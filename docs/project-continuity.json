@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "checkedAt": "2026-10-29",
-  "runtimeReference": "886feff6f7ea0130ae047c950d87dec68c1e3332",
+  "checkedAt": "2026-11-01",
+  "runtimeReference": "b5555c53622ad15cefbea35a535f7a68af2217a8",
   "integration": {
     "pr": 314,
     "branch": "feat/nex-042-visual-organization",
@@ -397,6 +397,16 @@
       "status": "active",
       "role": "reference",
       "purpose": "Cobertura por capítulo do livro TdV II, fluxos operacionais e fronteiras entre cálculo, procedimento assistido e decisão ficcional."
+    },
+    {
+      "path": "docs/v4/IMPLEMENTACAO.md",
+      "status": "active",
+      "purpose": "Auditoria V4, diferenças atuais→destino, evidências, bloqueios e rollback; fila somente no registro canônico."
+    },
+    {
+      "path": "docs/v4/Tadeon_Nexus_Especificacao_Final_V4.md",
+      "status": "reference",
+      "purpose": "Dossiê integral V4 fornecido por Tadeu, preservado sem redução; mandato vigente."
     }
   ],
   "tasks": [
@@ -1424,6 +1434,142 @@
         "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/40853375149"
       ],
       "checkpoint": "Integrado pela PR #314, fonte 2af4946, merge 886feff, e publicado em 2026-10-29T09:57:43.016Z. Ficha TdV II com abertura compacta, cinco abas na mesma faixa, recursos em uma linha e campos curtos lado a lado. Pessoa agrupa Feição/Dossiê e Âncora; vínculos têm resumo e edição individual. Radar e Matrizes próximos; Alinhavos e narrativa recompostos por largura. Iniciativa manual conserva nomes legíveis no celular/tablet. Todos os campos, ações e ferramentas restauradas por NEX-041/DEC-022 permanecem. Quality: 162 suítes/688 testes, auditoria sem alto/crítico (dois moderados). Cinco grupos visuais e agregador aprovados no HEAD exato; 99 estados TdV II, 42 do painel anterior e 40 vistas locais das cinco abas em 320/390/820/1440px, edição/leitura e movimento reduzido. Capturas finais inspecionadas; HTTP200/SHA exato e pacote canônico conferidos. Nenhuma migration ou escrita em contas reais. Geometria não mede FPS/INP; fixtures não certificam dispositivos físicos. A PR de fechamento registra a própria publicação."
+    },
+    {
+      "id": "NEX-043",
+      "title": "V4 fase 0: manifesto montado, fontes, baseline e restauração",
+      "domain": "delivery",
+      "status": "active",
+      "priority": 0,
+      "dependsOn": [
+        "NEX-042"
+      ],
+      "acceptance": [
+        "Ler dossiê V4, Trilogia e Kit Físico; registrar hashes, ativos e autoridades sem substituir dados.",
+        "Cruzar rotas, componentes e ações com permissões, persistência, testes e capturas; distinguir fonte, montagem e operação real.",
+        "Conferir GitHub/implantação, baseline mecânica/visual/segurança/performance e backup com restauração isolada.",
+        "Fechar lacunas da fase 0 antes de grandes superfícies; restauração de serviços/objetos e contas reais não pode ser inferida de fixtures."
+      ],
+      "evidence": [
+        "docs/v4/IMPLEMENTACAO.md",
+        "docs/v4/phase-0-validation.json"
+      ]
+    },
+    {
+      "id": "NEX-044",
+      "title": "V4 fase 1: biblioteca material e motion autoral",
+      "domain": "shell",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-043"
+      ],
+      "acceptance": [
+        "Ampliar o laboratório existente com Fólio, Instrumento/Bancada, Trama/Teia, Lâmina, Palco e Acervo; aprovar biblioteca antes de propagar.",
+        "Material, motion, foco, hover/toque, pendência, erro, retry e redução de movimento nos proprietários; sem novos overrides ou loops decorativos."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-045",
+      "title": "V4 fase 2: shell, entrada e utilidades",
+      "domain": "shell",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-044"
+      ],
+      "acceptance": [
+        "Recompor Login/reset/Dashboard/Usuários/Backup/Offline/PWA/diálogos e diagnósticos com hierarquia e estados completos.",
+        "Preservar rodas, busca, foco, identidade e dados; testar as composições compactas, tablet e desktop do capítulo 50."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-046",
+      "title": "V4 fase 3: Ficha Integral em cinco fólios",
+      "domain": "sheet",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-044",
+        "NEX-045"
+      ],
+      "acceptance": [
+        "Preservar todos os campos, IDs, narrativa, inventário, vínculos, rascunhos, CAS e acesso histórico.",
+        "Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-047",
+      "title": "V4 fase 4: Visão de Partida e integração física/digital",
+      "domain": "sheet",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-046",
+        "NEX-048"
+      ],
+      "acceptance": [
+        "Criar acesso próprio à Visão de Partida com os mesmos dados e motor; unificar Jogo/Editar sem reusar o motor histórico.",
+        "Isolar e identificar Forma de Poder legada, preservando URL/flag/payload e impedindo gravação por simples leitura.",
+        "Implementar dois Fios, cartões/repertório, físico/híbrido/digital, conciliação explícita, offline/retry e aprovação sem cobranças duplicadas."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-048",
+      "title": "V4: autoridade transacional de ações, custos e Resto",
+      "domain": "session",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-043",
+        "NEX-010",
+        "NEX-011"
+      ],
+      "acceptance": [
+        "Validar backup e restauração completos antes de migrações; schema aditivo, sem apagar legado.",
+        "Evoluir autoridades existentes com eventos versionados, revisões esperadas, idempotência, audiência no servidor e projeções mínimas.",
+        "Arquivar cena/Resto antes de limpeza; separar proposta, aprovação e confirmação; testar concorrência, late ACK, reconnect e rollback."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-049",
+      "title": "V4 fase 5: Mesa, Mestre e Nexus integrados",
+      "domain": "tabletop",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-047",
+        "NEX-048"
+      ],
+      "acceptance": [
+        "Preservar todas as ferramentas e montagens comprovadas da Mesa, guias gerais/II do Mestre e operações do Nexus; demonstrar destino equivalente antes de remover qualquer item.",
+        "Refinar palco/HUD/inspector, preparação/condução e explorar/ler/relacionar sobre os mesmos estados e eventos filtrados por audiência."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "NEX-050",
+      "title": "V4 fase 6: prova integral, acabamento e rollout",
+      "domain": "delivery",
+      "status": "planned",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-045",
+        "NEX-046",
+        "NEX-047",
+        "NEX-049",
+        "NEX-009"
+      ],
+      "acceptance": [
+        "Executar capítulos 50/58/60, sessão encadeada e checklist final com provas antes/depois, motion e rollback.",
+        "Certificar implantação por SHA atual, relatar módulos/dispositivos/contas não certificados e resíduos; não publicar V4 como final com falhas críticas/altas ou manifesto aberto."
+      ],
+      "evidence": []
     }
   ],
   "decisions": [
@@ -1570,6 +1716,11 @@
       "id": "DEC-022",
       "decision": "A adaptação de regras preserva as ferramentas da campanha e apresenta fichas existentes na estrutura atual por padrão.",
       "reason": "Correção explícita de Tadeu: mudar mecânicas não autoriza retirar funções. Dados anteriores permanecem preservados; revisão de competências não inventa equivalências de atributos, dano ou PM/PU."
+    },
+    {
+      "id": "DEC-023",
+      "decision": "Adotar o mandato integral Tadeon Nexus V4.0 como direção vigente, por fases verificáveis; preservar dados/funções/autorização e isolar Forma de Poder histórica da nova Visão de Partida.",
+      "reason": "Novo pedido explícito de Tadeu em 01/11/2026 supera a prioridade de polimento anterior. Mudanças estruturais necessárias são autorizadas, sem motor, cena, gasto ou autoridade duplicados. O capítulo 62 exige fase 0 e biblioteca aprovada antes da propagação; lacunas não são certificadas por inferência."
     }
   ],
   "bridges": [
@@ -1853,6 +2004,26 @@
     {
       "path": "docs/tdv-ii-validation.json",
       "purpose": "Procedência normativa, testes e evidências de migração, Mesa, Nexus, CI e publicação de NEX-040."
+    },
+    {
+      "path": "docs/v4/phase-0-validation.json",
+      "purpose": "Baseline, backup/restauração parcial real e bloqueios de migração/implantação."
+    },
+    {
+      "path": "docs/v4/route-contracts.json",
+      "purpose": "Rotas→componentes→ações→permissões→dados→dispositivos→testes→capturas, com lacunas explícitas."
+    },
+    {
+      "path": "docs/v4/runtime-baseline.json",
+      "purpose": "127 censos de DOM e hashes de capturas em fixtures; não certifica dispositivos/contas reais."
+    },
+    {
+      "path": "docs/v4/source-ledger.json",
+      "purpose": "Proveniência/hash e leitura das fontes normativas V4."
+    },
+    {
+      "path": "docs/v4/surface-manifest.json",
+      "purpose": "Inventário AST V4: fonte não equivale a função montada."
     }
   ],
   "integrationHistory": [

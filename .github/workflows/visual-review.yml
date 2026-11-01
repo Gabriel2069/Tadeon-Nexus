@@ -24,6 +24,7 @@ jobs:
     timeout-minutes: 40
     env:
       NEXUS_BROWSER_MODULE: file:///tmp/tadeon-browser/node_modules/playwright/index.mjs
+      NEXUS_SURFACE_CENSUS: "1"
     steps:
       - uses: actions/checkout@v4
         with:

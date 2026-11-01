@@ -1,3 +1,4 @@
+import { captureSurfaceCensus } from "./surface-census.mjs";
 import { installDesignFonts } from "./design-font-fixtures.mjs";
 /** Read-only browser fixture audit. No account credentials or live data required.
  * Install playwright-core outside the app and provide NEXUS_BROWSER_MODULE (file URL).
@@ -500,6 +501,11 @@ try {
           path: `${root}/${phase}-${name}-${width}.png`,
           fullPage: false,
           timeout: 20000,
+        });
+      if (process.env.NEXUS_SURFACE_CENSUS === "1")
+        await captureSurfaceCensus(page, {
+          path: `${root}/${phase}-${name}-${width}.surface.json`, state: phase,
+          screenshot: captureScreenshots ? `${phase}-${name}-${width}.png` : null,
         });
       const interactions = [];
       if (route === "/offline") {

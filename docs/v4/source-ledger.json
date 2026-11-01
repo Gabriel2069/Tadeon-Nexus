@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "mandate": "Tadeon Nexus V4.0",
+  "sources": [
+    {
+      "file": "Tadeon_Nexus_Especificacao_Final_V4(1).md",
+      "sha256": "6d33772c322ea8a4fa260b25c93ace4b7e821b21f3425dad901ef55ff296a739",
+      "bytes": 456937,
+      "textRead": "complete",
+      "visualReview": "not a pagination review"
+    },
+    {
+      "file": "01_Urdidura_do_Vazio(2).docx",
+      "sha256": "c674a5015f79bce3b1ff35104945a776de5ad54acda59790d5e35dcb96695cf0",
+      "bytes": 11032389,
+      "textRead": "complete",
+      "visualReview": "not a pagination review"
+    },
+    {
+      "file": "02_Livro_de_Regras(3).docx",
+      "sha256": "8846b485dc528e3998de9227a033bea746eb439d6519ea7f3362a7a8f9515c0f",
+      "bytes": 21471881,
+      "textRead": "complete",
+      "visualReview": "not a pagination review"
+    },
+    {
+      "file": "03_Fio_Mestre(2).docx",
+      "sha256": "c6c384e1f87eee80da022d960a2d8c5e15bbd551a8cb75b204c44738b6956725",
+      "bytes": 12642497,
+      "textRead": "complete",
+      "visualReview": "not a pagination review"
+    },
+    {
+      "file": "01_Tabuleiro_Individual_A3.pdf",
+      "sha256": "58a015d9769f1d78f4da28d40b48fbd32df3a510d9f59c88ce69d2590ab6e175",
+      "bytes": 451511,
+      "textRead": "complete",
+      "visualReview": "A3 board and first catalog page inspected"
+    },
+    {
+      "file": "18_Guia_Kit_Fisico_A4.pdf",
+      "sha256": "b5fdbdb5e7ceae0fde315c012fbc8d3799c36ebdbdffc711bb3a97bc03910c5d",
+      "bytes": 27097,
+      "textRead": "complete",
+      "visualReview": "A3 board and first catalog page inspected"
+    },
+    {
+      "file": "TdV_Marcadores_v1_Guia_de_Uso_e_Producao.pdf",
+      "sha256": "f18e923a1640b8dd28a721cb1342f6f8035c1941519908b16d1cc2ef8fe314aa",
+      "bytes": 73189,
+      "textRead": "complete",
+      "visualReview": "A3 board and first catalog page inspected"
+    },
+    {
+      "file": "TdV_Catalogo_Visual_do_Kit.pdf",
+      "sha256": "ab186f049bbe5ffe643904fc556312ee07ccc97197b2b424c483666b03fccd7b",
+      "bytes": 1164306,
+      "textRead": "complete",
+      "visualReview": "A3 board and first catalog page inspected"
+    },
+    {
+      "file": "TdV_Kit_Complementar_Provas_Completas.pdf",
+      "sha256": "1c19326e43e91243765d6a2617265e379ca66f36fda21bd1d70db2c5cfe0fbde",
+      "bytes": 919258,
+      "textRead": "complete",
+      "visualReview": "A3 board and first catalog page inspected"
+    }
+  ],
+  "localInstructionsRead": [
+    "AGENTS.md",
+    "docs/PROJECT_MAP.md",
+    "docs/style-architecture.json",
+    "docs/tdv-ii-coverage.md",
+    "docs/tabletop-workspace-map.md",
+    "docs/FOUNDATION.md",
+    "docs/DESIGN.md",
+    "docs/WORKPLAN.md",
+    "docs/tdv-ii-migration.md"
+  ],
+  "testReview": "Existing suite inventoried and run; focused reading of motor, round, SQL, permissions, backup, portability, identity and runtime tests. Not a line-by-line review of every historical test."
+}

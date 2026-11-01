@@ -1,4 +1,5 @@
 /** NEX-040: real UI, isolated authenticated fixtures. No production writes. */
+import { captureSurfaceCensus } from "./surface-census.mjs";
 import { installDesignFonts } from "./design-font-fixtures.mjs";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
@@ -293,6 +294,11 @@ try {
           await page.screenshot({
             path: `${output}/${label}-${role}-${width}.png`,
             timeout: 45000,
+          });
+        if (process.env.NEXUS_SURFACE_CENSUS === "1")
+          await captureSurfaceCensus(page, {
+            path: `${output}/${label}-${role}-${width}.surface.json`, state: `${label}/${role}`,
+            screenshot: process.env.NEXUS_SKIP_SCREENSHOTS !== "1" ? `${label}-${role}-${width}.png` : null,
           });
         results.push({ label, width, role, ...g, writes: writes.length });
         writeFileSync(output + "/results.json", JSON.stringify(results, null, 2));

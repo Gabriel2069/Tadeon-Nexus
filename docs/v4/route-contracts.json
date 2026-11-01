@@ -1,0 +1,837 @@
+{
+  "version": 1,
+  "sourceManifest": "surface-manifest.json",
+  "routes": [
+    {
+      "route": "/",
+      "routeId": "/",
+      "entry": "src/routes/index.tsx",
+      "component": "HomePage → CharacterArchive",
+      "actionGroups": [
+        "listar/buscar/filtrar/ordenar fichas",
+        "criar/excluir ficha confirmada"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/character-archive.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/material-surface.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/index.tsx"
+      ],
+      "permission": [
+        "character:view/create/delete; owner/cargo; RLS"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "character_sheets",
+        "cache namespace conta/cargo"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/dashboard-read.test.tsx",
+        "src/components/character-archive.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/.lovable/oauth/consent",
+      "routeId": "/.lovable/oauth/consent",
+      "entry": "src/routes/[.]lovable.oauth.consent.tsx",
+      "component": "OAuthConsentPage",
+      "actionGroups": [
+        "revisar/autorizar/cancelar consentimento"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/routes/[.]lovable.oauth.consent.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "Supabase Auth e escopos OAuth do adaptador"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "consentimento; não transformar em página de conteúdo"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/mcp/sdk-compatibility.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/.mcp/invoke-tool/$tool",
+      "routeId": "/.mcp/invoke-tool/$tool",
+      "entry": "src/routes/[.mcp]/invoke-tool/$tool.ts",
+      "component": "createTanStackInvokeToolHandler",
+      "actionGroups": [
+        "invocação de ferramenta/405"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "OAuth delegado; guarda por ferramenta e RLS"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "leituras conforme ferramenta"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/mcp/sdk-compatibility.test.ts",
+        "src/lib/mcp/tools/list-my-sheets.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/.mcp/list-tools",
+      "routeId": "/.mcp/list-tools",
+      "entry": "src/routes/[.mcp]/list-tools.ts",
+      "component": "createTanStackListToolsHandler",
+      "actionGroups": [
+        "catálogo de ferramentas/405"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "adaptador MCP; catálogo não concede acesso a dados"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "nenhuma escrita"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/mcp/sdk-compatibility.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/.well-known/oauth-protected-resource",
+      "routeId": "/.well-known/oauth-protected-resource",
+      "entry": "src/routes/[.well-known]/oauth-protected-resource.ts",
+      "component": "createTanStackOAuthProtectedResourceMetadataHandler",
+      "actionGroups": [
+        "metadados de recurso protegido"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "público; não retorna fichas/credenciais"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "metadados de protocolo"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/mcp/sdk-compatibility.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/login",
+      "routeId": "/login",
+      "entry": "src/routes/login.tsx",
+      "component": "LoginPage",
+      "actionGroups": [
+        "entrar/cadastrar/recuperar sessão",
+        "instalar/atualizar PWA"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/material-surface.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/login.tsx"
+      ],
+      "permission": [
+        "Supabase Auth; perfil/cargo verificado no shell"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "Supabase Auth",
+        "profiles/user_roles"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/auth.test.tsx",
+        "src/lib/auth-redirect.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/manage-users",
+      "routeId": "/manage-users",
+      "entry": "src/routes/manage-users.tsx",
+      "component": "ManageUsersPage → controles por pessoa",
+      "actionGroups": [
+        "buscar/filtrar",
+        "alterar papel/excluir com revisão"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/manage-users.tsx"
+      ],
+      "permission": [
+        "ProtectedShell mestre; admin-users.functions server authorization; autoalteração protegida"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "Auth/profiles/user_roles"
+      ],
+      "disposition": "refinar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/manage-users-flow.test.tsx",
+        "src/lib/permissions.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/master-panel",
+      "routeId": "/master-panel",
+      "entry": "src/routes/master-panel.tsx",
+      "component": "MasterWorkspace → navegação geral + TdvMasterPanel",
+      "actionGroups": [
+        "16 guias gerais",
+        "preparação/condução TdV II; cena; rodada; iniciativa; pressão; investigação; elenco",
+        "salvar rascunho/CAS/publicar projeção autorizada"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/assets/asset-library-panel.tsx",
+        "src/components/assets/asset-tile.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/master/master-catalog.tsx",
+        "src/components/master/master-hub.tsx",
+        "src/components/master/master-overview.tsx",
+        "src/components/master/master-panel-navigation.tsx",
+        "src/components/master/resistance-dt-calculator.tsx",
+        "src/components/master/session-workspace.tsx",
+        "src/components/master/tdv2-campaign-presences.tsx",
+        "src/components/master/tdv2-master.tsx",
+        "src/components/master/tdv2-procedures.tsx",
+        "src/components/material-surface.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/save-status.tsx",
+        "src/components/sheet/sheet-ui.tsx",
+        "src/components/sheet/tdv2-fields.tsx",
+        "src/components/sheet/tdv2-procedures.tsx",
+        "src/components/sheet/tdv2-sheet.tsx",
+        "src/components/sheet/tdv2-test-panel.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/components/workspace-actions.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/master-panel.tsx"
+      ],
+      "permission": [
+        "ProtectedShell mestre; servidor/RLS; tdv2_revision"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "game_settings.* e tdv2_state privado",
+        "character_sheets",
+        "tabletop_entities.properties.tdv2_round"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/components/master/master-workspace.test.tsx",
+        "src/components/master/use-master-draft.test.tsx",
+        "src/lib/tdv2-round.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/mcp",
+      "routeId": "/mcp",
+      "entry": "src/routes/mcp.ts",
+      "component": "createTanStackMcpHandler",
+      "actionGroups": [
+        "protocolo/catalogar/executar ferramentas"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "OAuth delegado; ctx.isAuthenticated; cliente Supabase do chamador; RLS"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "somente leituras autorizadas das ferramentas atuais"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/mcp/sdk-compatibility.test.ts",
+        "src/lib/mcp/tools/list-my-sheets.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/nexus",
+      "routeId": "/nexus",
+      "entry": "src/routes/nexus.tsx",
+      "component": "NexusRoute → NexusWorkspace",
+      "actionGroups": [
+        "árvore/lista/busca/abas",
+        "documento/grafo/combinado/divisores",
+        "editar/CAS/rascunhos/versões/aliases/tags/links/import/export/biblioteca/assets"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/assets/asset-picker-dialog.tsx",
+        "src/components/assets/asset-tile.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/knowledge/knowledge-collection-filter.tsx",
+        "src/components/knowledge/knowledge-library.tsx",
+        "src/components/knowledge/knowledge-portability-dialog.tsx",
+        "src/components/knowledge/knowledge-reading-panes.tsx",
+        "src/components/knowledge/knowledge-sheet-link.tsx",
+        "src/components/knowledge/knowledge-tree.tsx",
+        "src/components/knowledge/nexus-tabletop-locator.tsx",
+        "src/components/knowledge/nexus-workspace.tsx",
+        "src/components/knowledge/safe-markdown.tsx",
+        "src/components/material-surface.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/workspace-actions.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "knowledge:view/create/edit/publish/manage; workspace/campanha/autor/ACL no servidor; flags"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "knowledge_nodes/edges/aliases/mentions/versions/assets/ACL",
+        "drafts e reading preferences por identidade"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/knowledge/knowledge-service.test.ts",
+        "src/lib/knowledge/knowledge-portability.test.ts",
+        "src/components/knowledge/nexus-continuity.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/nexus-tools",
+      "routeId": "/nexus-tools",
+      "entry": "src/routes/nexus-tools.tsx",
+      "component": "NexusToolsPage",
+      "actionGroups": [
+        "exportar/importar fichas e settings; snapshot/histórico local",
+        "diagnóstico/heartbeat/logs/recuperação"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/nexus-tools.tsx"
+      ],
+      "permission": [
+        "ProtectedShell mestre; identidade capturada; autenticação e RLS"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "character_sheets/game_settings",
+        "snapshots IndexedDB por mestre",
+        "app_error_logs"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/nexus-backup.test.ts",
+        "src/lib/nexus-tools-identity.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/offline",
+      "routeId": "/offline",
+      "entry": "src/routes/offline.tsx",
+      "component": "OfflinePage",
+      "actionGroups": [
+        "buscar/consultar cópia local",
+        "atualizar/limpar cópia confirmada"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/offline.tsx"
+      ],
+      "permission": [
+        "conta/cargo verificados; sem herdar cache de outra identidade"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "offline-cache namespace; resumo/detalhes disponíveis"
+      ],
+      "disposition": "refinar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/offline-cache.test.ts",
+        "src/lib/service-worker.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/reset-password",
+      "routeId": "/reset-password",
+      "entry": "src/routes/reset-password.tsx",
+      "component": "ResetPasswordPage",
+      "actionGroups": [
+        "validar recuperação",
+        "atualizar senha"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/reset-password.tsx"
+      ],
+      "permission": [
+        "sessão de recuperação Supabase"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "Supabase Auth"
+      ],
+      "disposition": "refinar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/auth-errors.test.ts"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/sheet/$id",
+      "routeId": "/sheet/$id",
+      "entry": "src/routes/sheet.$id.tsx",
+      "component": "SheetRoute → Tdv2Sheet / ficha anterior",
+      "actionGroups": [
+        "consultar/editar/salvar/CAS",
+        "cinco abas; motor; vínculos; registros; inventário; história; PU; cena",
+        "histórico/presença/janela/arquivo/legado"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/master/resistance-dt-calculator.tsx",
+        "src/components/material-surface.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/save-status.tsx",
+        "src/components/sheet/add-item-dialog.tsx",
+        "src/components/sheet/condition-counter.tsx",
+        "src/components/sheet/sheet-attributes-section.tsx",
+        "src/components/sheet/sheet-conditions-section.tsx",
+        "src/components/sheet/sheet-description-panel.tsx",
+        "src/components/sheet/sheet-equilibrium-section.tsx",
+        "src/components/sheet/sheet-experience-bridge.tsx",
+        "src/components/sheet/sheet-exposure-section.tsx",
+        "src/components/sheet/sheet-identity-section.tsx",
+        "src/components/sheet/sheet-inventory-organizer.tsx",
+        "src/components/sheet/sheet-skills-section.tsx",
+        "src/components/sheet/sheet-ui.tsx",
+        "src/components/sheet/sheet-vitals-section.tsx",
+        "src/components/sheet/skill-tree.tsx",
+        "src/components/sheet/tdv2-conversion.tsx",
+        "src/components/sheet/tdv2-fields.tsx",
+        "src/components/sheet/tdv2-procedures.tsx",
+        "src/components/sheet/tdv2-retained-tools.tsx",
+        "src/components/sheet/tdv2-sheet.tsx",
+        "src/components/sheet/tdv2-test-panel.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/sheet.$id.tsx"
+      ],
+      "permission": [
+        "character:view/edit; dono/cargo; triggers/RLS; revisões"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "character_sheets.tdv2_data",
+        "campos legados preservados",
+        "histórico e recipientes"
+      ],
+      "disposition": "recompor",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/tdv2.test.ts",
+        "src/lib/tdv2-play.test.ts",
+        "src/lib/sheet-read.test.tsx",
+        "src/lib/use-serialized-autosave.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/sheet/$id/power",
+      "routeId": "/sheet/$id_/power",
+      "entry": "src/routes/sheet.$id_.power.tsx",
+      "component": "PowerFormPage → registro histórico",
+      "actionGroups": [
+        "consultar/editar Forma de Poder",
+        "sincronização atual ao abrir (corrigir)"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/master/resistance-dt-calculator.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/save-status.tsx",
+        "src/components/sheet/add-item-dialog.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/routes/__root.tsx",
+        "src/routes/sheet.$id_.power.tsx"
+      ],
+      "permission": [
+        "power_form_enabled; character:edit; RLS"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "character_sheets.power_form_data",
+        "recursos da edição anterior"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/components/sheet/attribute-radar.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/sitemap.xml",
+      "routeId": "/sitemap.xml",
+      "entry": "src/routes/sitemap[.]xml.ts",
+      "component": "SitemapHandler",
+      "actionGroups": [
+        "listar URLs públicas"
+      ],
+      "sourceActionRefs": [
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "público; não expor IDs privados"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "nenhuma escrita"
+      ],
+      "disposition": "preservar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/tabletop",
+      "routeId": "/tabletop",
+      "entry": "src/routes/tabletop.tsx",
+      "component": "TabletopRouteExperience → MasterEntry / ParticipantEntry / DirectorEntry",
+      "actionGroups": [
+        "cena/câmera/seleção/composição/editor",
+        "2D/3D/fog/níveis/portas/assets/áudio/director",
+        "sessão/presença/reconexão; links para ficha/Nexus; roda/contexto"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/realtime-status.tsx",
+        "src/components/tabletop/tabletop-composition-panel.tsx",
+        "src/components/tabletop/tabletop-creative-dock-bridge.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-director-remote.tsx",
+        "src/components/tabletop/tabletop-director-timeline-bridge.tsx",
+        "src/components/tabletop/tabletop-director-workspace.tsx",
+        "src/components/tabletop/tabletop-editor-panel.tsx",
+        "src/components/tabletop/tabletop-entity-dossier.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/tabletop/tabletop-fog-geometry-bridge.tsx",
+        "src/components/tabletop/tabletop-handout-viewer.tsx",
+        "src/components/tabletop/tabletop-integration-tools-bridge.tsx",
+        "src/components/tabletop/tabletop-live-session.tsx",
+        "src/components/tabletop/tabletop-participant-workspace.tsx",
+        "src/components/tabletop/tabletop-placeables-inspector-bridge.tsx",
+        "src/components/tabletop/tabletop-player-interaction-bridge.tsx",
+        "src/components/tabletop/tabletop-preflight-bridge.tsx",
+        "src/components/tabletop/tabletop-progressive-interface-bridge.tsx",
+        "src/components/tabletop/tabletop-radial-actions-bridge.tsx",
+        "src/components/tabletop/tabletop-region-automation-bridge.tsx",
+        "src/components/tabletop/tabletop-reliability-editor-bridge.tsx",
+        "src/components/tabletop/tabletop-route-experience.tsx",
+        "src/components/tabletop/tabletop-semantic-transform-bridge.tsx",
+        "src/components/tabletop/tabletop-smart-setup-bridge.tsx",
+        "src/components/tabletop/tabletop-urgent-reconciliation-bridge.tsx",
+        "src/components/tabletop/tabletop-view-bar.tsx",
+        "src/components/tabletop/tabletop-visibility-panel.tsx",
+        "src/components/tabletop/tabletop-workspace.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/workspace-actions.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "scene:view/interact/manage; campanha; tabletop-view no servidor; RLS; flags opcionais"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "tabletop_scenes/entities/layers/levels",
+        "visibility/fog/walls/lights",
+        "sessions/participants/view_preferences",
+        "assets/links"
+      ],
+      "disposition": "refinar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/lib/tabletop/tabletop-participant-service.test.ts",
+        "src/lib/tabletop/tabletop-save-identity.test.ts",
+        "src/lib/tabletop/realtime-protocol.test.ts",
+        "src/components/tabletop/tabletop-radial-actions-bridge.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    },
+    {
+      "route": "/visual-audit",
+      "routeId": "/visual-audit",
+      "entry": "src/routes/visual-audit.tsx",
+      "component": "VisualAuditPage → ResponsiveAuditLab / PopupGallery",
+      "actionGroups": [
+        "fixtures; galeria de popups; auditoria visual"
+      ],
+      "sourceActionRefs": [
+        "src/components/app-layout.tsx",
+        "src/components/experience-final-polish-bridge.tsx",
+        "src/components/global-search.tsx",
+        "src/components/mobile-more-menu.tsx",
+        "src/components/page-header.tsx",
+        "src/components/protected-shell.tsx",
+        "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
+        "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/dialog.tsx",
+        "src/components/ui/popup-presence.tsx",
+        "src/components/ui/sheet.tsx",
+        "src/components/visual-audit/popup-gallery.tsx",
+        "src/components/visual-audit/responsive-audit-lab.tsx",
+        "src/routes/__root.tsx"
+      ],
+      "permission": [
+        "ProtectedShell mestre; fixtures não certificam contas reais"
+      ],
+      "permissionEvidence": "source review; live server behavior not certified",
+      "persistentData": [
+        "estado de apresentação; não usar dados privados como fixture"
+      ],
+      "disposition": "ampliar",
+      "desktop/tablet/mobile": {
+        "baseline": "runtime-baseline.json; only matching captured routes/states",
+        "chapter50": "pending"
+      },
+      "test": [
+        "src/components/ui/control-system.test.tsx",
+        "src/components/ui/route-popup-frame.test.tsx"
+      ],
+      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "certification": "incomplete"
+    }
+  ],
+  "futureRoute": {
+    "route": "/sheet/$id/play",
+    "status": "not-implemented",
+    "purpose": "Visão de Partida; same tdv2_data and engine; no old power flag requirement"
+  }
+}
