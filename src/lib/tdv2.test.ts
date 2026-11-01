@@ -383,3 +383,26 @@ describe("existing dossiers in the current rules", () => {
     expect(tdv2CharacterSchema.safeParse(c).success).toBe(true);
   });
 });
+
+it("rolls an ordinary unrecorded test without changing the character or creating a diary entry", () => {
+  const c = { ...newTdvCharacter(), ready: true };
+  const rolled = resolveTest(
+    c,
+    {
+      matrix: "Nexo",
+      alinhavo: "Investigação",
+      dt: 10,
+      prumoPro: 0,
+      prumoDes: 0,
+      tentoPro: 0,
+      tentoDes: 0,
+      force: "",
+      extraordinary: false,
+      counterpart: "",
+    },
+    () => .25,
+  );
+  expect(rolled.character).toBe(c);
+  expect(rolled.character.scene.tests).toBeUndefined();
+  expect(rolled.result.enlace).toBe(6);
+});

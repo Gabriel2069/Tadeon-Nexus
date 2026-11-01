@@ -320,6 +320,31 @@ try {
       };
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
       await page.getByLabel("Nome da personagem", { exact: true }).waitFor();
+      if (process.env.NEXUS_SHEET_INSTRUMENTS_ONLY === "1") {
+        await page.getByRole("tab",{name:"Constituição",exact:true}).click();
+        assert(await page.locator('.tdv-alinhavos .tdv-competency').count()===21,"One flat list of 21 Alinhavos");
+        assert(await page.getByText('Grau 2 · Praticado',{exact:true}).count()===2,"Canonical initial d8 practice");
+        const hitTargets=await page.locator('.tdv-competency__die,.tdv-resource-value').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return [r.width,r.height];}));
+        assert(hitTargets.every(([w,h])=>w>=43.9&&h>=43.9),'Instrument touch targets stay at least 44px: '+JSON.stringify(hitTargets));
+        const clipped=await page.locator('.tadeon-attribute-radar-svg text').evaluateAll(es=>es.some(e=>{const b=e.getBBox();return b.x< -1||b.y< -1||b.x+b.width>251||b.y+b.height>251;}));
+        assert(!clipped,'Radar labels remain within the viewBox');
+        await geometry('instruments-constitution');
+        const competence=page.getByRole('button',{name:'Rolar Investigação · Grau 2 · Praticado · d8',exact:true});
+        if(role==='mestre') {
+          await competence.click();const dialog=page.getByRole('dialog',{name:'Dois Fios · Investigação',exact:true});await dialog.waitFor();
+          assert(await dialog.getByLabel('Intenção',{exact:true}).count()===0,'No required narrative fields in quick roll');
+          await page.evaluate(()=>Math.random=()=>.5);await dialog.getByRole('button',{name:/Rolar os dois Fios/}).click();
+          await dialog.getByText('Enlace',{exact:true}).waitFor();await geometry('instruments-quick-roll');
+          await page.keyboard.press('Escape');await dialog.waitFor({state:'detached'});
+          await page.getByRole('button',{name:/Ajustar PV$/}).click();
+          await page.getByRole('button',{name:'Retirar 1 PV',exact:true}).click();await saved(()=>row.tdv2_data.resources.pv===9);
+          await page.getByRole('button',{name:/Ajustar PV$/}).click();
+          await page.getByRole('button',{name:'Restaurar 1 PV',exact:true}).click();await saved(()=>row.tdv2_data.resources.pv===10);
+        } else assert(await competence.isDisabled(),'Readonly cannot roll');
+        await page.getByRole('tab',{name:'Percurso',exact:true}).click();
+        assert(await page.locator('.tdv-development-track > span').count()===21,'Twenty milestones plus the origin');await geometry('instruments-development');
+        await context.close();continue;
+      }
       if (process.env.NEXUS_LAYOUT_ONLY === "1") {
         for (const [label, key] of [
           ["Pessoa", "person"],
@@ -328,6 +353,7 @@ try {
           ["Expressão", "expression"],
           ["Percurso", "path"],
         ]) {
+          await page.evaluate(()=>{document.getElementById("tadeon-main").scrollTop=0;});
           await page.getByRole("tab", { name: label, exact: true }).click();
           await geometry("layout-" + key);
           if (key === "constitution") {
@@ -393,7 +419,9 @@ try {
         await page.getByRole("button", { name: "Registrar investimento", exact: true }).click();
         await saved(() => row.tdv2_data.investments.length === 1);
         await page.getByRole("tab", { name: "Constituição", exact: true }).click();
+        await page.getByRole("button", {name:/Ajustar PE$/}).click();
         await page.getByLabel("PE atual", { exact: true }).fill("0");
+        await page.getByRole("button", {name:"Aplicar PE",exact:true}).click();
         await saved(() => row.tdv2_data.resources.pe === 0);
       } else {
         assert(
@@ -440,6 +468,7 @@ try {
       await page.getByRole("tab", { name: "Ação", exact: true }).click();
       await geometry("sheet-action");
       if (role === "mestre") {
+        await page.getByLabel("Registrar a próxima rolagem", {exact:true}).check();
         await page.getByLabel("Intenção", { exact: true }).fill("Abrir o arquivo");
         await page.getByLabel("Abordagem", { exact: true }).fill("Ler as relações entre as travas");
         await page.getByLabel("Existe risco ou oposição relevante", { exact: true }).check();
@@ -469,7 +498,9 @@ try {
       }
       if (role === "mestre" && [320, 1440].includes(width)) {
         await page.getByRole("tab", { name: "Constituição", exact: true }).click();
+        await page.getByRole("button", {name:/Ajustar PE$/}).click();
         await page.getByLabel("PE atual", { exact: true }).fill("5");
+        await page.getByRole("button", {name:"Aplicar PE",exact:true}).click();
         await page
           .locator("summary")
           .filter({ hasText: "Proteção, cobertura e ausência de Guarda" })

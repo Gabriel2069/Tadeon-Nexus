@@ -19,6 +19,9 @@ export function TdvTestPanel({
   resolver,
   declaredCosts,
   intention,
+  quick = false,
+  initialMatrix = "Nexo",
+  initialAlinhavo = "Investigação",
 }: {
   character: TdvCharacter;
   onChange: (value: TdvCharacter) => void;
@@ -26,10 +29,13 @@ export function TdvTestPanel({
   resolver?: (request: TestRequest) => ReturnType<typeof resolveTest>;
   declaredCosts?: TestRequest["costs"];
   intention?: string;
+  quick?: boolean;
+  initialMatrix?: Matrix;
+  initialAlinhavo?: string;
 }) {
   const [request, setRequest] = useState<TestRequest>({
-    matrix: "Nexo",
-    alinhavo: "Investigação",
+    matrix: initialMatrix,
+    alinhavo: initialAlinhavo,
     dt: 10,
     prumoPro: 0,
     prumoDes: 0,
@@ -40,6 +46,7 @@ export function TdvTestPanel({
     counterpart: "",
     context: { intention: "", approach: "", change: "", point: "", risk: false },
   });
+  const [remember, setRemember] = useState(!quick);
   const [last, setLast] = useState<ReturnType<typeof resolveTest> | null>(null);
   const upd = <K extends keyof TestRequest>(key: K, value: TestRequest[K]) =>
     setRequest((p) => ({ ...p, [key]: value }));
@@ -47,11 +54,13 @@ export function TdvTestPanel({
   const [helper, setHelper] = useState({ name: "", grade: 0, contribution: "" });
   const effective = {
     ...request,
-    context: {
-      ...request.context!,
-      ...(intention !== undefined ? { intention } : {}),
-      ...(resolver ? { risk: true } : {}),
-    },
+    context: remember
+      ? {
+          ...request.context!,
+          ...(intention !== undefined ? { intention } : {}),
+          ...(resolver ? { risk: true } : {}),
+        }
+      : undefined,
     helper: auxiliary ? helper : undefined,
     costs: declaredCosts,
   };
@@ -65,33 +74,49 @@ export function TdvTestPanel({
   return (
     <div className="tdv-test-panel">
       <p className="tdv-note">
-        Declare intenção, abordagem e limiar antes de rolar. Sem risco relevante, resolva
-        diretamente pela ficção.
+        {quick
+          ? "Escolha os dois Fios e o limiar acordado. Sem risco, resolva pela ficção. A rolagem não cria registro automático; custos e efeitos continuam sendo aplicados."
+          : "Declare intenção, abordagem e limiar antes de rolar. Sem risco relevante, resolva diretamente pela ficção."}
       </p>
-      <div className="tdv-grid">
-        {(
-          [
-            ["intention", "Intenção"],
-            ["approach", "Abordagem"],
-            ["point", "Ponto em Jogo"],
-            ["change", "Mudança relevante desde a tentativa anterior"],
-          ] as const
-        ).map(([key, label]) => (
-          <TdvField
-            key={key}
-            label={label}
-            value={effective.context[key]}
-            disabled={!canEdit || (key === "intention" && intention !== undefined)}
-            onChange={(v) => upd("context", { ...request.context!, [key]: v })}
+      {quick && (
+        <TdvCheck
+          label="Registrar a próxima rolagem"
+          value={remember}
+          onChange={setRemember}
+          disabled={!canEdit}
+        />
+      )}
+      {remember && (
+        <>
+          {" "}
+          <div className="tdv-grid">
+            {(
+              [
+                ["intention", "Intenção"],
+                ["approach", "Abordagem"],
+                ["point", "Ponto em Jogo"],
+                ["change", "Mudança relevante desde a tentativa anterior"],
+              ] as const
+            ).map(([key, label]) => (
+              <TdvField
+                key={key}
+                label={label}
+                value={
+                  key === "intention" && intention !== undefined ? intention : request.context![key]
+                }
+                disabled={!canEdit || (key === "intention" && intention !== undefined)}
+                onChange={(v) => upd("context", { ...request.context!, [key]: v })}
+              />
+            ))}
+          </div>
+          <TdvCheck
+            label="Existe risco ou oposição relevante"
+            value={effective.context?.risk ?? request.context!.risk}
+            disabled={!canEdit}
+            onChange={(risk) => upd("context", { ...request.context!, risk })}
           />
-        ))}
-      </div>
-      <TdvCheck
-        label="Existe risco ou oposição relevante"
-        value={effective.context.risk}
-        disabled={!canEdit}
-        onChange={(risk) => upd("context", { ...request.context!, risk })}
-      />
+        </>
+      )}
       <TdvDisclosure initiallyOpen={false}>
         <summary>Auxílio: um Prumo, um Tento, um teste</summary>
         <TdvCheck
@@ -216,7 +241,7 @@ export function TdvTestPanel({
           onClick={() => {
             try {
               const rolled = resolver ? resolver(effective) : resolveTest(character, effective);
-              onChange(rolled.character);
+              if (rolled.character !== character) onChange(rolled.character);
               setLast(rolled);
             } catch (e) {
               toast.error((e as Error).message);
