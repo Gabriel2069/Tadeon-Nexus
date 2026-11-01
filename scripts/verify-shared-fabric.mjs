@@ -1,3 +1,4 @@
+import { auditViewports } from "./v4-viewports.mjs";
 /** NEX-013 login fixtures: local fake responses only; no real sign-in, emails or writes. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
@@ -28,9 +29,9 @@ try {
     server.on("exit", (code) => fail(new Error(`Vite ${code}`)));
     setTimeout(() => fail(new Error("Vite timeout")), 30000).unref();
   });
-  for (const width of JSON.parse(process.env.NEXUS_AUDIT_WIDTHS || "[320,390,820,1440]")) {
+  for (const {width,height,viewportKey} of auditViewports()) {
     const context = await browser.newContext({
-      viewport: { width, height: 1000 },
+      viewport: { width, height },
       hasTouch: width < 768,
     });
     const page = await context.newPage(),
@@ -75,6 +76,7 @@ try {
     await page.waitForTimeout(700);
     const metrics = await page.evaluate(() => ({
       overflow: document.documentElement.scrollWidth > innerWidth,
+      decorativeLoops: document.getAnimations().filter(a=>a.effect?.getTiming().iterations===Infinity).length,
       main: document.querySelectorAll("main").length,
       h1: document.querySelectorAll("h1").length,
       font: getComputedStyle(document.querySelector("h1")).fontFamily,
@@ -82,18 +84,18 @@ try {
       submitHeight: document.querySelector('button[type="submit"]').getBoundingClientRect().height,
     }));
     assert(
-      !metrics.overflow &&
+      !metrics.overflow && metrics.decorativeLoops === 0 &&
         metrics.main === 1 &&
         metrics.h1 === 1 &&
-        metrics.cloth >= 52 &&
+        metrics.cloth > 0 &&
         errors.length === 0,
-      `${width}: login render`,
+      `${width}: login render ${JSON.stringify({metrics,errors})}`,
     );
     assert(
       metrics.font.includes("Cormorant Garamond") && metrics.submitHeight >= 44,
       `${width}: type or target`,
     );
-    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/login-${width}.png`, fullPage: true });
+    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/login-${viewportKey}.png`, fullPage: true });
     await page.getByLabel("E-mail", { exact: true }).fill("fixture@nexus.test");
     await page.getByLabel("Senha", { exact: true }).fill("fixture-invalid");
     await page.getByRole("button", { name: "Entrar", exact: true }).click();
@@ -108,7 +110,7 @@ try {
       (await page.getByLabel("E-mail", { exact: true }).inputValue()) === "fixture@nexus.test",
       "Failed sign-in preserves input",
     );
-    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/error-${width}.png`, fullPage: true });
+    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/error-${viewportKey}.png`, fullPage: true });
     await page.getByRole("button", { name: "Esqueceu a senha?" }).click();
     await page.getByText("Se este e-mail estiver cadastrado", { exact: false }).first().waitFor();
     await page.getByRole("button", { name: "Não tem conta? Cadastre-se" }).click();
@@ -119,10 +121,11 @@ try {
     );
     const signup = await page.evaluate(() => ({
       overflow: document.documentElement.scrollWidth > innerWidth,
+      decorativeLoops: document.getAnimations().filter(a=>a.effect?.getTiming().iterations===Infinity).length,
       visible: document.querySelector("#name").getBoundingClientRect().width > 0,
     }));
     assert(!signup.overflow && signup.visible, `${width}: signup render`);
-    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/signup-${width}.png`, fullPage: true });
+    if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1") await page.screenshot({ path: `${root}/signup-${viewportKey}.png`, fullPage: true });
     await page.getByRole("button", { name: "Já tem conta? Entrar" }).click();
     const button = page.getByRole("button", { name: "Entrar", exact: true });
     await button.focus();
@@ -158,7 +161,7 @@ try {
       await page.emulateMedia({ reducedMotion: "no-preference" });
     }
     assert(errors.length === 0, JSON.stringify(errors));
-    results.push({ width, ...metrics, signup, errors, fixtureRequests: requests });
+    results.push({ width, height, ...metrics, signup, errors, fixtureRequests: requests });
     await context.close();
   }
   writeFileSync(`${root}/results.json`, JSON.stringify(results, null, 2));

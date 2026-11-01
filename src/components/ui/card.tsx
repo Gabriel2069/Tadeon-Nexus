@@ -1,30 +1,34 @@
 import * as React from "react";
 
 import { useMaterialLight } from "@/lib/use-material-light";
+import type { MaterialFamily } from "@/components/material-surface";
 import { cn } from "@/lib/utils";
 
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, onPointerMove, onPointerLeave, ...props }, ref) => {
-    const light = useMaterialLight<HTMLDivElement>();
-    return (
-      <div
-        ref={ref}
-        data-slot="card"
-        data-material-surface="card"
-        onPointerMove={(event) => {
-          onPointerMove?.(event);
-          if (!event.defaultPrevented) light.onPointerMove(event);
-        }}
-        onPointerLeave={(event) => {
-          onPointerLeave?.(event);
-          light.onPointerLeave();
-        }}
-        className={cn("tadeon-material-card text-card-foreground", className)}
-        {...props}
-      />
-    );
-  },
-);
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { family?: MaterialFamily }
+>(({ className, family = "ink", style, onPointerMove, onPointerLeave, ...props }, ref) => {
+  const light = useMaterialLight<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      data-slot="card"
+      data-material-surface="card"
+      data-material-family={family}
+      style={style}
+      onPointerMove={(event) => {
+        onPointerMove?.(event);
+        if (!event.defaultPrevented) light.onPointerMove(event);
+      }}
+      onPointerLeave={(event) => {
+        onPointerLeave?.(event);
+        light.onPointerLeave();
+      }}
+      className={cn("tadeon-material-card text-card-foreground", className)}
+      {...props}
+    />
+  );
+});
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

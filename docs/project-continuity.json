@@ -1,24 +1,25 @@
 {
   "version": 1,
   "checkedAt": "2026-11-01",
-  "runtimeReference": "b5555c53622ad15cefbea35a535f7a68af2217a8",
+  "runtimeReference": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
   "integration": {
-    "pr": 314,
-    "branch": "feat/nex-042-visual-organization",
+    "pr": 316,
+    "branch": "feat/v4-audit-foundation",
     "base": "main",
-    "baseCommit": "f8a2a1211020803f1dce335a3f1444f017fd3f87",
-    "sourceCommit": "2af4946e455285b8ce26785301501ea366082973",
-    "headCommit": "2af4946e455285b8ce26785301501ea366082973",
+    "baseCommit": "b5555c53622ad15cefbea35a535f7a68af2217a8",
+    "sourceCommit": "3b05d2fcf4701d18fccab977a22fd7ea653b123b",
+    "headCommit": "3b05d2fcf4701d18fccab977a22fd7ea653b123b",
     "state": "integrated",
-    "mergeCommit": "886feff6f7ea0130ae047c950d87dec68c1e3332",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/40851660233",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/40851660251",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/40853375137",
-    "production": "confirmed",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/40853375149",
-    "productionCommit": "886feff6f7ea0130ae047c950d87dec68c1e3332",
-    "productionVerifiedAt": "2026-10-29T09:57:43.016Z",
-    "productionHttpStatus": 200
+    "mergeCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
+    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41324786118",
+    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41324786034",
+    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41326160278",
+    "production": "workflow-confirmed; independent marker development",
+    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41326160269",
+    "productionCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
+    "productionVerifiedAt": "2026-11-01T16:26:37.405Z",
+    "productionHttpStatus": 200,
+    "note": "Última integração na base. A rodada de materiais tem checkpoint próprio nas tarefas; a CI e a publicação posteriores ao snapshot ficam registradas na PR correspondente."
   },
   "domains": [
     {
@@ -407,6 +408,11 @@
       "path": "docs/v4/Tadeon_Nexus_Especificacao_Final_V4.md",
       "status": "reference",
       "purpose": "Dossiê integral V4 fornecido por Tadeu, preservado sem redução; mandato vigente."
+    },
+    {
+      "path": "docs/v4/MATERIAIS_E_FECHAMENTO.md",
+      "status": "active",
+      "purpose": "Diferenças, fechamento técnico das fases iniciais, materiais autorais, provas e módulos não certificados."
     }
   ],
   "tasks": [
@@ -1452,14 +1458,17 @@
       ],
       "evidence": [
         "docs/v4/IMPLEMENTACAO.md",
-        "docs/v4/phase-0-validation.json"
-      ]
+        "docs/v4/phase-0-validation.json",
+        "docs/v4/MATERIAIS_E_FECHAMENTO.md",
+        "docs/v4/material-validation.json"
+      ],
+      "checkpoint": "Levantamento e cruzamento técnico ampliados nesta rodada. Certificação integral diferida por backup/contas/dispositivos reais; DEC-024 não bloqueia as mudanças visuais reversíveis."
     },
     {
       "id": "NEX-044",
       "title": "V4 fase 1: biblioteca material e motion autoral",
       "domain": "shell",
-      "status": "planned",
+      "status": "validated",
       "priority": 1,
       "dependsOn": [
         "NEX-043"
@@ -1468,13 +1477,17 @@
         "Ampliar o laboratório existente com Fólio, Instrumento/Bancada, Trama/Teia, Lâmina, Palco e Acervo; aprovar biblioteca antes de propagar.",
         "Material, motion, foco, hover/toque, pendência, erro, retry e redução de movimento nos proprietários; sem novos overrides ou loops decorativos."
       ],
-      "evidence": []
+      "evidence": [
+        "docs/v4/MATERIAIS_E_FECHAMENTO.md",
+        "docs/v4/material-validation.json"
+      ],
+      "checkpoint": "Biblioteca de seis famílias implementada e ensaiada em 15 viewports exatos, com pendência/erro/retry/leitura, foco, movimento reduzido e checagem adicional de cores forçadas. Fonte validada localmente; integração/publicação exigem os gates da PR desta rodada."
     },
     {
       "id": "NEX-045",
       "title": "V4 fase 2: shell, entrada e utilidades",
       "domain": "shell",
-      "status": "planned",
+      "status": "validated",
       "priority": 1,
       "dependsOn": [
         "NEX-044"
@@ -1483,7 +1496,11 @@
         "Recompor Login/reset/Dashboard/Usuários/Backup/Offline/PWA/diálogos e diagnósticos com hierarquia e estados completos.",
         "Preservar rodas, busca, foco, identidade e dados; testar as composições compactas, tablet e desktop do capítulo 50."
       ],
-      "evidence": []
+      "evidence": [
+        "docs/v4/MATERIAIS_E_FECHAMENTO.md",
+        "docs/v4/material-validation.json"
+      ],
+      "checkpoint": "Entrada, utilidades e envelope conferidos em 15 viewports. Login/recuperação e estados operacionais usam transportes sintéticos; nenhum e-mail, senha ou dado real alterado. O teto legado de 92rem foi removido no proprietário concorrente; 1920px conferido novamente. Contas/dispositivos reais continuam não certificados."
     },
     {
       "id": "NEX-046",
@@ -1501,8 +1518,11 @@
       ],
       "evidence": [
         "docs/v4/IMPLEMENTACAO.md",
-        "docs/v4/visible-validation.json"
-      ]
+        "docs/v4/visible-validation.json",
+        "docs/v4/MATERIAIS_E_FECHAMENTO.md",
+        "docs/v4/material-validation.json"
+      ],
+      "checkpoint": "Segundo lote: materiais e cores mais presentes com a organização aprovada intacta. As fases restantes da ficha continuam abertas."
     },
     {
       "id": "NEX-047",
@@ -1729,6 +1749,11 @@
       "id": "DEC-024",
       "decision": "Prosseguir com mudanças visíveis e reversíveis da V4 enquanto a restauração completa permanece pendente, por autorização explícita de Tadeu; não usar o backup como bloqueio para apresentação.",
       "reason": "Pedido atual: deixar os requisitos excessivos de backup para depois e mostrar mudanças. O primeiro lote recompõe a Ficha Integral nos proprietários existentes, sem migration, conversão de dados, mudança de autorização ou motor concorrente. A dispensa temporária supera a ordem anterior do capítulo 62 para estas mudanças visuais."
+    },
+    {
+      "id": "DEC-025",
+      "decision": "Preservar a organização aprovada da Ficha e intensificar materiais, cores, cantos, encaixes e visualização; fechar a implementação das fases iniciais com evidências proporcionais e prosseguir sem reabrir o bloqueio de backup.",
+      "reason": "Pedido explícito de Tadeu nesta rodada. A validação técnica não certifica dispositivos físicos, contas reais ou serviços restaurados; DEC-024 continua vigente. Nenhuma remoção de função ou migração de dados está autorizada por esta mudança visual."
     }
   ],
   "bridges": [
@@ -2036,6 +2061,10 @@
     {
       "path": "docs/v4/visible-validation.json",
       "purpose": "Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup."
+    },
+    {
+      "path": "docs/v4/material-validation.json",
+      "purpose": "Cruzamento reproduzível das rotas/contratos com censos e hashes de capturas desta rodada; não infere operação de callbacks."
     }
   ],
   "integrationHistory": [

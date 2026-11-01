@@ -192,7 +192,7 @@ function OfflinePageContent() {
         </div>
       )}
       {!hasCache ? (
-        <Card className="tadeon-surface rounded-2xl px-6 py-16 text-center">
+        <Card family="folio" className="tadeon-surface rounded-2xl px-6 py-16 text-center">
           <CloudOff className="mx-auto h-10 w-10 text-muted-foreground" />
           <h2 className="mt-4 font-cinzel text-xl font-semibold">Arquivo local ainda vazio</h2>
           <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
@@ -269,7 +269,11 @@ function OfflineSheetCard({
   const identity = (data?.identity_data ?? {}) as Record<string, unknown>;
 
   return (
-    <Card className="tadeon-offline-folio" data-availability={data ? "details" : "summary"}>
+    <Card
+      family="folio"
+      className="tadeon-offline-folio"
+      data-availability={data ? "details" : "summary"}
+    >
       <div className="tadeon-offline-folio__meta">
         <span>
           {summary.rules_version === 2 || tdv ? "Desenvolvimento" : "Exposição"}{" "}
@@ -346,7 +350,7 @@ function OfflineMaster({ cache }: { cache: NonNullable<OfflineCache["master"]> }
     const s = tdv.data;
     return (
       <div className="grid gap-4">
-        <Card className="tadeon-surface rounded-2xl p-4 md:p-6">
+        <Card family="folio" className="tadeon-surface rounded-2xl p-4 md:p-6">
           <p className="tadeon-eyebrow">Condução TdV II · somente leitura</p>
           <h2 className="font-cinzel text-2xl">{s.title || "Cena sem título"}</h2>
           <p>{s.objective}</p>
@@ -384,7 +388,7 @@ function OfflineMaster({ cache }: { cache: NonNullable<OfflineCache["master"]> }
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-      <Card className="tadeon-surface rounded-2xl p-4 md:p-6">
+      <Card family="folio" className="tadeon-surface rounded-2xl p-4 md:p-6">
         <p className="tadeon-eyebrow">Campanha</p>
         <h2 className="font-cinzel text-2xl font-semibold">{cache.campaignTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -408,7 +412,7 @@ function OfflineMaster({ cache }: { cache: NonNullable<OfflineCache["master"]> }
           ["Ameaças", cache.threats.length],
           ["Dobras ativas", activeFolds.length],
         ].map(([label, value]) => (
-          <Card key={String(label)} className="tadeon-surface rounded-2xl p-4">
+          <Card family="folio" key={String(label)} className="tadeon-surface rounded-2xl p-4">
             <p className="font-sans text-2xl font-medium tabular-nums">{value}</p>
             <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
               {label}
@@ -442,7 +446,7 @@ function ReadOnlyList({ title, items }: { title: string; items: string[] }) {
 
 function EmptyCard({ text }: { text: string }) {
   return (
-    <Card className="tadeon-surface rounded-2xl px-5 py-12 text-center">
+    <Card family="folio" className="tadeon-surface rounded-2xl px-5 py-12 text-center">
       <p className="text-sm text-muted-foreground">{text}</p>
     </Card>
   );

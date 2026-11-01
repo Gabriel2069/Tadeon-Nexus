@@ -10,11 +10,9 @@ describe("acabamento transversal solicitado", () => {
   // NEX-024: collapsed rail geometry is exercised in verify-dashboard-design.mjs.
 
 
-  it("normaliza a largura de Backup, Usuários e Consulta offline", () => {
-    const css = source("src/styles/interface-final-user-polish.css");
-    expect(css).toContain(".tadeon-route-tools,.tadeon-route-users,.tadeon-route-offline");
-    expect(css).toContain("max-width:min(92rem,100%) !important");
-  });
+  // NEX-045: the shared envelope moved to desktop-shell.css. Actual width,
+  // padding and typography are checked across routes by verify-header-ownership.mjs
+  // in all 15 chapter-50 viewports; the old 92rem source assertion conflicted with it.
 
   it("mantém superfícies grandes da Mesa contidas e mutuamente exclusivas", () => {
     const css = source("src/styles/interface-final-user-polish.css");

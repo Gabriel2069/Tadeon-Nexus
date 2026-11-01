@@ -592,7 +592,7 @@ function NexusToolsPageContent() {
         </TabsList>
 
         <TabsContent value="backup" className="tadeon-backup-workspace">
-          <Card className="tadeon-backup-create">
+          <Card family="instrument" className="tadeon-backup-create">
             <div className="tadeon-backup-create__heading">
               <FileClock aria-hidden="true" />
               <div>
@@ -643,7 +643,7 @@ function NexusToolsPageContent() {
           </Card>
 
           <div className="tadeon-backup-archive">
-            <Card className="tadeon-backup-history">
+            <Card family="instrument" className="tadeon-backup-history">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="tadeon-eyebrow">Versões locais</p>
@@ -713,7 +713,7 @@ function NexusToolsPageContent() {
               )}
             </Card>
 
-            <Card className="tadeon-backup-import">
+            <Card family="instrument" className="tadeon-backup-import">
               <FileUp className="mb-4 h-6 w-6 text-primary" />
               <h2 className="font-cinzel text-xl font-semibold">Importar backup</h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -741,7 +741,7 @@ function NexusToolsPageContent() {
         </TabsContent>
 
         <TabsContent value="diagnostics" className="space-y-5">
-          <Card className="tadeon-surface rounded-2xl p-4 md:p-6">
+          <Card family="instrument" className="tadeon-surface rounded-2xl p-4 md:p-6">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
                 <p className="tadeon-eyebrow">Estado atual</p>
@@ -768,7 +768,7 @@ function NexusToolsPageContent() {
           </div>
 
           {errorLogs.length > 0 && (
-            <Card className="tadeon-surface rounded-2xl p-4 md:p-6">
+            <Card family="instrument" className="tadeon-surface rounded-2xl p-4 md:p-6">
               <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                 <div>
                   <p className="tadeon-eyebrow">Ocorrências abertas</p>
@@ -951,7 +951,11 @@ function DiagnosticCard({ result }: { result: DiagnosticResult }) {
     );
 
   return (
-    <Card className="tadeon-diagnostic-record" data-diagnostic-level={result.level}>
+    <Card
+      family="instrument"
+      className="tadeon-diagnostic-record"
+      data-diagnostic-level={result.level}
+    >
       <div className="flex items-start gap-3">
         <div
           className={`mt-0.5 rounded-lg p-2 ${

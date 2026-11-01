@@ -39,6 +39,14 @@ const publicSupabaseEnv = [
   return definitions;
 }, {});
 
+// The deployment workflow supplies this public source identity. Define it for
+// both client and SSR environments; never substitute a local dirty Git HEAD.
+const buildCommit = [process.env.VITE_APP_COMMIT_SHA, process.env.TADEON_DEPLOY_SHA].find(
+  (value) => value !== undefined && /^[a-f0-9]{40}$/i.test(value),
+);
+if (buildCommit)
+  publicSupabaseEnv["import.meta.env.VITE_APP_COMMIT_SHA"] = JSON.stringify(buildCommit);
+
 const spacedKnowledgeGraphMemory = fileURLToPath(
   new URL("./src/lib/knowledge/knowledge-graph-memory-spaced.ts", import.meta.url),
 );

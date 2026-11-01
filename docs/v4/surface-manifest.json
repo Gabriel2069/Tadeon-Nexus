@@ -2592,6 +2592,8 @@
         "src/components/ui/select.tsx",
         "src/components/ui/sheet.tsx",
         "src/components/ui/sonner.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/components/visual-audit/material-gallery.tsx",
         "src/components/visual-audit/popup-gallery.tsx",
         "src/components/visual-audit/responsive-audit-lab.tsx",
         "src/components/visual-viewport-popup-bridge.tsx",
@@ -2666,6 +2668,8 @@
         "src/components/ui/dialog.tsx",
         "src/components/ui/popup-presence.tsx",
         "src/components/ui/sheet.tsx",
+        "src/components/ui/tabs.tsx",
+        "src/components/visual-audit/material-gallery.tsx",
         "src/components/visual-audit/popup-gallery.tsx",
         "src/components/visual-audit/responsive-audit-lab.tsx",
         "src/routes/__root.tsx"
@@ -2675,6 +2679,7 @@
         "src/components/experience-final-polish-bridge.tsx",
         "src/components/protected-shell.tsx",
         "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
+        "src/components/visual-audit/material-gallery.tsx",
         "src/lib/permissions.ts",
         "src/lib/tabletop/tabletop-engine.ts",
         "src/routes/visual-audit.tsx"
@@ -2689,6 +2694,7 @@
         "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
         "src/components/tabletop/tabletop-final-interaction-bridge.tsx",
         "src/components/tadeon-experience-director.tsx",
+        "src/components/ui/tabs.tsx",
         "src/components/visual-audit/popup-gallery.tsx",
         "src/components/visual-audit/responsive-audit-lab.tsx",
         "src/lib/auth.tsx",
@@ -3194,6 +3200,7 @@
     "src/components/ui/route-popup-frame.test.tsx",
     "src/components/ui/select-presence.test.tsx",
     "src/components/ui/sheet.test.tsx",
+    "src/components/visual-audit/material-gallery.test.tsx",
     "src/components/visual-viewport-popup-bridge.test.tsx",
     "src/components/workspace-actions.test.tsx",
     "src/integrations/supabase/public-config.test.ts",
@@ -22397,7 +22404,7 @@
       "guards": []
     },
     "src/components/material-surface.tsx": {
-      "sha256": "fc6edf4246e24ba183913b9073e2b9e5dd1b7dc741975d4283b7879249e64ac4",
+      "sha256": "076988b15cb3407a3cabc4ef11ec57853b38fe83beecb8699451be55abd950ef",
       "imports": [
         {
           "specifier": "@/lib/use-material-light",
@@ -22412,13 +22419,13 @@
       "renders": [
         {
           "component": "Element",
-          "line": 13
+          "line": 16
         }
       ],
       "actions": [
         {
           "component": "Element",
-          "line": 16,
+          "line": 20,
           "event": "onPointerMove",
           "expression": "{(event) => { onPointerMove?.(event); if (!event.defaultPrevented) light.onPointerMove(event); }}",
           "label": null,
@@ -22426,7 +22433,7 @@
         },
         {
           "component": "Element",
-          "line": 20,
+          "line": 24,
           "event": "onPointerLeave",
           "expression": "{(event) => { onPointerLeave?.(event); light.onPointerLeave(); }}",
           "label": null,
@@ -50459,7 +50466,7 @@
       "guards": []
     },
     "src/components/ui/card.tsx": {
-      "sha256": "fae694da182cd42f649685d247d7cdefcccb12ad8710e37bf65d6918c5498816",
+      "sha256": "adca8ead3b3714ecd3c1571bd69d822f5da0076c8212177e606683a05a958776",
       "imports": [
         {
           "specifier": "react",
@@ -50482,7 +50489,7 @@
           "names": [
             "cn"
           ],
-          "line": 4,
+          "line": 5,
           "kind": "static",
           "target": "src/lib/utils.ts"
         }
@@ -50490,33 +50497,33 @@
       "renders": [
         {
           "component": "div",
-          "line": 10
+          "line": 13
         },
         {
           "component": "div",
-          "line": 32
+          "line": 36
         },
         {
           "component": "div",
-          "line": 44
+          "line": 48
         },
         {
           "component": "div",
-          "line": 56
+          "line": 60
         },
         {
           "component": "div",
-          "line": 68
+          "line": 72
         },
         {
           "component": "div",
-          "line": 75
+          "line": 79
         }
       ],
       "actions": [
         {
           "component": "div",
-          "line": 14,
+          "line": 19,
           "event": "onPointerMove",
           "expression": "{(event) => { onPointerMove?.(event); if (!event.defaultPrevented) light.onPointerMove(event); }}",
           "label": null,
@@ -50524,7 +50531,7 @@
         },
         {
           "component": "div",
-          "line": 18,
+          "line": 23,
           "event": "onPointerLeave",
           "expression": "{(event) => { onPointerLeave?.(event); light.onPointerLeave(); }}",
           "label": null,
@@ -53667,15 +53674,288 @@
       "routes": [],
       "guards": []
     },
-    "src/components/visual-audit/popup-gallery.tsx": {
-      "sha256": "07b88fc4236434159f220ea1b8a9a1a10176edcd7b3ee1d250b606ffbe758478",
+    "src/components/visual-audit/material-gallery.tsx": {
+      "sha256": "f967bb83b7a3618de1ee13a6f98d3541bf5a4a9dc540772effcf8848d646841a",
       "imports": [
+        {
+          "specifier": "react",
+          "names": [
+            "useEffect",
+            "useId",
+            "useRef",
+            "useState"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "@/components/ui/card",
+          "names": [
+            "Card"
+          ],
+          "line": 2,
+          "kind": "static",
+          "target": "src/components/ui/card.tsx"
+        },
+        {
+          "specifier": "@/components/ui/button",
+          "names": [
+            "Button"
+          ],
+          "line": 3,
+          "kind": "static",
+          "target": "src/components/ui/button.tsx"
+        },
+        {
+          "specifier": "@/components/ui/input",
+          "names": [
+            "Input"
+          ],
+          "line": 4,
+          "kind": "static",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
+          "specifier": "@/components/ui/tabs",
+          "names": [
+            "Tabs",
+            "TabsList",
+            "TabsTrigger"
+          ],
+          "line": 5,
+          "kind": "static",
+          "target": "src/components/ui/tabs.tsx"
+        },
+        {
+          "specifier": "@/components/fabric-filaments",
+          "names": [
+            "FabricFilaments"
+          ],
+          "line": 6,
+          "kind": "static",
+          "target": "src/components/fabric-filaments.tsx"
+        }
+      ],
+      "renders": [
+        {
+          "component": "section",
+          "line": 49
+        },
+        {
+          "component": "div",
+          "line": 50
+        },
+        {
+          "component": "div",
+          "line": 51
+        },
+        {
+          "component": "p",
+          "line": 52
+        },
+        {
+          "component": "h2",
+          "line": 53
+        },
+        {
+          "component": "span",
+          "line": 55
+        },
+        {
+          "component": "div",
+          "line": 57
+        },
+        {
+          "component": "Card",
+          "line": 59
+        },
+        {
+          "component": "FabricFilaments",
+          "line": 65
+        },
+        {
+          "component": "h3",
+          "line": 66
+        },
+        {
+          "component": "p",
+          "line": 67
+        },
+        {
+          "component": "div",
+          "line": 68
+        },
+        {
+          "component": "span",
+          "line": 69
+        },
+        {
+          "component": "span",
+          "line": 70
+        },
+        {
+          "component": "span",
+          "line": 71
+        },
+        {
+          "component": "Tabs",
+          "line": 76
+        },
+        {
+          "component": "TabsList",
+          "line": 77
+        },
+        {
+          "component": "TabsTrigger",
+          "line": 79
+        },
+        {
+          "component": "Card",
+          "line": 85
+        },
+        {
+          "component": "div",
+          "line": 91
+        },
+        {
+          "component": "p",
+          "line": 92
+        },
+        {
+          "component": "label",
+          "line": 95
+        },
+        {
+          "component": "Input",
+          "line": 96
+        },
+        {
+          "component": "div",
+          "line": 106
+        },
+        {
+          "component": "Button",
+          "line": 107
+        },
+        {
+          "component": "Button",
+          "line": 118
+        },
+        {
+          "component": "div",
+          "line": 132
+        },
+        {
+          "component": "label",
+          "line": 133
+        },
+        {
+          "component": "input",
+          "line": 134
+        },
+        {
+          "component": "label",
+          "line": 141
+        },
+        {
+          "component": "input",
+          "line": 142
+        },
+        {
+          "component": "p",
+          "line": 145
+        }
+      ],
+      "actions": [
+        {
+          "component": "Tabs",
+          "line": 76,
+          "event": "onValueChange",
+          "expression": "{(v) => setFamily(v as MaterialFamily)}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 101,
+          "event": "onChange",
+          "expression": "{(e) => { setDraft(e.target.value); if (state !== \"pending\") setState(\"idle\"); }}",
+          "label": "{`${id}-draft`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 110,
+          "event": "onClick",
+          "expression": "{simulate}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 121,
+          "event": "onClick",
+          "expression": "{() => { setState(\"idle\"); setFail(false); setReadonly(false); setDraft(\"O fio que permanece\"); }}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "input",
+          "line": 137,
+          "event": "onChange",
+          "expression": "{(e) => setReadonly(e.target.checked)}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "input",
+          "line": 142,
+          "event": "onChange",
+          "expression": "{(e) => setFail(e.target.checked)}",
+          "label": null,
+          "certification": "source-only"
+        }
+      ],
+      "data": [],
+      "routes": [],
+      "guards": [
+        {
+          "expression": "Input readOnly={readonly}",
+          "line": 99
+        },
+        {
+          "expression": "Input disabled={state === \"pending\"}",
+          "line": 100
+        },
+        {
+          "expression": "Button disabled={readonly || state === \"pending\"}",
+          "line": 108
+        },
+        {
+          "expression": "Button disabled={state === \"pending\"}",
+          "line": 120
+        }
+      ]
+    },
+    "src/components/visual-audit/popup-gallery.tsx": {
+      "sha256": "2f67bdc6c453565e52de318a770114dc345218651a9887178628f29415780397",
+      "imports": [
+        {
+          "specifier": "./material-gallery",
+          "names": [
+            "MaterialGallery"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": "src/components/visual-audit/material-gallery.tsx"
+        },
         {
           "specifier": "@/components/page-header",
           "names": [
             "PageHeader"
           ],
-          "line": 1,
+          "line": 2,
           "kind": "static",
           "target": "src/components/page-header.tsx"
         },
@@ -53684,7 +53964,7 @@
           "names": [
             "useState"
           ],
-          "line": 2,
+          "line": 3,
           "kind": "static",
           "target": null
         },
@@ -53698,7 +53978,7 @@
             "Maximize2",
             "PanelTop"
           ],
-          "line": 3,
+          "line": 4,
           "kind": "static",
           "target": null
         },
@@ -53707,7 +53987,7 @@
           "names": [
             "Button"
           ],
-          "line": 4,
+          "line": 5,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -53716,7 +53996,7 @@
           "names": [
             "Card"
           ],
-          "line": 5,
+          "line": 6,
           "kind": "static",
           "target": "src/components/ui/card.tsx"
         },
@@ -53731,7 +54011,7 @@
             "DialogTitle",
             "DialogTrigger"
           ],
-          "line": 6,
+          "line": 7,
           "kind": "static",
           "target": "src/components/ui/dialog.tsx"
         },
@@ -53748,7 +54028,7 @@
             "AlertDialogTitle",
             "AlertDialogTrigger"
           ],
-          "line": 15,
+          "line": 16,
           "kind": "static",
           "target": "src/components/ui/alert-dialog.tsx"
         },
@@ -53762,7 +54042,7 @@
             "SheetTitle",
             "SheetTrigger"
           ],
-          "line": 26,
+          "line": 27,
           "kind": "static",
           "target": "src/components/ui/sheet.tsx"
         },
@@ -53773,7 +54053,7 @@
             "PopoverContent",
             "PopoverTrigger"
           ],
-          "line": 34,
+          "line": 35,
           "kind": "static",
           "target": "src/components/ui/popover.tsx"
         },
@@ -53786,7 +54066,7 @@
             "SelectTrigger",
             "SelectValue"
           ],
-          "line": 35,
+          "line": 36,
           "kind": "static",
           "target": "src/components/ui/select.tsx"
         }
@@ -53794,186 +54074,186 @@
       "renders": [
         {
           "component": "div",
-          "line": 47
-        },
-        {
-          "component": "PageHeader",
           "line": 48
         },
         {
+          "component": "PageHeader",
+          "line": 49
+        },
+        {
           "component": "AppWindow",
-          "line": 53
+          "line": 54
         },
         {
-          "component": "div",
-          "line": 56
-        },
-        {
-          "component": "Card",
+          "component": "MaterialGallery",
           "line": 57
         },
         {
-          "component": "PanelTop",
+          "component": "div",
           "line": 58
         },
         {
-          "component": "h2",
+          "component": "Card",
           "line": 59
         },
         {
-          "component": "p",
+          "component": "PanelTop",
           "line": 60
         },
         {
+          "component": "h2",
+          "line": 61
+        },
+        {
+          "component": "p",
+          "line": 62
+        },
+        {
           "component": "Dialog",
-          "line": 63
-        },
-        {
-          "component": "DialogTrigger",
-          "line": 64
-        },
-        {
-          "component": "Button",
           "line": 65
         },
         {
-          "component": "DialogContent",
+          "component": "DialogTrigger",
+          "line": 66
+        },
+        {
+          "component": "Button",
           "line": 67
         },
         {
-          "component": "DialogHeader",
-          "line": 68
-        },
-        {
-          "component": "DialogTitle",
+          "component": "DialogContent",
           "line": 69
         },
         {
-          "component": "DialogDescription",
+          "component": "DialogHeader",
           "line": 70
         },
         {
-          "component": "div",
-          "line": 74
+          "component": "DialogTitle",
+          "line": 71
+        },
+        {
+          "component": "DialogDescription",
+          "line": 72
         },
         {
           "component": "div",
           "line": 76
         },
         {
+          "component": "div",
+          "line": 78
+        },
+        {
           "component": "DialogFooter",
-          "line": 84
+          "line": 86
         },
         {
           "component": "Button",
-          "line": 85
+          "line": 87
         },
         {
           "component": "Button",
-          "line": 88
+          "line": 90
         },
         {
           "component": "Card",
-          "line": 94
-        },
-        {
-          "component": "AlertTriangle",
-          "line": 95
-        },
-        {
-          "component": "h2",
           "line": 96
         },
         {
-          "component": "p",
+          "component": "AlertTriangle",
           "line": 97
         },
         {
-          "component": "AlertDialog",
-          "line": 100
-        },
-        {
-          "component": "AlertDialogTrigger",
-          "line": 101
-        },
-        {
-          "component": "Button",
-          "line": 102
-        },
-        {
-          "component": "AlertDialogContent",
-          "line": 106
-        },
-        {
-          "component": "AlertDialogHeader",
-          "line": 107
-        },
-        {
-          "component": "AlertDialogTitle",
-          "line": 108
-        },
-        {
-          "component": "AlertDialogDescription",
-          "line": 109
-        },
-        {
-          "component": "AlertDialogFooter",
-          "line": 113
-        },
-        {
-          "component": "AlertDialogCancel",
-          "line": 114
-        },
-        {
-          "component": "AlertDialogAction",
-          "line": 115
-        },
-        {
-          "component": "Card",
-          "line": 121
-        },
-        {
-          "component": "Maximize2",
-          "line": 122
-        },
-        {
           "component": "h2",
-          "line": 123
+          "line": 98
         },
         {
           "component": "p",
-          "line": 124
+          "line": 99
         },
         {
-          "component": "Sheet",
-          "line": 125
+          "component": "AlertDialog",
+          "line": 102
         },
         {
-          "component": "SheetTrigger",
-          "line": 126
+          "component": "AlertDialogTrigger",
+          "line": 103
         },
         {
           "component": "Button",
+          "line": 104
+        },
+        {
+          "component": "AlertDialogContent",
+          "line": 108
+        },
+        {
+          "component": "AlertDialogHeader",
+          "line": 109
+        },
+        {
+          "component": "AlertDialogTitle",
+          "line": 110
+        },
+        {
+          "component": "AlertDialogDescription",
+          "line": 111
+        },
+        {
+          "component": "AlertDialogFooter",
+          "line": 115
+        },
+        {
+          "component": "AlertDialogCancel",
+          "line": 116
+        },
+        {
+          "component": "AlertDialogAction",
+          "line": 117
+        },
+        {
+          "component": "Card",
+          "line": 123
+        },
+        {
+          "component": "Maximize2",
+          "line": 124
+        },
+        {
+          "component": "h2",
+          "line": 125
+        },
+        {
+          "component": "p",
+          "line": 126
+        },
+        {
+          "component": "Sheet",
           "line": 127
         },
         {
+          "component": "SheetTrigger",
+          "line": 128
+        },
+        {
+          "component": "Button",
+          "line": 129
+        },
+        {
           "component": "SheetContent",
-          "line": 131
-        },
-        {
-          "component": "SheetHeader",
-          "line": 132
-        },
-        {
-          "component": "SheetTitle",
           "line": 133
         },
         {
-          "component": "SheetDescription",
+          "component": "SheetHeader",
           "line": 134
         },
         {
-          "component": "div",
+          "component": "SheetTitle",
+          "line": 135
+        },
+        {
+          "component": "SheetDescription",
           "line": 136
         },
         {
@@ -53981,87 +54261,83 @@
           "line": 138
         },
         {
+          "component": "div",
+          "line": 140
+        },
+        {
           "component": "Card",
-          "line": 150
-        },
-        {
-          "component": "ChevronDown",
-          "line": 151
-        },
-        {
-          "component": "h2",
           "line": 152
         },
         {
-          "component": "p",
+          "component": "ChevronDown",
           "line": 153
         },
         {
-          "component": "Popover",
+          "component": "h2",
           "line": 154
         },
         {
-          "component": "PopoverTrigger",
+          "component": "p",
           "line": 155
         },
         {
-          "component": "Button",
+          "component": "Popover",
           "line": 156
         },
         {
-          "component": "PopoverContent",
-          "line": 160
-        },
-        {
-          "component": "p",
-          "line": 161
-        },
-        {
-          "component": "p",
-          "line": 162
+          "component": "PopoverTrigger",
+          "line": 157
         },
         {
           "component": "Button",
-          "line": 165
+          "line": 158
         },
         {
-          "component": "Card",
-          "line": 172
-        },
-        {
-          "component": "Columns3",
-          "line": 173
-        },
-        {
-          "component": "h2",
-          "line": 174
+          "component": "PopoverContent",
+          "line": 162
         },
         {
           "component": "p",
+          "line": 163
+        },
+        {
+          "component": "p",
+          "line": 164
+        },
+        {
+          "component": "Button",
+          "line": 167
+        },
+        {
+          "component": "Card",
+          "line": 174
+        },
+        {
+          "component": "Columns3",
           "line": 175
         },
         {
-          "component": "Select",
+          "component": "h2",
           "line": 176
         },
         {
-          "component": "SelectTrigger",
+          "component": "p",
           "line": 177
         },
         {
-          "component": "SelectValue",
+          "component": "Select",
           "line": 178
         },
         {
-          "component": "SelectContent",
+          "component": "SelectTrigger",
+          "line": 179
+        },
+        {
+          "component": "SelectValue",
           "line": 180
         },
         {
-          "component": "SelectItem",
-          "line": 181
-        },
-        {
-          "component": "SelectItem",
+          "component": "SelectContent",
           "line": 182
         },
         {
@@ -54073,38 +54349,46 @@
           "line": 184
         },
         {
+          "component": "SelectItem",
+          "line": 185
+        },
+        {
+          "component": "SelectItem",
+          "line": 186
+        },
+        {
           "component": "Card",
-          "line": 189
-        },
-        {
-          "component": "AppWindow",
-          "line": 190
-        },
-        {
-          "component": "h2",
           "line": 191
         },
         {
-          "component": "p",
+          "component": "AppWindow",
           "line": 192
         },
         {
+          "component": "h2",
+          "line": 193
+        },
+        {
+          "component": "p",
+          "line": 194
+        },
+        {
           "component": "div",
-          "line": 195
-        },
-        {
-          "component": "p",
-          "line": 196
-        },
-        {
-          "component": "p",
           "line": 197
+        },
+        {
+          "component": "p",
+          "line": 198
+        },
+        {
+          "component": "p",
+          "line": 199
         }
       ],
       "actions": [
         {
           "component": "Dialog",
-          "line": 63,
+          "line": 65,
           "event": "onOpenChange",
           "expression": "{setDialogOpen}",
           "label": null,
@@ -54112,7 +54396,7 @@
         },
         {
           "component": "Button",
-          "line": 85,
+          "line": 87,
           "event": "onClick",
           "expression": "{() => setDialogOpen(false)}",
           "label": null,
@@ -54120,7 +54404,7 @@
         },
         {
           "component": "Button",
-          "line": 88,
+          "line": 90,
           "event": "onClick",
           "expression": "{() => setDialogOpen(false)}",
           "label": null,
@@ -54131,19 +54415,19 @@
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 75
+          "line": 77
         },
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 137
+          "line": 139
         }
       ],
       "routes": [],
       "guards": []
     },
     "src/components/visual-audit/responsive-audit-lab.tsx": {
-      "sha256": "7f73ffbdb157d8e42cae593d4bb8761e87534cf2afc7f7713d4689796386fd7e",
+      "sha256": "4ca381792e321c40b7a2b5f07c3e339cd38977ae4e9ab76ad065c82e4a090803",
       "imports": [
         {
           "specifier": "@/components/page-header",
@@ -54235,217 +54519,217 @@
       "renders": [
         {
           "component": "div",
-          "line": 284
-        },
-        {
-          "component": "PageHeader",
-          "line": 285
-        },
-        {
-          "component": "Ruler",
-          "line": 290
-        },
-        {
-          "component": "Badge",
           "line": 292
         },
         {
-          "component": "ShieldCheck",
+          "component": "PageHeader",
           "line": 293
         },
         {
-          "component": "Card",
-          "line": 299
+          "component": "Ruler",
+          "line": 298
         },
         {
-          "component": "div",
+          "component": "Badge",
           "line": 300
         },
         {
-          "component": "div",
+          "component": "ShieldCheck",
           "line": 301
         },
         {
-          "component": "Label",
-          "line": 302
+          "component": "Card",
+          "line": 307
         },
         {
           "component": "div",
-          "line": 303
+          "line": 308
+        },
+        {
+          "component": "div",
+          "line": 309
+        },
+        {
+          "component": "Label",
+          "line": 310
+        },
+        {
+          "component": "div",
+          "line": 311
         },
         {
           "component": "Input",
-          "line": 304
-        },
-        {
-          "component": "Button",
           "line": 312
         },
         {
+          "component": "Button",
+          "line": 320
+        },
+        {
           "component": "ExternalLink",
-          "line": 313
+          "line": 321
         },
         {
           "component": "div",
-          "line": 318
-        },
-        {
-          "component": "Button",
-          "line": 319
-        },
-        {
-          "component": "RefreshCw",
           "line": 326
         },
         {
           "component": "Button",
-          "line": 329
+          "line": 327
         },
         {
-          "component": "Columns3",
-          "line": 333
+          "component": "RefreshCw",
+          "line": 334
         },
         {
           "component": "Button",
-          "line": 336
-        },
-        {
-          "component": "Eye",
           "line": 337
         },
         {
-          "component": "div",
-          "line": 343
-        },
-        {
-          "component": "div",
-          "line": 344
+          "component": "Columns3",
+          "line": 341
         },
         {
           "component": "Button",
-          "line": 349
+          "line": 344
         },
         {
-          "component": "Icon",
-          "line": 359
-        },
-        {
-          "component": "span",
-          "line": 361
+          "component": "Eye",
+          "line": 345
         },
         {
           "component": "div",
-          "line": 368
+          "line": 351
         },
         {
-          "component": "Frame",
+          "component": "div",
+          "line": 352
+        },
+        {
+          "component": "Button",
+          "line": 357
+        },
+        {
+          "component": "Icon",
+          "line": 367
+        },
+        {
+          "component": "span",
           "line": 369
-        },
-        {
-          "component": "strong",
-          "line": 370
         },
         {
           "component": "div",
           "line": 376
         },
         {
-          "component": "Button",
+          "component": "Frame",
+          "line": 377
+        },
+        {
+          "component": "strong",
           "line": 378
         },
         {
           "component": "div",
-          "line": 390
+          "line": 384
+        },
+        {
+          "component": "Button",
+          "line": 386
         },
         {
           "component": "div",
-          "line": 391
-        },
-        {
-          "component": "div",
-          "line": 392
-        },
-        {
-          "component": "span",
           "line": 398
         },
         {
-          "component": "span",
+          "component": "div",
           "line": 399
         },
         {
+          "component": "div",
+          "line": 400
+        },
+        {
+          "component": "span",
+          "line": 406
+        },
+        {
+          "component": "span",
+          "line": 407
+        },
+        {
           "component": "iframe",
-          "line": 402
+          "line": 410
         },
         {
           "component": "Card",
-          "line": 411
+          "line": 419
         },
         {
           "component": "div",
-          "line": 412
-        },
-        {
-          "component": "div",
-          "line": 413
-        },
-        {
-          "component": "p",
-          "line": 414
-        },
-        {
-          "component": "h2",
-          "line": 415
-        },
-        {
-          "component": "CheckCircle2",
-          "line": 418
-        },
-        {
-          "component": "AlertTriangle",
           "line": 420
         },
         {
+          "component": "div",
+          "line": 421
+        },
+        {
           "component": "p",
+          "line": 422
+        },
+        {
+          "component": "h2",
           "line": 423
         },
         {
-          "component": "div",
-          "line": 427
+          "component": "CheckCircle2",
+          "line": 426
+        },
+        {
+          "component": "AlertTriangle",
+          "line": 428
         },
         {
           "component": "p",
-          "line": 429
+          "line": 431
         },
         {
           "component": "div",
           "line": 435
         },
         {
-          "component": "div",
-          "line": 439
-        },
-        {
-          "component": "Badge",
-          "line": 440
-        },
-        {
-          "component": "code",
-          "line": 441
-        },
-        {
           "component": "p",
+          "line": 437
+        },
+        {
+          "component": "div",
           "line": 443
         },
         {
           "component": "div",
           "line": 447
+        },
+        {
+          "component": "Badge",
+          "line": 448
+        },
+        {
+          "component": "code",
+          "line": 449
+        },
+        {
+          "component": "p",
+          "line": 451
+        },
+        {
+          "component": "div",
+          "line": 455
         }
       ],
       "actions": [
         {
           "component": "Input",
-          "line": 307,
+          "line": 315,
           "event": "onChange",
           "expression": "{(event) => setPathInput(event.target.value)}",
           "label": "\"audit-path\"",
@@ -54453,7 +54737,7 @@
         },
         {
           "component": "Input",
-          "line": 308,
+          "line": 316,
           "event": "onKeyDown",
           "expression": "{(event) => { if (event.key === \"Enter\") navigatePreview(pathInput); }}",
           "label": "\"audit-path\"",
@@ -54461,7 +54745,7 @@
         },
         {
           "component": "Button",
-          "line": 312,
+          "line": 320,
           "event": "onClick",
           "expression": "{() => navigatePreview(pathInput)}",
           "label": null,
@@ -54469,7 +54753,7 @@
         },
         {
           "component": "Button",
-          "line": 321,
+          "line": 329,
           "event": "onClick",
           "expression": "{() => { setWidth(height); setHeight(width); }}",
           "label": null,
@@ -54477,7 +54761,7 @@
         },
         {
           "component": "Button",
-          "line": 331,
+          "line": 339,
           "event": "onClick",
           "expression": "{() => setGuides((value) => !value)}",
           "label": null,
@@ -54485,7 +54769,7 @@
         },
         {
           "component": "Button",
-          "line": 336,
+          "line": 344,
           "event": "onClick",
           "expression": "{auditFrame}",
           "label": null,
@@ -54493,7 +54777,7 @@
         },
         {
           "component": "Button",
-          "line": 353,
+          "line": 361,
           "event": "onClick",
           "expression": "{() => { setWidth(preset.width); setHeight(preset.height); }}",
           "label": null,
@@ -54501,7 +54785,7 @@
         },
         {
           "component": "Button",
-          "line": 382,
+          "line": 390,
           "event": "onClick",
           "expression": "{() => navigatePreview(href)}",
           "label": null,
@@ -54509,7 +54793,7 @@
         },
         {
           "component": "iframe",
-          "line": 406,
+          "line": 414,
           "event": "onLoad",
           "expression": "{() => window.setTimeout(auditFrame, 450)}",
           "label": "{`Auditoria de ${path}`}",
@@ -54520,7 +54804,7 @@
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 106
+          "line": 114
         }
       ],
       "routes": [],
@@ -60546,7 +60830,7 @@
       ]
     },
     "src/routes/manage-users.tsx": {
-      "sha256": "622da0015c9441926264f7235eef8baf404ca077de0c723d5f624a26714629f1",
+      "sha256": "d1ea976c6151ec8b87906c7e62dfc000b20090e198a73b311f960e073f9ed858",
       "imports": [
         {
           "specifier": "@/components/page-header",
@@ -60838,115 +61122,115 @@
         },
         {
           "component": "div",
-          "line": 276
-        },
-        {
-          "component": "span",
-          "line": 277
-        },
-        {
-          "component": "div",
-          "line": 280
-        },
-        {
-          "component": "p",
           "line": 281
         },
         {
           "component": "span",
-          "line": 283
+          "line": 282
         },
         {
-          "component": "p",
+          "component": "div",
           "line": 285
         },
         {
           "component": "p",
-          "line": 289
+          "line": 286
+        },
+        {
+          "component": "span",
+          "line": 288
+        },
+        {
+          "component": "p",
+          "line": 290
+        },
+        {
+          "component": "p",
+          "line": 294
         },
         {
           "component": "div",
-          "line": 295
+          "line": 300
         },
         {
           "component": "Icon",
-          "line": 296
+          "line": 301
         },
         {
           "component": "Select",
-          "line": 297
+          "line": 302
         },
         {
           "component": "SelectTrigger",
-          "line": 304
+          "line": 309
         },
         {
           "component": "SelectValue",
-          "line": 308
+          "line": 313
         },
         {
           "component": "SelectContent",
-          "line": 310
+          "line": 315
         },
         {
           "component": "SelectItem",
-          "line": 312
+          "line": 317
         },
         {
           "component": "Button",
-          "line": 318
+          "line": 323
         },
         {
           "component": "Trash2",
-          "line": 326
+          "line": 331
         },
         {
           "component": "AlertDialog",
-          "line": 334
+          "line": 339
         },
         {
           "component": "AlertDialogContent",
-          "line": 340
-        },
-        {
-          "component": "AlertDialogHeader",
-          "line": 341
-        },
-        {
-          "component": "AlertDialogTitle",
-          "line": 342
-        },
-        {
-          "component": "AlertDialogDescription",
           "line": 345
         },
         {
-          "component": "strong",
-          "line": 348
+          "component": "AlertDialogHeader",
+          "line": 346
+        },
+        {
+          "component": "AlertDialogTitle",
+          "line": 347
+        },
+        {
+          "component": "AlertDialogDescription",
+          "line": 350
         },
         {
           "component": "strong",
-          "line": 349
+          "line": 353
         },
         {
           "component": "strong",
-          "line": 356
+          "line": 354
+        },
+        {
+          "component": "strong",
+          "line": 361
         },
         {
           "component": "AlertDialogFooter",
-          "line": 362
+          "line": 367
         },
         {
           "component": "AlertDialogCancel",
-          "line": 363
+          "line": 368
         },
         {
           "component": "AlertDialogAction",
-          "line": 364
+          "line": 369
         },
         {
           "component": "Loader2",
-          "line": 372
+          "line": 377
         }
       ],
       "actions": [
@@ -60992,7 +61276,7 @@
         },
         {
           "component": "Select",
-          "line": 300,
+          "line": 305,
           "event": "onValueChange",
           "expression": "{(next) => { if (next !== row.role) setPending({ user: row, role: next as AppRole }); }}",
           "label": null,
@@ -61000,7 +61284,7 @@
         },
         {
           "component": "Button",
-          "line": 323,
+          "line": 328,
           "event": "onClick",
           "expression": "{() => setPending({ user: row })}",
           "label": "{`Excluir ${row.full_name || row.email || \"usuário\"}`}",
@@ -61008,7 +61292,7 @@
         },
         {
           "component": "AlertDialog",
-          "line": 336,
+          "line": 341,
           "event": "onOpenChange",
           "expression": "{(open) => { if (!open && !busyId) setPending(null); }}",
           "label": null,
@@ -61016,7 +61300,7 @@
         },
         {
           "component": "AlertDialogAction",
-          "line": 366,
+          "line": 371,
           "event": "onClick",
           "expression": "{(event) => { event.preventDefault(); void applyChange(); }}",
           "label": null,
@@ -61038,19 +61322,19 @@
         },
         {
           "expression": "Select disabled={isSelf || Boolean(busyId)}",
-          "line": 299
+          "line": 304
         },
         {
           "expression": "Button disabled={isSelf || Boolean(busyId)}",
-          "line": 321
+          "line": 326
         },
         {
           "expression": "AlertDialogCancel disabled={Boolean(busyId)}",
-          "line": 363
+          "line": 368
         },
         {
           "expression": "AlertDialogAction disabled={Boolean(busyId)}",
-          "line": 365
+          "line": 370
         }
       ]
     },
@@ -64168,7 +64452,7 @@
       "guards": []
     },
     "src/routes/nexus-tools.tsx": {
-      "sha256": "4b076ea0107aa6a591c45a516b6bd7d91845e6770a131d96257bec0a9000ad72",
+      "sha256": "2eff6fa6ea648737d3df26206576e79eab70b96568fdb439cdbf320209c1ec56",
       "imports": [
         {
           "specifier": "@/components/page-header",
@@ -64950,31 +65234,31 @@
         },
         {
           "component": "div",
-          "line": 955
+          "line": 959
         },
         {
           "component": "div",
-          "line": 956
+          "line": 960
         },
         {
           "component": "div",
-          "line": 967
+          "line": 971
         },
         {
           "component": "div",
-          "line": 968
+          "line": 972
         },
         {
           "component": "p",
-          "line": 969
+          "line": 973
         },
         {
           "component": "span",
-          "line": 970
+          "line": 974
         },
         {
           "component": "p",
-          "line": 978
+          "line": 982
         }
       ],
       "actions": [
@@ -65278,7 +65562,7 @@
       "guards": []
     },
     "src/routes/offline.tsx": {
-      "sha256": "b6152a1a7c2b878dd27d400ff51ca26633894db44aa0f6b59df2f352f5f192ac",
+      "sha256": "62aafd70a0f89775aac316c72a7f5c1a8fa3a38ff9a7d7e5b58192dc9232df58",
       "imports": [
         {
           "specifier": "@/lib/tdv2-master",
@@ -65660,195 +65944,195 @@
         },
         {
           "component": "div",
-          "line": 273
-        },
-        {
-          "component": "span",
-          "line": 274
+          "line": 277
         },
         {
           "component": "span",
           "line": 278
         },
         {
-          "component": "h2",
-          "line": 280
+          "component": "span",
+          "line": 282
         },
         {
-          "component": "p",
-          "line": 281
+          "component": "h2",
+          "line": 284
         },
         {
           "component": "p",
           "line": 285
         },
         {
+          "component": "p",
+          "line": 289
+        },
+        {
           "component": "dl",
-          "line": 291
+          "line": 295
         },
         {
           "component": "div",
-          "line": 305
+          "line": 309
         },
         {
           "component": "dt",
-          "line": 306
+          "line": 310
         },
         {
           "component": "dd",
-          "line": 307
+          "line": 311
         },
         {
           "component": "span",
-          "line": 308
+          "line": 312
         },
         {
           "component": "div",
-          "line": 313
+          "line": 317
         },
         {
           "component": "Badge",
-          "line": 315
+          "line": 319
         },
         {
           "component": "p",
-          "line": 321
+          "line": 325
         },
         {
           "component": "span",
-          "line": 322
+          "line": 326
         },
         {
           "component": "p",
-          "line": 328
+          "line": 332
         },
         {
           "component": "Button",
-          "line": 333
+          "line": 337
         },
         {
           "component": "Link",
-          "line": 334
+          "line": 338
         },
         {
           "component": "div",
-          "line": 348
-        },
-        {
-          "component": "Card",
-          "line": 349
-        },
-        {
-          "component": "p",
-          "line": 350
-        },
-        {
-          "component": "h2",
-          "line": 351
-        },
-        {
-          "component": "p",
           "line": 352
         },
         {
-          "component": "ReadOnlyList",
+          "component": "Card",
           "line": 353
         },
         {
-          "component": "ReadOnlyList",
-          "line": 359
-        },
-        {
-          "component": "ReadOnlyList",
-          "line": 366
-        },
-        {
           "component": "p",
-          "line": 367
-        },
-        {
-          "component": "div",
-          "line": 386
-        },
-        {
-          "component": "Card",
-          "line": 387
-        },
-        {
-          "component": "p",
-          "line": 388
+          "line": 354
         },
         {
           "component": "h2",
-          "line": 389
+          "line": 355
         },
         {
           "component": "p",
-          "line": 390
-        },
-        {
-          "component": "div",
-          "line": 393
+          "line": 356
         },
         {
           "component": "ReadOnlyList",
+          "line": 357
+        },
+        {
+          "component": "ReadOnlyList",
+          "line": 363
+        },
+        {
+          "component": "ReadOnlyList",
+          "line": 370
+        },
+        {
+          "component": "p",
+          "line": 371
+        },
+        {
+          "component": "div",
+          "line": 390
+        },
+        {
+          "component": "Card",
+          "line": 391
+        },
+        {
+          "component": "p",
+          "line": 392
+        },
+        {
+          "component": "h2",
+          "line": 393
+        },
+        {
+          "component": "p",
           "line": 394
+        },
+        {
+          "component": "div",
+          "line": 397
         },
         {
           "component": "ReadOnlyList",
           "line": 398
         },
         {
+          "component": "ReadOnlyList",
+          "line": 402
+        },
+        {
           "component": "div",
-          "line": 404
+          "line": 408
         },
         {
           "component": "Card",
-          "line": 411
+          "line": 415
         },
         {
           "component": "p",
-          "line": 412
+          "line": 416
         },
         {
           "component": "p",
-          "line": 413
+          "line": 417
         },
         {
           "component": "div",
-          "line": 425
+          "line": 429
         },
         {
           "component": "div",
-          "line": 426
+          "line": 430
         },
         {
           "component": "FileText",
-          "line": 427
-        },
-        {
-          "component": "p",
-          "line": 428
-        },
-        {
-          "component": "ul",
           "line": 431
         },
         {
-          "component": "li",
-          "line": 433
+          "component": "p",
+          "line": 432
         },
         {
-          "component": "p",
+          "component": "ul",
+          "line": 435
+        },
+        {
+          "component": "li",
           "line": 437
         },
         {
+          "component": "p",
+          "line": 441
+        },
+        {
           "component": "Card",
-          "line": 445
+          "line": 449
         },
         {
           "component": "p",
-          "line": 446
+          "line": 450
         }
       ],
       "actions": [
@@ -65878,7 +66162,7 @@
         },
         {
           "component": "Link",
-          "line": 334,
+          "line": 338,
           "event": "to",
           "expression": "\"/sheet/$id\"",
           "label": null,
@@ -65892,7 +66176,7 @@
       "guards": []
     },
     "src/routes/reset-password.tsx": {
-      "sha256": "263d2e31277ca3a1eb2cab2c9b6a3b6cb75c73667b3ccc915dad29bfcdd082f9",
+      "sha256": "87115b8470c64deb983d6690df2da409e0b0c7eeb782c5f3c6b702c1d925ee99",
       "imports": [
         {
           "specifier": "@tanstack/react-router",

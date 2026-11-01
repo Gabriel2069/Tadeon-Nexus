@@ -234,11 +234,11 @@ function ManageUsersPageContent() {
             : `${filtered.length} de ${rows.length} pessoas`}
       </p>
       {loading ? (
-        <Card className="grid min-h-48 place-items-center">
+        <Card family="archive" className="grid min-h-48 place-items-center">
           <Loader2 className="h-7 w-7 animate-spin" aria-label="Carregando" />
         </Card>
       ) : loadError ? (
-        <Card className="p-8 text-center">
+        <Card family="archive" className="p-8 text-center">
           <h2 className="font-medium">Não foi possível carregar os usuários.</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Verifique sua conexão e tente novamente.
@@ -248,7 +248,7 @@ function ManageUsersPageContent() {
           </Button>
         </Card>
       ) : filtered.length === 0 ? (
-        <Card className="p-10 text-center">
+        <Card family="archive" className="p-10 text-center">
           <Users className="mx-auto h-8 w-8 text-muted-foreground" />
           <h2 className="mt-4 font-medium">
             {rows.length ? "Nenhuma pessoa encontrada" : "Nenhum usuário cadastrado"}
@@ -272,7 +272,12 @@ function ManageUsersPageContent() {
             const isSelf = row.id === user?.id;
             const Icon = icons[row.role];
             return (
-              <Card key={row.id} className="tadeon-user-row" data-user-role={row.role}>
+              <Card
+                family="archive"
+                key={row.id}
+                className="tadeon-user-row"
+                data-user-role={row.role}
+              >
                 <div className="tadeon-user-row__identity">
                   <span className="tadeon-user-row__sigil" aria-hidden>
                     {(row.full_name || row.email || "?").trim().charAt(0).toUpperCase()}

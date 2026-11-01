@@ -1,3 +1,4 @@
+import { auditViewports } from "./v4-viewports.mjs";
 /** NEX-040: real UI, isolated authenticated fixtures. No production writes. */
 import { captureSurfaceCensus } from "./surface-census.mjs";
 import { installDesignFonts } from "./design-font-fixtures.mjs";
@@ -74,7 +75,7 @@ try {
     if (Date.now() > deadline) throw Error("Vite readiness: " + serverLog.slice(-2000));
     await new Promise((r) => setTimeout(r, 500));
   }
-  for (const width of JSON.parse(process.env.NEXUS_AUDIT_WIDTHS || "[320,390,820,1440]"))
+  for (const {width,height,viewportKey} of auditViewports())
     for (const role of ["mestre", "espectador"]) {
       let row = {
         id: sheetId,
@@ -117,7 +118,7 @@ try {
       const writes = [],
         errors = [];
       const context = await browser.newContext({
-        viewport: { width, height: 1000 },
+        viewport: { width, height },
         hasTouch: width < 768,
         reducedMotion: width === 1440 ? "no-preference" : "reduce",
       });
@@ -292,15 +293,15 @@ try {
         );
         if (process.env.NEXUS_SKIP_SCREENSHOTS !== "1")
           await page.screenshot({
-            path: `${output}/${label}-${role}-${width}.png`,
+            path: `${output}/${label}-${role}-${viewportKey}.png`,
             timeout: 45000,
           });
         if (process.env.NEXUS_SURFACE_CENSUS === "1")
           await captureSurfaceCensus(page, {
-            path: `${output}/${label}-${role}-${width}.surface.json`, state: `${label}/${role}`,
-            screenshot: process.env.NEXUS_SKIP_SCREENSHOTS !== "1" ? `${label}-${role}-${width}.png` : null,
+            path: `${output}/${label}-${role}-${viewportKey}.surface.json`, state: `${label}/${role}`,
+            screenshot: process.env.NEXUS_SKIP_SCREENSHOTS !== "1" ? `${label}-${role}-${viewportKey}.png` : null,
           });
-        results.push({ label, width, role, ...g, writes: writes.length });
+        results.push({ label, width, height, role, ...g, writes: writes.length });
         writeFileSync(output + "/results.json", JSON.stringify(results, null, 2));
         console.log(`${width}/${role}: ${label}`);
       };
@@ -817,7 +818,7 @@ try {
         const downloadEvent = page.waitForEvent("download");
         await page.getByRole("button", { name: "Guardar rascunho", exact: true }).click();
         const download = await downloadEvent;
-        const draftPath = `${output}/conflict-dossier-${width}.json`;
+        const draftPath = `${output}/conflict-dossier-${viewportKey}.json`;
         await download.saveAs(draftPath);
         const exported = JSON.parse(readFileSync(draftPath, "utf8"));
         assert(

@@ -1,3 +1,4 @@
+import { MaterialGallery } from "./material-gallery";
 import { PageHeader } from "@/components/page-header";
 import { useState } from "react";
 import { AlertTriangle, AppWindow, ChevronDown, Columns3, Maximize2, PanelTop } from "lucide-react";
@@ -53,6 +54,7 @@ export function PopupGallery() {
         mark={<AppWindow />}
       />
 
+      <MaterialGallery />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Card className="p-5">
           <PanelTop className="h-5 w-5 text-primary" />

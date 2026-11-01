@@ -1,3 +1,5 @@
+import { captureSurfaceCensus } from "./surface-census.mjs";
+import { auditViewports } from "./v4-viewports.mjs";
 import { installDesignFonts } from "./design-font-fixtures.mjs";
 /** NEX-003 browser fixtures. No credentials, live backend or persisted writes.
  * Uses the same externally supplied Playwright/Chromium as the header audit.
@@ -35,8 +37,8 @@ try {
  }
  writeFileSync(`${root}/server.log`,serverLog);
  if(!ready)throw new Error(`Vite did not become ready. Exit: ${serverExit}\n${serverLog}`);
- for(const width of JSON.parse(process.env.NEXUS_AUDIT_WIDTHS||"[320,390,820,1440]")) {
-  const context=await browser.newContext({viewport:{width,height:1000},hasTouch:width<768,reducedMotion:"reduce",acceptDownloads:true});
+ for (const {width,height,viewportKey} of auditViewports()) {
+  const context=await browser.newContext({viewport:{width,height},hasTouch:width<768,reducedMotion:"reduce",acceptDownloads:true});
   const page=await context.newPage();page.setDefaultTimeout(45000);
   const errors=[];page.on("pageerror",e=>errors.push(e.message));let usersError=false;let writes=0;let listCount=0;
   await page.addInitScript(({user,token})=>{
@@ -64,8 +66,9 @@ try {
   const geometry=async label=>{
    const result=await page.evaluate(()=>({rows:[...document.querySelectorAll('.tadeon-user-row')].map(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height,inside:r.x>=0&&r.right<=innerWidth};}),headingWidth:document.querySelector("h1")?.getBoundingClientRect().width,overflow:document.documentElement.scrollWidth>innerWidth,h1:document.querySelectorAll("h1").length,boundary:document.body.textContent.includes("Something went wrong")}));
    assert(result.headingWidth>100&&!result.overflow&&result.h1===1&&!result.boundary,`${label}/${width}: structure ${JSON.stringify(result)}`);assert(!errors.length,errors.join("\n"));
-   if(process.env.NEXUS_SKIP_SCREENSHOTS!=="1")await page.screenshot({path:`${root}/${label}-${width}.png`,fullPage:true});
-   results.push({width,label,...result,errors:[...errors]});writeFileSync(`${root}/results.json`,JSON.stringify(results,null,2));console.log(`${width}: ${label}`);
+   if(process.env.NEXUS_SKIP_SCREENSHOTS!=="1")await page.screenshot({path:`${root}/${label}-${viewportKey}.png`,fullPage:true});
+   if(process.env.NEXUS_SURFACE_CENSUS === "1") await captureSurfaceCensus(page,{path:`${root}/${label}-${viewportKey}.surface.json`,state:label,screenshot:process.env.NEXUS_SKIP_SCREENSHOTS!=="1"?`${label}-${viewportKey}.png`:null});
+   results.push({width,height,label,...result,errors:[...errors]});writeFileSync(`${root}/results.json`,JSON.stringify(results,null,2));console.log(`${width}: ${label}`);
   };
   await page.goto(`http://127.0.0.1:${port}/offline`,{waitUntil:"domcontentloaded"});
   await page.getByRole("heading",{name:"Consulta offline",exact:true,level:1}).waitFor({timeout:180000});
@@ -103,7 +106,7 @@ try {
    await opener.click();await drawer.waitFor();await page.setViewportSize({width:820,height:1000});await drawer.waitFor({state:"hidden"});await page.waitForFunction(() => document.querySelector('button[aria-controls="tadeon-mobile-navigation"]')?.getAttribute("aria-expanded") === "false" && document.getElementById("tadeon-main") === document.activeElement, undefined, {timeout:5000});await page.setViewportSize({width,height:1000});
   } else if(width>=768 && process.env.NEXUS_AUDIT_SCOPE !== "utilities") {
    await page.getByRole("button",{name:"Recolher menu",exact:true}).click();await page.waitForTimeout(250);const compact=page.locator("#tadeon-desktop-sidebar").getByRole("link",{name:"Usuários",exact:true});assert(await compact.isVisible(),"Collapsed destination keeps accessible label");
-   const icon=await compact.locator(".tadeon-nav-item__icon").evaluate(e=>({width:e.getBoundingClientRect().width,opacity:getComputedStyle(e).opacity,centerDelta:Math.abs((e.getBoundingClientRect().left+e.getBoundingClientRect().width/2)-(e.parentElement.getBoundingClientRect().left+e.parentElement.getBoundingClientRect().width/2))}));assert(icon.width>=16&&Number(icon.opacity)>0&&icon.centerDelta<1,"Collapsed icon remains visible and centered");if(process.env.NEXUS_SKIP_SCREENSHOTS!=="1")await page.screenshot({path:`${root}/sidebar-${width}.png`});await page.getByRole("button",{name:"Expandir menu",exact:true}).click();await page.waitForTimeout(500);
+   const icon=await compact.locator(".tadeon-nav-item__icon").evaluate(e=>({width:e.getBoundingClientRect().width,opacity:getComputedStyle(e).opacity,centerDelta:Math.abs((e.getBoundingClientRect().left+e.getBoundingClientRect().width/2)-(e.parentElement.getBoundingClientRect().left+e.parentElement.getBoundingClientRect().width/2))}));assert(icon.width>=16&&Number(icon.opacity)>0&&icon.centerDelta<1,"Collapsed icon remains visible and centered");if(process.env.NEXUS_SKIP_SCREENSHOTS!=="1")await page.screenshot({path:`${root}/sidebar-${viewportKey}.png`});await page.getByRole("button",{name:"Expandir menu",exact:true}).click();await page.waitForTimeout(500);
    const nav=page.locator("#tadeon-desktop-sidebar").getByRole("link",{name:"Consulta offline",exact:true});const before=await nav.boundingBox();await nav.hover();await page.waitForTimeout(250);const after=await nav.boundingBox();assert(Math.abs(after.x-before.x)<.5&&Math.abs(after.y-before.y)<.5,`Navigation target stays still on hover: ${JSON.stringify({before,after,style:await nav.evaluate(e=>({transform:getComputedStyle(e).transform,translate:getComputedStyle(e).translate,scale:getComputedStyle(e).scale,animation:getComputedStyle(e).animationName}))})}`);
    const sidebar=page.locator('#tadeon-desktop-sidebar');
    const slide=await sidebar.evaluate(async e=>{
@@ -161,7 +164,7 @@ await page.getByText("Cronista",{exact:true}).waitFor();
    const row=page.locator('.tadeon-user-row').last();await row.hover();
    assert(await row.evaluate(e=>{const c=getComputedStyle(e);return c.transform==='none' && c.filter==='none';}),'Directory rows stay still while operating controls');
    await page.emulateMedia({reducedMotion:'reduce'});
-   results.push({width,label:'directory-contract',roles,cardFrames});
+   results.push({width,height,label:'directory-contract',roles,cardFrames});
   }
   assert(results.findLast(result=>result.label==="users").rows.every(r=>r.inside && (width>=768 || r.height<220)),"Compact user rows stay readable without forced giant heights");
   await page.getByRole("searchbox").fill("cronista@");assert(!(await page.getByText(people[1].full_name,{exact:true}).count()),"User search filters name/email");

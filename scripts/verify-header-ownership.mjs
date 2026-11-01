@@ -1,3 +1,4 @@
+import { auditViewports } from "./v4-viewports.mjs";
 import { captureSurfaceCensus } from "./surface-census.mjs";
 import { installDesignFonts } from "./design-font-fixtures.mjs";
 /** Read-only browser fixture audit. No account credentials or live data required.
@@ -84,7 +85,7 @@ try {
     updated_at: "2026-10-01",
   };
 
-  for (const width of JSON.parse(process.env.NEXUS_AUDIT_WIDTHS || "[320,390,820,1440]"))
+  for (const {width,height,viewportKey} of auditViewports())
     for (const route of JSON.parse(
       process.env.NEXUS_AUDIT_ROUTES ||
         JSON.stringify([
@@ -104,7 +105,7 @@ try {
         (!process.env.NEXUS_AUDIT_SCREENSHOT_ROUTES ||
           JSON.parse(process.env.NEXUS_AUDIT_SCREENSHOT_ROUTES).includes(route));
       const context = await browser.newContext({
-        viewport: { width, height: 1000 },
+        viewport: { width, height },
         reducedMotion: process.env.NEXUS_MATERIAL_AUDIT === "1" ? "no-preference" : "reduce",
       });
       const page = await context.newPage();
@@ -229,7 +230,7 @@ try {
         });
         const launcher = page.getByRole("button", { name: "Abrir ações rápidas de Sentinela de teste" });
         await launcher.waitFor({ state: "visible", timeout: 15000 }).catch(async error => {
-          await page.screenshot({ path: `${root}/${phase}-radial-failure-${width}.png` });
+          await page.screenshot({ path: `${root}/${phase}-radial-failure-${viewportKey}.png` });
           console.log("Radial setup", await page.evaluate(() => ({ snapshot: window.__tadeonTabletopRuntime?.snapshot(), triggers: [...document.querySelectorAll(".tadeon-radial-trigger")].map(e=>({style:e.getAttribute("style"),visibility:getComputedStyle(e).visibility})), clean: document.documentElement.dataset.tadeonTabletopClean })));
           throw error;
         });
@@ -250,7 +251,7 @@ try {
             targets: [...e.querySelectorAll('[role="menuitem"]')].map(b=>{const r=b.getBoundingClientRect();return [r.width,r.height];}) };
         });
         if (!radialAudit.circular || !radialAudit.portal || !radialAudit.inside || !radialAudit.focus || radialAudit.targets.some(r => r[0] < 44 || r[1] < 44)) errors.push("Radial geometry/focus failed: " + JSON.stringify(radialAudit));
-        await page.screenshot({ path: `${root}/${phase}-radial-${width}.png` });
+        await page.screenshot({ path: `${root}/${phase}-radial-${viewportKey}.png` });
         await menu.getByRole("menuitem", { name: "Memória", exact: true }).click();
         radialAudit.memoryTargets = await menu.locator(".is-memory button").evaluateAll(buttons => buttons.map(b => { const r=b.getBoundingClientRect(); return [r.width,r.height]; }));
         if (radialAudit.memoryTargets.length !== 4 || radialAudit.memoryTargets.some(r=>r[0]<44 || r[1]<44)) errors.push("Radial memory targets failed");
@@ -271,6 +272,11 @@ try {
         radialAudit.entities = await page.evaluate(()=>window.__tadeonTabletopRuntime.snapshot().scene.entities.length);
         if (radialAudit.entities !== 2) errors.push("Radial duplication did not delegate to scene engine");
       }
+      // Observe the settled state instead of sampling halfway through an entrance.
+      await page.waitForFunction(() => [...document.querySelectorAll('[data-selection-rail]')].filter(e=>e.getBoundingClientRect().width>0&&e.getBoundingClientRect().height>0).every(e=>{
+        const active=e.querySelector('[role="tab"][data-state="active"],[aria-current="page"],[aria-pressed="true"],[data-more-active="true"]'),plate=e.querySelector('.tadeon-selection-plate');
+        if(!active||!plate)return true;const a=active.getBoundingClientRect(),p=plate.getBoundingClientRect();return Math.abs(a.x-p.x)<1&&Math.abs(a.y-p.y)<1&&Math.abs(a.width-p.width)<1&&Math.abs(a.height-p.height)<1;
+      }), undefined, {timeout:5000}).catch(()=>errors.push('Selection did not settle within 5 seconds'));
       const selectionGeometry = await page.evaluate(()=>[...document.querySelectorAll('[data-selection-rail]')].filter(e=>e.getBoundingClientRect().width>0&&e.getBoundingClientRect().height>0).map(e=>{
         const active=e.querySelector('[role="tab"][data-state="active"],[aria-current="page"],[aria-pressed="true"],[data-more-active="true"]'),plate=e.querySelector('.tadeon-selection-plate');
         if(!active||!plate)return null;const a=active.getBoundingClientRect(),p=plate.getBoundingClientRect();return {host:e.className,position:getComputedStyle(e).position,active:[a.x,a.y,a.width,a.height],plate:[p.x,p.y,p.width,p.height],plateStyle:plate.getAttribute('style'),scroll:[e.scrollLeft,e.scrollTop],aligned:Math.abs(a.x-p.x)<1&&Math.abs(a.y-p.y)<1&&Math.abs(a.width-p.width)<1&&Math.abs(a.height-p.height)<1};
@@ -433,8 +439,8 @@ try {
         if (await explore.isVisible()) {
           await explore.click({timeout:5000}).catch(async error=>{
             const detail=await explore.evaluate(e=>{const r=e.getBoundingClientRect();return {rect:[r.x,r.y,r.width,r.height],hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,400),ancestors:[e,...(()=>{let p=e.parentElement,a=[];while(p){a.push(p);p=p.parentElement;}return a;})()].map(n=>{const s=getComputedStyle(n),r=n.getBoundingClientRect();return {tag:n.tagName,class:n.className,rect:[r.x,r.y,r.width,r.height],position:s.position,overflow:s.overflow,zIndex:s.zIndex,pointerEvents:s.pointerEvents,clipPath:s.clipPath,transform:s.transform};})};});
-            writeFileSync(`${root}/explore-failure-${width}.json`,JSON.stringify(detail,null,2));
-            await page.screenshot({path:`${root}/explore-failure-${width}.png`});throw error;
+            writeFileSync(`${root}/explore-failure-${viewportKey}.json`,JSON.stringify(detail,null,2));
+            await page.screenshot({path:`${root}/explore-failure-${viewportKey}.png`});throw error;
           });
           if (
             !(await page
@@ -498,14 +504,14 @@ try {
       const name = route.slice(1) || "dashboard";
       if (captureScreenshots)
         await page.screenshot({
-          path: `${root}/${phase}-${name}-${width}.png`,
+          path: `${root}/${phase}-${name}-${viewportKey}.png`,
           fullPage: false,
           timeout: 20000,
         });
       if (process.env.NEXUS_SURFACE_CENSUS === "1")
         await captureSurfaceCensus(page, {
-          path: `${root}/${phase}-${name}-${width}.surface.json`, state: phase,
-          screenshot: captureScreenshots ? `${phase}-${name}-${width}.png` : null,
+          path: `${root}/${phase}-${name}-${viewportKey}.surface.json`, state: phase,
+          screenshot: captureScreenshots ? `${phase}-${name}-${viewportKey}.png` : null,
         });
       const interactions = [];
       if (route === "/offline") {
@@ -533,25 +539,27 @@ try {
             ),
           );
           let keyboardFixture = null;
+          const keyboardHeight = Math.min(600, height - 120);
           if (label === "Abrir busca global" && width <= 820) {
             await dialog.locator("input").first().focus();
-            await page.evaluate(() => {
+            await page.evaluate((keyboardHeight) => {
               Object.defineProperty(window.visualViewport, "height", {
-                value: 600,
+                value: keyboardHeight,
                 configurable: true,
               });
               window.dispatchEvent(new Event("resize"));
-            });
+            }, keyboardHeight);
             await page.waitForFunction(
-              () =>
-                document.documentElement.style.getPropertyValue("--tadeon-vv-height") === "600px" &&
+              (keyboardHeight) =>
+                document.documentElement.style.getPropertyValue("--tadeon-vv-height") === `${keyboardHeight}px` &&
                 document.documentElement.dataset.tadeonKeyboardOpen === "true",
+              keyboardHeight,
             );
-            await page.waitForFunction(() => {
+            await page.waitForFunction((keyboardHeight) => {
               const dialog = document.querySelector(".tadeon-global-search-dialog");
               const rect = dialog.getBoundingClientRect();
-              return rect.y >= -1 && rect.bottom <= 601;
-            });
+              return rect.y >= -1 && rect.bottom <= keyboardHeight + 1;
+            }, keyboardHeight);
             const keyboardRect = await dialog.boundingBox();
             const contract = await dialog.evaluate((element) => ({
               open: document.documentElement.dataset.tadeonKeyboardOpen,
@@ -561,13 +569,13 @@ try {
                 .trim(),
             }));
             const contained =
-              !!keyboardRect && keyboardRect.y >= -1 && keyboardRect.y + keyboardRect.height <= 601;
+              !!keyboardRect && keyboardRect.y >= -1 && keyboardRect.y + keyboardRect.height <= keyboardHeight + 1;
             keyboardFixture = { keyboardRect, contract, contained };
             if (
               !contained ||
               contract.open !== "true" ||
-              contract.rootHeight !== "600px" ||
-              contract.searchHeight !== "600px"
+              contract.rootHeight !== `${keyboardHeight}px` ||
+              contract.searchHeight !== `${keyboardHeight}px`
             )
               errors.push("Simulated keyboard viewport failed: " + JSON.stringify(keyboardFixture));
             await page.evaluate(() => {
@@ -594,10 +602,10 @@ try {
             rect.x >= -1 &&
             rect.y >= -1 &&
             rect.x + rect.width <= width + 1 &&
-            rect.y + rect.height <= 1001;
+            rect.y + rect.height <= height + 1;
           if (captureScreenshots)
             await page.screenshot({
-              path: `${root}/${phase}-portal-${label === "Abrir busca global" ? "search" : "account"}-${width}.png`,
+              path: `${root}/${phase}-portal-${label === "Abrir busca global" ? "search" : "account"}-${viewportKey}.png`,
               fullPage: true,
             });
           const focusInside = await page.evaluate(
@@ -675,8 +683,9 @@ try {
         metrics.preferences = preferences;
         await cdp.detach();
       }
-      results.push({ route, width, errors, interactions, selectionGeometry, craft, radialAudit, ...metrics });
-      console.log(JSON.stringify({ route, width, errors, preferences: metrics.preferences }));
+      results.push({ route, width, height, errors, interactions, selectionGeometry, craft, radialAudit, ...metrics });
+      writeFileSync(`${root}/${phase}.json`, JSON.stringify(results, null, 2));
+      console.log(JSON.stringify({ route, width, height, errors, preferences: metrics.preferences }));
       await context.close();
     }
   writeFileSync(`${root}/${phase}.json`, JSON.stringify(results, null, 2));
