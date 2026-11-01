@@ -26,6 +26,8 @@ jobs:
         run: npm run check:styles
       - name: Verificar mapas e continuidade
         run: npm run check:project
+      - name: Conferir manifesto de superfícies V4
+        run: npm run check:surfaces
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test

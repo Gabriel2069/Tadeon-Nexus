@@ -90,7 +90,7 @@ export function Tdv2Sheet({
   const face = (key: "origin" | "occupation" | "conviction" | "limit", value: string) =>
     upd("face", { ...c.face, [key]: value });
   return (
-    <div className="tadeon-tdv2-sheet">
+    <div className="tadeon-tdv2-sheet" data-folio={tab}>
       <div className="tdv-overview">
         {Object.entries({
           Desenvolvimento: `${stats.development}%`,
@@ -146,17 +146,26 @@ export function Tdv2Sheet({
         </div>
       )}
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="tdv-tabs tdv-tabs--sheet">
-          <TabsTrigger value="pessoa">Pessoa</TabsTrigger>
-          <TabsTrigger value="constituicao" aria-label="Constituição">
-            <span className="tdv-tab-label-full">Constituição</span>
-            <abbr className="tdv-tab-label-short" title="Constituição">
-              Constit.
-            </abbr>
-          </TabsTrigger>
-          <TabsTrigger value="acao">Ação</TabsTrigger>
-          <TabsTrigger value="expressao">Expressão</TabsTrigger>
-          <TabsTrigger value="percurso">Percurso</TabsTrigger>
+        <TabsList className="tdv-tabs tdv-tabs--sheet" aria-label="Fólios da Ficha Integral">
+          {(
+            [
+              ["pessoa", "Pessoa", "Pessoa"],
+              ["constituicao", "Constituição", "Constit."],
+              ["acao", "Ação", "Ação"],
+              ["expressao", "Expressão", "Expressão"],
+              ["percurso", "Percurso", "Percurso"],
+            ] as const
+          ).map(([value, label, compact], index) => (
+            <TabsTrigger key={value} value={value} aria-label={label}>
+              <span className="tdv-folio-number" aria-hidden="true">
+                0{index + 1}
+              </span>
+              <span className="tdv-tab-label-full">{label}</span>
+              <span className="tdv-tab-label-short" aria-hidden="true">
+                {compact}
+              </span>
+            </TabsTrigger>
+          ))}
         </TabsList>
         <TabsContent value="pessoa" data-sheet-content>
           <div className="tdv-persona-layout">
@@ -206,9 +215,16 @@ export function Tdv2Sheet({
                   </div>
                 </details>
               </Section>
-              {personaExtra}
             </div>
             <Section id="tdv-ancora" title="Âncora">
+              <div className="tdv-anchor-state" data-shaken={c.face.anchor.shaken}>
+                <span aria-hidden="true" className="tdv-anchor-knot" />
+                <div>
+                  <small>Continuidade</small>
+                  <strong>{c.face.anchor.shaken ? "Abalada" : "Assentada"}</strong>
+                </div>
+                <span>{c.face.anchor.pillar}</span>
+              </div>
               <div className="tdv-anchor">
                 <div className="tdv-grid">
                   <TdvSelect
@@ -235,52 +251,64 @@ export function Tdv2Sheet({
                     disabled={disabled}
                   />
                 </div>
-                <p className="tdv-note">
-                  Ancorar sustenta ou redireciona uma consequência plausível; não a apaga. Depois, a
-                  Âncora fica Abalada até uma ação significativa de Reassentar.
-                </p>
-                {!c.face.anchor.shaken && (
-                  <>
-                    <TdvSelect
-                      label="Forma de Ancorar"
-                      value={anchorMode}
-                      options={["Sustentar", "Redirecionar"]}
-                      onChange={(v) => setAnchorMode(v as typeof anchorMode)}
-                      disabled={disabled}
-                    />
+                <TdvDisclosure initiallyOpen={false} className="tdv-anchor-operation">
+                  <summary>
+                    {c.face.anchor.shaken
+                      ? "Reassentar · registrar retorno"
+                      : "Ancorar · sustentar ou redirecionar"}
+                  </summary>
+                  <div className="tdv-anchor-operation__body">
+                    <p className="tdv-note">
+                      Ancorar sustenta ou redireciona uma consequência plausível; não a apaga.
+                      Depois, a Âncora fica Abalada até uma ação significativa de Reassentar.
+                    </p>
+                    {!c.face.anchor.shaken && (
+                      <>
+                        <TdvSelect
+                          label="Forma de Ancorar"
+                          value={anchorMode}
+                          options={["Sustentar", "Redirecionar"]}
+                          onChange={(v) => setAnchorMode(v as typeof anchorMode)}
+                          disabled={disabled}
+                        />
+                        <TdvField
+                          label="Consequência concreta"
+                          value={consequence}
+                          onChange={setConsequence}
+                          disabled={disabled}
+                        />
+                      </>
+                    )}
                     <TdvField
-                      label="Consequência concreta"
-                      value={consequence}
-                      onChange={setConsequence}
+                      label={
+                        c.face.anchor.shaken
+                          ? "Ação significativa de Reassentar"
+                          : "Como a consequência permanece na ficção"
+                      }
+                      value={outcome}
+                      onChange={setOutcome}
                       disabled={disabled}
                     />
-                  </>
-                )}
-                <TdvField
-                  label={
-                    c.face.anchor.shaken
-                      ? "Ação significativa de Reassentar"
-                      : "Como a consequência permanece na ficção"
-                  }
-                  value={outcome}
-                  onChange={setOutcome}
-                  disabled={disabled}
-                />
-                <Button
-                  variant="outline"
-                  disabled={disabled || !c.ready}
-                  onClick={() =>
-                    run(() =>
-                      c.face.anchor.shaken
-                        ? resettle(c, outcome)
-                        : anchor(c, anchorMode, consequence, outcome),
-                    )
-                  }
-                >
-                  {c.face.anchor.shaken ? "Registrar Reassentamento" : "Ancorar e abalar Âncora"}
-                </Button>
+                    <Button
+                      variant="outline"
+                      disabled={disabled || !c.ready}
+                      onClick={() =>
+                        run(() =>
+                          c.face.anchor.shaken
+                            ? resettle(c, outcome)
+                            : anchor(c, anchorMode, consequence, outcome),
+                        )
+                      }
+                    >
+                      {c.face.anchor.shaken
+                        ? "Registrar Reassentamento"
+                        : "Ancorar e abalar Âncora"}
+                    </Button>
+                  </div>
+                </TdvDisclosure>
               </div>
             </Section>
+            {personaExtra}
           </div>
           <Section id="tdv-vinculos" title="Vínculos">
             <div className="tdv-folios tdv-link-list">
@@ -292,9 +320,10 @@ export function Tdv2Sheet({
                 >
                   <summary className="tdv-link-summary">
                     <strong>{link.node.trim() || `Vínculo ${index + 1}`}</strong>
-                    <small>
-                      {link.nature.trim() || "Definir relação"} · {link.state}
-                    </small>
+                    <small>{link.nature.trim() || "Definir relação"}</small>
+                    <span className="tdv-link-state" data-link-state={link.state}>
+                      {link.state}
+                    </span>
                   </summary>
                   <div className="tdv-link-editor">
                     <div className="tdv-grid tdv-grid--identity">
@@ -448,7 +477,7 @@ export function Tdv2Sheet({
               ))}
             </div>
           </Section>
-          <div className="tdv-grid">
+          <div className="tdv-state-layout">
             <Section id="tdv-recursos" title="Recursos e proteção">
               <div className="tdv-resources">
                 {(["pv", "pi", "pe"] as const).map((key) => (
@@ -459,6 +488,13 @@ export function Tdv2Sheet({
                     <div>
                       <strong>{c.resources[key]}</strong>
                       <span>/ {stats.maximums[key]}</span>
+                    </div>
+                    <div className="tdv-resource-level" aria-hidden="true">
+                      <span
+                        style={{
+                          width: `${Math.max(0, Math.min(100, (c.resources[key] / Math.max(1, stats.maximums[key])) * 100))}%`,
+                        }}
+                      />
                     </div>
                     <TdvNumber
                       label={`${key.toUpperCase()} atual`}
@@ -539,9 +575,36 @@ export function Tdv2Sheet({
             </Section>
             <Section id="tdv-equilibrio" title="Equilíbrio e Tensão">
               <div className="tdv-equilibrium">
-                <span>Medo</span>
-                <strong>{c.equilibrium}</strong>
-                <span>Conhecimento</span>
+                <div>
+                  <small>Posição no Véu</small>
+                  <strong>
+                    {c.equilibrium > 0 ? "+" : ""}
+                    {c.equilibrium}
+                  </strong>
+                </div>
+                <p>{equilibriumBand(c.equilibrium)}</p>
+              </div>
+              <div className="tdv-equilibrium-axis" aria-hidden="true">
+                <div className="tdv-equilibrium-axis__ticks">
+                  {Array.from({ length: 21 }, (_, i) => (
+                    <i key={i} data-center={i === 10} />
+                  ))}
+                </div>
+                <span
+                  className="tdv-equilibrium-axis__pin"
+                  style={{ left: `${(c.equilibrium + 10) * 5}%` }}
+                />
+              </div>
+              <div className="tdv-equilibrium-poles">
+                <span>
+                  Medo <small>−10</small>
+                </span>
+                <span>
+                  Inteireza <small>0</small>
+                </span>
+                <span>
+                  Conhecimento <small>+10</small>
+                </span>
               </div>
               <input
                 className="tdv-range"
@@ -553,10 +616,17 @@ export function Tdv2Sheet({
                 disabled={disabled}
                 onChange={(e) => upd("equilibrium", Number(e.target.value))}
               />
-              <p>{equilibriumBand(c.equilibrium)}</p>
               <p className="tdv-note">
                 Nenhum bônus universal. A faixa contextualiza Feição, Lavores e Tramas.
               </p>
+              <div className="tdv-tension-steps" aria-hidden="true">
+                {[-3, -2, -1, 0, 1, 2, 3].map((value) => (
+                  <span key={value} data-active={value === c.tension}>
+                    {value > 0 ? "+" : ""}
+                    {value}
+                  </span>
+                ))}
+              </div>
               <div className="tdv-actions">
                 <Button
                   variant="outline"

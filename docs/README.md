@@ -33,6 +33,8 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [rules/tdv-ii-v2.md](rules/tdv-ii-v2.md) | reference | Extração do Livro de Regras TdV II v2.0 fornecido por Tadeu; procedimentos normativos e tabelas com hash da fonte. |
 | [tdv-ii-migration.md](tdv-ii-migration.md) | active | Contrato de edição, compatibilidade e mapa das regras implementadas; a fila permanece em project-continuity. |
 | [tdv-ii-coverage.md](tdv-ii-coverage.md) | active | Cobertura por capítulo do livro TdV II, fluxos operacionais e fronteiras entre cálculo, procedimento assistido e decisão ficcional. |
+| [v4/IMPLEMENTACAO.md](v4/IMPLEMENTACAO.md) | active | Auditoria V4, diferenças atuais→destino, evidências, bloqueios e rollback; fila somente no registro canônico. |
+| [v4/Tadeon_Nexus_Especificacao_Final_V4.md](v4/Tadeon_Nexus_Especificacao_Final_V4.md) | reference | Dossiê integral V4 fornecido por Tadeu, preservado sem redução; mandato vigente. |
 
 ## Contratos e evidências
 
@@ -69,3 +71,9 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [dossier-density-validation.json](dossier-density-validation.json) | Evidência de NEX-038: proporções e encaixe dos instrumentos, Exposição, guias da Ficha e organização de Offline/Backup/Usuários; fixtures, integração e publicação separados. |
 | [navigation-presence-validation.json](navigation-presence-validation.json) | NEX-039: cartões individuais, preenchimento da Exposição e movimento lateral, com contratos, procedência e limites de validação. |
 | [tdv-ii-validation.json](tdv-ii-validation.json) | Procedência normativa, testes e evidências de migração, Mesa, Nexus, CI e publicação de NEX-040. |
+| [v4/phase-0-validation.json](v4/phase-0-validation.json) | Baseline, backup/restauração parcial real e bloqueios de migração/implantação. |
+| [v4/route-contracts.json](v4/route-contracts.json) | Rotas→componentes→ações→permissões→dados→dispositivos→testes→capturas, com lacunas explícitas. |
+| [v4/runtime-baseline.json](v4/runtime-baseline.json) | 127 censos de DOM e hashes de capturas em fixtures; não certifica dispositivos/contas reais. |
+| [v4/source-ledger.json](v4/source-ledger.json) | Proveniência/hash e leitura das fontes normativas V4. |
+| [v4/surface-manifest.json](v4/surface-manifest.json) | Inventário AST V4: fonte não equivale a função montada. |
+| [v4/visible-validation.json](v4/visible-validation.json) | Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup. |

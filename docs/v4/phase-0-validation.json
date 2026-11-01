@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "phase": "0",
+  "status": "in-progress",
+  "checkedAt": "2026-11-01",
+  "github": {
+    "main": "b5555c53622ad15cefbea35a535f7a68af2217a8",
+    "tree": "d9138838aaf0503c03f42b19997d712851ba9ba1",
+    "latestDeployRun": 40854332205,
+    "latestDeployConclusion": "success",
+    "freshPublicProbe": {
+      "http": 200,
+      "observedMarker": "development",
+      "expectedMarker": "b5555c53622ad15cefbea35a535f7a68af2217a8",
+      "certified": false
+    }
+  },
+  "supabase": {
+    "project": "nkxpstyfrzufsnowjrdi",
+    "status": "ACTIVE_HEALTHY",
+    "latestMigrations": [
+      "20261027093709",
+      "20261027191353"
+    ],
+    "productionWrites": false,
+    "storageObjects": 12,
+    "storageBucketPublic": false,
+    "assets": {
+      "supabase": 5,
+      "r2": 0
+    }
+  },
+  "baseline": {
+    "quality": {
+      "passed": true,
+      "suites": 162,
+      "tests": 688
+    },
+    "isolatedSql": {
+      "passed": true,
+      "checks": 41
+    },
+    "npmAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 15,
+      "high": 0,
+      "critical": 0,
+      "total": 15
+    },
+    "shellViews": 28,
+    "tdv2States": 99
+  },
+  "backup": {
+    "workflowRun": 41298570432,
+    "artifact": 13079628573,
+    "archiveDigestVerified": true,
+    "restore": {
+      "passed": true,
+      "dumpSha256": "f89e46719bdbe172175dba6fa347776e459861e68c91e59a9911e69e08e6864f",
+      "engine": "isolated PostgreSQL (PGlite)",
+      "applicationTables": 52,
+      "rows": 3665,
+      "allTableHashesMatched": true,
+      "scope": "public application tables and inline checks; binary image exported and reloaded",
+      "notCertified": [
+        "Supabase Auth/Realtime/Storage services",
+        "roles, policies, triggers and RPC operation",
+        "Storage/R2 object bytes"
+      ],
+      "migrationGate": "full-service restore remains required before production migrations",
+      "pgliteVersion": "0.5.14",
+      "pgRestoreVersion": "17.11"
+    },
+    "completeRestoreCertified": false
+  },
+  "migrationGate": {
+    "passed": false,
+    "reason": "Private Storage object bytes, complete service restore, live authorization and deployment identity remain uncertified."
+  },
+  "applicationChanges": {
+    "routesRemoved": 0,
+    "dataDeleted": 0,
+    "cssChanges": false,
+    "rulesChanges": false,
+    "migrationsAdded": 0
+  },
+  "instrumentation": {
+    "suite": "scripts/audit-v4-surfaces.test.mjs",
+    "tests": 5,
+    "passed": true,
+    "coverage": [
+      "unused import vs JSX",
+      "dynamic lazy alias",
+      "source string vs data access",
+      "production census refused",
+      "editable values omitted"
+    ],
+    "quality": {
+      "passed": true,
+      "suites": 163,
+      "tests": 693,
+      "lint": true,
+      "types": true,
+      "build": true
+    },
+    "browserRepeat": {
+      "passed": true,
+      "states": 10,
+      "width": 390,
+      "scope": "five tabs, master and spectator, final census privacy guard"
+    }
+  }
+}

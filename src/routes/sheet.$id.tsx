@@ -625,7 +625,7 @@ function SheetPage() {
       >
         <PageHeader
           section="sheet"
-          eyebrow="TdV II · Feição e Constituição"
+          eyebrow="Ficha Integral · TdV II"
           title={sheet.name || "Ficha"}
           className="tadeon-sheet-commandbar"
           actions={

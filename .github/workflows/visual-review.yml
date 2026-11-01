@@ -24,6 +24,7 @@ jobs:
     timeout-minutes: 40
     env:
       NEXUS_BROWSER_MODULE: file:///tmp/tadeon-browser/node_modules/playwright/index.mjs
+      NEXUS_SURFACE_CENSUS: "1"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -173,6 +174,13 @@ jobs:
         env:
           NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2
           NEXUS_AUDIT_WIDTHS: "[320,390,820,1440]"
+        run: node scripts/verify-tdv2.mjs
+      - name: Conferir os cinco fólios e instrumentos da ficha atual
+        if: matrix.suite == 'tdv2'
+        env:
+          NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2-atlas
+          NEXUS_AUDIT_WIDTHS: "[320,390,820,1440]"
+          NEXUS_LAYOUT_ONLY: "1"
         run: node scripts/verify-tdv2.mjs
       - name: Publicar métricas de comparação no log
         if: always()
