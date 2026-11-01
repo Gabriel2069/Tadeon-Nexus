@@ -44,3 +44,5 @@ Rollback: reverter os commits do lote. Os dados mantêm o formato anterior, incl
 | Constituição · 1440×900 | [Composição ampla](evidence/operational-constitution-1440.png) |
 
 As comparações usam dados fictícios e Chromium 141/Playwright 1.56.1. O check local aprovou 165 suítes/697 testes, lint, tipos e build. Os instrumentos passaram por 75 estados em 15 viewports exatos e dois cargos; foram verificados alvos de pelo menos 44px, rótulos sem corte, rolagem, edição de recursos e leitura. A CI deve completar as suítes mecânicas e visuais no SHA final antes de integrar. Não se declara cobertura de todos os cenários extraordinários ou aparelhos reais.
+
+A espera de captura consulta o estado atual das animações finitas e falha em 10 segundos se elas não assentarem. Ela substitui a espera de promessas `finished` antigas, que podiam permanecer pendentes após recolher uma área ou trocar de aba. As verificações de geometria, foco, escrita e leitura permanecem.

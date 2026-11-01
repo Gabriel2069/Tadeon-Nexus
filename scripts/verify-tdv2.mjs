@@ -224,18 +224,14 @@ try {
           "master-referência": "#tdv-master-reference",
         }[label];
         if (target) await page.locator(target).scrollIntoViewIfNeeded();
+        await page.evaluate(() => document.fonts.ready);
+        // Re-read the current state: a CSS animation removed by a disclosure or
+        // tab change can leave an earlier `finished` promise unresolved.
+        await page.waitForFunction(() => document.getAnimations().every((a) =>
+          a.playState !== "running" ||
+          !Number.isFinite(a.effect?.getComputedTiming().endTime)
+        ), null, { timeout: 10000 });
         await page.evaluate(async () => {
-          await document.fonts.ready;
-          await Promise.all(
-            document
-              .getAnimations()
-              .filter(
-                (a) =>
-                  a.playState === "running" &&
-                  Number.isFinite(a.effect?.getComputedTiming().endTime),
-              )
-              .map((a) => a.finished.catch(() => undefined)),
-          );
           await new Promise((resolve) =>
             requestAnimationFrame(() => requestAnimationFrame(resolve)),
           );

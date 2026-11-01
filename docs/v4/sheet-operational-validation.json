@@ -126,5 +126,6 @@
       "sha256": "f392253bd8d272e571c77d0f19c855ee17dd2dd5230d2ef78f17f7332da2dbe1"
     }
   ],
-  "localRegressionNote": "Full 99-state verifier was still running while the instrument run completed. The CI must run the complete legacy, current-sheet and mechanical suites before merging; no completion is inferred from a partial local run."
+  "localRegressionNote": "Full 99-state verifier was still running while the instrument run completed. The CI must run the complete legacy, current-sheet and mechanical suites before merging; no completion is inferred from a partial local run.",
+  "harnessCorrection": "The verifier polls current finite animation states with a 10s failure deadline. A cancelled/hidden CSS animation could leave a previously captured finished promise pending after a disclosure/tab transition. Geometry and operation assertions remain unchanged."
 }
