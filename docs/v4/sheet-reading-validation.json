@@ -46,7 +46,7 @@
       "mestre",
       "espectador"
     ],
-    "expectedStates": 135,
+    "expectedStates": 165,
     "checks": [
       "Reading is resting state; Apply writes once; Escape discards and restores focus",
       "Editor labels >=14px, text >=16px, writing region >=96px",
@@ -55,7 +55,8 @@
       "Legacy age saved through existing onUpdate and persistence",
       "Link offer/demand visible without opening editor",
       "Condition effect/exit reading; change severity/save; exit/save; create/save",
-      "Readonly has no inscription edit action, disabled native choices and zero writes"
+      "Readonly has no inscription edit action, disabled native choices and zero writes",
+      "A singleton link fills its row both closed and opened, including desktop container rules"
     ]
   },
   "audit": {

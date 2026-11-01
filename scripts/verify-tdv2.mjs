@@ -360,6 +360,13 @@ try {
         await page.locator('#tdv-vinculos').scrollIntoViewIfNeeded();
         await page.locator('.tdv-link-exchange').filter({hasText:'Abrigo e acesso aos arquivos do cais'}).waitFor();
         await geometry('reading-links');
+        const link=page.locator('.tdv-link-folio').first();
+        const listWidth=await page.locator('.tdv-link-list').evaluate(e=>e.getBoundingClientRect().width);
+        assert(Math.abs((await link.boundingBox()).width-listWidth)<1,'Single closed link fills its row');
+        await link.locator('summary').first().click();
+        assert(Math.abs((await link.boundingBox()).width-listWidth)<1,'Single opened link keeps its row');
+        await geometry('reading-link-editor');
+        await link.locator('summary').first().click();
         await page.getByRole('tab',{name:'Ação',exact:true}).click();
         await page.locator('#tdv-condicoes').scrollIntoViewIfNeeded();
         await page.locator('.tdv-condition__reading dd').filter({hasText:'Dificulta ações que exigem o braço ferido'}).waitFor();
