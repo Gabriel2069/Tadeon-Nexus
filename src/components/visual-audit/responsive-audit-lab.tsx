@@ -25,14 +25,22 @@ type AuditIssue = { kind: AuditKind; label: string; detail: string };
 type ViewportPreset = { label: string; width: number; height: number; icon: typeof Smartphone };
 
 const PRESETS: ViewportPreset[] = [
-  { label: "iPhone", width: 390, height: 844, icon: Smartphone },
-  { label: "Mobile largo", width: 430, height: 932, icon: Smartphone },
-  { label: "Tablet retrato", width: 768, height: 1024, icon: Tablet },
-  { label: "Tablet largo", width: 820, height: 1180, icon: Tablet },
-  { label: "Tablet paisagem", width: 1024, height: 768, icon: Tablet },
-  { label: "Notebook", width: 1366, height: 768, icon: Monitor },
-  { label: "Desktop", width: 1440, height: 1000, icon: Monitor },
-  { label: "Full HD", width: 1920, height: 1080, icon: Monitor },
+  { label: "320 × 720", width: 320, height: 720, icon: Smartphone },
+  { label: "360 × 780", width: 360, height: 780, icon: Smartphone },
+  { label: "390 × 844", width: 390, height: 844, icon: Smartphone },
+  { label: "430 × 932", width: 430, height: 932, icon: Smartphone },
+  { label: "568 × 320", width: 568, height: 320, icon: Smartphone },
+  { label: "744 × 1133", width: 744, height: 1133, icon: Tablet },
+  { label: "768 × 1024", width: 768, height: 1024, icon: Tablet },
+  { label: "820 × 1180", width: 820, height: 1180, icon: Tablet },
+  { label: "834 × 1194", width: 834, height: 1194, icon: Tablet },
+  { label: "1024 × 768", width: 1024, height: 768, icon: Tablet },
+  { label: "1024 × 1366", width: 1024, height: 1366, icon: Tablet },
+  { label: "1180 × 820", width: 1180, height: 820, icon: Tablet },
+  { label: "1280 × 800", width: 1280, height: 800, icon: Monitor },
+  { label: "Notebook adicional", width: 1366, height: 768, icon: Monitor },
+  { label: "1440 × 900", width: 1440, height: 900, icon: Monitor },
+  { label: "1920 × 1080", width: 1920, height: 1080, icon: Monitor },
 ];
 
 const PAGES = [

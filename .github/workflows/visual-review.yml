@@ -103,10 +103,23 @@ jobs:
         if: matrix.suite == 'utilities'
         env:
           NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/utility-registers
-          NEXUS_AUDIT_WIDTHS: "[320,390,820,1440]"
+          NEXUS_AUDIT_VIEWPORTS: chapter50
+          NEXUS_SURFACE_CENSUS: "1"
           NEXUS_AUDIT_SCOPE: utilities
           NEXUS_EXPECT_UTILITY_REGISTERS: "1"
         run: node scripts/verify-navigation-utilities.mjs
+      - name: Validar biblioteca material V4 nos 15 tamanhos normativos
+        if: matrix.suite == 'navigation'
+        env:
+          NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/v4-materials
+          NEXUS_AUDIT_VIEWPORTS: chapter50
+        run: node scripts/verify-v4-materials.mjs
+      - name: Validar recuperação de senha V4 com transportes sintéticos
+        if: matrix.suite == 'utilities'
+        env:
+          NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/v4-reset
+          NEXUS_AUDIT_VIEWPORTS: chapter50
+        run: node scripts/verify-v4-reset.mjs
       - name: Comparar composição anterior da Mesa
         if: matrix.suite == 'tabletop'
         env:

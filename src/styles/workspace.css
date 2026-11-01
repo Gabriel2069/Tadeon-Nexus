@@ -2243,7 +2243,7 @@
 .tadeon-library-card__title { white-space: normal; min-height: 2.25rem; }
 
 /* Administrative utilities: stable ink for content, a woven edge for orientation. */
-.tadeon-utility-summary { position: relative; isolation: isolate; overflow: hidden; border: 1px solid var(--border); border-radius: 1rem; background: linear-gradient(130deg, rgb(233 227 213 / 5%), transparent 55%), #15181e; box-shadow: inset 0 1px rgb(233 227 213 / 10%), 0 16px 35px -25px #000; }
+.tadeon-utility-summary { position: relative; isolation: isolate; overflow: hidden; border: 1px solid var(--border); border-radius: .4rem 1.5rem .4rem 1rem; background: radial-gradient(ellipse at 100% 0, rgb(var(--material-rgb, 217 215 164) / 21%), transparent 70%), #15181e; box-shadow: inset 0 1px rgb(233 227 213 / 10%), 0 16px 35px -25px #000; }
 .tadeon-utility-summary__threads { position: absolute; z-index: -1; right: 0; bottom: 0; width: min(32rem, 90%); color: var(--section-accent); mask-image: linear-gradient(90deg, transparent, black 30%, black 80%, transparent); pointer-events: none; }
 .tadeon-utility-summary dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 .tadeon-utility-summary dl > div { min-width: 0; padding: 1rem 1.25rem; border-inline-start: 1px solid var(--border); }
@@ -2634,7 +2634,7 @@ details.tadeon-utility-note { padding-block: .35rem; }
 
 /* Directory: a continuous register, with roles and actions on a stable second track. */
 .tadeon-users-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); align-items: stretch; gap: .875rem; }
-.tadeon-user-row { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; gap: .875rem; min-width: 0; padding: 1rem; border: 1px solid rgb(183 129 77 / 24%); border-radius: 1rem .4rem 1rem .4rem; overflow-wrap: anywhere; background: radial-gradient(ellipse at 0 0, rgb(183 129 77 / 11%), transparent 65%), #12171e; box-shadow: inset 0 1px rgb(233 227 213 / 9%), inset 2px 0 rgb(183 129 77 / 18%), 0 10px 22px -20px #000; transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out); }
+.tadeon-user-row { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; gap: .875rem; min-width: 0; padding: 1rem; border: 1px solid rgb(183 129 77 / 24%); border-radius: 1rem .4rem 1rem .4rem; overflow-wrap: anywhere; background: radial-gradient(ellipse at 0 0, rgb(214 164 104 / 21%), transparent 65%), #12171e; box-shadow: inset 0 1px rgb(233 227 213 / 9%), inset 2px 0 rgb(183 129 77 / 18%), 0 10px 22px -20px #000; transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out); }
 .tadeon-user-row__identity { display: flex; align-items: center; gap: .75rem; min-width: 0; }
 .tadeon-user-row__sigil { display: grid; flex: 0 0 auto; width: 2.75rem; aspect-ratio: 1; place-items: center; border: 1px solid rgb(183 129 77 / 30%); border-radius: .7rem .25rem .7rem .25rem; color: #e9e3d5; background: linear-gradient(145deg, rgb(183 129 77 / 14%), transparent), #171c22; box-shadow: inset 0 1px rgb(233 227 213 / 8%); font: 600 1.3rem/1 var(--font-cinzel); }
 .tadeon-user-row[data-user-role="mestre"] .tadeon-user-row__sigil { border-color: rgb(217 215 164 / 38%); }
@@ -2642,7 +2642,7 @@ details.tadeon-utility-note { padding-block: .35rem; }
 .tadeon-user-row__access [role="combobox"] { min-height: 44px; }
 .tadeon-user-row:focus-within { border-color: rgb(183 129 77 / 60%); background-color: #1b2027; }
 /* Offline folios expose availability and keep four resources in one engraved register. */
-.tadeon-offline-folio { display: flex; flex-direction: column; min-width: 0; padding: 1rem; border-radius: 1rem .35rem 1rem .35rem; border-color: rgb(113 107 123 / 35%); border-inline-start: 2px solid rgb(113 107 123 / 65%); background: linear-gradient(110deg, rgb(113 107 123 / 7%), transparent 60%), #12171e; }
+.tadeon-offline-folio { display: flex; flex-direction: column; min-width: 0; padding: 1rem; border-radius: .3rem 1.5rem .3rem .85rem; border-color: rgb(163 151 191 / 42%); border-inline-start: 3px solid rgb(163 151 191 / 75%); background: radial-gradient(ellipse at 100% 0, rgb(163 151 191 / 22%), transparent 65%), #12171e; }
 .tadeon-offline-folio__meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .35rem .75rem; color: var(--muted-foreground); font: 400 .75rem/1.4 var(--font-inter); }
 .tadeon-offline-folio__meta > :last-child { color: #e9e3d5; }
 .tadeon-offline-folio__title { margin-top: .6rem; overflow-wrap: anywhere; color: var(--foreground); font: 600 1.5rem/1.15 var(--font-cinzel); }
@@ -2655,7 +2655,7 @@ details.tadeon-utility-note { padding-block: .35rem; }
 .tadeon-offline-resources dd { margin-top: .2rem; color: var(--foreground); font: 500 1rem/1.3 var(--font-inter); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 /* Backup makes creation, local history and external import distinct operations. */
 .tadeon-backup-workspace { display: grid; gap: 1rem; }
-.tadeon-backup-create, .tadeon-backup-history, .tadeon-backup-import { min-width: 0; padding: clamp(.875rem, 1.8vw, 1.25rem); border-radius: 1rem; border-color: rgb(122 129 135 / 28%); background: linear-gradient(135deg, rgb(122 129 135 / 7%), transparent 50%), #12171e; }
+.tadeon-backup-create, .tadeon-backup-history, .tadeon-backup-import { min-width: 0; padding: clamp(.875rem, 1.8vw, 1.25rem); border-radius: .85rem; border-color: rgb(146 181 202 / 38%); background: radial-gradient(ellipse at 100% 0, rgb(146 181 202 / 18%), transparent 65%), #12171e; }
 .tadeon-backup-create__heading { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
 .tadeon-backup-create__heading > svg { width: 1.5rem; height: 1.5rem; color: var(--section-accent); }
 .tadeon-backup-create__heading h2 { font: 600 1.6rem/1.2 var(--font-cinzel); }
@@ -2737,3 +2737,29 @@ details.tadeon-utility-note { padding-block: .35rem; }
 .tdv-creation-review { width: 100%; min-width: 0; }
 .tdv-creation-review > summary { min-height: 44px; align-content: center; cursor: pointer; }
 .tdv-creation-review > p, .tdv-creation-review > ul { margin-top: .6rem; }
+
+/* The existing audit workspace owns the material library, not the app shell. */
+.tadeon-material-library { display: grid; gap: 1rem; min-width: 0; }
+.tadeon-material-library__heading { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+.tadeon-material-library__heading p { color: var(--primary); font-size: .85rem; }
+.tadeon-material-library__heading h2 { font: 600 clamp(1.7rem,3vw,2.5rem)/1.1 var(--font-cinzel); }
+.tadeon-material-library__heading > span { color: var(--muted-foreground); font-size: .85rem; }
+.tadeon-material-library__catalog { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,13rem),1fr)); gap: .75rem; }
+.tadeon-material-specimen { min-width: 0; overflow: hidden; padding: 1.25rem; min-height: 10rem; }
+.tadeon-material-specimen h3 { position: relative; font: 600 1.8rem/1.2 var(--font-cinzel); }
+.tadeon-material-specimen p { position: relative; color: var(--foreground); font-size: .95rem; }
+.tadeon-material-specimen__threads { position: absolute; width: 90%; height: 7rem; right: -15%; top: 0; color: rgb(var(--material-rgb)); opacity: .7; pointer-events: none; }
+.tadeon-material-specimen__notation { display: flex; align-items: center; gap: .4rem; margin-top: 1.5rem; }
+.tadeon-material-specimen__notation span { height: .3rem; width: 1.5rem; background: rgb(var(--material-rgb)); border-radius: 1rem; }
+.tadeon-material-specimen[data-material-family="weave"] .tadeon-material-specimen__notation span { width: .7rem; height: .7rem; border: 1px solid rgb(var(--material-rgb)); border-radius: 50%; background: none; }
+.tadeon-material-specimen[data-material-family="archive"] .tadeon-material-specimen__notation { border-top: 1px solid rgb(var(--material-rgb) / 35%); padding-top: .5rem; }
+.tadeon-material-library__tabs { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); width: 100%; height: auto; }
+.tadeon-material-library__tabs > button { min-width: 0; min-height: 44px; white-space: normal; }
+.tadeon-material-lab { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 1.5rem; padding: 1.25rem; }
+.tadeon-material-lab__content { display: grid; gap: .75rem; min-width: 0; }
+.tadeon-material-lab__content > p { color: rgb(var(--material-rgb)); }
+.tadeon-material-lab__states { display: grid; align-content: start; gap: .75rem; }
+.tadeon-material-lab__states label { display: flex; align-items: center; gap: .65rem; min-height: 44px; }
+.tadeon-material-lab__states input { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); }
+.tadeon-material-lab__states p { padding: .75rem; border-inline-start: 2px solid rgb(var(--manifestation-rgb,var(--material-rgb)) / 70%); background: #0b1016; }
+@media (max-width: 639px) { .tadeon-material-lab { grid-template-columns: minmax(0,1fr); } }

@@ -470,13 +470,6 @@ body:has(.tadeon-tabletop-studio) {
 
 /* Collapsed desktop sidebar: boxes deliberately extend to the right of their glyph. */
 
-/* Secondary routes use the same workspace width contract as the principal areas. */
-.tadeon-route-stage > :is(.tadeon-route-tools,.tadeon-route-users,.tadeon-route-offline) {
-  width:100% !important;
-  max-width:min(92rem,100%) !important;
-  margin-inline:auto !important;
-}
-
 /* Nexus: an Obsidian-like graph needs room to breathe; labels appear later than nodes. */
 .tadeon-brain-canvas,.tadeon-brain-viewport,[class*="tadeon-brain"][class*="canvas"],.tadeon-graph-canvas { min-height:44rem !important; }
 .tadeon-brain-canvas canvas,.tadeon-brain-viewport canvas,.tadeon-graph-canvas canvas { cursor:grab; }
@@ -631,7 +624,6 @@ body:has(.tadeon-tabletop-studio) {
 @keyframes tadeon-condition-sheen { 0%,62%{transform:translateX(-62%);opacity:0} 72%{opacity:1} 90%,100%{transform:translateX(62%);opacity:0} }
 
 @media (max-width:800px) {
-  .tadeon-route-stage > :is(.tadeon-route-tools,.tadeon-route-users,.tadeon-route-offline) { max-width:100% !important; }
   #equilibrio,#exposicao { border-radius:.85rem; }
 }
 

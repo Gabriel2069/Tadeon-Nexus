@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-01; referência de runtime: `b5555c53622ad15cefbea35a535f7a68af2217a8`. PR #314 em `feat/nex-042-visual-organization`; integração: `integrated`. Não é prova de deploy.
+Snapshot: 2026-11-01; referência de runtime: `9f632ffdc177a24cb4f4beded1233c83e4a26c4c`. PR #316 em `feat/v4-audit-foundation`; integração: `integrated`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 
@@ -53,8 +53,8 @@ Cada PR usa IDs desta fila e declara dependências. Trabalho sobre o mesmo propr
 | NEX-041 | Restituir ferramentas da campanha e adaptar fichas existentes sem perda funcional | Integrado | 1 | sheet | NEX-040 |
 | NEX-042 | Organização visual dos dossiês e instrumentos de campanha | Integrado | 1 | sheet | NEX-041 |
 | NEX-043 | V4 fase 0: manifesto montado, fontes, baseline e restauração | Adiado | 0 | delivery | NEX-042 |
-| NEX-044 | V4 fase 1: biblioteca material e motion autoral | Planejado | 1 | shell | NEX-043 |
-| NEX-045 | V4 fase 2: shell, entrada e utilidades | Planejado | 1 | shell | NEX-044 |
+| NEX-044 | V4 fase 1: biblioteca material e motion autoral | Validado na branch | 1 | shell | NEX-043 |
+| NEX-045 | V4 fase 2: shell, entrada e utilidades | Validado na branch | 1 | shell | NEX-044 |
 | NEX-046 | V4 fase 3: Ficha Integral em cinco fólios | Em andamento | 1 | sheet | NEX-042 |
 | NEX-047 | V4 fase 4: Visão de Partida e integração física/digital | Planejado | 1 | sheet | NEX-046, NEX-048 |
 | NEX-048 | V4: autoridade transacional de ações, custos e Resto | Planejado | 1 | session | NEX-043, NEX-010, NEX-011 |
@@ -432,21 +432,21 @@ Evidências: [src/components/sheet/tdv2-sheet.tsx](../src/components/sheet/tdv2-
 - Conferir GitHub/implantação, baseline mecânica/visual/segurança/performance e backup com restauração isolada.
 - Fechar lacunas da fase 0 antes de grandes superfícies; restauração de serviços/objetos e contas reais não pode ser inferida de fixtures.
 
-Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/phase-0-validation.json](../docs/v4/phase-0-validation.json).
+Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/phase-0-validation.json](../docs/v4/phase-0-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json).
 
 ## NEX-044 — V4 fase 1: biblioteca material e motion autoral
 
 - Ampliar o laboratório existente com Fólio, Instrumento/Bancada, Trama/Teia, Lâmina, Palco e Acervo; aprovar biblioteca antes de propagar.
 - Material, motion, foco, hover/toque, pendência, erro, retry e redução de movimento nos proprietários; sem novos overrides ou loops decorativos.
 
-Evidências: pendentes; não declarar concluído.
+Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json).
 
 ## NEX-045 — V4 fase 2: shell, entrada e utilidades
 
 - Recompor Login/reset/Dashboard/Usuários/Backup/Offline/PWA/diálogos e diagnósticos com hierarquia e estados completos.
 - Preservar rodas, busca, foco, identidade e dados; testar as composições compactas, tablet e desktop do capítulo 50.
 
-Evidências: pendentes; não declarar concluído.
+Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json).
 
 ## NEX-046 — V4 fase 3: Ficha Integral em cinco fólios
 
@@ -454,7 +454,7 @@ Evidências: pendentes; não declarar concluído.
 - Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.
 - Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco.
 
-Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json).
+Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json).
 
 ## NEX-047 — V4 fase 4: Visão de Partida e integração física/digital
 
@@ -514,3 +514,4 @@ Evidências: pendentes; não declarar concluído.
 | DEC-022 | A adaptação de regras preserva as ferramentas da campanha e apresenta fichas existentes na estrutura atual por padrão. | Correção explícita de Tadeu: mudar mecânicas não autoriza retirar funções. Dados anteriores permanecem preservados; revisão de competências não inventa equivalências de atributos, dano ou PM/PU. |
 | DEC-023 | Adotar o mandato integral Tadeon Nexus V4.0 como direção vigente, por fases verificáveis; preservar dados/funções/autorização e isolar Forma de Poder histórica da nova Visão de Partida. | Novo pedido explícito de Tadeu em 01/11/2026 supera a prioridade de polimento anterior. Mudanças estruturais necessárias são autorizadas, sem motor, cena, gasto ou autoridade duplicados. O capítulo 62 exige fase 0 e biblioteca aprovada antes da propagação; lacunas não são certificadas por inferência. |
 | DEC-024 | Prosseguir com mudanças visíveis e reversíveis da V4 enquanto a restauração completa permanece pendente, por autorização explícita de Tadeu; não usar o backup como bloqueio para apresentação. | Pedido atual: deixar os requisitos excessivos de backup para depois e mostrar mudanças. O primeiro lote recompõe a Ficha Integral nos proprietários existentes, sem migration, conversão de dados, mudança de autorização ou motor concorrente. A dispensa temporária supera a ordem anterior do capítulo 62 para estas mudanças visuais. |
+| DEC-025 | Preservar a organização aprovada da Ficha e intensificar materiais, cores, cantos, encaixes e visualização; fechar a implementação das fases iniciais com evidências proporcionais e prosseguir sem reabrir o bloqueio de backup. | Pedido explícito de Tadeu nesta rodada. A validação técnica não certifica dispositivos físicos, contas reais ou serviços restaurados; DEC-024 continua vigente. Nenhuma remoção de função ou migração de dados está autorizada por esta mudança visual. |

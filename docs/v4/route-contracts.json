@@ -39,13 +39,13 @@
       "disposition": "recompor",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/dashboard-read.test.tsx",
         "src/components/character-archive.test.tsx"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -208,13 +208,13 @@
       "disposition": "recompor",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/auth.test.tsx",
         "src/lib/auth-redirect.test.ts"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -253,13 +253,13 @@
       "disposition": "refinar",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/manage-users-flow.test.tsx",
         "src/lib/permissions.test.ts"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -321,14 +321,14 @@
       "disposition": "recompor",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/components/master/master-workspace.test.tsx",
         "src/components/master/use-master-draft.test.tsx",
         "src/lib/tdv2-round.test.ts"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -414,14 +414,14 @@
       "disposition": "recompor",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/knowledge/knowledge-service.test.ts",
         "src/lib/knowledge/knowledge-portability.test.ts",
         "src/components/knowledge/nexus-continuity.test.tsx"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -463,13 +463,13 @@
       "disposition": "recompor",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/nexus-backup.test.ts",
         "src/lib/nexus-tools-identity.test.tsx"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -509,13 +509,13 @@
       "disposition": "refinar",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/lib/offline-cache.test.ts",
         "src/lib/service-worker.test.ts"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -545,12 +545,13 @@
       "disposition": "refinar",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
-        "src/lib/auth-errors.test.ts"
+        "src/lib/auth-errors.test.ts",
+        "scripts/verify-v4-reset.mjs"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     },
     {
@@ -789,7 +790,8 @@
       "entry": "src/routes/visual-audit.tsx",
       "component": "VisualAuditPage → ResponsiveAuditLab / PopupGallery",
       "actionGroups": [
-        "fixtures; galeria de popups; auditoria visual"
+        "fixtures; galeria de popups; auditoria visual",
+        "ensaiar seis materiais, pendência/erro/retry/somente leitura sem persistência"
       ],
       "sourceActionRefs": [
         "src/components/app-layout.tsx",
@@ -807,7 +809,8 @@
         "src/components/ui/sheet.tsx",
         "src/components/visual-audit/popup-gallery.tsx",
         "src/components/visual-audit/responsive-audit-lab.tsx",
-        "src/routes/__root.tsx"
+        "src/routes/__root.tsx",
+        "src/components/visual-audit/material-gallery.tsx"
       ],
       "permission": [
         "ProtectedShell mestre; fixtures não certificam contas reais"
@@ -819,13 +822,14 @@
       "disposition": "ampliar",
       "desktop/tablet/mobile": {
         "baseline": "runtime-baseline.json; only matching captured routes/states",
-        "chapter50": "pending"
+        "chapter50": "material-validation.json; 15 exact CSS viewports, synthetic fixtures and captured states only"
       },
       "test": [
         "src/components/ui/control-system.test.tsx",
-        "src/components/ui/route-popup-frame.test.tsx"
+        "src/components/ui/route-popup-frame.test.tsx",
+        "src/components/visual-audit/material-gallery.test.tsx"
       ],
-      "screenshot": "runtime-baseline.json; no claim for uncaptured states",
+      "screenshot": "material-validation.json; captures and hashes; no real-device/account certification",
       "certification": "incomplete"
     }
   ],

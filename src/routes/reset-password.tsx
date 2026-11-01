@@ -119,7 +119,7 @@ function ResetPasswordPage() {
   return (
     <main className="tadeon-consent-page">
       <div aria-hidden className="tadeon-consent-thread" />
-      <Card className="tadeon-consent-card w-full max-w-md">
+      <Card family="glass" className="tadeon-consent-card w-full max-w-md">
         <header className="tadeon-consent-card__header">
           <span className="tadeon-consent-card__mark">
             <BrandMark className="h-8 w-8" />

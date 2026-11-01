@@ -88,3 +88,10 @@ Constituição apresenta três recursos com nível proporcional e cores legívei
 O CSS muda em sheet-premium.css, com variáveis de extensão na superfície já proprietária, sem nova folha ou !important. Os materiais da edição anterior usam os fallbacks originais. A operação de Âncora tem um passo adicional de abrir a dobra; o verificador cobre abrir, Ancorar, gravar, Reassentar e gravar novamente. A restauração completa permanece pendente e não é declarada concluída por este lote.
 
 Validação local do lote visível em [visible-validation.json](visible-validation.json): 163 suítes/693 testes, check/audit, 48 vistas dos cinco fólios/instrumentos em 320/390/820/1440px, mestre/espectador e movimento normal/reduzido; 99 estados/fluxos operacionais com Ancorar/Reassentar, gravar, recursos, Tensão, registros e conflitos. A exclusão dos seletores do modo Jogo antigo deixa o material e o espaçamento da ficha atual com seu proprietário; a edição anterior conserva seus seletores. Em 390px a Pessoa passa de 2130 para 1936px na mesma fixture; isso mede composição, não desempenho físico. A fonte permanece sem migration e sem novo !important.
+
+
+## Segundo lote — biblioteca, entrada e utilidades
+
+A base desta rodada foi reconfirmada em `9f632ffdc177a24cb4f4beded1233c83e4a26c4c` (PR #316), árvore `0df0ad61c4c3f43d14831f3dd353d833a06119f5`. A seção Base conferida acima é a auditoria anterior; não descreve o HEAD desta rodada. O workflow de publicação 41326160269 passou, mas o marcador observado fora dele ainda era development; a identidade é tratada separadamente da disponibilidade de HTTP/JS/CSS. O novo lote explicita a identidade pública no build e exige nova prova na publicação.
+
+As diferenças de materiais, a entrega técnica das fases 0–2 e os limites estão em [MATERIAIS_E_FECHAMENTO.md](MATERIAIS_E_FECHAMENTO.md). O [cruzamento desta rodada](material-validation.json) conserva o estado real da evidência; não converte fonte em execução. O backup continua diferido por DEC-024 e a ficha permanece na NEX-046, com a organização aprovada preservada.
