@@ -1,25 +1,25 @@
 {
   "version": 1,
   "checkedAt": "2026-11-01",
-  "runtimeReference": "83a181daaa3692070fff8c4324f981438a584317",
+  "runtimeReference": "209c82a62236d107c73ced883f4bec7884529d62",
   "integration": {
-    "pr": 317,
-    "branch": "feat/v4-material-system",
+    "pr": 318,
+    "branch": "feat/nex-046-sheet-instruments",
     "base": "main",
-    "baseCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
-    "sourceCommit": "18e89a7c077c0b0f8c904c0da3d537f15b58f309",
-    "headCommit": "18e89a7c077c0b0f8c904c0da3d537f15b58f309",
+    "baseCommit": "83a181daaa3692070fff8c4324f981438a584317",
+    "sourceCommit": "9c20780c1148ce92503be1c27eaacfdc7bb41a24",
+    "headCommit": "9c20780c1148ce92503be1c27eaacfdc7bb41a24",
     "state": "integrated",
-    "mergeCommit": "83a181daaa3692070fff8c4324f981438a584317",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41338241736",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41338241694",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41344374135",
+    "mergeCommit": "209c82a62236d107c73ced883f4bec7884529d62",
+    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41350892351",
+    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41350892354",
+    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41352162296",
     "production": "workflow-confirmed; HTTP200 and exact release marker",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41344374194",
-    "productionCommit": "83a181daaa3692070fff8c4324f981438a584317",
-    "productionVerifiedAt": "2026-11-01T20:01:19.145Z",
+    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41352162350",
+    "productionCommit": "209c82a62236d107c73ced883f4bec7884529d62",
+    "productionVerifiedAt": "2026-11-01T21:30:28.202Z",
     "productionHttpStatus": 200,
-    "note": "Última integração na base. A rodada de materiais tem checkpoint próprio nas tarefas; a CI e a publicação posteriores ao snapshot ficam registradas na PR correspondente."
+    "note": "Última integração publicada; PR 318 conserva os gates, HTTP200/SHA e integridade do pacote. O novo lote de leitura exige gates próprios."
   },
   "domains": [
     {
@@ -1529,9 +1529,10 @@
         "docs/v4/MATERIAIS_E_FECHAMENTO.md",
         "docs/v4/material-validation.json",
         "docs/v4/FICHA_OPERACIONAL.md",
-        "docs/v4/sheet-operational-validation.json"
+        "docs/v4/sheet-operational-validation.json",
+        "docs/v4/sheet-reading-validation.json"
       ],
-      "checkpoint": "DEC-026: ficha de consulta e operação, com instrumentos canônicos de grau/categoria/dado, rolagem rápida transitória, registro opcional e controles de recursos. Preserva dados e os cinco fólios. Nova fonte anexada conferida pelo mesmo hash normativo. Este lote não encerra todas as fases da ficha/VP."
+      "checkpoint": "DEC-027 aprofunda a ficha interativa: inscrições editáveis sob demanda, Pilar da Âncora por escolhas nativas, oferta/cobrança visíveis e condições com intensidade/efeito/saída. Recompõe encaixe do editor de vínculos por largura real. Preserva escalas, dados e os cinco fólios. Não encerra a ficha/VP integral."
     },
     {
       "id": "NEX-047",
@@ -1768,6 +1769,11 @@
       "id": "DEC-026",
       "decision": "A ficha deve funcionar como ficha física ampliada por recursos digitais, com leitura e operação próprias para cada informação. Registro narrativo de rolagens é opcional, e dados já salvos devem ser preservados.",
       "reason": "Pedido explícito de Tadeu em 01/11: melhorar visualização além do acabamento, conferir níveis/graus/dados com o Livro de Regras e retirar burocracia de diário. O livro não cria nível universal e não exige anotação de cada Resto."
+    },
+    {
+      "id": "DEC-027",
+      "decision": "Priorizar leitura visual e operações diretas na ficha, com escrita sob demanda e revisão dos encaixes e sobreposições.",
+      "reason": "Pedido explícito de Tadeu após aprovar a PR 318: ficha interativa, prática e visual, preservando os campos descritivos pertinentes e evitando formulário exaustivo."
     }
   ],
   "bridges": [
@@ -2083,6 +2089,10 @@
     {
       "path": "docs/v4/sheet-operational-validation.json",
       "purpose": "Provas de grau/dado, rolagem sem diário, recursos e visualização operacional da ficha; sem certificação de contas reais."
+    },
+    {
+      "path": "docs/v4/sheet-reading-validation.json",
+      "purpose": "Leitura/edição cancelável, Pilar, vínculos e condições; foco, encaixe de editores e dimensões em fixtures."
     }
   ],
   "integrationHistory": [

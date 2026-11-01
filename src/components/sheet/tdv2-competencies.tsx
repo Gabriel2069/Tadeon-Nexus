@@ -244,8 +244,11 @@ export function TdvResourceActions({
               +
             </Button>
           </div>
-          <label htmlFor={id}>{name} atual</label>
+          <label className="tadeon-dossier-label" htmlFor={id}>
+            {name} atual
+          </label>
           <Input
+            className="tadeon-resource-field"
             id={id}
             type="number"
             value={draft}

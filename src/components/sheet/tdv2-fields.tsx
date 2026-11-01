@@ -1,6 +1,133 @@
 import { useId, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
+/** Reading is the resting state; writing is a deliberate, cancellable operation. */
+export function TdvInscription({
+  label,
+  value,
+  onChange,
+  disabled = false,
+  short = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+  short?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState(value);
+  const id = useId();
+  const reading = (
+    <>
+      <span className="tdv-inscription__label">{label}</span>
+      <strong id={`${id}-reading`}>{value || "Por definir"}</strong>
+      {!disabled && <small>editar</small>}
+    </>
+  );
+  if (disabled)
+    return (
+      <div className="tdv-inscription" data-empty={!value}>
+        {reading}
+      </div>
+    );
+  return (
+    <Popover
+      open={open}
+      onOpenChange={(next) => {
+        if (next) setDraft(value);
+        setOpen(next);
+      }}
+    >
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="tdv-inscription"
+          data-empty={!value}
+          aria-label={`Editar ${label}`}
+          aria-describedby={`${id}-reading`}
+        >
+          {reading}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="tdv-inscription-editor" aria-label={`Edição de ${label}`}>
+        <label className="tadeon-dossier-label" htmlFor={id}>
+          {label}
+        </label>
+        {short ? (
+          <Input
+            className="tadeon-dossier-field"
+            id={id}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+          />
+        ) : (
+          <Textarea
+            className="tadeon-dossier-field"
+            id={id}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+          />
+        )}
+        <div className="tdv-actions">
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => {
+              onChange(draft);
+              setOpen(false);
+            }}
+          >
+            Aplicar {label}
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/** Native radio semantics keep keyboard choice and one selected value. */
+export function TdvChoices({
+  label,
+  value,
+  options,
+  onChange,
+  disabled = false,
+}: {
+  label: string;
+  value: string;
+  options: readonly string[];
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}) {
+  const name = useId();
+  return (
+    <fieldset className="tdv-choices" disabled={disabled}>
+      <legend>{label}</legend>
+      <div>
+        {options.map((option) => (
+          <label key={option}>
+            <input
+              type="radio"
+              name={name}
+              value={option}
+              checked={value === option}
+              onChange={() => onChange(option)}
+            />
+            <span>
+              <i aria-hidden="true" />
+              {option}
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
 export function TdvDisclosure({
   initiallyOpen,
   children,

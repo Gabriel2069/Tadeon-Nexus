@@ -115,6 +115,11 @@ try {
         tdv2_state: {},
         tdv2_revision: 0,
       };
+      if (process.env.NEXUS_SHEET_READING_ONLY === "1") {
+        row.tdv2_data.face.links[0].offer = "Abrigo e acesso aos arquivos do cais";
+        row.tdv2_data.face.links[0].demand = "Preservar a identidade das testemunhas";
+        row.tdv2_data.conditions = [{ id: "fixture-condition", name: "Ferida no braço", origin: "Estilhaços no cais", effect: "Dificulta ações que exigem o braço ferido", exit: "Receber cuidado e repouso adequado", intensity: "Leve" }];
+      }
       const writes = [],
         errors = [];
       const context = await browser.newContext({
@@ -316,6 +321,64 @@ try {
       };
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
       await page.getByLabel("Nome da personagem", { exact: true }).waitFor();
+      if (process.env.NEXUS_SHEET_READING_ONLY === "1") {
+        await page.locator('#tdv-feicao').scrollIntoViewIfNeeded(); await geometry('reading-person');
+        assert(await page.locator('.tdv-inscription:visible').count() === 5, 'Five inscriptions, without five default text fields');
+        assert(await page.getByRole('textbox',{name:'Convicção',exact:true}).count() === 0, 'Reading is not a permanently mounted form');
+        const targets = await page.locator('button.tdv-inscription:visible,.tdv-choices label > span:visible').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return [r.width,r.height];}));
+        assert(targets.every(([w,h])=>w>=43.9&&h>=43.9),'Reading and pillar touch targets >=44px: '+JSON.stringify(targets));
+        if(role==='mestre') {
+          const trigger=page.getByRole('button',{name:'Editar Convicção',exact:true}); await trigger.click();
+          const popup=page.getByRole('dialog',{name:'Edição de Convicção',exact:true}); await popup.waitFor();
+          await popup.getByRole('textbox',{name:'Convicção',exact:true}).fill('Rascunho descartado');
+          const metrics=await popup.evaluate(e=>({label:parseFloat(getComputedStyle(e.querySelector('label')).fontSize),field:parseFloat(getComputedStyle(e.querySelector('textarea')).fontSize),fieldMin:getComputedStyle(e.querySelector('textarea')).minHeight,display:getComputedStyle(e).display}));
+          assert(metrics.label>=14&&metrics.field>=16&&parseFloat(metrics.fieldMin)>=96,'Legacy density cannot shrink the editor: '+JSON.stringify(metrics));
+          const b=await popup.boundingBox(); assert(b&&b.x>=0&&b.y>=0&&b.x+b.width<=width+1&&b.y+b.height<=height+1,'Editor stays within viewport');
+          for(const control of await popup.locator('textarea,button').all()) {
+            await control.scrollIntoViewIfNeeded();
+            assert(await control.evaluate(e=>{const r=e.getBoundingClientRect();return e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));}),'Editor control is not obscured by chrome or another plane');
+          }
+          await geometry('reading-editor'); await page.keyboard.press('Escape'); await popup.waitFor({state:'detached'});
+          assert(row.tdv2_data.face.conviction==='Preservar testemunhos'&&writes.length===0,'Escape discards draft without persistence');
+          assert(await trigger.evaluate(e=>e===document.activeElement),'Editor restores focus');
+          await trigger.click(); await popup.getByRole('textbox',{name:'Convicção',exact:true}).fill('Preservar vidas e testemunhos');
+          await page.getByRole('button',{name:'Aplicar Convicção',exact:true}).click();
+          await saved(()=>row.tdv2_data.face.conviction==='Preservar vidas e testemunhos');
+          await page.getByRole('radio',{name:'Convicção',exact:true}).focus(); await page.keyboard.press('ArrowRight');
+          assert(await page.getByRole('radio',{name:'Limite',exact:true}).isChecked(),'Pillar supports native arrow-key choice');
+          await saved(()=>row.tdv2_data.face.anchor.pillar==='Limite');
+          await page.locator('summary').filter({hasText:'Dados complementares'}).click();
+          await page.getByRole('button',{name:'Editar Idade',exact:true}).click();
+          await page.getByRole('textbox',{name:'Idade',exact:true}).fill('31');
+          await page.getByRole('button',{name:'Aplicar Idade',exact:true}).click();
+          await saved(()=>row.age==='31');
+          await page.locator('summary').filter({hasText:'Dados complementares'}).click();
+        } else {
+          assert(await page.getByRole('button',{name:'Editar Convicção',exact:true}).count()===0,'Read-only inscription has no edit action');
+          assert(await page.getByRole('radio',{name:'Convicção',exact:true}).isDisabled(),'Read-only pillar cannot change');
+        }
+        await page.locator('#tdv-vinculos').scrollIntoViewIfNeeded();
+        await page.locator('.tdv-link-exchange').filter({hasText:'Abrigo e acesso aos arquivos do cais'}).waitFor();
+        await geometry('reading-links');
+        await page.getByRole('tab',{name:'Ação',exact:true}).click();
+        await page.locator('#tdv-condicoes').scrollIntoViewIfNeeded();
+        await page.locator('.tdv-condition__reading dd').filter({hasText:'Dificulta ações que exigem o braço ferido'}).waitFor();
+        assert(await page.getByLabel('Nome da condição 1',{exact:true}).isVisible()===false,'Condition reads effect and exit before editing');
+        await geometry('reading-condition');
+        await page.locator('summary').filter({hasText:'Editar condição 1'}).click();
+        if(role==='mestre') {
+          await page.getByRole('radio',{name:'Grave',exact:true}).check();
+          await saved(()=>row.tdv2_data.conditions[0].intensity==='Grave');
+          await page.locator('summary').filter({hasText:'Editar condição 1'}).click();
+          await page.getByRole('button',{name:'Registrar saída da condição 1',exact:true}).click();
+          await saved(()=>row.tdv2_data.conditions.length===0);
+          await page.getByRole('button',{name:'Nova condição',exact:true}).click();
+          await page.getByLabel('Nome da condição 1',{exact:true}).fill('Marca de frio');
+          await saved(()=>row.tdv2_data.conditions[0]?.name==='Marca de frio');
+        } else { assert(await page.getByRole('radio',{name:'Grave',exact:true}).isDisabled(),'Read-only condition cannot change'); assert(writes.length===0,'Read-only produced no writes'); }
+        await geometry('reading-condition-editor');
+        await context.close();continue;
+      }
       if (process.env.NEXUS_SHEET_INSTRUMENTS_ONLY === "1") {
         await page.getByRole("tab",{name:"Constituição",exact:true}).click();
         assert(await page.locator('.tdv-alinhavos .tdv-competency').count()===21,"One flat list of 21 Alinhavos");

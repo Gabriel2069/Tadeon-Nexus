@@ -13,7 +13,15 @@ import {
 } from "@/components/ui/dialog";
 import AttributeRadar from "./attribute-radar";
 import { useState, type ReactNode } from "react";
-import { TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-fields";
+import {
+  TdvDisclosure,
+  TdvField,
+  TdvSelect,
+  TdvNumber,
+  TdvCheck,
+  TdvInscription,
+  TdvChoices,
+} from "./tdv2-fields";
 import {
   TdvGuard,
   TdvLinkUse,
@@ -111,6 +119,7 @@ export function Tdv2Sheet({
       toast.error((e as Error).message);
     }
   };
+  const FaceField = c.ready ? TdvInscription : TdvField;
   const face = (key: "origin" | "occupation" | "conviction" | "limit", value: string) =>
     upd("face", { ...c.face, [key]: value });
   return (
@@ -204,7 +213,7 @@ export function Tdv2Sheet({
                       ["limit", "Limite"],
                     ] as const
                   ).map(([key, label]) => (
-                    <TdvField
+                    <FaceField
                       key={key}
                       label={label}
                       short={key === "origin" || key === "occupation"}
@@ -250,8 +259,8 @@ export function Tdv2Sheet({
                 <span>{c.face.anchor.pillar}</span>
               </div>
               <div className="tdv-anchor">
-                <div className="tdv-grid">
-                  <TdvSelect
+                <div className="tdv-anchor-foundation">
+                  <TdvChoices
                     label="Pilar escolhido como Âncora"
                     value={c.face.anchor.pillar}
                     options={PILLARS}
@@ -266,7 +275,7 @@ export function Tdv2Sheet({
                     }
                     disabled={disabled}
                   />
-                  <TdvField
+                  <FaceField
                     label="A que parte de mim consigo retornar?"
                     value={c.face.anchor.detail}
                     onChange={(v) =>
@@ -348,6 +357,22 @@ export function Tdv2Sheet({
                     <span className="tdv-link-state" data-link-state={link.state}>
                       {link.state}
                     </span>
+                    {(link.offer || link.demand) && (
+                      <span className="tdv-link-exchange">
+                        {link.offer && (
+                          <span>
+                            <b>Oferece</b>
+                            {link.offer}
+                          </span>
+                        )}
+                        {link.demand && (
+                          <span>
+                            <b>Cobra</b>
+                            {link.demand}
+                          </span>
+                        )}
+                      </span>
+                    )}
                   </summary>
                   <div className="tdv-link-editor">
                     <div className="tdv-grid tdv-grid--identity">
@@ -732,43 +757,70 @@ export function Tdv2Sheet({
             </Section>
           </details>
           <Section id="tdv-condicoes" title="Condições">
-            <div className="tdv-folios">
+            {c.conditions.length === 0 && (
+              <p className="tdv-condition-empty">Nenhuma condição ativa.</p>
+            )}
+            <div className="tdv-folios tdv-condition-list">
               {c.conditions.map((condition, index) => (
-                <div key={condition.id} className="tdv-folio">
-                  <div className="tdv-grid">
-                    {(["name", "origin", "effect", "exit"] as const).map((key, i) => (
-                      <TdvField
-                        key={key}
-                        label={`${["Nome", "Origem", "Efeito", "Saída"][i]} da condição ${index + 1}`}
-                        value={condition[key]}
+                <article
+                  key={condition.id}
+                  className="tdv-folio tdv-condition"
+                  data-intensity={condition.intensity}
+                >
+                  <header>
+                    <span className="tdv-condition__severity">
+                      <i aria-hidden="true" />
+                      {condition.intensity}
+                    </span>
+                    <h3>{condition.name || "Nova condição"}</h3>
+                  </header>
+                  <dl className="tdv-condition__reading">
+                    <div>
+                      <dt>Efeito</dt>
+                      <dd>{condition.effect || "Efeito ainda não definido"}</dd>
+                    </div>
+                    <div>
+                      <dt>Saída</dt>
+                      <dd>{condition.exit || "Saída ainda não definida"}</dd>
+                    </div>
+                  </dl>
+                  <TdvDisclosure initiallyOpen={!condition.name.trim()}>
+                    <summary>Editar condição {index + 1}</summary>
+                    <div className="tdv-grid">
+                      {(["name", "origin", "effect", "exit"] as const).map((key, i) => (
+                        <TdvField
+                          key={key}
+                          label={`${["Nome", "Origem", "Efeito", "Saída"][i]} da condição ${index + 1}`}
+                          value={condition[key]}
+                          disabled={disabled}
+                          onChange={(v) =>
+                            upd(
+                              "conditions",
+                              c.conditions.map((x) =>
+                                x.id === condition.id ? { ...x, [key]: v } : x,
+                              ),
+                            )
+                          }
+                        />
+                      ))}
+                      <TdvChoices
+                        label={`Intensidade da condição ${index + 1}`}
+                        value={condition.intensity}
+                        options={["Leve", "Grave", "Crítica"]}
                         disabled={disabled}
                         onChange={(v) =>
                           upd(
                             "conditions",
                             c.conditions.map((x) =>
-                              x.id === condition.id ? { ...x, [key]: v } : x,
+                              x.id === condition.id
+                                ? { ...x, intensity: v as typeof condition.intensity }
+                                : x,
                             ),
                           )
                         }
                       />
-                    ))}
-                    <TdvSelect
-                      label={`Intensidade da condição ${index + 1}`}
-                      value={condition.intensity}
-                      options={["Leve", "Grave", "Crítica"]}
-                      disabled={disabled}
-                      onChange={(v) =>
-                        upd(
-                          "conditions",
-                          c.conditions.map((x) =>
-                            x.id === condition.id
-                              ? { ...x, intensity: v as typeof condition.intensity }
-                              : x,
-                          ),
-                        )
-                      }
-                    />
-                  </div>
+                    </div>
+                  </TdvDisclosure>
                   <Button
                     variant="ghost"
                     disabled={disabled || !condition.exit.trim()}
@@ -781,7 +833,7 @@ export function Tdv2Sheet({
                   >
                     Registrar saída da condição {index + 1}
                   </Button>
-                </div>
+                </article>
               ))}
             </div>
             <Button

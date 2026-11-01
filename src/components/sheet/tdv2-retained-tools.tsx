@@ -1,7 +1,7 @@
 import { Section, RowTable } from "./sheet-ui";
 import { AddItemDialog } from "./add-item-dialog";
 import { SheetInventoryOrganizer } from "./sheet-inventory-organizer";
-import { TdvField } from "./tdv2-fields";
+import { TdvField, TdvDisclosure, TdvInscription } from "./tdv2-fields";
 import { uid, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
 import type { SheetData, SheetUpdate } from "./sheet-model";
 export function Tdv2DossierDetails({
@@ -15,30 +15,38 @@ export function Tdv2DossierDetails({
 }) {
   return (
     <Section id="tdv-pessoal" title="Dossiê pessoal">
-      <div className="tdv-grid tdv-grid--identity">
-        <TdvField
-          label="Idade"
-          value={sheet.age ?? ""}
-          short
-          disabled={!canEdit}
-          onChange={(v) => onUpdate("age", v)}
-        />
-        {(
-          [
-            ["wound", "Ferida"],
-            ["question", "Pergunta da personagem"],
-            ["lifeCycleTrait", "Traço do ciclo de vida"],
-          ] as const
-        ).map(([key, label]) => (
-          <TdvField
-            key={key}
-            label={label}
-            value={sheet.identity_data[key] ?? ""}
+      <TdvDisclosure
+        initiallyOpen={Boolean(
+          sheet.age ||
+            (["wound", "question", "lifeCycleTrait"] as const).some((key) => sheet.identity_data[key]?.trim()),
+        )}
+      >
+        <summary>Dados complementares</summary>
+        <div className="tdv-grid tdv-grid--identity">
+          <TdvInscription
+            label="Idade"
+            value={sheet.age ?? ""}
+            short
             disabled={!canEdit}
-            onChange={(v) => onUpdate("identity_data", { ...sheet.identity_data, [key]: v })}
+            onChange={(v) => onUpdate("age", v)}
           />
-        ))}
-      </div>
+          {(
+            [
+              ["wound", "Ferida"],
+              ["question", "Pergunta da personagem"],
+              ["lifeCycleTrait", "Traço do ciclo de vida"],
+            ] as const
+          ).map(([key, label]) => (
+            <TdvInscription
+              key={key}
+              label={label}
+              value={sheet.identity_data[key] ?? ""}
+              disabled={!canEdit}
+              onChange={(v) => onUpdate("identity_data", { ...sheet.identity_data, [key]: v })}
+            />
+          ))}
+        </div>
+      </TdvDisclosure>
     </Section>
   );
 }
