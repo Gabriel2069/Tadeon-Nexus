@@ -1,6 +1,6 @@
 # V4 — auditoria de implementação
 
-A V4 é o mandato vigente. A fase 0 está **em andamento**, sem certificação integral e sem mudanças de interface, regras, autorização ou banco nesta etapa. O [dossiê completo](Tadeon_Nexus_Especificacao_Final_V4.md) foi incorporado sem redução; o [registro de fontes](source-ledger.json) identifica as nove fontes lidas por hash. O Livro II coincide com a fonte normativa já registrada no projeto (`8846b485…`). A fila continua exclusivamente em `docs/project-continuity.json` (NEX-043 em diante).
+A V4 é o mandato vigente. **DEC-024:** Tadeu autorizou adiar os requisitos pendentes de backup e prosseguir com mudanças visíveis e reversíveis. O primeiro lote recompõe a Ficha Integral como atlas; as evidências da fase 0 abaixo são o registro anterior, sem certificação integral. Não há mudança de regras, autorização ou banco. O [dossiê completo](Tadeon_Nexus_Especificacao_Final_V4.md) foi incorporado sem redução; o [registro de fontes](source-ledger.json) identifica as nove fontes lidas por hash. O Livro II coincide com a fonte normativa já registrada no projeto (`8846b485…`). A fila continua exclusivamente em `docs/project-continuity.json` (NEX-043 em diante).
 
 ## Base conferida
 
@@ -76,4 +76,15 @@ Tecido/tinta no conteúdo, vidro nos comandos, Fios nas relações. Famílias: F
 
 Pendentes: matriz de 15 viewports do capítulo 50, zoom 200/400%, teclado real, safe areas e janela parcial de tablet; estados densos e excepcionais do capítulo 60; sessão encadeada criação→VP→Mesa→Mestre→Nexus→encerramento; contas reais mestre/jogador/espectador entre campanhas, OAuth e audiência no transporte/cache; hardware e performance; restauração completa de serviços/arquivos; revisão artística independente.
 
-Esta etapa acrescenta instrumentação, fontes e evidência; a aplicação permanece igual à base. Rollback: reverter o commit da instrumentação e os registros associados da continuidade; não há rollback de banco, pois nenhuma migração foi criada/aplicada. Não publicar a V4 como final com a fase 0 em aberto. Os próximos lotes estão na fila canônica, não neste documento como segunda fila.
+O lote inicial de auditoria acrescentou instrumentação, fontes e evidência. O lote visível autorizado por DEC-024 está descrito abaixo. Rollback: reverter os commits correspondentes e os registros associados da continuidade; não há rollback de banco, pois nenhuma migração foi criada/aplicada. Não declarar a V4 integralmente concluída com o manifesto aberto. Os próximos lotes estão na fila canônica, não neste documento como segunda fila.
+
+
+## Primeiro lote visível — NEX-046 / DEC-024
+
+A ficha passa a apresentar cinco fólios indexados, tinta com margem de costura e instrumentos distintos para recursos e Equilíbrio. Pessoa recompõe Feição e Âncora em duas regiões a partir de 700px úteis; o dossiê pessoal ocupa a faixa seguinte. No celular, os campos continuam em pares e a consulta à Âncora precede a operação recolhida, alcançável por um disclosure explícito. Todos os campos e operações permanecem; os callbacks de Ancorar/Reassentar, recursos e Tensão são os existentes.
+
+Constituição apresenta três recursos com nível proporcional e cores legíveis, radar/Matrizes por largura útil, régua bipolar de Equilíbrio e sete marcas de Tensão. Os valores são projeções do motor atual; não há bônus ou gastos novos. As cinco abas conservam SelectionPlate e os controles mantêm foco, leitura e redução de movimento existentes.
+
+O CSS muda em sheet-premium.css, com variáveis de extensão na superfície já proprietária, sem nova folha ou !important. Os materiais da edição anterior usam os fallbacks originais. A operação de Âncora tem um passo adicional de abrir a dobra; o verificador cobre abrir, Ancorar, gravar, Reassentar e gravar novamente. A restauração completa permanece pendente e não é declarada concluída por este lote.
+
+Validação local do lote visível em [visible-validation.json](visible-validation.json): 163 suítes/693 testes, check/audit, 48 vistas dos cinco fólios/instrumentos em 320/390/820/1440px, mestre/espectador e movimento normal/reduzido; 99 estados/fluxos operacionais com Ancorar/Reassentar, gravar, recursos, Tensão, registros e conflitos. A exclusão dos seletores do modo Jogo antigo deixa o material e o espaçamento da ficha atual com seu proprietário; a edição anterior conserva seus seletores. Em 390px a Pessoa passa de 2130 para 1936px na mesma fixture; isso mede composição, não desempenho físico. A fonte permanece sem migration e sem novo !important.

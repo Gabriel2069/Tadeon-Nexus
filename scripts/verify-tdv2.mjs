@@ -329,6 +329,10 @@ try {
         ]) {
           await page.getByRole("tab", { name: label, exact: true }).click();
           await geometry("layout-" + key);
+          if (key === "constitution") {
+            await page.locator("#tdv-recursos").scrollIntoViewIfNeeded();
+            await geometry("layout-instruments");
+          }
         }
         await context.close();
         continue;
@@ -345,6 +349,7 @@ try {
       await page.getByRole("tab", { name: "Ação", exact: true }).click();
       await page.getByRole("tab", { name: "Pessoa", exact: true }).click();
       if (role === "mestre") {
+        await page.locator("summary").filter({hasText:"Ancorar · sustentar ou redirecionar"}).click();
         await page
           .getByLabel("Consequência concreta", { exact: true })
           .fill("A testemunha é levada");

@@ -76,3 +76,4 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/runtime-baseline.json](v4/runtime-baseline.json) | 127 censos de DOM e hashes de capturas em fixtures; não certifica dispositivos/contas reais. |
 | [v4/source-ledger.json](v4/source-ledger.json) | Proveniência/hash e leitura das fontes normativas V4. |
 | [v4/surface-manifest.json](v4/surface-manifest.json) | Inventário AST V4: fonte não equivale a função montada. |
+| [v4/visible-validation.json](v4/visible-validation.json) | Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup. |

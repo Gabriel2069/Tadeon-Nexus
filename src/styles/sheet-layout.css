@@ -212,8 +212,8 @@ html[data-tadeon-sheet-mode="game"] label:not(.tadeon-dossier-field, .tadeon-res
 }
 
 html[data-tadeon-sheet-mode="game"] .tadeon-surface,
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-section,
-html[data-tadeon-sheet-mode="game"] section[id] {
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-section:not(.tadeon-tdv2-sheet *),
+html[data-tadeon-sheet-mode="game"] section[id]:not(.tadeon-tdv2-sheet *) {
   scroll-margin-top: 5.5rem;
 }
 
@@ -372,17 +372,17 @@ html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page {
 }
 
 /* A ficha passa a se comportar como painel de leitura. */
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page .tadeon-sheet-section,
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id] {
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page .tadeon-sheet-section:not(.tadeon-tdv2-sheet *),
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id]:not(.tadeon-tdv2-sheet *) {
   padding: .78rem !important;
 }
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id] {
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id]:not(.tadeon-tdv2-sheet *) {
   border-color: color-mix(in srgb, var(--border) 58%, transparent) !important;
   box-shadow: none !important;
 }
 
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page .tadeon-sheet-section + .tadeon-sheet-section,
-html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id] + section[id] {
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page .tadeon-sheet-section:not(.tadeon-tdv2-sheet *) + .tadeon-sheet-section:not(.tadeon-tdv2-sheet *),
+html[data-tadeon-sheet-mode="game"] .tadeon-sheet-page section[id]:not(.tadeon-tdv2-sheet *) + section[id]:not(.tadeon-tdv2-sheet *) {
   margin-top: var(--game-section-gap) !important;
 }
 
@@ -529,8 +529,8 @@ html[data-tadeon-sheet-mode="game"] .text-muted-foreground {
   opacity: .72;
 }
 
-html[data-tadeon-sheet-mode="game"] section[id]:hover .text-muted-foreground,
-html[data-tadeon-sheet-mode="game"] section[id]:focus-within .text-muted-foreground {
+html[data-tadeon-sheet-mode="game"] section[id]:not(.tadeon-tdv2-sheet *):hover .text-muted-foreground,
+html[data-tadeon-sheet-mode="game"] section[id]:not(.tadeon-tdv2-sheet *):focus-within .text-muted-foreground {
   opacity: .94;
 }
 

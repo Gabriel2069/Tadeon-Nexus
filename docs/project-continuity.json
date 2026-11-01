@@ -1439,7 +1439,7 @@
       "id": "NEX-043",
       "title": "V4 fase 0: manifesto montado, fontes, baseline e restauração",
       "domain": "delivery",
-      "status": "active",
+      "status": "deferred",
       "priority": 0,
       "dependsOn": [
         "NEX-042"
@@ -1489,17 +1489,20 @@
       "id": "NEX-046",
       "title": "V4 fase 3: Ficha Integral em cinco fólios",
       "domain": "sheet",
-      "status": "planned",
+      "status": "active",
       "priority": 1,
       "dependsOn": [
-        "NEX-044",
-        "NEX-045"
+        "NEX-042"
       ],
       "acceptance": [
         "Preservar todos os campos, IDs, narrativa, inventário, vínculos, rascunhos, CAS e acesso histórico.",
-        "Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet."
+        "Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.",
+        "Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco."
       ],
-      "evidence": []
+      "evidence": [
+        "docs/v4/IMPLEMENTACAO.md",
+        "docs/v4/visible-validation.json"
+      ]
     },
     {
       "id": "NEX-047",
@@ -1721,6 +1724,11 @@
       "id": "DEC-023",
       "decision": "Adotar o mandato integral Tadeon Nexus V4.0 como direção vigente, por fases verificáveis; preservar dados/funções/autorização e isolar Forma de Poder histórica da nova Visão de Partida.",
       "reason": "Novo pedido explícito de Tadeu em 01/11/2026 supera a prioridade de polimento anterior. Mudanças estruturais necessárias são autorizadas, sem motor, cena, gasto ou autoridade duplicados. O capítulo 62 exige fase 0 e biblioteca aprovada antes da propagação; lacunas não são certificadas por inferência."
+    },
+    {
+      "id": "DEC-024",
+      "decision": "Prosseguir com mudanças visíveis e reversíveis da V4 enquanto a restauração completa permanece pendente, por autorização explícita de Tadeu; não usar o backup como bloqueio para apresentação.",
+      "reason": "Pedido atual: deixar os requisitos excessivos de backup para depois e mostrar mudanças. O primeiro lote recompõe a Ficha Integral nos proprietários existentes, sem migration, conversão de dados, mudança de autorização ou motor concorrente. A dispensa temporária supera a ordem anterior do capítulo 62 para estas mudanças visuais."
     }
   ],
   "bridges": [
@@ -2024,6 +2032,10 @@
     {
       "path": "docs/v4/surface-manifest.json",
       "purpose": "Inventário AST V4: fonte não equivale a função montada."
+    },
+    {
+      "path": "docs/v4/visible-validation.json",
+      "purpose": "Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup."
     }
   ],
   "integrationHistory": [
