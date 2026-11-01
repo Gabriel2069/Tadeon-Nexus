@@ -5,10 +5,19 @@ interface AttributeRadarProps {
   data: { attr: string; value: number }[];
   fillOpacity?: number;
   tickColor: string;
+  title?: string;
+  valueText?: (value: number) => string;
 }
 
 /** A static instrument. The surrounding card owns its dimensions and material. */
-function AttributeRadar({ color, data, fillOpacity = 0.34, tickColor }: AttributeRadarProps) {
+function AttributeRadar({
+  color,
+  data,
+  fillOpacity = 0.34,
+  tickColor,
+  title = "Distribuição dos atributos",
+  valueText = String,
+}: AttributeRadarProps) {
   const id = useId();
   const titleId = `${id}-title`;
   const descriptionId = `${id}-description`;
@@ -38,10 +47,10 @@ function AttributeRadar({ color, data, fillOpacity = 0.34, tickColor }: Attribut
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
     >
-      <title id={titleId}>Distribuição dos atributos</title>
+      <title id={titleId}>{title}</title>
       <desc id={descriptionId}>
         {data.length
-          ? `${data.map(({ attr, value }) => `${attr}: ${value}`).join("; ")}. Escala de ${minimum} a ${maximum}.`
+          ? `${data.map(({ attr, value }) => `${attr}: ${valueText(value)}`).join("; ")}. Escala de ${minimum} a ${maximum}.`
           : "Sem atributos disponíveis."}
       </desc>
       {data.length > 0 ? (
@@ -74,7 +83,7 @@ function AttributeRadar({ color, data, fillOpacity = 0.34, tickColor }: Attribut
                   <text
                     x={label.x}
                     y={label.y}
-                    textAnchor="middle"
+                    textAnchor={label.x > 126 ? "end" : label.x < 124 ? "start" : "middle"}
                     fill={tickColor}
                     fontFamily="var(--font-cinzel), Georgia, serif"
                     fontSize="16"
@@ -87,7 +96,7 @@ function AttributeRadar({ color, data, fillOpacity = 0.34, tickColor }: Attribut
                       fontFamily="var(--font-inter), sans-serif"
                       fontSize="14"
                     >
-                      {value}
+                      {valueText(value)}
                     </tspan>
                   </text>
                 </g>
@@ -95,7 +104,7 @@ function AttributeRadar({ color, data, fillOpacity = 0.34, tickColor }: Attribut
             })}
             <text
               x="125"
-              y="244"
+              y="139"
               textAnchor="middle"
               fill={tickColor}
               opacity="0.7"

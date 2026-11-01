@@ -36,6 +36,7 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/IMPLEMENTACAO.md](v4/IMPLEMENTACAO.md) | active | Auditoria V4, diferenças atuais→destino, evidências, bloqueios e rollback; fila somente no registro canônico. |
 | [v4/Tadeon_Nexus_Especificacao_Final_V4.md](v4/Tadeon_Nexus_Especificacao_Final_V4.md) | reference | Dossiê integral V4 fornecido por Tadeu, preservado sem redução; mandato vigente. |
 | [v4/MATERIAIS_E_FECHAMENTO.md](v4/MATERIAIS_E_FECHAMENTO.md) | active | Diferenças, fechamento técnico das fases iniciais, materiais autorais, provas e módulos não certificados. |
+| [v4/FICHA_OPERACIONAL.md](v4/FICHA_OPERACIONAL.md) | active | Direção operacional da ficha, reconciliação com o Livro de Regras, destinos dos controles, persistência e limites. |
 
 ## Contratos e evidências
 
@@ -79,3 +80,4 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/surface-manifest.json](v4/surface-manifest.json) | Inventário AST V4: fonte não equivale a função montada. |
 | [v4/visible-validation.json](v4/visible-validation.json) | Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup. |
 | [v4/material-validation.json](v4/material-validation.json) | Cruzamento reproduzível das rotas/contratos com censos e hashes de capturas desta rodada; não infere operação de callbacks. |
+| [v4/sheet-operational-validation.json](v4/sheet-operational-validation.json) | Provas de grau/dado, rolagem sem diário, recursos e visualização operacional da ficha; sem certificação de contas reais. |

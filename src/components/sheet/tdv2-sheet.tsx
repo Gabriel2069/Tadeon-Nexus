@@ -1,3 +1,16 @@
+import {
+  TdvCompetency,
+  TdvDevelopment,
+  TdvResourceActions,
+  MATRIX_CATEGORIES,
+} from "./tdv2-competencies";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import AttributeRadar from "./attribute-radar";
 import { useState, type ReactNode } from "react";
 import { TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-fields";
@@ -66,6 +79,7 @@ export function Tdv2Sheet({
     [cost, setCost] = useState(4),
     [transcendent, setTranscendent] = useState(false),
     [recordKind, setRecordKind] = useState<TdvRecord["kind"]>("Lavor");
+  const [rollChoice, setRollChoice] = useState<{ matrix?: Matrix; alinhavo?: string } | null>(null);
   const [newLinkId, setNewLinkId] = useState<string | null>(null);
   const [recovery, setRecovery] = useState("Pausa breve"),
     [care, setCare] = useState(false),
@@ -78,6 +92,16 @@ export function Tdv2Sheet({
   const stats = constitution(c),
     errors = creationErrors(c),
     disabled = !canEdit;
+  const investmentGrade =
+    kind === "Matriz"
+      ? stats.matrices[target as Matrix]
+      : kind === "Alinhavo"
+        ? stats.alinhavos[target]
+        : undefined;
+  const investmentCost =
+    kind === "Matriz" ? (investmentGrade ?? 0) + 3 : kind === "Alinhavo" ? 2 : cost;
+  const investmentAtLimit =
+    investmentGrade !== undefined && investmentGrade >= (kind === "Matriz" ? 5 : 4);
   const upd = <K extends keyof TdvCharacter>(key: K, value: TdvCharacter[K]) =>
     onChange({ ...c, [key]: value });
   const run = (action: () => TdvCharacter) => {
@@ -421,6 +445,10 @@ export function Tdv2Sheet({
             <div className="tdv-constitution-instruments">
               <div className="tadeon-attribute-radar">
                 <AttributeRadar
+                  title="Distribuição das Matrizes"
+                  valueText={(value) =>
+                    `${MATRIX_CATEGORIES[value].split(" · ")[0]} · d${DICE[value]}`
+                  }
                   color="#a397bf"
                   tickColor="#e9e3d5"
                   data={MATRICES.map((attr) => ({ attr, value: stats.matrices[attr] }))}
@@ -428,52 +456,34 @@ export function Tdv2Sheet({
               </div>
               <div className="tdv-matrices">
                 {MATRICES.map((matrix) => (
-                  <div className="tdv-matrix" key={matrix}>
-                    <span>{matrix}</span>
-                    <strong>d{DICE[stats.matrices[matrix]]}</strong>
-                    {!c.ready ? (
-                      <TdvNumber
-                        label={`Valor de ${matrix}`}
-                        value={c.matrices[matrix]}
-                        min={2}
-                        max={3}
-                        onChange={(v) =>
-                          onChange(
-                            (() => {
-                              const next = { ...c, matrices: { ...c.matrices, [matrix]: v } };
-                              return { ...next, resources: constitution(next).maximums };
-                            })(),
-                          )
-                        }
-                        disabled={disabled}
-                      />
-                    ) : (
-                      <small>
-                        Categoria {stats.matrices[matrix]}
-                        {c.scene.shaken.includes(matrix) ? " · Abalada" : ""}
-                      </small>
-                    )}
-                  </div>
+                  <TdvCompetency
+                    key={matrix}
+                    name={matrix}
+                    grade={stats.matrices[matrix]}
+                    matrix
+                    shaken={c.scene.shaken.includes(matrix)}
+                    creation={!c.ready}
+                    disabled={disabled}
+                    onRoll={() => setRollChoice({ matrix })}
+                    onChange={(v) => {
+                      const next = { ...c, matrices: { ...c.matrices, [matrix]: v } };
+                      onChange({ ...next, resources: constitution(next).maximums });
+                    }}
+                  />
                 ))}
               </div>
             </div>
             <div className="tdv-alinhavos">
               {ALINHAVOS.map((name) => (
-                <div key={name}>
-                  <span>{name}</span>
-                  {!c.ready ? (
-                    <TdvSelect
-                      label={`Grau inicial de ${name}`}
-                      compactLabel
-                      value={String(c.alinhavos[name] ?? 0)}
-                      options={["0", "1", "2"]}
-                      onChange={(v) => upd("alinhavos", { ...c.alinhavos, [name]: Number(v) })}
-                      disabled={disabled}
-                    />
-                  ) : (
-                    <strong>d{DICE[stats.alinhavos[name] ?? 0]}</strong>
-                  )}
-                </div>
+                <TdvCompetency
+                  key={name}
+                  name={name}
+                  grade={stats.alinhavos[name] ?? 0}
+                  creation={!c.ready}
+                  disabled={disabled}
+                  onChange={(v) => upd("alinhavos", { ...c.alinhavos, [name]: v })}
+                  onRoll={() => setRollChoice({ alinhavo: name })}
+                />
               ))}
             </div>
           </Section>
@@ -485,23 +495,12 @@ export function Tdv2Sheet({
                     <small>
                       {{ pv: "Vitalidade · PV", pi: "Inteireza · PI", pe: "Esforço · PE" }[key]}
                     </small>
-                    <div>
-                      <strong>{c.resources[key]}</strong>
-                      <span>/ {stats.maximums[key]}</span>
-                    </div>
-                    <div className="tdv-resource-level" aria-hidden="true">
-                      <span
-                        style={{
-                          width: `${Math.max(0, Math.min(100, (c.resources[key] / Math.max(1, stats.maximums[key])) * 100))}%`,
-                        }}
-                      />
-                    </div>
-                    <TdvNumber
-                      label={`${key.toUpperCase()} atual`}
+                    <TdvResourceActions
+                      name={key.toUpperCase()}
                       value={c.resources[key]}
-                      max={stats.maximums[key]}
+                      maximum={stats.maximums[key]}
+                      disabled={disabled}
                       onChange={(v) => run(() => setResource(c, key, v))}
-                      disabled={disabled || !c.ready}
                     />
                   </div>
                 ))}
@@ -655,80 +654,83 @@ export function Tdv2Sheet({
         </TabsContent>
         <TabsContent value="acao" data-sheet-content>
           <Section id="tdv-motor" title="Motor de dois Fios">
-            <TdvTestPanel character={c} onChange={onChange} canEdit={canEdit} />
+            <TdvTestPanel character={c} onChange={onChange} canEdit={canEdit} quick />
             <TdvOutcome character={c} onChange={onChange} canEdit={canEdit} />
           </Section>
-          <Section id="tdv-cena" title="Continuidade da cena">
-            <p>
-              Matrizes Abaladas: {c.scene.shaken.join(", ") || "nenhuma"}. Forçar a 0 PE:{" "}
-              {c.scene.forcedAtZero ? "já utilizado" : "disponível, mediante contrapartida"}.
-            </p>
-            <Button
-              disabled={disabled}
-              variant="outline"
-              onClick={() =>
-                upd("scene", {
-                  ...c.scene,
-                  shaken: [],
-                  forcedAtZero: false,
-                  tests: [],
-                  paidEvents: [],
-                })
-              }
-            >
-              Encerrar cena e liberar efeitos de cena
-            </Button>
-            <p className="tdv-note">
-              Encerrar cena não recupera recursos, não remove Condições e não Reassenta a Âncora.
-            </p>
-          </Section>
-          <Section id="tdv-recuperacao" title="Recuperação">
-            <TdvSelect
-              label="Profundidade da recuperação"
-              value={recovery}
-              options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
-              onChange={setRecovery}
-              disabled={disabled}
-            />
-            <TdvField
-              label="Nova janela real de recuperação"
-              value={window}
-              onChange={setWindow}
-              disabled={disabled}
-            />
-            <TdvCheck
-              label="Houve cuidado corporal adequado"
-              value={care}
-              onChange={setCare}
-              disabled={disabled}
-            />
-            <TdvCheck
-              label="Houve reconstrução real da continuidade para PI pleno"
-              value={rebuilt}
-              onChange={setRebuilt}
-              disabled={disabled}
-            />
-            <Button
-              disabled={disabled || !c.ready}
-              onClick={() =>
-                run(() =>
-                  recover(
-                    c,
-                    recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
-                    care,
-                    rebuilt,
-                    window,
-                  ),
-                )
-              }
-            >
-              Aplicar recuperação
-            </Button>
-            <p className="tdv-note">
-              Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2 só
-              com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
-            </p>
-          </Section>
+          <details className="tdv-disclosure tdv-scene-tools">
+            <summary>Recuperação e efeitos de cena</summary>
+            <Section id="tdv-cena" title="Continuidade da cena">
+              <p>
+                Matrizes Abaladas: {c.scene.shaken.join(", ") || "nenhuma"}. Forçar a 0 PE:{" "}
+                {c.scene.forcedAtZero ? "já utilizado" : "disponível, mediante contrapartida"}.
+              </p>
+              <Button
+                disabled={disabled}
+                variant="outline"
+                onClick={() =>
+                  upd("scene", {
+                    ...c.scene,
+                    shaken: [],
+                    forcedAtZero: false,
+                    tests: [],
+                    paidEvents: [],
+                  })
+                }
+              >
+                Encerrar cena e liberar efeitos de cena
+              </Button>
+              <p className="tdv-note">
+                Encerrar cena não recupera recursos, não remove Condições e não Reassenta a Âncora.
+              </p>
+            </Section>
+            <Section id="tdv-recuperacao" title="Recuperação">
+              <TdvSelect
+                label="Profundidade da recuperação"
+                value={recovery}
+                options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
+                onChange={setRecovery}
+                disabled={disabled}
+              />
+              <TdvField
+                label="Nova janela real de recuperação"
+                value={window}
+                onChange={setWindow}
+                disabled={disabled}
+              />
+              <TdvCheck
+                label="Houve cuidado corporal adequado"
+                value={care}
+                onChange={setCare}
+                disabled={disabled}
+              />
+              <TdvCheck
+                label="Houve reconstrução real da continuidade para PI pleno"
+                value={rebuilt}
+                onChange={setRebuilt}
+                disabled={disabled}
+              />
+              <Button
+                disabled={disabled || !c.ready}
+                onClick={() =>
+                  run(() =>
+                    recover(
+                      c,
+                      recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
+                      care,
+                      rebuilt,
+                      window,
+                    ),
+                  )
+                }
+              >
+                Aplicar recuperação
+              </Button>
+              <p className="tdv-note">
+                Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2 só
+                com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
+              </p>
+            </Section>
+          </details>
           <Section id="tdv-condicoes" title="Condições">
             <div className="tdv-folios">
               {c.conditions.map((condition, index) => (
@@ -897,20 +899,7 @@ export function Tdv2Sheet({
         </TabsContent>
         <TabsContent value="percurso" data-sheet-content>
           <Section id="tdv-desenvolvimento" title="Desenvolvimento e Ponto de Urdume">
-            <div
-              className="tdv-development"
-              role="meter"
-              aria-label="Desenvolvimento"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={stats.development}
-            >
-              <span style={{ width: `${stats.development}%` }} />
-            </div>
-            <p>
-              {stats.development}% · {c.milestones.length} de 20 Marcos · {stats.pu} PU disponíveis
-              · {stats.spent} investidos
-            </p>
+            <TdvDevelopment percent={stats.development} available={stats.pu} spent={stats.spent} />
             {isMaster && (
               <details className="tdv-disclosure">
                 <summary>Reconhecer um Marco</summary>
@@ -982,8 +971,36 @@ export function Tdv2Sheet({
                 onChange={setTranscendent}
                 disabled={disabled}
               />
+              <div className="tdv-investment-preview" role="status">
+                <strong>
+                  {investmentAtLimit
+                    ? "Escala concluída"
+                    : investmentGrade !== undefined
+                      ? `d${DICE[investmentGrade]} → d${DICE[investmentGrade + 1]}`
+                      : target || "Escolha uma incorporação"}
+                </strong>
+                <span>
+                  {investmentAtLimit ? (
+                    "Não há avanço ordinário seguinte"
+                  ) : (
+                    <>
+                      {investmentCost} PU ·{" "}
+                      {stats.pu >= investmentCost
+                        ? `${stats.pu - investmentCost} PU após investir`
+                        : `faltam ${investmentCost - stats.pu} PU`}
+                    </>
+                  )}
+                </span>
+              </div>
               <Button
-                disabled={disabled || !c.ready}
+                disabled={
+                  disabled ||
+                  !c.ready ||
+                  investmentAtLimit ||
+                  stats.pu < investmentCost ||
+                  !reason.trim() ||
+                  !target.trim()
+                }
                 onClick={() =>
                   run(() =>
                     invest(c, {
@@ -1028,15 +1045,45 @@ export function Tdv2Sheet({
                 disabled={disabled}
               />
             )}
-            <TdvField
-              label="Anotações e Restos"
-              value={c.notes}
-              onChange={(v) => upd("notes", v)}
-              disabled={disabled}
-            />
+            <TdvDisclosure initiallyOpen={Boolean(c.notes.trim())}>
+              <summary>Anotações opcionais</summary>
+              <TdvField
+                label="Anotações e Restos"
+                value={c.notes}
+                onChange={(v) => upd("notes", v)}
+                disabled={disabled}
+              />
+            </TdvDisclosure>
           </Section>
         </TabsContent>
       </Tabs>
+      <Dialog
+        open={rollChoice !== null}
+        onOpenChange={(open) => {
+          if (!open) setRollChoice(null);
+        }}
+      >
+        <DialogContent className="tdv-roll-dialog">
+          <DialogHeader>
+            <DialogTitle>Dois Fios · {rollChoice?.alinhavo ?? rollChoice?.matrix}</DialogTitle>
+            <DialogDescription>
+              Escolha a Matriz pela abordagem e o Alinhavo pela prática. A ficha calcula os dados e
+              aplica apenas os efeitos mecânicos.
+            </DialogDescription>
+          </DialogHeader>
+          {rollChoice && (
+            <TdvTestPanel
+              key={`${rollChoice.matrix}/${rollChoice.alinhavo}`}
+              character={c}
+              onChange={onChange}
+              canEdit={canEdit}
+              quick
+              initialMatrix={rollChoice.matrix}
+              initialAlinhavo={rollChoice.alinhavo}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

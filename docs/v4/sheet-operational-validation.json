@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "task": "NEX-046",
+  "decision": "DEC-026",
+  "baseCommit": "83a181daaa3692070fff8c4324f981438a584317",
+  "bookSha256": "8846b485dc528e3998de9227a033bea746eb439d6519ea7f3362a7a8f9515c0f",
+  "state": "local core and instrument checks passed; full exact-source CI required before integration",
+  "dataMigration": false,
+  "realAccountWrites": 0,
+  "limits": [
+    "Local synthetic fixtures do not certify real accounts/devices",
+    "All extraordinary-effect and cross-surface authority scenarios are not certified by this lot"
+  ],
+  "localCheck": {
+    "suites": 165,
+    "tests": 697,
+    "lint": true,
+    "types": true,
+    "build": true,
+    "styleFiles": 57,
+    "rootStyleLinks": 12,
+    "newImportant": 0
+  },
+  "audit": {
+    "high": 0,
+    "critical": 0,
+    "moderate": 15,
+    "dependenciesChanged": false
+  },
+  "instrumentCases": 75,
+  "viewports": [
+    [
+      320,
+      720
+    ],
+    [
+      360,
+      780
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ],
+    [
+      568,
+      320
+    ],
+    [
+      744,
+      1133
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      820,
+      1180
+    ],
+    [
+      834,
+      1194
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1024,
+      1366
+    ],
+    [
+      1180,
+      820
+    ],
+    [
+      1280,
+      800
+    ],
+    [
+      1440,
+      900
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "roles": [
+    "mestre",
+    "espectador"
+  ],
+  "instrumentChecks": [
+    "21 flat Alinhavos with canonical degree/state/die",
+    "touch targets >=44px",
+    "radar labels remain inside viewBox",
+    "click competence to open existing Motor",
+    "ordinary roll has no required narrative fields",
+    "resource decrement/save/restore/save against isolated fixture",
+    "read-only cannot roll",
+    "origin plus 20 milestones"
+  ],
+  "screenshots": [
+    {
+      "path": "docs/v4/evidence/operational-constitution-390-before.png",
+      "sha256": "84dd30731203f964330c7882e7f40adac428dcd1dea80cf20308451ca1d442c6"
+    },
+    {
+      "path": "docs/v4/evidence/operational-constitution-390-after.png",
+      "sha256": "034bdde9d1ed7c5b158b132cf5e9bf164450cc514caf09fc165374067e2c0d67"
+    },
+    {
+      "path": "docs/v4/evidence/operational-roll-390.png",
+      "sha256": "a5e46158b67045a78c4d386d4333fead22e653ae0d552587e50ae6d11b9e225a"
+    },
+    {
+      "path": "docs/v4/evidence/operational-development-390.png",
+      "sha256": "40f83f5998dc0783761ba8e57c81835c1284871c0bf9c4cbcee9c6f7d950611c"
+    },
+    {
+      "path": "docs/v4/evidence/operational-constitution-1440.png",
+      "sha256": "f392253bd8d272e571c77d0f19c855ee17dd2dd5230d2ef78f17f7332da2dbe1"
+    }
+  ],
+  "localRegressionNote": "Full 99-state verifier was still running while the instrument run completed. The CI must run the complete legacy, current-sheet and mechanical suites before merging; no completion is inferred from a partial local run.",
+  "harnessCorrection": "The verifier polls current finite animation states with a 10s failure deadline. A cancelled/hidden CSS animation could leave a previously captured finished promise pending after a disclosure/tab transition. Geometry and operation assertions remain unchanged."
+}

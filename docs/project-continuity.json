@@ -1,23 +1,23 @@
 {
   "version": 1,
   "checkedAt": "2026-11-01",
-  "runtimeReference": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
+  "runtimeReference": "83a181daaa3692070fff8c4324f981438a584317",
   "integration": {
-    "pr": 316,
-    "branch": "feat/v4-audit-foundation",
+    "pr": 317,
+    "branch": "feat/v4-material-system",
     "base": "main",
-    "baseCommit": "b5555c53622ad15cefbea35a535f7a68af2217a8",
-    "sourceCommit": "3b05d2fcf4701d18fccab977a22fd7ea653b123b",
-    "headCommit": "3b05d2fcf4701d18fccab977a22fd7ea653b123b",
+    "baseCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
+    "sourceCommit": "18e89a7c077c0b0f8c904c0da3d537f15b58f309",
+    "headCommit": "18e89a7c077c0b0f8c904c0da3d537f15b58f309",
     "state": "integrated",
-    "mergeCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41324786118",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41324786034",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41326160278",
-    "production": "workflow-confirmed; independent marker development",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41326160269",
-    "productionCommit": "9f632ffdc177a24cb4f4beded1233c83e4a26c4c",
-    "productionVerifiedAt": "2026-11-01T16:26:37.405Z",
+    "mergeCommit": "83a181daaa3692070fff8c4324f981438a584317",
+    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41338241736",
+    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41338241694",
+    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41344374135",
+    "production": "workflow-confirmed; HTTP200 and exact release marker",
+    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41344374194",
+    "productionCommit": "83a181daaa3692070fff8c4324f981438a584317",
+    "productionVerifiedAt": "2026-11-01T20:01:19.145Z",
     "productionHttpStatus": 200,
     "note": "Última integração na base. A rodada de materiais tem checkpoint próprio nas tarefas; a CI e a publicação posteriores ao snapshot ficam registradas na PR correspondente."
   },
@@ -413,6 +413,11 @@
       "path": "docs/v4/MATERIAIS_E_FECHAMENTO.md",
       "status": "active",
       "purpose": "Diferenças, fechamento técnico das fases iniciais, materiais autorais, provas e módulos não certificados."
+    },
+    {
+      "path": "docs/v4/FICHA_OPERACIONAL.md",
+      "status": "active",
+      "purpose": "Direção operacional da ficha, reconciliação com o Livro de Regras, destinos dos controles, persistência e limites."
     }
   ],
   "tasks": [
@@ -1468,7 +1473,7 @@
       "id": "NEX-044",
       "title": "V4 fase 1: biblioteca material e motion autoral",
       "domain": "shell",
-      "status": "validated",
+      "status": "integrated",
       "priority": 1,
       "dependsOn": [
         "NEX-043"
@@ -1479,7 +1484,8 @@
       ],
       "evidence": [
         "docs/v4/MATERIAIS_E_FECHAMENTO.md",
-        "docs/v4/material-validation.json"
+        "docs/v4/material-validation.json",
+        "https://github.com/Gabriel2069/tadeon-nexus/pull/317"
       ],
       "checkpoint": "Biblioteca de seis famílias implementada e ensaiada em 15 viewports exatos, com pendência/erro/retry/leitura, foco, movimento reduzido e checagem adicional de cores forçadas. Fonte validada localmente; integração/publicação exigem os gates da PR desta rodada."
     },
@@ -1487,7 +1493,7 @@
       "id": "NEX-045",
       "title": "V4 fase 2: shell, entrada e utilidades",
       "domain": "shell",
-      "status": "validated",
+      "status": "integrated",
       "priority": 1,
       "dependsOn": [
         "NEX-044"
@@ -1498,7 +1504,8 @@
       ],
       "evidence": [
         "docs/v4/MATERIAIS_E_FECHAMENTO.md",
-        "docs/v4/material-validation.json"
+        "docs/v4/material-validation.json",
+        "https://github.com/Gabriel2069/tadeon-nexus/pull/317"
       ],
       "checkpoint": "Entrada, utilidades e envelope conferidos em 15 viewports. Login/recuperação e estados operacionais usam transportes sintéticos; nenhum e-mail, senha ou dado real alterado. O teto legado de 92rem foi removido no proprietário concorrente; 1920px conferido novamente. Contas/dispositivos reais continuam não certificados."
     },
@@ -1520,9 +1527,11 @@
         "docs/v4/IMPLEMENTACAO.md",
         "docs/v4/visible-validation.json",
         "docs/v4/MATERIAIS_E_FECHAMENTO.md",
-        "docs/v4/material-validation.json"
+        "docs/v4/material-validation.json",
+        "docs/v4/FICHA_OPERACIONAL.md",
+        "docs/v4/sheet-operational-validation.json"
       ],
-      "checkpoint": "Segundo lote: materiais e cores mais presentes com a organização aprovada intacta. As fases restantes da ficha continuam abertas."
+      "checkpoint": "DEC-026: ficha de consulta e operação, com instrumentos canônicos de grau/categoria/dado, rolagem rápida transitória, registro opcional e controles de recursos. Preserva dados e os cinco fólios. Nova fonte anexada conferida pelo mesmo hash normativo. Este lote não encerra todas as fases da ficha/VP."
     },
     {
       "id": "NEX-047",
@@ -1754,6 +1763,11 @@
       "id": "DEC-025",
       "decision": "Preservar a organização aprovada da Ficha e intensificar materiais, cores, cantos, encaixes e visualização; fechar a implementação das fases iniciais com evidências proporcionais e prosseguir sem reabrir o bloqueio de backup.",
       "reason": "Pedido explícito de Tadeu nesta rodada. A validação técnica não certifica dispositivos físicos, contas reais ou serviços restaurados; DEC-024 continua vigente. Nenhuma remoção de função ou migração de dados está autorizada por esta mudança visual."
+    },
+    {
+      "id": "DEC-026",
+      "decision": "A ficha deve funcionar como ficha física ampliada por recursos digitais, com leitura e operação próprias para cada informação. Registro narrativo de rolagens é opcional, e dados já salvos devem ser preservados.",
+      "reason": "Pedido explícito de Tadeu em 01/11: melhorar visualização além do acabamento, conferir níveis/graus/dados com o Livro de Regras e retirar burocracia de diário. O livro não cria nível universal e não exige anotação de cada Resto."
     }
   ],
   "bridges": [
@@ -2065,6 +2079,10 @@
     {
       "path": "docs/v4/material-validation.json",
       "purpose": "Cruzamento reproduzível das rotas/contratos com censos e hashes de capturas desta rodada; não infere operação de callbacks."
+    },
+    {
+      "path": "docs/v4/sheet-operational-validation.json",
+      "purpose": "Provas de grau/dado, rolagem sem diário, recursos e visualização operacional da ficha; sem certificação de contas reais."
     }
   ],
   "integrationHistory": [

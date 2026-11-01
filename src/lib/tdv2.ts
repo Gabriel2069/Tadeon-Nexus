@@ -573,6 +573,9 @@ export function resolveTest(c: TdvCharacter, r: TestRequest, random: () => numbe
   const dice = prepareTest(c, r),
     roll = (size: number) => Math.min(size, Math.floor(Math.max(0, random()) * size) + 1),
     result = readTest(roll(dice.prumo), roll(dice.tento), r.dt);
+  // A plain roll is transient; only mechanical effects or explicit records change the sheet.
+  if (!(dice.cost || dice.piCost || dice.zero || result.criticalFailure || r.context || r.costs))
+    return { result, dice, character: c };
   return {
     result,
     dice,
