@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "task": "NEX-046",
+  "decision": "DEC-027",
+  "baseCommit": "209c82a62236d107c73ced883f4bec7884529d62",
+  "state": "Source snapshot: targeted local interactions observed; exact-source complete CI required before merge. Final integration/production proof belongs to the PR.",
+  "dataMigration": false,
+  "realAccountWrites": 0,
+  "changes": [
+    "Reading inscriptions with explicit apply/cancel; creation keeps direct writing",
+    "Six native pillar choices, same persisted value",
+    "Link offer/demand visible without opening fields; singleton fills the row",
+    "Condition severity/effect/exit reading with preserved editor and exit action",
+    "Link expansion follows actual atlas width",
+    "Dossier/resource field ownership prevents legacy game CSS from shrinking portalled editors"
+  ],
+  "limits": [
+    "Synthetic fixtures and viewport emulation do not certify physical devices/accounts",
+    "No new rules, costs, authorization or transacted cross-surface events"
+  ],
+  "screenshots": [
+    {
+      "path": "docs/v4/evidence/reading-person-390-before.png",
+      "sha256": "269951e64d58bc324c60940d5b47fbb49317978102e8092c92f6839f3155f5b9"
+    },
+    {
+      "path": "docs/v4/evidence/reading-person-390.png",
+      "sha256": "563bbb8619b8efe2899a718fe723549f6ff615620b6d9770c1f727ef70b46c03"
+    },
+    {
+      "path": "docs/v4/evidence/reading-editor-390.png",
+      "sha256": "56a44639cd0c8f08127a9a36e840efac490fdad91afda885eabd58b1d4ff49c8"
+    },
+    {
+      "path": "docs/v4/evidence/reading-links-390.png",
+      "sha256": "95cbc3859cc47008d5edd1eaf601f7f587985c0e89d0fd67f06eff034605112b"
+    },
+    {
+      "path": "docs/v4/evidence/reading-condition-390.png",
+      "sha256": "06f8cefa8f4019fee1be138fa8abb18cd62975bba257a7d6b3fded45c6fcb8f4"
+    }
+  ],
+  "browserSuite": {
+    "viewports": "15 exact chapter-50 dimensions",
+    "roles": [
+      "mestre",
+      "espectador"
+    ],
+    "expectedStates": 165,
+    "checks": [
+      "Reading is resting state; Apply writes once; Escape discards and restores focus",
+      "Editor labels >=14px, text >=16px, writing region >=96px",
+      "Editor bounds within viewport; control centers not obscured after inner scrolling",
+      "Native full-size pillar radio and arrow-key selection",
+      "Legacy age saved through existing onUpdate and persistence",
+      "Link offer/demand visible without opening editor",
+      "Condition effect/exit reading; change severity/save; exit/save; create/save",
+      "Readonly has no inscription edit action, disabled native choices and zero writes",
+      "A singleton link fills its row both closed and opened, including desktop container rules"
+    ]
+  },
+  "audit": {
+    "high": 0,
+    "critical": 0,
+    "moderate": 15,
+    "dependenciesChanged": false
+  }
+}

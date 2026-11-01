@@ -202,6 +202,13 @@ jobs:
           NEXUS_AUDIT_VIEWPORTS: chapter50
           NEXUS_SHEET_INSTRUMENTS_ONLY: "1"
         run: node scripts/verify-tdv2.mjs
+      - name: Conferir inscrições, vínculos, condições e encaixe dos editores
+        if: matrix.suite == 'tdv2'
+        env:
+          NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2-reading
+          NEXUS_AUDIT_VIEWPORTS: chapter50
+          NEXUS_SHEET_READING_ONLY: "1"
+        run: node scripts/verify-tdv2.mjs
       - name: Publicar métricas de comparação no log
         if: always()
         run: |

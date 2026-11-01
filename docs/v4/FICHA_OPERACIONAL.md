@@ -46,3 +46,23 @@ Rollback: reverter os commits do lote. Os dados mantêm o formato anterior, incl
 As comparações usam dados fictícios e Chromium 141/Playwright 1.56.1. O check local aprovou 165 suítes/697 testes, lint, tipos e build. Os instrumentos passaram por 75 estados em 15 viewports exatos e dois cargos; foram verificados alvos de pelo menos 44px, rótulos sem corte, rolagem, edição de recursos e leitura. A CI deve completar as suítes mecânicas e visuais no SHA final antes de integrar. Não se declara cobertura de todos os cenários extraordinários ou aparelhos reais.
 
 A espera de captura consulta o estado atual das animações finitas e falha em 10 segundos se elas não assentarem. Ela substitui a espera de promessas `finished` antigas, que podiam permanecer pendentes após recolher uma área ou trocar de aba. As verificações de geometria, foco, escrita e leitura permanecem.
+
+## Leitura interativa e encaixes — DEC-027
+
+Feição de personagens prontas apresenta inscrições de leitura, com edição ao toque, rascunho local e Aplicar/Cancelar. Escape descarta o rascunho e devolve foco; o formato salvo é o mesmo. A criação conserva escrita direta e a leitura sem autorização não oferece edição.
+
+A Âncora apresenta seus seis Pilares como escolhas nativas de valor único. Vínculos mostram Oferta e Cobrança; um vínculo único ocupa a linha, e o editor se expande pela largura útil do atlas, não pela largura da janela. Condições mostram nome, intensidade, efeito e saída, com editor recolhível e a operação anterior de registrar saída. Não há remoção automática ou inferência de cura.
+
+O conflito de densidade do modo de jogo foi resolvido usando a propriedade já existente de campos/rótulos do dossiê nos portais, inclusive no ajuste de recursos. Os pop-ups preservam o enquadramento, colisão, presença e foco dos primitivos atuais. As escolhas usam toda a região visível como alvo nativo. As inscrições adaptam a tipografia à largura; os textos continuam íntegros.
+
+Provas desta rodada e limites: [sheet-reading-validation.json](sheet-reading-validation.json). A migração de dados não é necessária; rollback por reversão do merge. Os relatórios anteriores são snapshots históricos, com integração/publicação confirmadas nas PRs correspondentes.
+
+Dados complementares seguem a mesma leitura: vazios recolhidos, conteúdo existente aberto. Idade conserva seu campo próprio, e os demais valores conservam `identity_data`, sem transformação de payload.
+
+| Comparação desta rodada | Captura |
+| --- | --- |
+| Pessoa · base publicada · 390 px | [Antes](evidence/reading-person-390-before.png) |
+| Pessoa · inscrições e dados complementares recolhidos | [Depois](evidence/reading-person-390.png) |
+| Editor com rascunho cancelável | [Edição](evidence/reading-editor-390.png) |
+| Vínculo com Oferta e Cobrança | [Relação](evidence/reading-links-390.png) |
+| Condição com efeito e saída | [Condição](evidence/reading-condition-390.png) |

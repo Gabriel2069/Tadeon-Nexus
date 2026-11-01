@@ -2,6 +2,8 @@
 
 Verificado em 01/11/2026 (America/Sao_Paulo). Entrada curta de retomada; o registro único de tarefas e responsáveis é [project-continuity.json](../project-continuity.json).
 
+Checkpoint de ficha: PR 318 integrada em `209c82a`, publicada com HTTP200/SHA exato em 2026-11-01T21:30:28.202Z. 697 testes e 222 estados TdV II no fonte exato; fixtures não certificam contas/aparelhos reais. DEC-027 autoriza aprofundar a leitura interativa: inscrições, Pilar, vínculos e condições com edição sob demanda e encaixe por largura real. Validação deste lote em `docs/v4/sheet-reading-validation.json`; gates/publicação próprios ainda necessários.
+
 Checkpoint de materiais: DEC-025 preserva a organização da ficha e intensifica cor, cantos, costura e visualização. Biblioteca de seis famílias montada no laboratório existente, com estados sintéticos e sem gravação. Entrada, cabeçalhos, Usuários/Offline/Backup recebem materiais em seus proprietários; nenhum campo ou ferramenta foi removido. Relatório e limites em [v4/MATERIAIS_E_FECHAMENTO.md](../v4/MATERIAIS_E_FECHAMENTO.md). A fila canônica distingue implementação e certificação; restauração completa continua diferida.
 
 Checkpoint visual V4: DEC-024 autoriza adiar o bloqueio de backup e entregar mudanças visíveis. NEX-046 ativo: Ficha Integral como atlas de cinco fólios, Feição/Âncora por largura útil, dossiê em faixa própria, operação de Ancorar progressiva, instrumentos de PV/PI/PE, régua bipolar e marcas de Tensão. Sem migration, mudança de regra, permissões ou dados convertidos em massa. A fase 0 abaixo é histórica e suas pendências de restauração não foram resolvidas. A validação e publicação deste lote exigem evidência própria.

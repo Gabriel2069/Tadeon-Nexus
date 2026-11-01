@@ -81,3 +81,4 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/visible-validation.json](v4/visible-validation.json) | Primeiro lote visual V4: preservação, 48 vistas, 99 estados/fluxos, testes e limites; DEC-024 adia bloqueio de backup. |
 | [v4/material-validation.json](v4/material-validation.json) | Cruzamento reproduzível das rotas/contratos com censos e hashes de capturas desta rodada; não infere operação de callbacks. |
 | [v4/sheet-operational-validation.json](v4/sheet-operational-validation.json) | Provas de grau/dado, rolagem sem diário, recursos e visualização operacional da ficha; sem certificação de contas reais. |
+| [v4/sheet-reading-validation.json](v4/sheet-reading-validation.json) | Leitura/edição cancelável, Pilar, vínculos e condições; foco, encaixe de editores e dimensões em fixtures. |
