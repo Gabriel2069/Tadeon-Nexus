@@ -902,7 +902,10 @@ try {
           updated_at: new Date(Date.parse(row.updated_at) + 1000).toISOString(),
           tdv2_data: { ...row.tdv2_data, notes: "Atualização em outra janela" },
         };
-        await page.getByLabel("Origem", { exact: true }).fill("Rascunho local em conflito");
+        await page.getByRole("button", { name: "Editar Origem", exact: true }).click();
+        await page.getByRole("dialog", { name: "Edição de Origem", exact: true })
+          .getByRole("textbox", { name: "Origem", exact: true }).fill("Rascunho local em conflito");
+        await page.getByRole("button", { name: "Aplicar Origem", exact: true }).click();
         await page.getByRole("button", { name: "Salvar", exact: true }).click();
         await page.getByRole("button", { name: "Guardar rascunho", exact: true }).waitFor();
         const downloadEvent = page.waitForEvent("download");
