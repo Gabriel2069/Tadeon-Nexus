@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useMaterialLight, useMaterialToneStyle } from "@/lib/use-material-light";
+import { useMaterialLight } from "@/lib/use-material-light";
 import type { MaterialFamily } from "@/components/material-surface";
 import { cn } from "@/lib/utils";
 
@@ -9,14 +9,13 @@ const Card = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { family?: MaterialFamily }
 >(({ className, family = "ink", style, onPointerMove, onPointerLeave, ...props }, ref) => {
   const light = useMaterialLight<HTMLDivElement>();
-  const tone = useMaterialToneStyle();
   return (
     <div
       ref={ref}
       data-slot="card"
       data-material-surface="card"
       data-material-family={family}
-      style={{ ...tone, ...style }}
+      style={style}
       onPointerMove={(event) => {
         onPointerMove?.(event);
         if (!event.defaultPrevented) light.onPointerMove(event);

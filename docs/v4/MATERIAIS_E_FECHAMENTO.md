@@ -8,7 +8,7 @@ O pedido vigente preserva a organização da ficha e pede mais presença nos mat
 | --- | --- | --- |
 | Inventário e fontes | Preservar e integrar | Dossiê, Trilogia e Kit conservados; manifesto AST atualizado e cruzamento com censos de DOM e hashes de capturas. Fonte, montagem e operação continuam distintos. |
 | Biblioteca | Ampliar | Seis famílias no laboratório real `/visual-audit?gallery=1`: Fólio, Instrumento, Trama, Lâmina, Palco e Acervo. Seleção, texto preservado, pendência, rejeição, retry, somente leitura e confirmação sintética. |
-| Materiais compartilhados | Refinar | Tinta com grão vertical discreto, bordas iluminadas e raios por família; cor da rota chega também aos cards. Conteúdo permanece estável sob o cursor. |
+| Materiais compartilhados | Refinar | Tinta com grão vertical discreto, bordas iluminadas e raios por família; cor da rota e dos quadros internos chega aos cards por herança. Conteúdo permanece estável sob o cursor. |
 | Entrada e cabeçalhos | Refinar | Luz de tecido mais presente, vidro contido no formulário e cor por área; controles e fluxos existentes preservados. |
 | Usuários | Refinar | Cards individuais, autoria em bronze, papéis e confirmação conservados. Não restaurar registro único em linhas. |
 | Offline | Refinar | Fólios violetas, margem de encadernação e leitura dos quatro recursos; conta/cargo continuam limitando o cache. |
@@ -54,3 +54,7 @@ Check completo aprovado: 164 suítes/694 testes, lint, tipos, build e arquitetur
 Matriz local: 90 estados de shell em seis rotas, 150 de utilidades, 15 da biblioteca, 15 de login, 30 de recuperação e 48 da ficha; checagem adicional de cores forçadas. O cruzamento contém 334 registros ligados, dos quais 319 têm censo de DOM. As três divergências de envelope em 1920px foram corrigidas e conferidas novamente. Dez das 18 rotas têm montagem documentada nesta rodada; as outras oito estão listadas como não certificadas neste lote, conservando seus contratos e funções. Isso não é cobertura integral de callbacks ou contas.
 
 A CI da PR acrescenta os cinco grupos completos de regressão, incluindo operações mecânicas, Mesa, navegação e motion. Integração e publicação são posteriores ao snapshot e exigem prova no SHA correspondente; a PR reúne esses resultados sem afirmar antecipadamente que a branch já está em produção.
+
+A revisão final conserva a herança DOM da cor nos cards. Portais mantêm seu contexto nos proprietários já existentes; um Card interno não escreve o tom da rota sobre o pigmento do seu quadro. Nenhuma nova leitura de contexto é necessária no Card.
+
+O ensaio adicional de herança altera o pigmento do contêiner e confere a cor computada no Card interno, restaurando o valor no fim. Ele passou em navegador local. O ambiente de coleta ficou indisponível durante a nova execução completa; a CI deve validar o SHA final antes da integração, sem substituir uma interrupção local por uma alegação de sucesso.

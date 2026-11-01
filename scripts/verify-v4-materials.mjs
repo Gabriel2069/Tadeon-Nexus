@@ -94,7 +94,13 @@ try {
     const forced=await page.locator('.tadeon-material-specimen').first().evaluate(e=>({shadow:getComputedStyle(e).boxShadow,edge:getComputedStyle(e).borderTopColor}));
     assert(forced.shadow==='none'&&forced.edge!=='rgba(0, 0, 0, 0)','Forced-color fallback');
     await page.emulateMedia({forcedColors:'none'});
-    rows.push({route:'/visual-audit?gallery=1',width,height,materials:6,pending:true,errorPreserved:true,retry:true,readOnly:true,focusReturn:true,reducedMotion:true,forcedColors:true,decorativeLoops:loops,overflow,errors});
+    const inheritsLocalTone=await page.locator('.tadeon-material-library + .grid > .tadeon-material-card').first().evaluate(card=>{
+      const host=card.parentElement,prior=host.style.getPropertyValue('--material-rgb');
+      try{host.style.setProperty('--material-rgb','144 185 157');return getComputedStyle(card).getPropertyValue('--material-rgb').trim()==='144 185 157';}
+      finally{if(prior)host.style.setProperty('--material-rgb',prior);else host.style.removeProperty('--material-rgb');}
+    });
+    assert(inheritsLocalTone,'Nested cards preserve the local material pigment');
+    rows.push({route:'/visual-audit?gallery=1',width,height,materials:6,pending:true,errorPreserved:true,retry:true,readOnly:true,focusReturn:true,reducedMotion:true,forcedColors:true,localMaterialInheritance:true,decorativeLoops:loops,overflow,errors});
     writeFileSync(`${output}/results.json`,JSON.stringify(rows,null,2));console.log(viewportKey+': material states and dialog passed');
     await browser.close();browser=null;
   }

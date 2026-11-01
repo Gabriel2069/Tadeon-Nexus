@@ -27,7 +27,7 @@
     }
   ],
   "scope": "V4 phases 0–2 implementation evidence, plus sheet material regression. Local synthetic fixtures; not physical-device or real-account certification.",
-  "sourceManifestSha256": "356329f12bfe94a4102af2ab4a9e8dc4fa18774b55f88ce917b62d9b048fee24",
+  "sourceManifestSha256": "372c18966ad2230c19be03e427b23f1285f5396a3075ec55afc2a9860ec51119",
   "materialSources": [
     {
       "path": "src/styles/sheet-premium.css",
@@ -5981,7 +5981,8 @@
     "styleFiles": 57,
     "rootStyleLinks": 12,
     "importantAdded": 0,
-    "importantRemoved": 4
+    "importantRemoved": 4,
+    "note": "Complete 694-test local check passed before this small inheritance correction. The additional browser inheritance check passed locally. A subsequent complete local run was interrupted when the environment became unavailable; exact final-source CI is required."
   },
   "securityAudit": {
     "high": 0,
@@ -6006,7 +6007,18 @@
     "noNewDecorativeLoops": true,
     "wideEnvelopeFindingsClosed": 3,
     "qualityScope": "The initial 1920px envelope failures are superseded by six corrected shell views and nine corrected utility captures. A one-second unit-test wait timed out under concurrent browser load; the complete serial check passed all 694 assertions without modifying that test.",
-    "utilityTraceNote": "The original directory-contract result rows omit height; each belongs to the immediately preceding users capture in the same viewport loop. DOM censuses retain both dimensions, and the verifier now includes height on that row too."
+    "utilityTraceNote": "The original directory-contract result rows omit height; each belongs to the immediately preceding users capture in the same viewport loop. DOM censuses retain both dimensions, and the verifier now includes height on that row too.",
+    "additionalLocalInheritanceState": 1,
+    "additionalInheritanceProof": {
+      "fixture": true,
+      "viewport": [
+        390,
+        1000
+      ],
+      "localMaterialInheritance": true,
+      "forcedColors": true,
+      "decorativeLoops": 0
+    }
   },
   "organizationComparison": [
     {
@@ -6065,5 +6077,6 @@
     "/sheet/$id/power",
     "/sitemap.xml",
     "/tabletop"
-  ]
+  ],
+  "materialInheritance": "Cards inherit their local DOM material. Existing portal primitives carry route context; consumers may explicitly provide their own style."
 }
