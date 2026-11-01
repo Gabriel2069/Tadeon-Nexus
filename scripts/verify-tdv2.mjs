@@ -490,7 +490,7 @@ try {
         assert(
           (await page
             .locator(
-              ".tadeon-tdv2-sheet input:not([disabled]),.tadeon-tdv2-sheet textarea:not([disabled]),.tadeon-tdv2-sheet select:not([disabled]):not([data-view-control])",
+              ".tadeon-tdv2-sheet input:enabled,.tadeon-tdv2-sheet textarea:enabled,.tadeon-tdv2-sheet select:enabled:not([data-view-control])",
             )
             .count()) === 0,
           "Readonly fields enabled",
@@ -502,7 +502,7 @@ try {
           assert(
             (await page
               .locator(
-                ".tadeon-tdv2-sheet input:not([disabled]),.tadeon-tdv2-sheet textarea:not([disabled]),.tadeon-tdv2-sheet select:not([disabled]):not([data-view-control])",
+                ".tadeon-tdv2-sheet input:enabled,.tadeon-tdv2-sheet textarea:enabled,.tadeon-tdv2-sheet select:enabled:not([data-view-control])",
               )
               .count()) === 0,
             "Readonly fields enabled in " + name,
