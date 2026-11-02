@@ -151,6 +151,31 @@ export async function verifyInteractive({
     await saved(() => getRow().tdv2_data.milestones.length === 0);
     assert(getRow().tdv2_data.corrections.length === 2, "Marco correction archived");
     await close(popup);
+    if ([320, 1440].includes(width)) {
+      await page.getByRole("button", { name: "Correções e permissões", exact: true }).click();
+      await page
+        .getByRole("dialog", { name: "Correções e permissões", exact: true })
+        .getByRole("button", { name: "Rever escolhas iniciais", exact: true })
+        .click();
+      const beforeReview = writes.length;
+      await page.getByRole("button", { name: /^Distribuir Nexo ·/ }).click();
+      await page
+        .getByRole("dialog", { name: "Capacidade Nexo", exact: true })
+        .getByRole("button", { name: "Reverter Nexo", exact: true })
+        .click();
+      assert(
+        await page
+          .getByRole("button", { name: "Salvar escolhas iniciais", exact: true })
+          .isDisabled(),
+        "Master review cannot save an incomplete allocation",
+      );
+      assert(
+        writes.length === beforeReview,
+        "Initial correction stays local until a valid confirmation",
+      );
+      await page.getByRole("button", { name: "Cancelar revisão", exact: true }).click();
+    }
+
     await tab("Expressão");
     assert(
       await page.getByRole("heading", { name: "Lavores", exact: true }).isVisible(),

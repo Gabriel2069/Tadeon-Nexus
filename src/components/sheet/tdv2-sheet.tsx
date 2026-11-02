@@ -8,6 +8,7 @@ import { TdvPlayPresence } from "./tdv2-play-presence";
 import { TdvCompetency, TdvDevelopment, MATRIX_CATEGORIES } from "./tdv2-competencies";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -559,11 +560,23 @@ export function Tdv2Sheet({
                   name={matrix}
                   grade={stats.matrices[matrix]}
                   matrix
-                  onAdvance={() => run(() => advanceCapability(c, matrix, true))}
-                  onReverse={() => run(() => reverseCapability(c, matrix, true))}
+                  onAdvance={() =>
+                    run(() =>
+                      initialDraft
+                        ? allocateCreation(c, matrix, c.matrices[matrix] + 1, true)
+                        : advanceCapability(c, matrix, true),
+                    )
+                  }
+                  onReverse={() =>
+                    run(() =>
+                      initialDraft
+                        ? allocateCreation(c, matrix, c.matrices[matrix] - 1, true)
+                        : reverseCapability(c, matrix, true),
+                    )
+                  }
                   canReverse={
                     isMaster &&
-                    (c.ready
+                    (c.ready && !initialDraft
                       ? c.investments.some((i) => i.target === matrix && i.kind === "Matriz")
                       : c.matrices[matrix] > 1)
                   }
@@ -630,11 +643,23 @@ export function Tdv2Sheet({
                 key={name}
                 name={name}
                 grade={stats.alinhavos[name] ?? 0}
-                onAdvance={() => run(() => advanceCapability(c, name, false))}
-                onReverse={() => run(() => reverseCapability(c, name, false))}
+                onAdvance={() =>
+                  run(() =>
+                    initialDraft
+                      ? allocateCreation(c, name, (c.alinhavos[name] ?? 0) + 1, false)
+                      : advanceCapability(c, name, false),
+                  )
+                }
+                onReverse={() =>
+                  run(() =>
+                    initialDraft
+                      ? allocateCreation(c, name, (c.alinhavos[name] ?? 0) - 1, false)
+                      : reverseCapability(c, name, false),
+                  )
+                }
                 canReverse={
                   isMaster &&
-                  (c.ready
+                  (c.ready && !initialDraft
                     ? c.investments.some((i) => i.target === name && i.kind === "Alinhavo")
                     : (c.alinhavos[name] ?? 0) > 0)
                 }
@@ -844,6 +869,29 @@ export function Tdv2Sheet({
                   Corrigir preserva o registro anterior. Um Marco com PU já investidos exige
                   reverter o investimento primeiro.
                 </p>
+                {c.ready && !initialDraft && (
+                  <DialogClose asChild>
+                    <Button
+                      variant="outline"
+                      disabled={!canEdit || c.investments.length > 0}
+                      onClick={() => {
+                        setInitialDraft({
+                          ...c,
+                          progression: {
+                            allowMilestones: c.progression?.allowMilestones ?? false,
+                            allowCreation: true,
+                          },
+                        });
+                        setGameToolsOpen(false);
+                        setTab("constituicao");
+                        setGameTab("constituicao");
+                      }}
+                    >
+                      Rever escolhas iniciais
+                    </Button>
+                  </DialogClose>
+                )}
+
                 <div className="tdv-actions">
                   <Button
                     disabled={disabled || !c.milestones.length || stats.pu < 2}
@@ -965,19 +1013,7 @@ export function Tdv2Sheet({
             ))}
           </div>
         )}
-        {isMaster && c.ready && c.progression?.allowCreation && !initialDraft && (
-          <Button
-            variant="outline"
-            disabled={!canEdit || c.investments.length > 0}
-            onClick={() => {
-              setInitialDraft(c);
-              setTab("constituicao");
-              setGameTab("constituicao");
-            }}
-          >
-            Rever escolhas iniciais
-          </Button>
-        )}
+
         {initialDraft && (
           <div className="tdv-allocation-status">
             <p>Revisão das escolhas · alterações ainda não salvas</p>
@@ -1045,7 +1081,7 @@ export function Tdv2Sheet({
             onSelect={presentation === "game" ? setGameTab : setTab}
           />
         )}
-        {presentation === "game" ? (
+        {presentation === "game" && !initialDraft ? (
           <>
             <TdvGamePanel
               character={c}
