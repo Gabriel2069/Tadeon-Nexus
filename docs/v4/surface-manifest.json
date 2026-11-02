@@ -31194,7 +31194,7 @@
       "guards": []
     },
     "src/components/sheet/tdv2-retained-tools.tsx": {
-      "sha256": "10c21e402f3030ba8430b354b19d637e80c0a73994a88bfb296f161c8bb6d01b",
+      "sha256": "01dc36263b60d1b332c1d6326a1c273ab84f57b0ed41b511b7c429eafd6f2af1",
       "imports": [
         {
           "specifier": "@/components/selection-plate",
@@ -31377,123 +31377,123 @@
         },
         {
           "component": "div",
-          "line": 273
+          "line": 282
         },
         {
           "component": "SelectionPlate",
-          "line": 279
+          "line": 288
         },
         {
           "component": "Button",
-          "line": 285
+          "line": 294
         },
         {
           "component": "small",
-          "line": 292
-        },
-        {
-          "component": "div",
-          "line": 297
-        },
-        {
-          "component": "article",
           "line": 301
         },
         {
-          "component": "header",
-          "line": 305
-        },
-        {
-          "component": "span",
+          "component": "div",
           "line": 306
         },
         {
-          "component": "Button",
-          "line": 308
+          "component": "article",
+          "line": 310
         },
         {
-          "component": "TdvInscription",
-          "line": 318
+          "component": "header",
+          "line": 314
         },
         {
-          "component": "div",
-          "line": 325
-        },
-        {
-          "component": "TdvInscription",
-          "line": 329
-        },
-        {
-          "component": "div",
-          "line": 340
+          "component": "span",
+          "line": 315
         },
         {
           "component": "Button",
-          "line": 342
+          "line": 317
+        },
+        {
+          "component": "TdvInscription",
+          "line": 327
+        },
+        {
+          "component": "div",
+          "line": 334
+        },
+        {
+          "component": "TdvInscription",
+          "line": 338
+        },
+        {
+          "component": "div",
+          "line": 349
+        },
+        {
+          "component": "Button",
+          "line": 351
         },
         {
           "component": "TdvRecordActions",
-          "line": 354
+          "line": 363
         },
         {
           "component": "TdvAction",
-          "line": 360
+          "line": 369
         },
         {
           "component": "p",
-          "line": 361
+          "line": 370
         },
         {
           "component": "Button",
-          "line": 362
+          "line": 371
         },
         {
           "component": "p",
-          "line": 380
+          "line": 389
         },
         {
           "component": "article",
-          "line": 411
+          "line": 420
         },
         {
           "component": "TdvInscription",
-          "line": 412
+          "line": 421
         },
         {
           "component": "div",
-          "line": 419
+          "line": 428
         },
         {
           "component": "TdvInscription",
-          "line": 423
+          "line": 432
         },
         {
           "component": "div",
-          "line": 434
-        },
-        {
-          "component": "Button",
-          "line": 436
-        },
-        {
-          "component": "TdvRecordActions",
-          "line": 440
-        },
-        {
-          "component": "TdvAction",
-          "line": 442
-        },
-        {
-          "component": "p",
           "line": 443
-        },
-        {
-          "component": "DialogClose",
-          "line": 444
         },
         {
           "component": "Button",
           "line": 445
+        },
+        {
+          "component": "TdvRecordActions",
+          "line": 449
+        },
+        {
+          "component": "TdvAction",
+          "line": 451
+        },
+        {
+          "component": "p",
+          "line": 452
+        },
+        {
+          "component": "DialogClose",
+          "line": 453
+        },
+        {
+          "component": "Button",
+          "line": 454
         }
       ],
       "actions": [
@@ -31531,7 +31531,7 @@
         },
         {
           "component": "AddItemDialog",
-          "line": 249,
+          "line": 258,
           "event": "onAdd",
           "expression": "{(row) => { if (c.records.length >= 200) return; onChange({ ...c, records: [ ...c.records, { id: uid(), kind: kind as TdvRecord[\"kind\"], name: row.nome, fields: Object.fromEntries( Object.entries(row).filter(([key]) => key !== \"nome\"), ), }",
           "label": "{`Adicionar ${kind}`}",
@@ -31539,7 +31539,7 @@
         },
         {
           "component": "Button",
-          "line": 289,
+          "line": 298,
           "event": "onClick",
           "expression": "{() => setPhenomenon(kind)}",
           "label": null,
@@ -31547,7 +31547,7 @@
         },
         {
           "component": "Button",
-          "line": 312,
+          "line": 321,
           "event": "onClick",
           "expression": "{() => onUse(record.id)}",
           "label": null,
@@ -31555,7 +31555,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 323,
+          "line": 332,
           "event": "onChange",
           "expression": "{(name) => patch({ ...record, name })}",
           "label": null,
@@ -31563,7 +31563,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 334,
+          "line": 343,
           "event": "onChange",
           "expression": "{(value) => patch({ ...record, fields: { ...record.fields, [field]: value } }) }",
           "label": null,
@@ -31571,7 +31571,7 @@
         },
         {
           "component": "Button",
-          "line": 344,
+          "line": 353,
           "event": "onClick",
           "expression": "{() => setEditingRecords((state) => ({ ...state, [record.id]: !state[record.id], })) }",
           "label": null,
@@ -31579,7 +31579,7 @@
         },
         {
           "component": "TdvRecordActions",
-          "line": 358,
+          "line": 367,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -31587,7 +31587,7 @@
         },
         {
           "component": "Button",
-          "line": 365,
+          "line": 374,
           "event": "onClick",
           "expression": "{() => onChange({ ...c, records: c.records.filter((item) => item.id !== record.id), }) }",
           "label": null,
@@ -31595,7 +31595,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 417,
+          "line": 426,
           "event": "onChange",
           "expression": "{(name) => patch({ ...record, name })}",
           "label": null,
@@ -31603,7 +31603,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 428,
+          "line": 437,
           "event": "onChange",
           "expression": "{(value) => patch({ ...record, fields: { ...record.fields, [field]: value } }) }",
           "label": null,
@@ -31611,7 +31611,7 @@
         },
         {
           "component": "Button",
-          "line": 436,
+          "line": 445,
           "event": "onClick",
           "expression": "{() => setEditing((value) => !value)}",
           "label": null,
@@ -31619,7 +31619,7 @@
         },
         {
           "component": "TdvRecordActions",
-          "line": 440,
+          "line": 449,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -31627,7 +31627,7 @@
         },
         {
           "component": "Button",
-          "line": 447,
+          "line": 456,
           "event": "onClick",
           "expression": "{() => onChange({ ...c, records: c.records.filter((item) => item.id !== record.id) }) }",
           "label": null,
@@ -31655,35 +31655,35 @@
         },
         {
           "expression": "Button disabled={!canEdit || !c.ready}",
-          "line": 311
+          "line": 320
         },
         {
           "expression": "TdvInscription disabled={!canEdit}",
-          "line": 322
+          "line": 331
         },
         {
           "expression": "TdvInscription disabled={!canEdit}",
-          "line": 333
+          "line": 342
         },
         {
           "expression": "TdvRecordActions canEdit={canEdit}",
-          "line": 357
+          "line": 366
         },
         {
           "expression": "Button disabled={!canEdit}",
-          "line": 364
+          "line": 373
         },
         {
           "expression": "TdvInscription disabled={!canEdit}",
-          "line": 416
+          "line": 425
         },
         {
           "expression": "TdvInscription disabled={!canEdit}",
-          "line": 427
+          "line": 436
         },
         {
           "expression": "TdvRecordActions canEdit={canEdit}",
-          "line": 440
+          "line": 449
         }
       ]
     },

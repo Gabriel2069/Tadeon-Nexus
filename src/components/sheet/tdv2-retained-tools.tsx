@@ -243,7 +243,16 @@ export function TdvRecordCollection({
                       ...RECORD_FIELDS[kind as TdvRecord["kind"]].map((key) => ({
                         key,
                         label: key,
-                        type: "textarea" as const,
+                        type: ([
+                          "Expressão",
+                          "Efeito",
+                          "Descrição",
+                          "Resíduo",
+                          "Preço/limite",
+                          "Gesto",
+                        ].includes(key)
+                          ? "textarea"
+                          : "text") as "textarea" | "text",
                       })),
                     ]}
                     onAdd={(row) => {

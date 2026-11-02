@@ -127,13 +127,29 @@ export async function verifyInteractive({
     await tab("Percurso");
     await page.getByRole("button", { name: "Conceder Marco · +5% e 2 PU", exact: true }).click();
     await saved(() => getRow().tdv2_data.milestones.length === 1);
+    await tab("Constituição");
+    await page.getByRole("button", { name: /^Consultar Luta ·/ }).click();
+    popup = page.getByRole("dialog", { name: "Capacidade Luta", exact: true });
+    assert(
+      (await popup.getByText("2 PU · saldo 2 PU", { exact: true }).count()) === 1,
+      "Actual advancement price and balance",
+    );
+    await popup.getByRole("button", { name: "Avançar Luta", exact: true }).click();
+    await saved(() => getRow().tdv2_data.investments.length === 1);
+    await page.getByRole("button", { name: /^Consultar Luta ·/ }).click();
+    await page
+      .getByRole("dialog", { name: "Capacidade Luta", exact: true })
+      .getByRole("button", { name: "Reverter Luta", exact: true })
+      .click();
+    await saved(() => getRow().tdv2_data.investments.length === 0);
+    await tab("Percurso");
     await page.getByRole("button", { name: "Correções e permissões", exact: true }).click();
     popup = page.getByRole("dialog", { name: "Correções e permissões", exact: true });
     await fit(popup);
     await geometry("interactive-master-controls");
     await popup.getByRole("button", { name: "Reverter último Marco", exact: true }).click();
     await saved(() => getRow().tdv2_data.milestones.length === 0);
-    assert(getRow().tdv2_data.corrections.length === 1, "Marco correction archived");
+    assert(getRow().tdv2_data.corrections.length === 2, "Marco correction archived");
     await close(popup);
     await tab("Expressão");
     assert(
@@ -284,6 +300,7 @@ export async function verifyInteractive({
     fresh.creation = { groupReason: "Proteger o cais", familiarities: [], reviewed: true };
     resetCharacter(fresh);
     await page.goto(page.url().split("?")[0] + "?mode=edit");
+    await page.getByRole("button", { name: "Ficha integral", exact: true }).click();
     await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).waitFor();
     await tab("Constituição");
     assert(
