@@ -111,10 +111,18 @@ export function TdvConditions({
                       Ajustar condição
                     </Button>
                     <Button
-                      disabled={!canEdit || !item.exit.trim()}
+                      disabled={
+                        !canEdit ||
+                        !item.exit.trim() ||
+                        (item.id === "tdv-zero-pv" && c.resources.pv === 0) ||
+                        (item.id === "tdv-zero-pi" && c.resources.pi === 0)
+                      }
                       onClick={() => {
                         onChange({
                           ...c,
+                          ...(item.id === "tdv-zero-pv" && c.resources.pv > 0
+                            ? { critical: "Ativa" as const }
+                            : {}),
                           conditions: c.conditions.filter((x) => x.id !== item.id),
                         });
                         setOpen(null);

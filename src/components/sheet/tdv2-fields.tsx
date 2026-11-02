@@ -1,4 +1,13 @@
-import { useId, useState, type ReactNode } from "react";
+import {
+  Anchor,
+  Link2,
+  Sparkles,
+  HeartPulse,
+  Shield,
+  Sprout,
+  SlidersHorizontal,
+} from "lucide-react";
+import { createContext, useContext, useId, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,6 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+export const TdvSurfaceContext = createContext("constituicao");
 /** Text belongs to the character surface; blur commits, Escape cancels. */
 export function TdvInscription({
   label,
@@ -87,6 +97,21 @@ export function TdvAction({
   disabled?: boolean;
   className?: string;
 }) {
+  const folio = useContext(TdvSurfaceContext),
+    key = title.toLocaleLowerCase("pt-BR");
+  const Icon = key.includes("vínculo")
+    ? Link2
+    : key.includes("âncora") || key.includes("ancorar")
+      ? Anchor
+      : key.includes("proteção")
+        ? Shield
+        : key.includes("recupera")
+          ? HeartPulse
+          : key.includes("correç") || key.includes("marco")
+            ? Sprout
+            : key.includes("express") || key.includes("marca")
+              ? Sparkles
+              : SlidersHorizontal;
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -94,9 +119,12 @@ export function TdvAction({
           {title}
         </Button>
       </DialogTrigger>
-      <DialogContent className={`tdv-operation-dialog ${className}`}>
+      <DialogContent className={`tdv-operation-dialog ${className}`} data-folio={folio}>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>
+            <Icon aria-hidden="true" />
+            {title}
+          </DialogTitle>
           <DialogDescription className="sr-only">{title} nesta personagem.</DialogDescription>
         </DialogHeader>
         <div className="tdv-operation-body">{children}</div>
