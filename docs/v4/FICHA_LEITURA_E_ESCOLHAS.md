@@ -6,7 +6,7 @@ Pedido: refinamento da PR 321, com informações como função primária da fich
 
 | Área | Resultado | Dados preservados |
 |---|---|---|
-| Navegação | Placa calcula coordenadas locais descontando escala ancestral; coluna de ícones permanece ancorada ao recolher | Rotas, teclado, foco, redução de movimento |
+| Navegação | Placa calcula coordenadas locais descontando escala ancestral; ícones conservam centralização no menu recolhido | Rotas, teclado, foco, redução de movimento |
 | Matrizes/Alinhavos | Silhuetas de dados autorais; nomes maiores; duas colunas à esquerda e radar à direita quando há largura; ramos com cores correspondentes | Categorias/graus e investimentos |
 | Recursos | Neon contido, arco/barra mais espessos; Esforço verde | Valores, máximos, custos e controle direto |
 | Quadros | Material escuro translúcido e cantos comuns à narrativa; símbolos Lucide simples, títulos concisos, marca d'água discreta e margens internas | Todo conteúdo das cinco guias |
@@ -32,7 +32,7 @@ Pedido: refinamento da PR 321, com informações como função primária da fich
 
 O pedido explícito mantém QA reduzido. O driver atual substitui as passagens UI sobrepostas: quatro composições, mestre/espectador, cinco guias e os fluxos alterados. Testes unitários de domínio, autorização/CAS e PostgreSQL permanecem; o roteiro UI antigo que dependia de formulários/removidos foi substituído pelo driver atual. Para PR estreita de ficha/navegação, Visual review executa navegação e ficha; PRs que alteram outros proprietários mantêm seis grupos. Não são desativados Quality ou o gate de produção de main.
 
-Validação inicial local: typecheck, lint sem erros, estilos sem crescimento de overrides, dez testes focados e 52 verificações PostgreSQL passaram. A execução local do Chromium foi bloqueada pelo ambiente ao criar sockets; a prova renderizada deve vir do CI deste fonte, com capturas inspecionadas antes do merge. Resultados finais e publicação ficam na PR; não confundir esta implementação com deploy.
+Validação inicial local: typecheck, lint sem erros, estilos sem crescimento de overrides, dez testes focados e 52 verificações PostgreSQL passaram. A execução local do Chromium foi bloqueada pelo ambiente ao criar sockets; a prova renderizada deve vir do CI deste fonte, com capturas inspecionadas antes do merge. Primeiro CI: Quality aprovado; a prova visual revelou uma descentralização do menu recolhido e disputa de foco entre seletores em sucessão rápida. Corrigidos sem relaxar alvos ou verificações. A revisão salva somente escolhas e conserva recursos/registro atuais; regressão de preservação foi adicionada. Resultados finais e publicação ficam na PR; não confundir esta implementação com deploy.
 
 Migração aditiva de função: `20261102153325_tdv_sheet_authorized_corrections.sql`; sem regravar fichas, tabelas ou permissões RLS. Aplicação em produção somente após validar o fonte. Rollback visual preserva os campos opcionais `progression`/`corrections` e seu guard; não voltar ao parser antigo que descartaria os arquivos de correção. A função anterior está na migração de origem; restaurá-la revoga delegação, sem apagar registros.
 

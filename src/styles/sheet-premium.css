@@ -2150,6 +2150,8 @@
 .tdv-item-composition { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .85rem; }
 .tdv-item-composition > [data-field="nome"],.tdv-item-composition > [data-field-type="textarea"],.tdv-item-composition > [data-slot="dialog-footer"] { grid-column: 1 / -1; }
 .tdv-item-composition > [data-field="nome"] input { font: 500 1.6rem var(--font-cinzel); }
+.tdv-item-composition > div:focus-within { border-bottom: 2px solid rgb(var(--folio-rgb) / 80%); background: linear-gradient(0deg,rgb(var(--folio-rgb) / 12%),transparent); }
+.tdv-item-composition :is(input,textarea):focus-visible { outline: none; box-shadow: none; border-color: transparent; }
 .tdv-item-composition label { color: rgb(var(--folio-rgb)); margin-bottom: .3rem; }
 .tdv-item-composition :is(input,textarea) { border: 0; border-bottom: 1px solid rgb(var(--folio-rgb) / 35%); border-radius: .3rem .3rem 0 0; background: #070c1438; }
 .tdv-guard-reading { display: flex; align-items: center; gap: .8rem; padding: .65rem .7rem; margin-bottom: .75rem; border-left: 2px solid #79b9ce; background: linear-gradient(90deg,#79b9ce12,transparent); }

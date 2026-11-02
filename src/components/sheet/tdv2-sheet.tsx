@@ -66,6 +66,14 @@ import {
 } from "@/lib/tdv2";
 import { toast } from "sonner";
 
+const correctionText = (payload: string) => {
+  try {
+    const record = JSON.parse(payload) as { target?: string; event?: string };
+    return record.target || record.event || "Registro preservado";
+  } catch {
+    return "Registro preservado";
+  }
+};
 export { TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-fields";
 export function Tdv2Sheet({
   name = "Personagem",
@@ -104,6 +112,7 @@ export function Tdv2Sheet({
     [target, setTarget] = useState<string>(MATRICES[0]),
     [cost, setCost] = useState(4),
     [transcendent, setTranscendent] = useState(false);
+  const [markEditing, setMarkEditing] = useState(false);
   const [developmentOpen, setDevelopmentOpen] = useState(false),
     [expressionUse, setExpressionUse] = useState<string | null>(null),
     [skillSearch, setSkillSearch] = useState(""),
@@ -154,7 +163,7 @@ export function Tdv2Sheet({
     [outcome, setOutcome] = useState(""),
     [careAction, setCareAction] = useState("");
   const stats = constitution(c),
-    disabled = !canEdit;
+    disabled = !canEdit || Boolean(initialDraft);
   const investmentGrade =
     kind === "Matriz"
       ? stats.matrices[target as Matrix]
@@ -225,6 +234,7 @@ export function Tdv2Sheet({
                 type="button"
                 key={value}
                 aria-pressed={gameProfile === value}
+                disabled={Boolean(initialDraft)}
                 onClick={() => selectProfile(value)}
               >
                 {label}
@@ -236,7 +246,11 @@ export function Tdv2Sheet({
           <Button
             variant="outline"
             disabled={!canEdit || c.investments.length > 0}
-            onClick={() => setInitialDraft(c)}
+            onClick={() => {
+              setInitialDraft(c);
+              setTab("constituicao");
+              setGameTab("constituicao");
+            }}
           >
             Rever escolhas iniciais
           </Button>
@@ -244,6 +258,13 @@ export function Tdv2Sheet({
         {initialDraft && (
           <div className="tdv-allocation-status">
             <p>Revisão das escolhas · alterações ainda não salvas</p>
+            {creationErrors(c).length > 0 && (
+              <ul aria-live="polite">
+                {creationErrors(c).map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            )}
             <div className="tdv-actions">
               <Button variant="ghost" onClick={() => setInitialDraft(null)}>
                 Cancelar revisão
@@ -251,7 +272,27 @@ export function Tdv2Sheet({
               <Button
                 disabled={creationErrors(c).length > 0}
                 onClick={() => {
-                  onPersist(c);
+                  const merged = {
+                    ...incoming,
+                    matrices: c.matrices,
+                    alinhavos: c.alinhavos,
+                    creation: c.creation
+                      ? { ...incoming.creation!, familiarities: c.creation.familiarities }
+                      : incoming.creation,
+                    face: {
+                      ...incoming.face,
+                      anchor: { ...incoming.face.anchor, pillar: c.face.anchor.pillar },
+                    },
+                  };
+                  const maximums = constitution(merged).maximums;
+                  onPersist({
+                    ...merged,
+                    resources: {
+                      pv: Math.min(incoming.resources.pv, maximums.pv),
+                      pi: Math.min(incoming.resources.pi, maximums.pi),
+                      pe: Math.min(incoming.resources.pe, maximums.pe),
+                    },
+                  });
                   setInitialDraft(null);
                 }}
               >
@@ -264,7 +305,7 @@ export function Tdv2Sheet({
           name={name}
           character={c}
           onChange={onChange}
-          canEdit={canEdit}
+          canEdit={canEdit && !initialDraft}
           physical={presentation === "game" && gameProfile === "fisico"}
           onInspectState={() => (presentation === "game" ? setGameTab : setTab)("acao")}
         />
@@ -296,7 +337,13 @@ export function Tdv2Sheet({
                 ["percurso", "Percurso", "Percurso", Sprout],
               ] as const
             ).map(([value, label, compact, Icon]) => (
-              <TabsTrigger key={value} value={value} aria-label={label} title={label}>
+              <TabsTrigger
+                key={value}
+                value={value}
+                aria-label={label}
+                title={label}
+                disabled={Boolean(initialDraft) && !["pessoa", "constituicao"].includes(value)}
+              >
                 <Icon aria-hidden="true" />
                 <span>{compact}</span>
               </TabsTrigger>
@@ -327,25 +374,38 @@ export function Tdv2Sheet({
                   </div>
                   <div className="tdv-mark-reading">
                     <h3>Marca</h3>
-                    <div className="tdv-grid tdv-grid--identity">
-                      {(
-                        [
-                          ["trigger", "Gatilho"],
-                          ["manifestation", "Manifestação"],
-                          ["residue", "Resíduo"],
-                        ] as const
-                      ).map(([key, label]) => (
-                        <TdvInscription
-                          key={key}
-                          label={label}
-                          value={c.face.mark[key]}
-                          disabled={disabled}
-                          onChange={(value) =>
-                            upd("face", { ...c.face, mark: { ...c.face.mark, [key]: value } })
-                          }
-                        />
-                      ))}
-                    </div>
+                    {markEditing || Object.values(c.face.mark).some((value) => value.trim()) ? (
+                      <div className="tdv-grid tdv-grid--identity">
+                        {(
+                          [
+                            ["trigger", "Gatilho"],
+                            ["manifestation", "Manifestação"],
+                            ["residue", "Resíduo"],
+                          ] as const
+                        ).map(([key, label]) => (
+                          <TdvInscription
+                            key={key}
+                            label={label}
+                            value={c.face.mark[key]}
+                            disabled={disabled}
+                            onChange={(value) =>
+                              upd("face", { ...c.face, mark: { ...c.face.mark, [key]: value } })
+                            }
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <p>Não manifestada</p>
+                    )}
+                    {canEdit && !Object.values(c.face.mark).some((value) => value.trim()) && (
+                      <Button
+                        variant="ghost"
+                        disabled={disabled}
+                        onClick={() => setMarkEditing((value) => !value)}
+                      >
+                        {markEditing ? "Fechar edição" : "Definir Marca"}
+                      </Button>
+                    )}
                   </div>
                 </Section>
               </div>
@@ -376,7 +436,7 @@ export function Tdv2Sheet({
                               },
                             })
                           }
-                          disabled={disabled}
+                          disabled={!canEdit}
                         />
                       )}
                     </div>
@@ -617,7 +677,7 @@ export function Tdv2Sheet({
                       matrix
                       shaken={c.scene.shaken.includes(matrix)}
                       creation={initialUnlocked}
-                      disabled={disabled}
+                      disabled={!canEdit}
                       onRoll={() => setRollChoice({ matrix })}
                       onDevelop={() => develop(matrix, true)}
                       effects={impacts(matrix)}
@@ -677,7 +737,7 @@ export function Tdv2Sheet({
                     name={name}
                     grade={stats.alinhavos[name] ?? 0}
                     creation={initialUnlocked}
-                    disabled={disabled}
+                    disabled={!canEdit}
                     allocationHint={skillAllocation}
                     choiceAllowed={(grade) => allocationPossible(name, grade, false)}
                     onChange={(grade) => run(() => allocateCreation(c, name, grade, false))}
@@ -973,9 +1033,9 @@ export function Tdv2Sheet({
                 ))}
                 {c.corrections?.map((item) => (
                   <p key={item.id}>
-                    {item.kind} revertido · {item.at}
+                    {item.kind} revertido · {new Date(item.at).toLocaleDateString("pt-BR")}
                     <br />
-                    <code>{item.payload}</code>
+                    {correctionText(item.payload)}
                   </p>
                 ))}
                 {c.investments.map((i) => (
