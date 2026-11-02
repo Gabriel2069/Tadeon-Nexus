@@ -2255,10 +2255,10 @@
 .tdv-matrix h3 { font: 600 clamp(1.5rem,3cqi,1.9rem)/1.1 var(--font-cinzel); color: rgb(var(--capability-rgb)); }
 .tdv-matrix .tdv-die { width: 3rem; height: 3rem; }
 .tdv-matrix .tdv-die > b { font-size: 1.4rem; }
-.tdv-matrix[data-capability="Ímpeto"] { --capability-rgb: 243 141 128; }
-.tdv-matrix[data-capability="Cadência"] { --capability-rgb: 112 216 227; }
-.tdv-matrix[data-capability="Nexo"] { --capability-rgb: 189 155 255; }
-.tdv-matrix[data-capability="Lastro"] { --capability-rgb: 186 216 118; }
+.tdv-matrix[data-capability="Ímpeto"] { --capability-rgb: 210 143 132; }
+.tdv-matrix[data-capability="Cadência"] { --capability-rgb: 137 190 197; }
+.tdv-matrix[data-capability="Nexo"] { --capability-rgb: 178 158 211; }
+.tdv-matrix[data-capability="Lastro"] { --capability-rgb: 177 190 141; }
 .tdv-competency[data-shaken="true"] { border-bottom-style: dashed; }
 .tdv-competency[data-affected="true"] { border-bottom-color: #db9c78; }
 .tdv-competency[data-affected="true"] h3::after { content: "•"; color: #e6a577; margin-left: .3rem; }

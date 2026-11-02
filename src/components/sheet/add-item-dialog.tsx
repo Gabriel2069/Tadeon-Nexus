@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Sword, Backpack } from "lucide-react";
+import { Plus, Sword, Backpack, Sparkles, Gem, Spool } from "lucide-react";
 
 export interface FieldDef {
   key: string;
@@ -36,7 +36,7 @@ export function AddItemDialog<T>({
   initial: T;
   onAdd: (item: T) => void;
   trigger?: ReactNode;
-  composition?: "weapon" | "inventory";
+  composition?: "weapon" | "inventory" | "trama" | "fragmento" | "selo" | "lavor";
 }) {
   const formId = useId();
   const [open, setOpen] = useState(false);
@@ -71,11 +71,19 @@ export function AddItemDialog<T>({
         <DialogHeader>
           <DialogTitle className="font-cinzel">
             {composition &&
-              (composition === "weapon" ? (
-                <Sword aria-hidden="true" />
-              ) : (
-                <Backpack aria-hidden="true" />
-              ))}
+              (() => {
+                const Icon =
+                  composition === "weapon"
+                    ? Sword
+                    : composition === "inventory"
+                      ? Backpack
+                      : composition === "trama"
+                        ? Spool
+                        : composition === "lavor"
+                          ? Sparkles
+                          : Gem;
+                return <Icon aria-hidden="true" />;
+              })()}
             {title}
           </DialogTitle>
         </DialogHeader>

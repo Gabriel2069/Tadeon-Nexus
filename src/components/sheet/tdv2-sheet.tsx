@@ -52,6 +52,8 @@ import {
   resettle,
   stabilize,
   grantMilestone,
+  advanceCapability,
+  reverseCapability,
   reverseProgression,
   allocateCreation,
   creationErrors,
@@ -184,7 +186,7 @@ export function Tdv2Sheet({
     }
   };
   const FaceField = TdvInscription;
-  const initialUnlocked = !c.ready || Boolean(initialDraft);
+  const initialUnlocked = !c.ready || (isMaster && Boolean(initialDraft));
   const mayGrantMilestone = isMaster || Boolean(c.progression?.allowMilestones);
   const allocationPossible = (name: string, grade: number, matrix: boolean) => {
     try {
@@ -242,7 +244,7 @@ export function Tdv2Sheet({
             ))}
           </div>
         )}
-        {c.ready && c.progression?.allowCreation && !initialDraft && (
+        {isMaster && c.ready && c.progression?.allowCreation && !initialDraft && (
           <Button
             variant="outline"
             disabled={!canEdit || c.investments.length > 0}
@@ -663,7 +665,7 @@ export function Tdv2Sheet({
                       data={MATRICES.map((attr, index) => ({
                         attr,
                         value: stats.matrices[attr],
-                        color: ["#f38d80", "#70d8e3", "#bd9bff", "#bad876"][index],
+                        color: ["#d28f84", "#89bec5", "#b29ed3", "#b1be8d"][index],
                       }))}
                     />
                   </div>
@@ -675,6 +677,16 @@ export function Tdv2Sheet({
                       name={matrix}
                       grade={stats.matrices[matrix]}
                       matrix
+                      onAdvance={() => run(() => advanceCapability(c, matrix, true))}
+                      onReverse={() => run(() => reverseCapability(c, matrix, true))}
+                      canReverse={
+                        isMaster &&
+                        (c.ready
+                          ? c.investments.some((i) => i.target === matrix && i.kind === "Matriz")
+                          : c.matrices[matrix] > 1)
+                      }
+                      advanceCost={stats.matrices[matrix] + 3}
+                      availablePU={stats.pu}
                       shaken={c.scene.shaken.includes(matrix)}
                       creation={initialUnlocked}
                       disabled={!canEdit}
@@ -736,6 +748,16 @@ export function Tdv2Sheet({
                     key={name}
                     name={name}
                     grade={stats.alinhavos[name] ?? 0}
+                    onAdvance={() => run(() => advanceCapability(c, name, false))}
+                    onReverse={() => run(() => reverseCapability(c, name, false))}
+                    canReverse={
+                      isMaster &&
+                      (c.ready
+                        ? c.investments.some((i) => i.target === name && i.kind === "Alinhavo")
+                        : (c.alinhavos[name] ?? 0) > 0)
+                    }
+                    advanceCost={2}
+                    availablePU={stats.pu}
                     creation={initialUnlocked}
                     disabled={!canEdit}
                     allocationHint={skillAllocation}
@@ -949,8 +971,16 @@ export function Tdv2Sheet({
               <div className="tdv-milestone-actions">
                 {mayGrantMilestone && (
                   <Button
-                    disabled={disabled || !c.ready || c.milestones.length >= 20}
-                    onClick={() => run(() => grantMilestone(c))}
+                    disabled={disabled || c.milestones.length >= 20}
+                    onClick={() => {
+                      if (!c.ready && creationErrors(c).length) {
+                        toast.error(creationErrors(c).join(" "));
+                        setTab("constituicao");
+                        setGameTab("constituicao");
+                        return;
+                      }
+                      run(() => grantMilestone(c));
+                    }}
                   >
                     Conceder Marco · +5% e 2 PU
                   </Button>
@@ -986,28 +1016,6 @@ export function Tdv2Sheet({
                         })
                       }
                     />
-                    <TdvCheck
-                      label="Reabrir escolhas iniciais com autorização do mestre"
-                      value={Boolean(c.progression?.allowCreation)}
-                      disabled={disabled || c.investments.length > 0}
-                      onChange={(value) => {
-                        if (!value) {
-                          const errors = creationErrors(c);
-                          if (errors.length) {
-                            toast.error(errors.join(" "));
-                            return;
-                          }
-                        }
-                        upd("progression", {
-                          allowMilestones: c.progression?.allowMilestones ?? false,
-                          allowCreation: value,
-                        });
-                      }}
-                    />
-                    <p className="tdv-note">
-                      A distribuição inicial só pode ser corrigida sem investimentos ativos. A
-                      autorização permanece até ser revogada pelo mestre.
-                    </p>
                   </TdvAction>
                 )}
               </div>
