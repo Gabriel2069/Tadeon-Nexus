@@ -284,6 +284,21 @@ export async function verifyInteractive({
     (await page.locator(".tdv-game-skills .tdv-competency").count()) === 21,
     "All skills available",
   );
+  const crampedLabels = await page
+    .locator(".tdv-game-skills .tdv-competency h3")
+    .evaluateAll((elements) =>
+      elements
+        .filter(
+          (element) =>
+            element.getBoundingClientRect().height >
+            parseFloat(getComputedStyle(element).fontSize) * 3.8,
+        )
+        .map((element) => element.textContent),
+    );
+  assert(
+    crampedLabels.length === 0,
+    "Capability names remain readable: " + JSON.stringify(crampedLabels),
+  );
   await geometry("interactive-digital-cockpit");
   await page.getByRole("button", { name: "Equipamento", exact: true }).click();
   popup = page.getByRole("dialog", { name: "Instrumentos da personagem", exact: true });
