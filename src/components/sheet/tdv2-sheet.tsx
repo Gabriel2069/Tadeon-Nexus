@@ -72,7 +72,7 @@ export { TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-
 export function Tdv2Sheet({
   name = "Personagem",
   presentation = "edit",
-  character: c,
+  character: incoming,
   onChange,
   canEdit,
   isMaster,
@@ -90,7 +90,7 @@ export function Tdv2Sheet({
   belongings?: ReactNode;
   narrative?: ReactNode;
 }) {
-  const [gameTab, setGameTab] = useState("acao");
+  const c = incoming.ready || incoming.creation ? incoming : { ...incoming, creation: { groupReason: "", familiarities: [], reviewed: false } }; const [gameTab, setGameTab] = useState("acao");
   const [tab, setTab] = useState("pessoa"),
     [event, setEvent] = useState(""),
     [incorporation, setIncorporation] = useState(""),

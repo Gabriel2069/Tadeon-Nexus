@@ -3219,6 +3219,7 @@
     "src/components/sheet/sheet-ui.test.tsx",
     "src/components/sheet/tdv2-creation-loom.test.tsx",
     "src/components/sheet/tdv2-fields.test.tsx",
+    "src/components/sheet/tdv2-sheet-creation.test.tsx",
     "src/components/sheet/tdv2-test-panel.test.tsx",
     "src/components/tabletop/tabletop-commands.test.tsx",
     "src/components/tabletop/tabletop-editor-panel.test.tsx",
@@ -30081,7 +30082,7 @@
       ]
     },
     "src/components/sheet/tdv2-sheet.tsx": {
-      "sha256": "64949fb1cb76d0c80a1f7092088969b26f19384e2d7842f64e744e791cb7e9de",
+      "sha256": "271bf5cb047c47c6fc65cc4385b362eedca0c9c8204a2df919018167a169870b",
       "imports": [
         {
           "specifier": "./tdv2-visual-instruments",
