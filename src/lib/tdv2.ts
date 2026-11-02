@@ -488,6 +488,30 @@ function shift(die: number, direction: number, extraordinary: boolean) {
   const index = DICE.indexOf(die as (typeof DICE)[number]);
   return DICE[Math.max(0, Math.min(extraordinary ? 5 : Math.max(index, 4), index + direction))];
 }
+/** Only explicit portable declarations affect a Fio; severity/prose never infer penalties. */
+export function conditionImpact(
+  effect: string,
+): { kind: "Desproveito" | "Impedimento"; target: string; description: string } | null {
+  const [line, ...rest] = effect.split("\n");
+  const m = /^Fio declarado · (Desproveito|Impedimento) · (.+)$/.exec(line);
+  return m && [...MATRICES, ...ALINHAVOS].some((name) => name === m[2])
+    ? { kind: m[1] as "Desproveito" | "Impedimento", target: m[2], description: rest.join("\n") }
+    : null;
+}
+export function declareConditionImpact(
+  effect: string,
+  kind: "Descrição apenas" | "Desproveito" | "Impedimento",
+  target: string,
+) {
+  const prose = conditionImpact(effect)?.description ?? effect;
+  if (kind === "Descrição apenas") return prose;
+  if (![...MATRICES, ...ALINHAVOS].some((name) => name === target))
+    throw new Error("Escolha uma capacidade válida.");
+  return `Fio declarado · ${kind} · ${target}\n${prose}`;
+}
+export function capabilityConditions(c: TdvCharacter, target: string) {
+  return c.conditions.filter((item) => conditionImpact(item.effect)?.target === target);
+}
 export function prepareTest(c: TdvCharacter, r: TestRequest) {
   if (!c.ready) throw new Error("Conclua a criação da personagem.");
   const current = constitution(c);
@@ -535,9 +559,29 @@ export function prepareTest(c: TdvCharacter, r: TestRequest) {
     throw new Error("Organize a cena antes de novos pagamentos.");
   let prumo: number = DICE[current.matrices[r.matrix]],
     tento: number = DICE[r.helper?.grade ?? current.alinhavos[r.alinhavo] ?? 0];
+  const impacts = c.conditions.map((item) => ({ item, impact: conditionImpact(item.effect) }));
+  const applicable = impacts.filter(
+    ({ impact }) => impact && (impact.target === r.matrix || impact.target === r.alinhavo),
+  );
+  const blocked = applicable.find(({ impact }) => impact?.kind === "Impedimento");
+  if (blocked)
+    throw new Error(
+      `${blocked.item.name || "Condição ativa"}: ${blocked.impact!.target} está impedido até a saída declarada.`,
+    );
+  const disadvantages = (target: string) =>
+    applicable.filter(({ impact }) => impact?.target === target && impact.kind === "Desproveito")
+      .length;
   const shaken = c.scene.shaken.includes(r.matrix) ? 1 : 0;
-  prumo = shift(prumo, Math.sign(r.prumoPro - r.prumoDes - shaken), r.extraordinary);
-  tento = shift(tento, Math.sign(r.tentoPro - r.tentoDes), r.extraordinary);
+  prumo = shift(
+    prumo,
+    Math.sign(r.prumoPro - r.prumoDes - shaken - disadvantages(r.matrix)),
+    r.extraordinary,
+  );
+  tento = shift(
+    tento,
+    Math.sign(r.tentoPro - r.tentoDes - (r.helper ? 0 : disadvantages(r.alinhavo))),
+    r.extraordinary,
+  );
   let cost = 0,
     zero = false;
   if (r.force) {

@@ -1,5 +1,4 @@
 import { useId, useState, type ReactNode } from "react";
-import { TdvEmblem } from "./tdv2-emblem";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ export function TdvInscription({
     <>
       <span className="tdv-inscription__label">{label}</span>
       <strong id={`${id}-reading`}>{value || "Por definir"}</strong>
-      {!disabled && <small>editar</small>}
+      {!disabled && <small aria-hidden="true">↗</small>}
     </>
   );
   if (disabled)
@@ -121,20 +120,6 @@ export function TdvChoices({
             />
             <span>
               <i aria-hidden="true" />
-              {label === "Pilar escolhido como Âncora" && (
-                <TdvEmblem
-                  kind={
-                    {
-                      Origem: "historia",
-                      Ofício: "armas",
-                      Convicção: "pessoa",
-                      Limite: "condicoes",
-                      Marca: "uso",
-                      Vínculo: "vinculos",
-                    }[option] ?? "pessoa"
-                  }
-                />
-              )}
               {option}
             </span>
           </label>

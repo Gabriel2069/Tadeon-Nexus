@@ -93,6 +93,7 @@ export function Section({
   id,
   className = "",
   emblem,
+  variant,
 }: {
   title: string;
   children: React.ReactNode;
@@ -100,6 +101,7 @@ export function Section({
   id?: string;
   className?: string;
   emblem?: string;
+  variant?: "folio";
 }) {
   const presentationKey = id ?? title.toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, "-");
   const presentation = SECTION_PRESENTATION[presentationKey] ?? {
@@ -135,32 +137,34 @@ export function Section({
       id={id}
       data-section={presentationKey}
       data-tadeon-context-help={SECTION_HELP[presentationKey]}
-      title={SECTION_HELP[presentationKey]}
+      title={variant === "folio" ? undefined : SECTION_HELP[presentationKey]}
       data-collapsed={collapsed ? "true" : "false"}
-      className={`tadeon-sheet-section scroll-mt-44 ${className}`}
+      className={`tadeon-sheet-section ${variant === "folio" ? "tadeon-sheet-section--folio" : ""} scroll-mt-44 ${className}`}
     >
-      <FabricFilaments className="tadeon-sheet-fabric" />
+      {variant !== "folio" && <FabricFilaments className="tadeon-sheet-fabric" />}
       <Collapsible open={!collapsed} onOpenChange={(open) => setCollapsed(!open)}>
         <div className="tadeon-sheet-section__heading">
           <div className="tadeon-sheet-section__title-group">
-            <span className="tadeon-sheet-section__index" aria-hidden="true">
-              {emblem || (id?.startsWith("tdv-") && !id.startsWith("tdv-master-")) ? (
-                <TdvEmblem
-                  kind={
-                    emblem ??
-                    (id === "tdv-feicao"
-                      ? "pessoa"
-                      : id === "tdv-desenvolvimento"
-                        ? "percurso"
-                        : (id?.replace("tdv-", "") ?? "pessoa"))
-                  }
-                />
-              ) : (
-                presentation.index
-              )}
-            </span>
+            {variant !== "folio" && (
+              <span className="tadeon-sheet-section__index" aria-hidden="true">
+                {emblem || (id?.startsWith("tdv-") && !id.startsWith("tdv-master-")) ? (
+                  <TdvEmblem
+                    kind={
+                      emblem ??
+                      (id === "tdv-feicao"
+                        ? "pessoa"
+                        : id === "tdv-desenvolvimento"
+                          ? "percurso"
+                          : (id?.replace("tdv-", "") ?? "pessoa"))
+                    }
+                  />
+                ) : (
+                  presentation.index
+                )}
+              </span>
+            )}
             <span className="min-w-0">
-              <small>{presentation.kicker}</small>
+              {variant !== "folio" && <small>{presentation.kicker}</small>}
               <h2 tabIndex={-1} onFocus={() => setCollapsed(false)}>
                 {title}
               </h2>

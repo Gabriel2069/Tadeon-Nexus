@@ -269,8 +269,8 @@ export function TdvTestPanel({
           ))}
         </div>
         <p className="tdv-note">
-          Fontes opostas se cancelam por Fio; aplique no máximo um deslocamento líquido. Matriz
-          Abalada é incluída no Prumo.
+          Fontes opostas se cancelam por Fio; no máximo uma categoria líquida. Matriz Abalada e
+          efeitos declarados de Condições já estão incluídos. Informe apenas outras fontes.
         </p>
         <TdvSelect
           label="Forçar um Fio"

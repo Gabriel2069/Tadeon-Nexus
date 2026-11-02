@@ -341,17 +341,26 @@ export function TdvRecordActions({
     </TdvDisclosure>
   );
 }
-export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
+export function TdvExpressionUse({
+  character: c,
+  onChange,
+  canEdit,
+  initialRecordId,
+}: Props & { initialRecordId?: string }) {
   const [s, setS] = useState<ExpressionUse>({
     eventId: uid(),
-    recordIds: [],
+    recordIds: initialRecordId ? [initialRecordId] : [],
     intention: "",
     target: "",
-    contributions: [],
-    vertentes: [],
+    contributions: initialRecordId ? [""] : [],
+    vertentes: initialRecordId
+      ? [c.records.find((record) => record.id === initialRecordId)?.fields.Vertente ?? ""]
+      : [],
     pe: 0,
     pi: 0,
-    priceSource: "",
+    priceSource: initialRecordId
+      ? (c.records.find((record) => record.id === initialRecordId)?.fields["Preço/limite"] ?? "")
+      : "",
     limitsAcknowledged: false,
     sustain: false,
     sustainPE: 0,
@@ -359,6 +368,7 @@ export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
     exit: "",
   });
   const [risky, setRisky] = useState(false);
+  const [moreChoices, setMoreChoices] = useState(!initialRecordId);
   const choices = c.records.filter((r) => ["Lavor", "Trama", "Fragmento", "Selo"].includes(r.kind));
   const next = (value: TdvCharacter) => {
     onChange(value);
@@ -367,55 +377,75 @@ export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
   return (
     <>
       {choices.length ? (
-        <TdvDisclosure initiallyOpen={false}>
+        <TdvDisclosure initiallyOpen={true}>
           <summary>Preparar uma expressão ou Costura</summary>
-          <p className="tdv-note">
-            Escolha uma expressão ou costure Lavores de Vertentes diferentes. Os custos e limites
-            vêm das práticas escolhidas. Uma Costura tem uma intenção e um único teste, salvo ações
-            realmente distintas.
-          </p>
-          <div className="tdv-folios">
-            {choices.map((r) => (
-              <div className="tdv-folio" key={r.id}>
-                <TdvCheck
-                  label={`${r.kind}: ${r.name || "Sem nome"}`}
-                  value={s.recordIds.includes(r.id)}
-                  disabled={!canEdit}
-                  onChange={(checked) => {
-                    const ids = checked
-                      ? [...s.recordIds, r.id]
-                      : s.recordIds.filter((id) => id !== r.id);
-                    setS({
-                      ...s,
-                      recordIds: ids,
-                      contributions: ids.map(
-                        (id) => s.contributions[s.recordIds.indexOf(id)] ?? "",
-                      ),
-                      vertentes: ids.map(
-                        (id) =>
-                          s.vertentes[s.recordIds.indexOf(id)] ??
-                          c.records.find((x) => x.id === id)?.fields.Vertente ??
-                          "",
-                      ),
-                    });
-                  }}
-                />
-                <p className="tdv-note">
-                  {r.fields["Preço/limite"] || r.fields["Custo PE"] || r.fields["Custo de uso"]}{" "}
-                  {r.fields.Gatilho}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="tdv-grid">
+          {initialRecordId && (
+            <div className="tdv-expression-reading">
+              <small>Gatilho</small>
+              <p>
+                {c.records.find((record) => record.id === initialRecordId)?.fields.Gatilho ||
+                  "Conforme a prática escolhida"}
+              </p>
+              <p>{c.records.find((record) => record.id === initialRecordId)?.fields.Expressão}</p>
+              <Button variant="ghost" onClick={() => setMoreChoices((value) => !value)}>
+                {moreChoices ? "Recolher práticas" : "Costurar com outra prática"}
+              </Button>
+            </div>
+          )}
+          {moreChoices && (
+            <div className="tdv-expression-choices">
+              {choices.map((r) => (
+                <label
+                  className="tdv-expression-choice"
+                  key={r.id}
+                  data-selected={s.recordIds.includes(r.id)}
+                >
+                  <input
+                    type="checkbox"
+                    aria-label={`${r.kind}: ${r.name || "Sem nome"}`}
+                    checked={s.recordIds.includes(r.id)}
+                    disabled={!canEdit}
+                    onChange={(event) => {
+                      const checked = event.target.checked;
+                      const ids = checked
+                        ? [...s.recordIds, r.id]
+                        : s.recordIds.filter((id) => id !== r.id);
+                      setS({
+                        ...s,
+                        recordIds: ids,
+                        contributions: ids.map(
+                          (id) => s.contributions[s.recordIds.indexOf(id)] ?? "",
+                        ),
+                        vertentes: ids.map(
+                          (id) =>
+                            s.vertentes[s.recordIds.indexOf(id)] ??
+                            c.records.find((x) => x.id === id)?.fields.Vertente ??
+                            "",
+                        ),
+                      });
+                    }}
+                  />
+                  <strong>{r.name || r.kind}</strong>
+                  <small>
+                    {r.kind} ·{" "}
+                    {r.fields["Preço/limite"] || r.fields["Custo PE"] || r.fields.Gatilho}
+                  </small>
+                  <span aria-hidden="true">{s.recordIds.includes(r.id) ? "✓" : "+"}</span>
+                </label>
+              ))}
+            </div>
+          )}
+          <div className="tdv-expression-operation">
             <TdvField
               label="Intenção única da expressão"
+              short
               value={s.intention}
               onChange={(intention) => setS({ ...s, intention })}
               disabled={!canEdit}
             />
             <TdvField
               label="Alvo e acesso concreto"
+              short
               value={s.target}
               onChange={(target) => setS({ ...s, target })}
               disabled={!canEdit}
@@ -471,13 +501,26 @@ export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
                 />
               </div>
             ))}
-          <TdvField
-            label="Identificador da Puxagem original, se houver"
-            value={s.pullEventId ?? ""}
-            onChange={(pullEventId) => setS({ ...s, pullEventId: pullEventId.trim() || undefined })}
-            disabled={!canEdit}
-            short
-          />
+          <div className="tdv-expression-budget" aria-live="polite">
+            <span>
+              Após o preço: <strong>{c.resources.pe - s.pe}</strong> PE
+            </span>
+            <span>
+              <strong>{c.resources.pi - s.pi}</strong> PI
+            </span>
+          </div>
+          <details className="tdv-disclosure">
+            <summary>Relacionar Puxagem anterior, se houver</summary>{" "}
+            <TdvField
+              label="Identificador da Puxagem original, se houver"
+              value={s.pullEventId ?? ""}
+              onChange={(pullEventId) =>
+                setS({ ...s, pullEventId: pullEventId.trim() || undefined })
+              }
+              disabled={!canEdit}
+              short
+            />
+          </details>
           <TdvCheck
             label="Gatilhos válidos e preços de todas as práticas conferidos"
             value={s.limitsAcknowledged}
@@ -534,17 +577,30 @@ export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
             />
           ) : (
             <Button
-              disabled={!canEdit || !c.ready}
+              disabled={
+                !canEdit ||
+                !c.ready ||
+                !s.recordIds.length ||
+                !s.intention.trim() ||
+                !s.target.trim() ||
+                !s.priceSource.trim() ||
+                !s.limitsAcknowledged ||
+                s.pe > c.resources.pe ||
+                s.pi > c.resources.pi
+              }
               onClick={() => commit(next, () => expressDirectly(c, s))}
             >
               Expressar pela ficção e pagar custos
             </Button>
           )}
-          <p className="tdv-note">
-            Aproximação, Tração, Tecitura, Expressão e Relaxamento são movimentos conceituais. Não
-            exigem cinco ações ou cinco rolagens. Puxagem e Tecitura permanecem distintas; a mesma
-            consequência não deve ser cobrada novamente como Refluxo.
-          </p>
+          <details className="tdv-disclosure">
+            <summary>Consultar limites da expressão</summary>{" "}
+            <p className="tdv-note">
+              Aproximação, Tração, Tecitura, Expressão e Relaxamento são movimentos conceituais. Não
+              exigem cinco ações ou cinco rolagens. Puxagem e Tecitura permanecem distintas; a mesma
+              consequência não deve ser cobrada novamente como Refluxo.
+            </p>
+          </details>
         </TdvDisclosure>
       ) : (
         <p className="tdv-note">
@@ -552,16 +608,35 @@ export function TdvExpressionUse({ character: c, onChange, canEdit }: Props) {
           precisam de incorporação em PU antes do uso.
         </p>
       )}
-      {(c.activeExpressions ?? []).map((active) => (
-        <TdvActiveUse
-          key={active.id}
-          character={c}
-          id={active.id}
-          onChange={onChange}
-          canEdit={canEdit}
-        />
-      ))}
     </>
+  );
+}
+export function TdvActiveExpressions({ character: c, onChange, canEdit }: Props) {
+  const current = (c.activeExpressions ?? []).filter((a) =>
+      ["Sustentada", "Em curso"].includes(a.state),
+    ),
+    ended = (c.activeExpressions ?? []).filter(
+      (a) => !["Sustentada", "Em curso"].includes(a.state),
+    );
+  if (!current.length && !ended.length) return null;
+  const view = (a: NonNullable<TdvCharacter["activeExpressions"]>[number]) => (
+    <TdvActiveUse key={a.id} character={c} id={a.id} onChange={onChange} canEdit={canEdit} />
+  );
+  return (
+    <div className="tdv-active-expressions">
+      {current.length > 0 && (
+        <>
+          <h3>Em curso</h3>
+          {current.map(view)}
+        </>
+      )}
+      {ended.length > 0 && (
+        <details className="tdv-disclosure">
+          <summary>Expressões encerradas · {ended.length}</summary>
+          {ended.map(view)}
+        </details>
+      )}
+    </div>
   );
 }
 function TdvActiveUse({ character: c, id, onChange, canEdit }: Props & { id: string }) {
@@ -574,7 +649,7 @@ function TdvActiveUse({ character: c, id, onChange, canEdit }: Props & { id: str
     [event, setEvent] = useState("");
   const active = ["Sustentada", "Em curso"].includes(a.state);
   return (
-    <TdvDisclosure initiallyOpen={active}>
+    <TdvDisclosure initiallyOpen={false}>
       <summary>
         {a.name} · {a.state}
       </summary>

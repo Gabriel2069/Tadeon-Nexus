@@ -7,7 +7,6 @@ import {
 } from "@/lib/tdv2";
 import { TdvCheck } from "./tdv2-fields";
 import { Button } from "@/components/ui/button";
-import { TdvEmblem } from "./tdv2-emblem";
 
 /** The book's eight creation steps; no XP pool, class or free Lavor is inferred. */
 export function TdvCreationLoom({
@@ -44,7 +43,7 @@ export function TdvCreationLoom({
     ],
     [
       "Defesas",
-      "constituicao",
+      "acao",
       "ancora",
       true,
       `Res. ${stats.defenses.Resistência} · Evasão ${stats.defenses.Evasão}`,
@@ -91,7 +90,6 @@ export function TdvCreationLoom({
               data-complete={done}
               aria-label={`Criação: ${label}`}
             >
-              <TdvEmblem kind={emblem} />
               <span>
                 <small>0{i + 1}</small>
                 <strong>{label}</strong>
@@ -154,7 +152,14 @@ export function TdvFamiliarities({
 }) {
   if (!c.creation) return null;
   const selected = c.creation.familiarities;
-  if (c.ready) return selected.length ? <div className="tdv-familiarities-reading"><small>Familiaridades iniciais · sem bônus</small><p>{selected.join(" · ")}</p><span>Os dados atuais estão nos Alinhavos.</span></div> : null;
+  if (c.ready)
+    return selected.length ? (
+      <div className="tdv-familiarities-reading">
+        <small>Familiaridades iniciais · sem bônus</small>
+        <p>{selected.join(" · ")}</p>
+        <span>Os dados atuais estão nos Alinhavos.</span>
+      </div>
+    ) : null;
   return (
     <details className="tdv-disclosure tdv-familiarities">
       <summary>

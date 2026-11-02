@@ -1,3 +1,4 @@
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +10,17 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import "@/styles/sheet-experience.css";
-import { ExternalLink, Gamepad2, History, Link2, Loader2, Pencil, Save, Users } from "lucide-react";
+import {
+  ExternalLink,
+  Ellipsis,
+  Gamepad2,
+  History,
+  Link2,
+  Loader2,
+  Pencil,
+  Save,
+  Users,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { NEXUS_DRAG_MIME } from "@/lib/knowledge/knowledge-transfer";
@@ -114,7 +125,9 @@ export function SheetExperienceBridge({
   canEdit,
   mode: controlledMode,
   onModeChange,
+  compact = false,
 }: {
+  compact?: boolean;
   sheetId: string;
   dropTarget: HTMLElement | null;
   canEdit: boolean;
@@ -265,6 +278,51 @@ export function SheetExperienceBridge({
 
   if (!sheetId || embedded) return null;
 
+  const secondaryActions = (
+    <>
+      <Button
+        size="icon"
+        variant="ghost"
+        onClick={() => {
+          setHistoryOpen(true);
+          void loadHistory();
+        }}
+        title="Ver mudanças registradas ao salvar sessões"
+        aria-label="Ver mudanças de sessão"
+      >
+        <History className="h-4 w-4" />
+      </Button>
+      <span
+        className="tadeon-sheet-presence"
+        title={`${onlineCount} pessoa(s) com esta ficha aberta`}
+      >
+        <Users aria-hidden="true" />
+        {onlineCount}
+      </span>
+      {!popout && (
+        <Button
+          size="icon"
+          variant="ghost"
+          className="tadeon-sheet-popout-button"
+          onClick={() =>
+            openPopout(
+              `/sheet/${sheetId}?mode=${mode === "game" ? "game" : "edit"}&popout=1`,
+              `tadeon-sheet-${sheetId}`,
+            )
+          }
+          title="Abrir ficha em janela dedicada"
+          aria-label="Abrir ficha em janela dedicada"
+        >
+          <ExternalLink className="h-4 w-4" />
+        </Button>
+      )}
+      {nexusLinks.length > 0 && (
+        <span className="tadeon-sheet-nexus-links" title="Páginas do Nexus ligadas à ficha">
+          <Link2 aria-hidden="true" /> {nexusLinks.length}
+        </span>
+      )}
+    </>
+  );
   return (
     <>
       <div className="tadeon-sheet-experience-actions" data-sheet-experience-actions>
@@ -297,46 +355,25 @@ export function SheetExperienceBridge({
                 : "Jogo"}
           </span>
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={() => {
-            setHistoryOpen(true);
-            void loadHistory();
-          }}
-          title="Ver mudanças registradas ao salvar sessões"
-          aria-label="Ver mudanças de sessão"
-        >
-          <History className="h-4 w-4" />
-        </Button>
-        <span
-          className="tadeon-sheet-presence"
-          title={`${onlineCount} pessoa(s) com esta ficha aberta`}
-        >
-          <Users aria-hidden="true" />
-          {onlineCount}
-        </span>
-        {!popout && (
-          <Button
-            size="icon"
-            variant="ghost"
-            className="tadeon-sheet-popout-button"
-            onClick={() =>
-              openPopout(
-                `/sheet/${sheetId}?mode=${mode === "game" ? "game" : "edit"}&popout=1`,
-                `tadeon-sheet-${sheetId}`,
-              )
-            }
-            title="Abrir ficha em janela dedicada"
-            aria-label="Abrir ficha em janela dedicada"
-          >
-            <ExternalLink className="h-4 w-4" />
-          </Button>
-        )}
-        {nexusLinks.length > 0 && (
-          <span className="tadeon-sheet-nexus-links" title="Páginas do Nexus ligadas à ficha">
-            <Link2 aria-hidden="true" /> {nexusLinks.length}
-          </span>
+        {compact ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                aria-label="Ferramentas da ficha"
+                title="Ferramentas da ficha"
+              >
+                <Ellipsis className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="tdv-sheet-tools" aria-label="Ferramentas da ficha">
+              <p>Ficha conectada</p>
+              {secondaryActions}
+            </PopoverContent>
+          </Popover>
+        ) : (
+          secondaryActions
         )}
       </div>
 
