@@ -1,5 +1,13 @@
+import { TdvRecordCollection } from "./tdv2-retained-tools";
 import { TdvAnchorSeal } from "./tdv2-visual-instruments";
-import { LayoutPanelLeft, UserRound, Activity, Layers3, Sprout } from "lucide-react";
+import {
+  Shield as ShieldIcon,
+  LayoutPanelLeft,
+  UserRound,
+  Activity,
+  Layers3,
+  Sprout,
+} from "lucide-react";
 import { TdvCreationLoom, TdvFamiliarities } from "./tdv2-creation-loom";
 import { TdvPlayPresence } from "./tdv2-play-presence";
 import { TdvCompetency, TdvDevelopment, MATRIX_CATEGORIES } from "./tdv2-competencies";
@@ -11,8 +19,9 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import AttributeRadar from "./attribute-radar";
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type CSSProperties } from "react";
 import {
+  TdvAction,
   TdvDisclosure,
   TdvField,
   TdvSelect,
@@ -25,7 +34,6 @@ import {
   TdvGuard,
   TdvLinkUse,
   TdvOutcome,
-  TdvRecordActions,
   TdvExpressionUse,
   TdvActiveExpressions,
 } from "./tdv2-procedures";
@@ -40,11 +48,13 @@ import {
   LINK_STATES,
   MATRICES,
   PILLARS,
-  RECORD_FIELDS,
   anchor,
   resettle,
   stabilize,
-  addMilestone,
+  grantMilestone,
+  reverseProgression,
+  allocateCreation,
+  creationErrors,
   constitution,
   conditionImpact,
   capabilityConditions,
@@ -53,7 +63,6 @@ import {
   uid,
   type Matrix,
   type TdvCharacter,
-  type TdvRecord,
 } from "@/lib/tdv2";
 import { toast } from "sonner";
 
@@ -62,7 +71,7 @@ export function Tdv2Sheet({
   name = "Personagem",
   presentation = "edit",
   character: incoming,
-  onChange,
+  onChange: onPersist,
   canEdit,
   isMaster,
   personaExtra,
@@ -81,19 +90,20 @@ export function Tdv2Sheet({
   narrative?: ReactNode;
   preferenceKey?: string;
 }) {
+  const [initialDraft, setInitialDraft] = useState<TdvCharacter | null>(null);
+  const source = initialDraft ?? incoming;
   const c =
-    incoming.ready || incoming.creation
-      ? incoming
-      : { ...incoming, creation: { groupReason: "", familiarities: [], reviewed: false } };
+    source.ready || source.creation
+      ? source
+      : { ...source, creation: { groupReason: "", familiarities: [], reviewed: false } };
+  const onChange = (value: TdvCharacter) =>
+    initialDraft ? setInitialDraft(value) : onPersist(value);
   const [tab, setTab] = useState(c.ready ? "constituicao" : "pessoa"),
-    [event, setEvent] = useState(""),
-    [incorporation, setIncorporation] = useState(""),
     [reason, setReason] = useState(""),
     [kind, setKind] = useState("Matriz"),
     [target, setTarget] = useState<string>(MATRICES[0]),
     [cost, setCost] = useState(4),
-    [transcendent, setTranscendent] = useState(false),
-    [recordKind, setRecordKind] = useState<TdvRecord["kind"]>("Lavor");
+    [transcendent, setTranscendent] = useState(false);
   const [developmentOpen, setDevelopmentOpen] = useState(false),
     [expressionUse, setExpressionUse] = useState<string | null>(null),
     [skillSearch, setSkillSearch] = useState(""),
@@ -164,7 +174,26 @@ export function Tdv2Sheet({
       toast.error((e as Error).message);
     }
   };
-  const FaceField = c.ready ? TdvInscription : TdvField;
+  const FaceField = TdvInscription;
+  const initialUnlocked = !c.ready || Boolean(initialDraft);
+  const mayGrantMilestone = isMaster || Boolean(c.progression?.allowMilestones);
+  const allocationPossible = (name: string, grade: number, matrix: boolean) => {
+    try {
+      allocateCreation(c, name, grade, matrix);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const matrixAllocation = `${6 - Object.values(c.matrices).reduce((sum, value) => sum + value - 1, 0)} avanços restantes · duas d10 e duas d8`;
+  const skillAllocation = `${2 - Object.values(c.alinhavos).filter((n) => n === 2).length} escolhas d8 · ${4 - Object.values(c.alinhavos).filter((n) => n === 1).length} escolhas d6`;
+  const conditionSeverity = c.conditions.some((item) => item.intensity === "Crítica")
+    ? "Crítica"
+    : c.conditions.some((item) => item.intensity === "Grave")
+      ? "Grave"
+      : c.conditions.length
+        ? "Leve"
+        : "Nenhuma";
   const face = (key: "origin" | "occupation" | "conviction" | "limit", value: string) =>
     upd("face", { ...c.face, [key]: value });
   const activeTab = presentation === "game" ? gameTab : tab;
@@ -172,6 +201,13 @@ export function Tdv2Sheet({
     <div
       className="tadeon-tdv2-sheet"
       data-folio={activeTab}
+      data-severity={conditionSeverity}
+      style={
+        {
+          "--equilibrium-tint": c.equilibrium < 0 ? "242 88 70" : "244 205 62",
+          "--equilibrium-strength": Math.abs(c.equilibrium) / 100,
+        } as CSSProperties
+      }
       data-presentation={presentation}
       data-game-profile={gameProfile}
     >
@@ -194,6 +230,34 @@ export function Tdv2Sheet({
                 {label}
               </button>
             ))}
+          </div>
+        )}
+        {c.ready && c.progression?.allowCreation && !initialDraft && (
+          <Button
+            variant="outline"
+            disabled={!canEdit || c.investments.length > 0}
+            onClick={() => setInitialDraft(c)}
+          >
+            Rever escolhas iniciais
+          </Button>
+        )}
+        {initialDraft && (
+          <div className="tdv-allocation-status">
+            <p>Revisão das escolhas · alterações ainda não salvas</p>
+            <div className="tdv-actions">
+              <Button variant="ghost" onClick={() => setInitialDraft(null)}>
+                Cancelar revisão
+              </Button>
+              <Button
+                disabled={creationErrors(c).length > 0}
+                onClick={() => {
+                  onPersist(c);
+                  setInitialDraft(null);
+                }}
+              >
+                Salvar escolhas iniciais
+              </Button>
+            </div>
           </div>
         )}
         <TdvPlayPresence
@@ -228,7 +292,7 @@ export function Tdv2Sheet({
                 ["constituicao", "Constituição", "Ficha", LayoutPanelLeft],
                 ["pessoa", "Pessoa", "Pessoa", UserRound],
                 ["acao", "Ação", "Cena", Activity],
-                ["expressao", "Expressão", "Repertório", Layers3],
+                ["expressao", "Expressão", "Expressão", Layers3],
                 ["percurso", "Percurso", "Percurso", Sprout],
               ] as const
             ).map(([value, label, compact, Icon]) => (
@@ -261,11 +325,9 @@ export function Tdv2Sheet({
                       />
                     ))}
                   </div>
-                  <details className="tdv-disclosure">
-                    <summary>
-                      Marca · {c.face.mark.trigger ? "transformação registrada" : "não manifestada"}
-                    </summary>
-                    <div className="tdv-grid">
+                  <div className="tdv-mark-reading">
+                    <h3>Marca</h3>
+                    <div className="tdv-grid tdv-grid--identity">
                       {(
                         [
                           ["trigger", "Gatilho"],
@@ -273,18 +335,18 @@ export function Tdv2Sheet({
                           ["residue", "Resíduo"],
                         ] as const
                       ).map(([key, label]) => (
-                        <TdvField
+                        <TdvInscription
                           key={key}
                           label={label}
                           value={c.face.mark[key]}
-                          onChange={(v) =>
-                            upd("face", { ...c.face, mark: { ...c.face.mark, [key]: v } })
-                          }
                           disabled={disabled}
+                          onChange={(value) =>
+                            upd("face", { ...c.face, mark: { ...c.face.mark, [key]: value } })
+                          }
                         />
                       ))}
                     </div>
-                  </details>
+                  </div>
                 </Section>
               </div>
               <Section variant="folio" id="tdv-ancora" title="Âncora">
@@ -297,24 +359,26 @@ export function Tdv2Sheet({
                   <span>{c.face.anchor.pillar}</span>
                 </div>
                 <div className="tdv-anchor">
-                  <div className="tdv-anchor-foundation">
-                    <div className="tdv-anchor-rose">
+                  <div className="tdv-anchor-foundation" data-locked={!initialUnlocked}>
+                    <div className={initialUnlocked ? "tdv-anchor-rose" : "tdv-anchor-portrait"}>
                       <TdvAnchorSeal shaken={c.face.anchor.shaken} pillar={c.face.anchor.pillar} />
-                      <TdvChoices
-                        label="Pilar escolhido como Âncora"
-                        value={c.face.anchor.pillar}
-                        options={PILLARS}
-                        onChange={(v) =>
-                          upd("face", {
-                            ...c.face,
-                            anchor: {
-                              ...c.face.anchor,
-                              pillar: v as TdvCharacter["face"]["anchor"]["pillar"],
-                            },
-                          })
-                        }
-                        disabled={disabled}
-                      />
+                      {initialUnlocked && (
+                        <TdvChoices
+                          label="Pilar escolhido como Âncora"
+                          value={c.face.anchor.pillar}
+                          options={PILLARS}
+                          onChange={(v) =>
+                            upd("face", {
+                              ...c.face,
+                              anchor: {
+                                ...c.face.anchor,
+                                pillar: v as TdvCharacter["face"]["anchor"]["pillar"],
+                              },
+                            })
+                          }
+                          disabled={disabled}
+                        />
+                      )}
                     </div>
                     <FaceField
                       label="A que parte de mim consigo retornar?"
@@ -325,12 +389,7 @@ export function Tdv2Sheet({
                       disabled={disabled}
                     />
                   </div>
-                  <TdvDisclosure initiallyOpen={false} className="tdv-anchor-operation">
-                    <summary>
-                      {c.face.anchor.shaken
-                        ? "Reassentar · registrar retorno"
-                        : "Ancorar · sustentar ou redirecionar"}
-                    </summary>
+                  <TdvAction title={c.face.anchor.shaken ? "Reassentar" : "Ancorar"}>
                     <div className="tdv-anchor-operation__body">
                       <p className="tdv-note">
                         Ancorar sustenta ou redireciona uma consequência plausível; não a apaga.
@@ -379,7 +438,7 @@ export function Tdv2Sheet({
                           : "Ancorar e abalar Âncora"}
                       </Button>
                     </div>
-                  </TdvDisclosure>
+                  </TdvAction>
                 </div>
               </Section>
               {personaExtra}
@@ -432,7 +491,7 @@ export function Tdv2Sheet({
                             ["tension", "Condição de tensão"],
                           ] as const
                         ).map(([key, label]) => (
-                          <TdvField
+                          <TdvInscription
                             key={key}
                             label={`${label} do vínculo ${index + 1}`}
                             value={link[key]}
@@ -512,12 +571,7 @@ export function Tdv2Sheet({
               </Button>
             </Section>
             {c.creation && (
-              <Section
-                variant="folio"
-                id="tdv-grupo"
-                title="Laço com a primeira situação"
-                emblem="vinculos"
-              >
+              <Section variant="folio" id="tdv-grupo" title="Implicação" emblem="vinculos">
                 <TdvInscription
                   label="Razão para entrar na primeira situação"
                   value={c.creation.groupReason}
@@ -529,9 +583,15 @@ export function Tdv2Sheet({
           </TabsContent>
           <TabsContent value="constituicao" data-sheet-content>
             <Section variant="folio" id="tdv-constituicao" title="Matrizes e Alinhavos">
+              {initialUnlocked && (
+                <p className="tdv-allocation-status" role="status">
+                  Matrizes · {matrixAllocation}
+                  <br />
+                  Alinhavos · {skillAllocation}
+                </p>
+              )}
               <div className="tdv-constitution-instruments">
-                <details className="tdv-radar-view">
-                  <summary>Ver distribuição</summary>
+                <div className="tdv-radar-view">
                   <div className="tadeon-attribute-radar">
                     <AttributeRadar
                       title="Distribuição das Matrizes"
@@ -540,10 +600,14 @@ export function Tdv2Sheet({
                       }
                       color="#a397bf"
                       tickColor="#e9e3d5"
-                      data={MATRICES.map((attr) => ({ attr, value: stats.matrices[attr] }))}
+                      data={MATRICES.map((attr, index) => ({
+                        attr,
+                        value: stats.matrices[attr],
+                        color: ["#f38d80", "#70d8e3", "#bd9bff", "#bad876"][index],
+                      }))}
                     />
                   </div>
-                </details>
+                </div>
                 <div className="tdv-matrices">
                   {MATRICES.map((matrix) => (
                     <TdvCompetency
@@ -552,21 +616,20 @@ export function Tdv2Sheet({
                       grade={stats.matrices[matrix]}
                       matrix
                       shaken={c.scene.shaken.includes(matrix)}
-                      creation={!c.ready}
+                      creation={initialUnlocked}
                       disabled={disabled}
                       onRoll={() => setRollChoice({ matrix })}
                       onDevelop={() => develop(matrix, true)}
                       effects={impacts(matrix)}
-                      onChange={(v) => {
-                        const next = { ...c, matrices: { ...c.matrices, [matrix]: v } };
-                        onChange({ ...next, resources: constitution(next).maximums });
-                      }}
+                      allocationHint={matrixAllocation}
+                      choiceAllowed={(grade) => allocationPossible(matrix, grade, true)}
+                      onChange={(grade) => run(() => allocateCreation(c, matrix, grade, true))}
                     />
                   ))}
                 </div>
               </div>
               <div className="tdv-alinhavos-heading">
-                <h3>O que os gestos sabem</h3>
+                <h3>Alinhavos</h3>
                 <div className="tdv-capability-filters">
                   {presentation === "game" && c.ready && (
                     <button
@@ -613,24 +676,11 @@ export function Tdv2Sheet({
                     key={name}
                     name={name}
                     grade={stats.alinhavos[name] ?? 0}
-                    creation={!c.ready}
+                    creation={initialUnlocked}
                     disabled={disabled}
-                    onChange={(v) =>
-                      onChange({
-                        ...c,
-                        alinhavos: { ...c.alinhavos, [name]: v },
-                        ...(c.creation && v > 0
-                          ? {
-                              creation: {
-                                ...c.creation,
-                                familiarities: c.creation.familiarities.filter(
-                                  (value) => value !== name,
-                                ),
-                              },
-                            }
-                          : {}),
-                      })
-                    }
+                    allocationHint={skillAllocation}
+                    choiceAllowed={(grade) => allocationPossible(name, grade, false)}
+                    onChange={(grade) => run(() => allocateCreation(c, name, grade, false))}
                     onRoll={() => setRollChoice({ alinhavo: name })}
                     onDevelop={() => develop(name, false)}
                     effects={impacts(name)}
@@ -642,11 +692,27 @@ export function Tdv2Sheet({
                   Limpar busca
                 </Button>
               )}
-              <TdvFamiliarities character={c} onChange={onChange} canEdit={canEdit} />
+              <TdvFamiliarities
+                character={c}
+                onChange={onChange}
+                canEdit={canEdit && initialUnlocked}
+              />
             </Section>
           </TabsContent>
           <TabsContent value="acao" data-sheet-content>
-            <Section variant="folio" id="tdv-protecao" title="Proteção e limites">
+            <Section variant="folio" id="tdv-protecao" title="Proteção">
+              <div className="tdv-guard-reading">
+                <ShieldIcon />
+                <div>
+                  <small>Guarda atual</small>
+                  <strong>{stats.guard ?? "Ausente"}</strong>
+                </div>
+                <span>
+                  {c.guard.broken
+                    ? "Sem proteção imediata"
+                    : c.guard.protectionSource || "Base de Cadência"}
+                </span>
+              </div>
               <dl className="tdv-defense">
                 {Object.entries(stats.defenses).map(([name, value]) => (
                   <div key={name}>
@@ -656,9 +722,9 @@ export function Tdv2Sheet({
                 ))}
               </dl>
               <TdvGuard character={c} onChange={onChange} canEdit={canEdit} />
-              <p>
-                Guarda atual: <strong>{stats.guard ?? "sem proteção imediata"}</strong>
-              </p>
+              {c.guard.totalCover && (
+                <p className="tdv-protection-note">Cobertura total · {c.guard.totalCover}</p>
+              )}
               {c.resources.pi === 0 && (
                 <p role="alert">
                   Colapso: registre Condição Crítica e transformação duradoura na Feição. Nenhum
@@ -714,231 +780,98 @@ export function Tdv2Sheet({
                 </div>
               )}
             </Section>
-            <details id="tdv-motor" className="tdv-disclosure tdv-optional-tools">
-              <summary>Resolver consequência ou consultar dados</summary>
-              <TdvOutcome character={c} onChange={onChange} canEdit={canEdit} />
-              <Button variant="ghost" onClick={() => setRollChoice({ matrix: "Nexo" })}>
-                Abrir dados opcionais
-              </Button>
-            </details>
-            <details className="tdv-disclosure tdv-scene-tools">
-              <summary>Recuperação e efeitos de cena</summary>
-              <Section variant="folio" id="tdv-cena" title="Continuidade da cena">
-                <p>
-                  Matrizes Abaladas: {c.scene.shaken.join(", ") || "nenhuma"}. Forçar a 0 PE:{" "}
-                  {c.scene.forcedAtZero ? "já utilizado" : "disponível, mediante contrapartida"}.
-                </p>
-                <Button
-                  disabled={disabled}
-                  variant="outline"
-                  onClick={() =>
-                    upd("scene", {
-                      ...c.scene,
-                      shaken: [],
-                      forcedAtZero: false,
-                      tests: [],
-                      paidEvents: [],
-                    })
-                  }
-                >
-                  Encerrar cena e liberar efeitos de cena
+            <div id="tdv-motor" className="tdv-scene-actions">
+              <TdvAction title="Consequência">
+                <TdvOutcome character={c} onChange={onChange} canEdit={canEdit} />
+                <Button variant="ghost" onClick={() => setRollChoice({ matrix: "Nexo" })}>
+                  Abrir dados opcionais
                 </Button>
-                <p className="tdv-note">
-                  Encerrar cena não recupera recursos, não remove Condições e não Reassenta a
-                  Âncora.
-                </p>
-              </Section>
-              <Section variant="folio" id="tdv-recuperacao" title="Recuperação">
-                <TdvSelect
-                  label="Profundidade da recuperação"
-                  value={recovery}
-                  options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
-                  onChange={setRecovery}
-                  disabled={disabled}
-                />
-                <TdvField
-                  label="Nova janela real de recuperação"
-                  value={window}
-                  onChange={setWindow}
-                  disabled={disabled}
-                />
-                <TdvCheck
-                  label="Houve cuidado corporal adequado"
-                  value={care}
-                  onChange={setCare}
-                  disabled={disabled}
-                />
-                <TdvCheck
-                  label="Houve reconstrução real da continuidade para PI pleno"
-                  value={rebuilt}
-                  onChange={setRebuilt}
-                  disabled={disabled}
-                />
-                <Button
-                  disabled={disabled || !c.ready}
-                  onClick={() =>
-                    run(() =>
-                      recover(
-                        c,
-                        recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
-                        care,
-                        rebuilt,
-                        window,
-                      ),
-                    )
-                  }
-                >
-                  Aplicar recuperação
-                </Button>
-                <p className="tdv-note">
-                  Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2
-                  só com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
-                </p>
-              </Section>
-            </details>
+              </TdvAction>
+              <TdvAction title="Cena e recuperação">
+                <Section variant="folio" id="tdv-cena" title="Continuidade da cena">
+                  <p>
+                    Matrizes Abaladas: {c.scene.shaken.join(", ") || "nenhuma"}. Forçar a 0 PE:{" "}
+                    {c.scene.forcedAtZero ? "já utilizado" : "disponível, mediante contrapartida"}.
+                  </p>
+                  <Button
+                    disabled={disabled}
+                    variant="outline"
+                    onClick={() =>
+                      upd("scene", {
+                        ...c.scene,
+                        shaken: [],
+                        forcedAtZero: false,
+                        tests: [],
+                        paidEvents: [],
+                      })
+                    }
+                  >
+                    Encerrar cena e liberar efeitos de cena
+                  </Button>
+                  <p className="tdv-note">
+                    Encerrar cena não recupera recursos, não remove Condições e não Reassenta a
+                    Âncora.
+                  </p>
+                </Section>
+                <Section variant="folio" id="tdv-recuperacao" title="Recuperação">
+                  <TdvSelect
+                    label="Profundidade da recuperação"
+                    value={recovery}
+                    options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
+                    onChange={setRecovery}
+                    disabled={disabled}
+                  />
+                  <TdvField
+                    label="Nova janela real de recuperação"
+                    value={window}
+                    onChange={setWindow}
+                    disabled={disabled}
+                  />
+                  <TdvCheck
+                    label="Houve cuidado corporal adequado"
+                    value={care}
+                    onChange={setCare}
+                    disabled={disabled}
+                  />
+                  <TdvCheck
+                    label="Houve reconstrução real da continuidade para PI pleno"
+                    value={rebuilt}
+                    onChange={setRebuilt}
+                    disabled={disabled}
+                  />
+                  <Button
+                    disabled={disabled || !c.ready}
+                    onClick={() =>
+                      run(() =>
+                        recover(
+                          c,
+                          recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
+                          care,
+                          rebuilt,
+                          window,
+                        ),
+                      )
+                    }
+                  >
+                    Aplicar recuperação
+                  </Button>
+                  <p className="tdv-note">
+                    Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2
+                    só com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
+                  </p>
+                </Section>
+              </TdvAction>
+            </div>
           </TabsContent>
           <TabsContent value="expressao" data-sheet-content>
             {presentation !== "game" && belongings}
             <TdvActiveExpressions character={c} onChange={onChange} canEdit={canEdit} />
-            <Section variant="folio" id="tdv-expressao" title="Repertório e Permanência">
-              <div className="tdv-actions">
-                <Button
-                  id="tdv-uso"
-                  variant="ghost"
-                  disabled={!c.ready}
-                  onClick={() => setExpressionUse("")}
-                >
-                  Expressar / Costurar
-                </Button>
-                <TdvSelect
-                  label="Mostrar repertório"
-                  value={recordKind}
-                  options={Object.keys(RECORD_FIELDS)}
-                  navigation
-                  onChange={(v) => setRecordKind(v as TdvRecord["kind"])}
-                />
-                <Button
-                  variant="outline"
-                  disabled={disabled || c.records.length >= 200}
-                  onClick={() =>
-                    upd("records", [
-                      ...c.records,
-                      {
-                        id: uid(),
-                        kind: recordKind,
-                        name: "",
-                        fields: Object.fromEntries(RECORD_FIELDS[recordKind].map((k) => [k, ""])),
-                      },
-                    ])
-                  }
-                >
-                  Adicionar registro
-                </Button>
-              </div>
-              <div className="tdv-repertoire-grid">
-                {c.records
-                  .filter((record) => record.kind === recordKind)
-                  .map((record, index) => (
-                    <TdvDisclosure
-                      key={record.id}
-                      initiallyOpen={!record.name}
-                      className={`tdv-repertoire-card tdv-repertoire-card--${record.kind.toLowerCase()}`}
-                    >
-                      <summary className="tdv-record-summary">
-                        <span className="tdv-record-summary__title">
-                          <span>
-                            <small>{record.kind}</small>
-                            <strong>{record.name || `Registro ${index + 1}`}</strong>
-                          </span>
-                        </span>
-                        {["Lavor", "Trama", "Fragmento", "Selo"].includes(record.kind) && (
-                          <button
-                            type="button"
-                            className="tdv-expression-quick"
-                            disabled={disabled || !c.ready}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              event.stopPropagation();
-                              setExpressionUse(record.id);
-                            }}
-                          >
-                            Usar {record.name || record.kind} ↗
-                          </button>
-                        )}
-                        {Object.entries(record.fields)
-                          .filter(([, value]) => value.trim())
-                          .slice(0, record.kind === "Lavor" ? 5 : 3)
-                          .map(([key, value]) => (
-                            <span className="tdv-record-summary__fact" key={key}>
-                              <b>{key}</b>
-                              {value}
-                            </span>
-                          ))}
-                      </summary>
-                      <TdvField
-                        label={`Nome do registro ${index + 1}`}
-                        value={record.name}
-                        short
-                        disabled={disabled}
-                        onChange={(v) =>
-                          upd(
-                            "records",
-                            c.records.map((x) => (x.id === record.id ? { ...x, name: v } : x)),
-                          )
-                        }
-                      />
-                      <div className="tdv-grid">
-                        {[
-                          ...new Set([
-                            ...RECORD_FIELDS[record.kind],
-                            ...Object.keys(record.fields),
-                          ]),
-                        ].map((field) => (
-                          <TdvField
-                            key={field}
-                            label={`${field} · registro ${index + 1}`}
-                            value={record.fields[field] || ""}
-                            disabled={disabled}
-                            onChange={(v) =>
-                              upd(
-                                "records",
-                                c.records.map((x) =>
-                                  x.id === record.id
-                                    ? { ...x, fields: { ...x.fields, [field]: v } }
-                                    : x,
-                                ),
-                              )
-                            }
-                          />
-                        ))}
-                      </div>
-                      <TdvRecordActions
-                        character={c}
-                        record={record}
-                        onChange={onChange}
-                        canEdit={canEdit}
-                      />
-                      <Button
-                        variant="ghost"
-                        disabled={disabled}
-                        onClick={() =>
-                          upd(
-                            "records",
-                            c.records.filter((x) => x.id !== record.id),
-                          )
-                        }
-                      >
-                        Remover registro {index + 1}
-                      </Button>
-                    </TdvDisclosure>
-                  ))}
-              </div>
-              <p className="tdv-note">
-                Registrar conteúdo não compra Lavor nem autoriza efeito extraordinário: aquisição
-                fica no histórico de PU; custos em PE e condições são os escritos no próprio
-                conteúdo.
-              </p>
-            </Section>
+            <TdvRecordCollection
+              character={c}
+              onChange={onChange}
+              canEdit={canEdit}
+              onUse={setExpressionUse}
+            />
             {presentation === "game" && (
               <TdvDisclosure initiallyOpen={false}>
                 <summary>Equipamento e inventário</summary>
@@ -947,69 +880,102 @@ export function Tdv2Sheet({
             )}
           </TabsContent>
           <TabsContent value="percurso" data-sheet-content>
-            <Section
-              variant="folio"
-              id="tdv-desenvolvimento"
-              title="Desenvolvimento e Ponto de Urdume"
-            >
+            <Section variant="folio" id="tdv-desenvolvimento" title="Desenvolvimento e PU">
               <TdvDevelopment
                 percent={stats.development}
                 available={stats.pu}
                 spent={stats.spent}
               />
-              {isMaster && (
-                <details className="tdv-disclosure">
-                  <summary>Reconhecer um Marco</summary>
-                  <div className="tdv-grid">
-                    <TdvField label="Acontecimento do Marco" value={event} onChange={setEvent} />
-                    <TdvField
-                      label="Mudança incorporada"
-                      value={incorporation}
-                      onChange={setIncorporation}
-                    />
-                  </div>
+              <div className="tdv-milestone-actions">
+                {mayGrantMilestone && (
                   <Button
                     disabled={disabled || !c.ready || c.milestones.length >= 20}
-                    onClick={() => run(() => addMilestone(c, event, incorporation))}
+                    onClick={() => run(() => grantMilestone(c))}
                   >
                     Conceder Marco · +5% e 2 PU
                   </Button>
-                </details>
-              )}
-              <div className="tdv-development-actions">
-                {(
-                  [
-                    ["Matriz", "Aprofundar uma Matriz", "Categoria atual + 3 PU"],
-                    ["Alinhavo", "Praticar um Alinhavo", "2 PU por grau"],
-                    ["Lavor", "Incorporar um Lavor", "4 ou 6 PU"],
-                    ["Ampliação", "Ampliar uma estrutura", "3 a 7 PU"],
-                  ] as const
-                ).map(([value, label, price]) => (
-                  <button
-                    type="button"
-                    key={value}
-                    disabled={disabled || !c.ready}
-                    onClick={() => {
-                      setKind(value);
-                      setTarget(
-                        value === "Matriz" ? MATRICES[0] : value === "Alinhavo" ? ALINHAVOS[0] : "",
-                      );
-                      setReason("");
-                      setTranscendent(false);
-                      setDevelopmentOpen(true);
-                    }}
-                  >
-                    <span>{label}</span>
-                    <small>{price}</small>
-                    <span aria-hidden="true">↗</span>
-                  </button>
-                ))}
+                )}
+                {isMaster && (
+                  <TdvAction title="Correções e permissões">
+                    <p>
+                      Corrigir preserva o registro anterior. Um Marco com PU já investidos exige
+                      reverter o investimento primeiro.
+                    </p>
+                    <div className="tdv-actions">
+                      <Button
+                        disabled={disabled || !c.milestones.length || stats.pu < 2}
+                        onClick={() => run(() => reverseProgression(c, "Marco"))}
+                      >
+                        Reverter último Marco
+                      </Button>
+                      <Button
+                        disabled={disabled || !c.investments.length}
+                        onClick={() => run(() => reverseProgression(c, "Investimento"))}
+                      >
+                        Reverter último investimento
+                      </Button>
+                    </div>
+                    <TdvCheck
+                      label="Autorizar jogador a conceder Marcos nesta ficha"
+                      value={Boolean(c.progression?.allowMilestones)}
+                      disabled={disabled}
+                      onChange={(value) =>
+                        upd("progression", {
+                          allowCreation: c.progression?.allowCreation ?? false,
+                          allowMilestones: value,
+                        })
+                      }
+                    />
+                    <TdvCheck
+                      label="Reabrir escolhas iniciais com autorização do mestre"
+                      value={Boolean(c.progression?.allowCreation)}
+                      disabled={disabled || c.investments.length > 0}
+                      onChange={(value) => {
+                        if (!value) {
+                          const errors = creationErrors(c);
+                          if (errors.length) {
+                            toast.error(errors.join(" "));
+                            return;
+                          }
+                        }
+                        upd("progression", {
+                          allowMilestones: c.progression?.allowMilestones ?? false,
+                          allowCreation: value,
+                        });
+                      }}
+                    />
+                    <p className="tdv-note">
+                      A distribuição inicial só pode ser corrigida sem investimentos ativos. A
+                      autorização permanece até ser revogada pelo mestre.
+                    </p>
+                  </TdvAction>
+                )}
               </div>
+              <Button
+                variant="outline"
+                disabled={disabled || !c.ready || stats.pu < 2}
+                onClick={() => {
+                  setKind("Matriz");
+                  setTarget(MATRICES[0]);
+                  setReason("");
+                  setTranscendent(false);
+                  setDevelopmentOpen(true);
+                }}
+              >
+                Investir PU
+              </Button>
               <details className="tdv-disclosure">
                 <summary>Trajetória incorporada</summary>
                 {c.milestones.map((m, i) => (
                   <p key={m.id}>
                     {(i + 1) * 5}% · {m.event} · {m.incorporation}
+                  </p>
+                ))}
+                {c.corrections?.map((item) => (
+                  <p key={item.id}>
+                    {item.kind} revertido · {item.at}
+                    <br />
+                    <code>{item.payload}</code>
                   </p>
                 ))}
                 {c.investments.map((i) => (

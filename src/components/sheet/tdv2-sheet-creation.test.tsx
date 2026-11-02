@@ -9,7 +9,7 @@ it("offers the full creation review on an older draft without changing its saved
   const change = vi.fn();
   const html = renderToStaticMarkup(<Tdv2Sheet character={character} onChange={change} canEdit isMaster />);
   expect(html).toContain("Razão para entrar na primeira situação");
-  expect(html).toContain("Conferi permissões ficcionais");
+  expect(html).toContain("Revisar criação");
   expect(JSON.stringify(character)).toBe(before);
   expect(change).not.toHaveBeenCalled();
 });

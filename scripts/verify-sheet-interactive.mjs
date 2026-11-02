@@ -10,6 +10,8 @@ export async function verifyInteractive({
   geometry,
   saved,
   assert,
+  resetCharacter,
+  makeCharacter,
 }) {
   const tab = (name) => page.getByRole("tab", { name, exact: true }).click();
   const top = () =>
@@ -106,6 +108,61 @@ export async function verifyInteractive({
   );
   await page.getByRole("button", { name: "Limpar busca", exact: true }).click();
   if (role === "mestre") {
+    await tab("Pessoa");
+    const before = writes.length;
+    await page.getByRole("button", { name: "Editar Origem", exact: true }).click();
+    let inline = page.getByRole("textbox", { name: "Origem", exact: true });
+    await inline.fill("Rascunho cancelado");
+    await inline.press("Escape");
+    assert(writes.length === before, "Escape cancels inline text");
+    await page.getByRole("button", { name: "Editar Origem", exact: true }).click();
+    inline = page.getByRole("textbox", { name: "Origem", exact: true });
+    await inline.fill("O cais restaurado");
+    await inline.press("Control+Enter");
+    await saved(() => getRow().tdv2_data.face.origin === "O cais restaurado");
+    assert(
+      await page.getByRole("button", { name: "Editar Origem", exact: true }).isVisible(),
+      "Inline returns to reading",
+    );
+    await tab("Percurso");
+    await page.getByRole("button", { name: "Conceder Marco · +5% e 2 PU", exact: true }).click();
+    await saved(() => getRow().tdv2_data.milestones.length === 1);
+    await page.getByRole("button", { name: "Correções e permissões", exact: true }).click();
+    popup = page.getByRole("dialog", { name: "Correções e permissões", exact: true });
+    await fit(popup);
+    await geometry("interactive-master-controls");
+    await popup.getByRole("button", { name: "Reverter último Marco", exact: true }).click();
+    await saved(() => getRow().tdv2_data.milestones.length === 0);
+    assert(getRow().tdv2_data.corrections.length === 1, "Marco correction archived");
+    await close(popup);
+    await tab("Expressão");
+    assert(
+      await page.getByRole("heading", { name: "Lavores", exact: true }).isVisible(),
+      "Lavores have their own home",
+    );
+    assert(
+      await page.getByRole("heading", { name: "Tramas e Fragmentos", exact: true }).isVisible(),
+      "Tramas/Fragmentos have their own home",
+    );
+    for (const [action, title, name] of [
+      ["Adicionar arma", "Nova arma", "Lâmina de teste"],
+      ["Adicionar item", "Novo item", "Corda de teste"],
+    ]) {
+      await page.getByRole("button", { name: action, exact: true }).click();
+      popup = page.getByRole("dialog", { name: title, exact: true });
+      await fit(popup);
+      await geometry(action === "Adicionar arma" ? "interactive-weapon" : "interactive-inventory");
+      await popup.getByRole("textbox", { name: "Nome", exact: true }).fill(name);
+      await popup.getByRole("button", { name: "Adicionar", exact: true }).click();
+      await saved(() => getRow().tdv2_data.records.some((record) => record.name === name));
+    }
+    await tab("Ação");
+    await page.getByRole("button", { name: "Proteção e cobertura", exact: true }).click();
+    popup = page.getByRole("dialog", { name: "Proteção e cobertura", exact: true });
+    await fit(popup);
+    await geometry("interactive-protection");
+    await close(popup);
+    await tab("Constituição");
     await page.getByRole("button", { name: "Retirar 1 PV", exact: true }).click();
     await saved(() => getRow().tdv2_data.resources.pv === 9);
     for (let i = 0; i < 4; i++)
@@ -173,9 +230,7 @@ export async function verifyInteractive({
   await top();
   await geometry("interactive-hybrid");
   if (role === "mestre") {
-    await page
-      .getByRole("button", { name: "Usar Ler os vestígios do cais ↗", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Usar Ler os vestígios do cais", exact: true }).click();
     popup = page.getByRole("dialog", { name: "Ler os vestígios do cais", exact: true });
     await fit(popup);
     await geometry("interactive-expression");
@@ -204,6 +259,65 @@ export async function verifyInteractive({
       "true",
     "Scoped destination restored",
   );
+  if (role === "mestre" && [320, 1440].includes(width)) {
+    const fresh = makeCharacter();
+    fresh.face = getRow().tdv2_data.face;
+    fresh.creation = { groupReason: "Proteger o cais", familiarities: [], reviewed: true };
+    resetCharacter(fresh);
+    await page.goto(page.url().split("?")[0] + "?mode=edit");
+    await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).waitFor();
+    await tab("Constituição");
+    assert(
+      (await page.locator('.tdv-matrices [data-grade="1"]').count()) === 4,
+      "Creation starts four d6 matrices",
+    );
+    const pick = async (name, grade, matrix) => {
+      await page
+        .getByRole("button", {
+          name: new RegExp("^" + (matrix ? "Valor" : "Grau inicial") + " de " + name + ":"),
+        })
+        .click();
+      await page
+        .getByRole("group", {
+          name: (matrix ? "Valor" : "Grau inicial") + " de " + name,
+          exact: true,
+        })
+        .getByRole("button", { name: new RegExp("^" + grade + " ·") })
+        .click();
+    };
+    await pick("Ímpeto", 3, true);
+    await pick("Cadência", 3, true);
+    await page.getByRole("button", { name: /^Valor de Nexo:/ }).click();
+    popup = page.getByRole("dialog", { name: "Escolher Nexo", exact: true });
+    assert(
+      await popup.getByRole("button", { name: /^3 ·/ }).isDisabled(),
+      "Third d10 allocation blocked",
+    );
+    await close(popup);
+    await pick("Nexo", 2, true);
+    await pick("Lastro", 2, true);
+    for (const [name, grade] of [
+      ["Engenharia", 2],
+      ["Investigação", 2],
+      ["Atletismo", 1],
+      ["Percepção", 1],
+      ["Sociedade", 1],
+      ["Iniciativa", 1],
+    ])
+      await pick(name, grade, false);
+    await page.getByRole("button", { name: /^Familiaridades ·/ }).click();
+    popup = page.getByRole("dialog", { name: /^Familiaridades ·/ });
+    await fit(popup);
+    await geometry("interactive-familiarities");
+    await popup.getByRole("button", { name: /Luta/ }).click();
+    await close(popup);
+    await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).click();
+    await saved(() => getRow().tdv2_data.ready);
+    assert(
+      (await page.getByRole("button", { name: /^Valor de Nexo:/ }).count()) === 0,
+      "Completed creation locks distribution",
+    );
+  }
   if (role === "espectador") assert(writes.length === 0, "Readonly no writes");
   await context.close();
 }

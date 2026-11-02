@@ -2,7 +2,7 @@ import { memo, useId } from "react";
 
 interface AttributeRadarProps {
   color: string;
-  data: { attr: string; value: number }[];
+  data: { attr: string; value: number; color?: string }[];
   fillOpacity?: number;
   tickColor: string;
   title?: string;
@@ -59,32 +59,56 @@ function AttributeRadar({
             {[1, 2, 3, 4, 5].map((level) => (
               <polygon key={level} points={points((90 * level) / 5)} />
             ))}
-            {data.map(({ attr }, index) => {
+            {data.map(({ attr, color: branchColor }, index) => {
               const p = point(index, 90);
-              return <line key={attr} x1="125" y1="125" x2={p.x} y2={p.y} />;
+              return (
+                <line
+                  key={attr}
+                  x1="125"
+                  y1="125"
+                  x2={p.x}
+                  y2={p.y}
+                  stroke={branchColor ?? color}
+                  strokeOpacity={branchColor ? 0.65 : 0.22}
+                />
+              );
             })}
           </g>
+          {data.some((item) => item.color) &&
+            values.map((p, index) => {
+              const next = values[(index + 1) % values.length];
+              const previous = values[(index + values.length - 1) % values.length];
+              return (
+                <polygon
+                  key={data[index].attr}
+                  points={`125,125 ${(previous.x + p.x) / 2},${(previous.y + p.y) / 2} ${p.x},${p.y} ${(next.x + p.x) / 2},${(next.y + p.y) / 2}`}
+                  fill={data[index].color ?? color}
+                  fillOpacity={0.24}
+                  aria-hidden="true"
+                />
+              );
+            })}
           <polygon
             points={values.map((p) => `${p.x},${p.y}`).join(" ")}
             fill={color}
-            fillOpacity={fillOpacity}
+            fillOpacity={data.some((item) => item.color) ? 0.04 : fillOpacity}
             stroke={color}
             strokeWidth="1.8"
             strokeLinejoin="round"
             aria-hidden="true"
           />
           <g aria-hidden="true">
-            {data.map(({ attr, value }, index) => {
+            {data.map(({ attr, value, color: branchColor }, index) => {
               const label = point(index, 108),
                 p = values[index];
               return (
                 <g key={attr}>
-                  <circle cx={p.x} cy={p.y} r="2" fill={tickColor} />
+                  <circle cx={p.x} cy={p.y} r="3" fill={branchColor ?? tickColor} />
                   <text
                     x={label.x}
                     y={label.y}
                     textAnchor={label.x > 126 ? "end" : label.x < 124 ? "start" : "middle"}
-                    fill={tickColor}
+                    fill={branchColor ?? tickColor}
                     fontFamily="var(--font-cinzel), Georgia, serif"
                     fontSize="16"
                     fontWeight="650"

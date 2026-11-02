@@ -31,10 +31,12 @@ export function SelectionPlate({
     const position = (selected: HTMLElement) => {
       const bounds = group.getBoundingClientRect();
       const target = selected.getBoundingClientRect();
-      const x = target.left - bounds.left + group.scrollLeft - group.clientLeft;
-      const y = target.top - bounds.top + group.scrollTop - group.clientTop;
-      element.style.width = `${target.width}px`;
-      element.style.height = `${target.height}px`;
+      const scaleX = group.offsetWidth ? bounds.width / group.offsetWidth : 1;
+      const scaleY = group.offsetHeight ? bounds.height / group.offsetHeight : 1;
+      const x = (target.left - bounds.left) / scaleX + group.scrollLeft - group.clientLeft;
+      const y = (target.top - bounds.top) / scaleY + group.scrollTop - group.clientTop;
+      element.style.width = `${target.width / scaleX}px`;
+      element.style.height = `${target.height / scaleY}px`;
       element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       element.dataset.ready = "true";
     };

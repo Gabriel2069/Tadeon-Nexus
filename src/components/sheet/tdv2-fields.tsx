@@ -2,9 +2,16 @@ import { useId, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-/** Reading is the resting state; writing is a deliberate, cancellable operation. */
+/** Text belongs to the character surface; blur commits, Escape cancels. */
 export function TdvInscription({
   label,
   value,
@@ -18,75 +25,83 @@ export function TdvInscription({
   disabled?: boolean;
   short?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   const id = useId();
-  const reading = (
-    <>
-      <span className="tdv-inscription__label">{label}</span>
-      <strong id={`${id}-reading`}>{value || "Por definir"}</strong>
-      {!disabled && <small aria-hidden="true">↗</small>}
-    </>
-  );
-  if (disabled)
-    return (
-      <div className="tdv-inscription" data-empty={!value}>
-        {reading}
-      </div>
-    );
   return (
-    <Popover
-      open={open}
-      onOpenChange={(next) => {
-        if (next) setDraft(value);
-        setOpen(next);
-      }}
-    >
-      <PopoverTrigger asChild>
+    <div className="tdv-inscription" data-empty={!value} data-writing={editing || undefined}>
+      <label className="tdv-inscription__label" htmlFor={id}>
+        {label}
+      </label>
+      {disabled ? (
+        <strong>{value || "Por definir"}</strong>
+      ) : editing ? (
+        <Textarea
+          id={id}
+          autoFocus
+          aria-label={label}
+          value={draft}
+          rows={short ? 1 : 3}
+          className="tdv-inline-writing"
+          onChange={(event) => setDraft(event.target.value)}
+          onBlur={() => {
+            if (draft !== value) onChange(draft);
+            setEditing(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              event.preventDefault();
+              setDraft(value);
+              setEditing(false);
+            }
+            if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
+              event.currentTarget.blur();
+          }}
+        />
+      ) : (
         <button
+          id={id}
           type="button"
-          className="tdv-inscription"
-          data-empty={!value}
           aria-label={`Editar ${label}`}
-          aria-describedby={`${id}-reading`}
+          onClick={() => {
+            setDraft(value);
+            setEditing(true);
+          }}
         >
-          {reading}
+          <strong>{value || "Por definir"}</strong>
         </button>
-      </PopoverTrigger>
-      <PopoverContent className="tdv-inscription-editor" aria-label={`Edição de ${label}`}>
-        <label className="tadeon-dossier-label" htmlFor={id}>
-          {label}
-        </label>
-        {short ? (
-          <Input
-            className="tadeon-dossier-field"
-            id={id}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-          />
-        ) : (
-          <Textarea
-            className="tadeon-dossier-field"
-            id={id}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-          />
-        )}
-        <div className="tdv-actions">
-          <Button variant="ghost" onClick={() => setOpen(false)}>
-            Cancelar
-          </Button>
-          <Button
-            onClick={() => {
-              onChange(draft);
-              setOpen(false);
-            }}
-          >
-            Aplicar {label}
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
+  );
+}
+
+/** Occasional operations have their own temporary workspace, never a second card. */
+export function TdvAction({
+  title,
+  children,
+  disabled = false,
+  className = "",
+}: {
+  title: string;
+  children: ReactNode;
+  disabled?: boolean;
+  className?: string;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" disabled={disabled} className="tdv-context-action">
+          {title}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className={`tdv-operation-dialog ${className}`}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">{title} nesta personagem.</DialogDescription>
+        </DialogHeader>
+        <div className="tdv-operation-body">{children}</div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

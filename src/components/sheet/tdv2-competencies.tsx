@@ -1,3 +1,4 @@
+import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -33,6 +34,8 @@ export function TdvCompetency({
   onRoll,
   onDevelop,
   effects = [],
+  choiceAllowed,
+  allocationHint,
 }: {
   name: string;
   grade: number;
@@ -44,6 +47,8 @@ export function TdvCompetency({
   onRoll?: () => void;
   onDevelop?: () => void;
   effects?: { name: string; kind: string }[];
+  choiceAllowed?: (grade: number) => boolean;
+  allocationHint?: string;
 }) {
   const [open, setOpen] = useState(false);
   const state = matrix
@@ -53,8 +58,7 @@ export function TdvCompetency({
   const blocked = effects.some((effect) => effect.kind === "Impedimento");
   const face = (
     <span className="tdv-capability-die">
-      <small>d</small>
-      {DICE[grade]}
+      <TdvDie sides={DICE[grade]} />
     </span>
   );
   return (
@@ -80,12 +84,14 @@ export function TdvCompetency({
           </PopoverTrigger>
           <PopoverContent className="tdv-competency__choices" aria-label={`Escolher ${name}`}>
             <p>{name} · distribuição inicial</p>
+            <p className="tdv-note">{allocationHint} Devolva uma escolha para liberar espaço.</p>
             <div role="group" aria-label={matrix ? `Valor de ${name}` : `Grau inicial de ${name}`}>
               {(matrix ? [1, 2, 3] : [0, 1, 2]).map((value) => (
                 <Button
                   key={value}
                   variant="outline"
                   aria-pressed={grade === value}
+                  disabled={disabled || (choiceAllowed ? !choiceAllowed(value) : false)}
                   onClick={() => {
                     onChange?.(value);
                     setOpen(false);

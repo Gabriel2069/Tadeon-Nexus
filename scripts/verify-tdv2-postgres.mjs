@@ -311,6 +311,87 @@ assert.deepEqual(
   { COR: 3, MEN: 2 },
 );
 checks++;
+// DEC-031: delegated authority comes only from the stored master grant.
+await db.exec("reset role");
+await db.exec(
+  readFileSync("supabase/migrations/20261102153325_tdv_sheet_authorized_corrections.sql", "utf8"),
+);
+await auth(master);
+let authorized = { ...c, progression: { allowCreation: false, allowMilestones: false } };
+await update(authorized);
+await auth(player);
+await assert.rejects(() =>
+  update({ ...authorized, progression: { allowCreation: false, allowMilestones: true } }),
+);
+checks++;
+await assert.rejects(() => update(addMilestone(authorized, "Delegated", "Changed")));
+checks++;
+await auth(master);
+authorized.progression.allowMilestones = true;
+await update(authorized);
+await auth(player);
+const advanced = addMilestone(authorized, "Delegated", "Changed");
+await update(advanced);
+checks++;
+await assert.rejects(() => update({ ...advanced, milestones: advanced.milestones.slice(1) }));
+checks++;
+await assert.rejects(() =>
+  update({
+    ...advanced,
+    milestones: advanced.milestones.map((m, i) => (i ? m : { ...m, event: "Rewrite" })),
+  }),
+);
+checks++;
+await assert.rejects(() =>
+  update({
+    ...advanced,
+    face: { ...advanced.face, anchor: { ...advanced.face.anchor, pillar: "Origem" } },
+  }),
+);
+checks++;
+await auth(master);
+const reopened = {
+  ...advanced,
+  investments: [],
+  progression: { allowMilestones: false, allowCreation: true },
+};
+await update(reopened);
+await auth(player);
+await update({
+  ...reopened,
+  face: { ...reopened.face, anchor: { ...reopened.face.anchor, pillar: "Origem" } },
+});
+checks++;
+await assert.rejects(() =>
+  update({ ...reopened, progression: { allowMilestones: true, allowCreation: true } }),
+);
+checks++;
+await auth(master);
+await update({ ...reopened, progression: { allowMilestones: false, allowCreation: false } });
+await auth(player);
+await assert.rejects(() =>
+  update({
+    ...reopened,
+    face: { ...reopened.face, anchor: { ...reopened.face.anchor, pillar: "Origem" } },
+    progression: { allowMilestones: false, allowCreation: false },
+  }),
+);
+checks++;
+await assert.rejects(() =>
+  db.query(
+    "insert into character_sheets(id,owner_id,name,rules_version,tdv2_data) values($1,$2,$3,2,$4)",
+    [
+      "00000000-0000-4000-8000-000000000077",
+      player,
+      "Forged grant",
+      JSON.stringify({
+        ...newTdvCharacter(),
+        progression: { allowCreation: true, allowMilestones: false },
+      }),
+    ],
+  ),
+);
+checks++;
 await db.exec("reset role; set role anon");
 await assert.rejects(() => db.query("select * from character_sheets"));
 checks++;
@@ -319,7 +400,11 @@ console.log(
     passed: true,
     checks,
     engine: "PostgreSQL (PGlite)",
-    migrations: ["20261027093709_tdv_ii_versioned_rules", "20261027191353_tdv_ii_operational_play"],
+    migrations: [
+      "20261027093709_tdv_ii_versioned_rules",
+      "20261027191353_tdv_ii_operational_play",
+      "20261102153325_tdv_sheet_authorized_corrections",
+    ],
     legacyUnchanged: true,
   }),
 );

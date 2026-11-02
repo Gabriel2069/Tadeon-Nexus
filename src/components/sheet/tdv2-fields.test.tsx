@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { TdvChoices, TdvInscription } from "./tdv2-fields";
 afterEach(cleanup);
-it("keeps reading visible and commits an inscription only on apply", async () => {
+it("keeps reading visible and commits inline writing on blur and cancels with Escape", async () => {
   const change = vi.fn();
   render(<TdvInscription label="Convicção" value="Preservar testemunhos" onChange={change} />);
   expect(screen.queryByRole("textbox")).toBeNull();
@@ -12,13 +12,13 @@ it("keeps reading visible and commits an inscription only on apply", async () =>
     target: { value: "Preservar vidas" },
   });
   expect(change).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByText("Cancelar", { selector: "button" }));
-  await waitFor(() => expect(screen.queryByLabelText("Convicção")).toBeNull());
+  fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
+  expect(screen.queryByRole("textbox")).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Editar Convicção" }));
   const field = (await screen.findByLabelText("Convicção")) as HTMLTextAreaElement;
   expect(field.value).toBe("Preservar testemunhos");
   fireEvent.change(field, { target: { value: "Preservar vidas" } });
-  fireEvent.click(screen.getByText("Aplicar Convicção", { selector: "button" }));
+  fireEvent.blur(field);
   expect(change).toHaveBeenCalledExactlyOnceWith("Preservar vidas");
 });
 it("does not expose a writing action in read-only mode", () => {

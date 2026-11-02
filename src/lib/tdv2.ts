@@ -94,6 +94,18 @@ export const tdv2CharacterSchema = z
   .object({
     version: z.literal(2),
     ready: z.boolean(),
+    progression: z.object({ allowMilestones: z.boolean(), allowCreation: z.boolean() }).optional(),
+    corrections: z
+      .array(
+        z.object({
+          id: z.string(),
+          at: z.string(),
+          kind: z.enum(["Marco", "Investimento"]),
+          payload: text,
+        }),
+      )
+      .max(500)
+      .optional(),
     creation: z
       .object({
         groupReason: text,
@@ -348,6 +360,95 @@ export function addMilestone(c: TdvCharacter, event: string, incorporation: stri
   )
     throw new Error("O Marco precisa de acontecimento e incorporação; o limite é 100%.");
   return { ...c, milestones: [...c.milestones, { id: uid(), event, incorporation }] };
+}
+/** Creation has an allocation, not freely editable levels or a second PU currency. */
+export function allocateCreation(
+  c: TdvCharacter,
+  name: string,
+  grade: number,
+  matrix: boolean,
+): TdvCharacter {
+  if (c.ready && !c.progression?.allowCreation)
+    throw new Error("A criação está concluída. Solicite autorização ao mestre.");
+  if (c.investments.length)
+    throw new Error("Reverta os investimentos antes de corrigir a distribuição inicial.");
+  if (!Number.isInteger(grade)) throw new Error("Escolha um grau inteiro.");
+  let next: TdvCharacter;
+  if (matrix) {
+    if (!MATRICES.includes(name as Matrix) || grade < 1 || grade > 3)
+      throw new Error("Matriz inicial entre d6 e d10.");
+    next = { ...c, matrices: { ...c.matrices, [name]: grade } };
+    const values = Object.values(next.matrices);
+    if (
+      values.filter((value) => value === 3).length > 2 ||
+      values.reduce((sum, value) => sum + value - 1, 0) > 6
+    )
+      throw new Error(
+        "Distribua seis avanços: duas Matrizes d10 e duas d8. Devolva uma escolha para redistribuir.",
+      );
+  } else {
+    if (!ALINHAVOS.includes(name as (typeof ALINHAVOS)[number]) || grade < 0 || grade > 2)
+      throw new Error("Alinhavo inicial entre d4 e d8.");
+    next = {
+      ...c,
+      alinhavos: { ...c.alinhavos, [name]: grade },
+      ...(c.creation && grade > 0
+        ? {
+            creation: {
+              ...c.creation,
+              familiarities: c.creation.familiarities.filter((value) => value !== name),
+            },
+          }
+        : {}),
+    };
+    const values = ALINHAVOS.map((key) => next.alinhavos[key] ?? 0);
+    if (
+      values.filter((value) => value === 2).length > 2 ||
+      values.filter((value) => value === 1).length > 4
+    )
+      throw new Error(
+        "Há duas escolhas d8 e quatro escolhas d6. Devolva uma escolha para liberar a vaga.",
+      );
+  }
+  const maximums = constitution(next).maximums;
+  return {
+    ...next,
+    resources: c.ready
+      ? {
+          pv: Math.min(c.resources.pv, maximums.pv),
+          pi: Math.min(c.resources.pi, maximums.pi),
+          pe: Math.min(c.resources.pe, maximums.pe),
+        }
+      : maximums,
+  };
+}
+export function grantMilestone(c: TdvCharacter): TdvCharacter {
+  const number = c.milestones.length + 1;
+  return addMilestone(c, `Marco ${number}`, `Reconhecido na trajetória · ${number * 5}%`);
+}
+/** Corrections retain the previous record; spent PU can never become negative. */
+export function reverseProgression(c: TdvCharacter, kind: "Marco" | "Investimento"): TdvCharacter {
+  const record = kind === "Marco" ? c.milestones.at(-1) : c.investments.at(-1);
+  if (!record) throw new Error("Não há registro para reverter.");
+  const next = {
+    ...c,
+    ...(kind === "Marco"
+      ? { milestones: c.milestones.slice(0, -1) }
+      : { investments: c.investments.slice(0, -1) }),
+    corrections: [
+      ...(c.corrections ?? []),
+      { id: uid(), at: new Date().toISOString(), kind, payload: JSON.stringify(record) },
+    ],
+  };
+  const stats = constitution(next); // blocks reversal of a Marco whose PU are invested
+  return {
+    ...next,
+    resources: {
+      pv: Math.min(next.resources.pv, stats.maximums.pv),
+      pi: Math.min(next.resources.pi, stats.maximums.pi),
+      pe: Math.min(next.resources.pe, stats.maximums.pe),
+    },
+  };
 }
 export function addTension(c: TdvCharacter, amount: number): TdvCharacter {
   const total = c.tension + Math.trunc(amount);

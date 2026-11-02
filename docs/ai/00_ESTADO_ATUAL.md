@@ -2,6 +2,8 @@
 
 Verificado em 02/11/2026 (America/Sao_Paulo). Entrada curta de retomada; o registro único de tarefas e responsáveis é [project-continuity.json](../project-continuity.json).
 
+Checkpoint DEC-031: exposição como prioridade; quadros uniformes e escrita inline, Lavores/Tramas em casas próprias, criação limitada, Marcos diretos e autorização de revisão/delegação por guarda SQL. Fonte/gates/publicação próprios; QA reduzido por escopo. Ver [diferenças e limites](../v4/FICHA_LEITURA_E_ESCOLHAS.md).
+
 Checkpoint DEC-030: expandido padrão, recursos diretos, capacidades compactas e operações contextuais. Recomposto após indisponibilidade; fonte/gates/publicação da PR 321 são próprios. QA reduzido por instrução expressa de Tadeu, com amostra responsiva e regressões mecânicas. Ver [diferenças e limites](../v4/FICHA_PRANCHETA_INTERATIVA.md); não declarar V4 integral.
 
 Checkpoint DEC-029: PR 320 publicada em `172eafa`, HTTP200/SHA exato em 2026-11-02T02:12:26.777Z. Tadeu rejeitou a apresentação ainda semelhante a formulário. Nova composição da ficha em instrumentos de Feição, Âncora, vínculos, recursos, Equilíbrio, Motor e trajetória; criação pelos oito passos com implicação, revisão e familiaridades opcionais. Fonte, gates e publicação próprios: [diferenças/limites](../v4/FICHA_COMO_INSTRUMENTO.md). Não declarar V4 integral nem criar permissão gratuita de Lavor pelo cliente.

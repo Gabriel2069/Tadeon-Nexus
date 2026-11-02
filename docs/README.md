@@ -40,6 +40,7 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/FICHA_VISUAL_E_JOGO.md](v4/FICHA_VISUAL_E_JOGO.md) | active | Diferenças, destinos das funções, criação d6/d4, apresentação de jogo, provas e limites do lote DEC-028. |
 | [v4/FICHA_COMO_INSTRUMENTO.md](v4/FICHA_COMO_INSTRUMENTO.md) | active | Diferenças compositivas e funcionais, conciliação da criação, cobertura e limitações de DEC-029. |
 | [v4/FICHA_PRANCHETA_INTERATIVA.md](v4/FICHA_PRANCHETA_INTERATIVA.md) | active | Direção DEC-030, destinos de funções, condições explícitas e validação proporcional solicitada pelo usuário. |
+| [v4/FICHA_LEITURA_E_ESCOLHAS.md](v4/FICHA_LEITURA_E_ESCOLHAS.md) | active | Destinos, criação/progressão, autorização e limites de DEC-031. |
 
 ## Contratos e evidências
 
