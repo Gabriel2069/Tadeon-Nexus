@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { uid, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
+import { uid, constitution, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
 import {
   configureGuard,
   activateLink,
@@ -20,7 +20,7 @@ import {
   REPUTATION_WEIGHT,
   type ExpressionUse,
 } from "@/lib/tdv2-play";
-import { TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-fields";
+import { TdvAction, TdvDisclosure, TdvField, TdvSelect, TdvNumber, TdvCheck } from "./tdv2-fields";
 import { TdvTestPanel } from "./tdv2-test-panel";
 type Props = { character: TdvCharacter; onChange: (c: TdvCharacter) => void; canEdit: boolean };
 function commit(onChange: Props["onChange"], action: () => TdvCharacter) {
@@ -39,8 +39,7 @@ export function TdvGuard({ character: c, onChange, canEdit }: Props) {
     totalCover: c.guard.totalCover ?? "",
   });
   return (
-    <TdvDisclosure initiallyOpen={false}>
-      <summary>Proteção, cobertura e ausência de Guarda</summary>
+    <TdvAction title="Proteção e cobertura">
       <div className="tdv-grid">
         <TdvSelect
           label="Proteção ordinária combinada"
@@ -105,7 +104,7 @@ export function TdvGuard({ character: c, onChange, canEdit }: Props) {
       >
         Aplicar proteção declarada
       </Button>
-    </TdvDisclosure>
+    </TdvAction>
   );
 }
 export function TdvLinkUse({
@@ -118,8 +117,7 @@ export function TdvLinkUse({
     [effect, setEffect] = useState(""),
     [contribution, setContribution] = useState("");
   return (
-    <TdvDisclosure initiallyOpen={false}>
-      <summary>Mobilizar este Vínculo</summary>
+    <TdvAction title="Mobilizar vínculo">
       <TdvSelect
         label="Modo do Vínculo"
         value={mode}
@@ -149,7 +147,7 @@ export function TdvLinkUse({
       >
         Registrar uso do Vínculo
       </Button>
-    </TdvDisclosure>
+    </TdvAction>
   );
 }
 export function TdvOutcome({ character: c, onChange, canEdit }: Props) {
@@ -236,16 +234,17 @@ export function TdvRecordActions({
   if (!["Lavor", "Preparo", "Arma", "Equipamento", "Fragmento", "Reputação"].includes(r.kind))
     return null;
   return (
-    <TdvDisclosure initiallyOpen={false}>
-      <summary>
-        {r.kind === "Lavor"
+    <TdvAction
+      title={
+        r.kind === "Lavor"
           ? "Incorporar prática com PU"
           : r.kind === "Reputação"
             ? "Reconhecimento nesta rede"
             : r.kind === "Preparo"
               ? "Acionar o Preparo"
-              : "Integridade e reparo"}
-      </summary>
+              : "Integridade e reparo"
+      }
+    >
       {r.kind === "Lavor" ? (
         <>
           <p>
@@ -254,7 +253,7 @@ export function TdvRecordActions({
               : "Rascunho: a aquisição precisa de incorporação e PU disponíveis."}
           </p>
           <TdvSelect
-            label="Custo autorizado do Lavor em PU"
+            label={`Custo do Lavor · ${constitution(c).pu} PU disponíveis`}
             value={String(cost)}
             options={["4", "6"]}
             onChange={(v) => setCost(Number(v))}
@@ -316,7 +315,11 @@ export function TdvRecordActions({
         </>
       )}
       <Button
-        disabled={!canEdit || !c.ready || (r.kind === "Lavor" && lavorIncorporated(c, r))}
+        disabled={
+          !canEdit ||
+          !c.ready ||
+          (r.kind === "Lavor" && (lavorIncorporated(c, r) || constitution(c).pu < cost))
+        }
         onClick={() =>
           commit(onChange, () =>
             r.kind === "Lavor"
@@ -338,7 +341,7 @@ export function TdvRecordActions({
               ? "reconhecimento"
               : "reparo"}
       </Button>
-    </TdvDisclosure>
+    </TdvAction>
   );
 }
 export function TdvExpressionUse({

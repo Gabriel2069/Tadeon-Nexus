@@ -1,3 +1,18 @@
+import {
+  UserRound,
+  Anchor,
+  Link2,
+  Fingerprint,
+  Shield,
+  Sprout,
+  BookOpen,
+  Sword,
+  Backpack,
+  Layers3,
+  Sparkles,
+  NotebookPen,
+  Activity,
+} from "lucide-react";
 import { TdvEmblem } from "./tdv2-emblem";
 import { FabricFilaments } from "@/components/fabric-filaments";
 import { Button } from "@/components/ui/button";
@@ -110,6 +125,25 @@ export function Section({
       ? "Condução da Tessitura"
       : "Arquivo da personagem",
   };
+  const FolioIcon =
+    (
+      {
+        "tdv-feicao": UserRound,
+        "tdv-pessoal": Fingerprint,
+        "tdv-ancora": Anchor,
+        "tdv-vinculos": Link2,
+        "tdv-grupo": Link2,
+        "tdv-constituicao": Activity,
+        "tdv-protecao": Shield,
+        "tdv-desenvolvimento": Sprout,
+        "tdv-historia": BookOpen,
+        "sec-armas": Sword,
+        "sec-inv": Backpack,
+        "tdv-lavores": Sparkles,
+        "tramas-fragmentos": Layers3,
+        "tdv-permanencias": NotebookPen,
+      } as Record<string, typeof UserRound>
+    )[presentationKey] ?? Layers3;
   const storageKey = `tadeon.sheet.section:${presentationKey}`;
   const fieldId = useId();
   const bodyId = `sheet-section-body-${fieldId}`;
@@ -141,10 +175,16 @@ export function Section({
       data-collapsed={collapsed ? "true" : "false"}
       className={`tadeon-sheet-section ${variant === "folio" ? "tadeon-sheet-section--folio" : ""} scroll-mt-44 ${className}`}
     >
+      {variant === "folio" && <FolioIcon className="tdv-card-watermark" aria-hidden="true" />}
       {variant !== "folio" && <FabricFilaments className="tadeon-sheet-fabric" />}
       <Collapsible open={!collapsed} onOpenChange={(open) => setCollapsed(!open)}>
         <div className="tadeon-sheet-section__heading">
           <div className="tadeon-sheet-section__title-group">
+            {variant === "folio" && (
+              <span className="tdv-card-symbol" aria-hidden="true">
+                <FolioIcon />
+              </span>
+            )}
             {variant !== "folio" && (
               <span className="tadeon-sheet-section__index" aria-hidden="true">
                 {emblem || (id?.startsWith("tdv-") && !id.startsWith("tdv-master-")) ? (

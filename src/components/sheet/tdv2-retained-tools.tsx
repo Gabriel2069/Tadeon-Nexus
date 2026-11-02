@@ -1,8 +1,13 @@
-import { Section, RowTable } from "./sheet-ui";
+import { useState } from "react";
+import { DialogClose } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { TdvRecordActions } from "./tdv2-procedures";
+import { TdvAction } from "./tdv2-fields";
+import { Section } from "./sheet-ui";
 import { AddItemDialog } from "./add-item-dialog";
 import { SheetInventoryOrganizer } from "./sheet-inventory-organizer";
-import { TdvField, TdvDisclosure, TdvInscription } from "./tdv2-fields";
-import { uid, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
+import { TdvInscription } from "./tdv2-fields";
+import { uid, RECORD_FIELDS, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
 import type { SheetData, SheetUpdate } from "./sheet-model";
 export function Tdv2DossierDetails({
   sheet,
@@ -14,41 +19,31 @@ export function Tdv2DossierDetails({
   onUpdate: SheetUpdate;
 }) {
   return (
-    <Section id="tdv-pessoal" title="Dossiê pessoal">
-      <TdvDisclosure
-        initiallyOpen={Boolean(
-          sheet.age ||
-          (["wound", "question", "lifeCycleTrait"] as const).some((key) =>
-            sheet.identity_data[key]?.trim(),
-          ),
-        )}
-      >
-        <summary>Dados complementares</summary>
-        <div className="tdv-grid tdv-grid--identity">
+    <Section variant="folio" id="tdv-pessoal" title="Particularidades">
+      <div className="tdv-grid tdv-grid--identity">
+        <TdvInscription
+          label="Idade"
+          value={sheet.age ?? ""}
+          short
+          disabled={!canEdit}
+          onChange={(v) => onUpdate("age", v)}
+        />
+        {(
+          [
+            ["wound", "Ferida"],
+            ["question", "Pergunta da personagem"],
+            ["lifeCycleTrait", "Traço do ciclo de vida"],
+          ] as const
+        ).map(([key, label]) => (
           <TdvInscription
-            label="Idade"
-            value={sheet.age ?? ""}
-            short
+            key={key}
+            label={label}
+            value={sheet.identity_data[key] ?? ""}
             disabled={!canEdit}
-            onChange={(v) => onUpdate("age", v)}
+            onChange={(v) => onUpdate("identity_data", { ...sheet.identity_data, [key]: v })}
           />
-          {(
-            [
-              ["wound", "Ferida"],
-              ["question", "Pergunta da personagem"],
-              ["lifeCycleTrait", "Traço do ciclo de vida"],
-            ] as const
-          ).map(([key, label]) => (
-            <TdvInscription
-              key={key}
-              label={label}
-              value={sheet.identity_data[key] ?? ""}
-              disabled={!canEdit}
-              onChange={(v) => onUpdate("identity_data", { ...sheet.identity_data, [key]: v })}
-            />
-          ))}
-        </div>
-      </TdvDisclosure>
+        ))}
+      </div>
     </Section>
   );
 }
@@ -66,7 +61,7 @@ export function Tdv2Belongings({
   beforeOrganize: () => Promise<boolean>;
 }) {
   return (
-    <>
+    <div className="tdv-belongings-grid">
       {(
         [
           [
@@ -82,10 +77,10 @@ export function Tdv2Belongings({
           ["Equipamento", "Inventário", "Descrição", "Porte e acesso", "Integridade"],
         ] as const
       ).map(([kind, title, ...fields]) => {
-        const records = c.records.filter((r) => r.kind === kind),
-          rows = records.map((r) => ({ id: r.id, nome: r.name, ...r.fields }));
+        const records = c.records.filter((r) => r.kind === kind);
         return (
           <Section
+            variant="folio"
             key={kind}
             emblem={kind === "Arma" ? "armas" : "inventario"}
             id={kind === "Arma" ? "sec-armas" : "sec-inv"}
@@ -101,12 +96,19 @@ export function Tdv2Belongings({
                 )}{" "}
                 {canEdit && (
                   <AddItemDialog<Record<string, string>>
-                    title={`Novo registro: ${title}`}
+                    title={kind === "Arma" ? "Nova arma" : "Novo item"}
+                    composition={kind === "Arma" ? "weapon" : "inventory"}
                     triggerLabel={`Adicionar ${kind === "Arma" ? "arma" : "item"}`}
                     initial={{ nome: "", ...Object.fromEntries(fields.map((key) => [key, ""])) }}
                     fields={[
                       { key: "nome", label: "Nome" },
-                      ...fields.map((key) => ({ key, label: key })),
+                      ...fields.map((key) => ({
+                        key,
+                        label: key,
+                        type: (["Descrição", "Propriedades", "Porte e acesso"].includes(key)
+                          ? "textarea"
+                          : "text") as "textarea" | "text",
+                      })),
                     ]}
                     onAdd={(row) =>
                       onChange({
@@ -129,34 +131,23 @@ export function Tdv2Belongings({
               </div>
             }
           >
-            <RowTable
-              rows={rows}
-              canEdit={canEdit}
-              columns={[
-                { key: "nome", label: "Nome", flex: 1.2 },
-                ...fields.slice(0, 3).map((key) => ({ key, label: key, flex: 1 })),
-              ]}
-              onChange={(next) =>
-                onChange({
-                  ...c,
-                  records: c.records
-                    .filter((r) => r.kind !== kind)
-                    .concat(
-                      next.map((row) => ({
-                        id: row.id,
-                        kind,
-                        name: row.nome,
-                        fields: {
-                          ...records.find((r) => r.id === row.id)?.fields,
-                          ...Object.fromEntries(
-                            Object.entries(row).filter(([key]) => !["id", "nome"].includes(key)),
-                          ),
-                        },
-                      })),
-                    ),
-                })
-              }
-            />
+            <div className="tdv-equipment-list">
+              {records.map((record) => (
+                <TdvEquipmentEntry
+                  key={record.id}
+                  record={record}
+                  fields={fields}
+                  character={c}
+                  canEdit={canEdit}
+                  onChange={onChange}
+                />
+              ))}
+            </div>
+            {!records.length && (
+              <p className="tdv-empty-reading">
+                {kind === "Arma" ? "Nenhuma arma registrada." : "Nenhum item registrado."}
+              </p>
+            )}
             {kind === "Arma" && (
               <p className="tdv-note">
                 Impacto e propriedades seguem o texto da arma. O valor de dano anterior permanece no
@@ -166,6 +157,250 @@ export function Tdv2Belongings({
           </Section>
         );
       })}
-    </>
+    </div>
+  );
+}
+
+/** Separate, always visible homes for the player's acquired works and phenomena. */
+export function TdvRecordCollection({
+  character: c,
+  onChange,
+  canEdit,
+  onUse,
+}: {
+  character: TdvCharacter;
+  onChange: (c: TdvCharacter) => void;
+  canEdit: boolean;
+  onUse: (id: string) => void;
+}) {
+  const [editingRecords, setEditingRecords] = useState<Record<string, boolean>>({});
+  const groups = [
+    { id: "tdv-lavores", title: "Lavores", kinds: ["Lavor"] },
+    {
+      id: "tramas-fragmentos",
+      title: "Tramas e Fragmentos",
+      kinds: ["Trama", "Fragmento", "Selo"],
+    },
+    {
+      id: "tdv-permanencias",
+      title: "Continuidade",
+      kinds: ["Reputação", "Preparo", "Costura", "Resto"],
+    },
+  ];
+  const patch = (record: TdvRecord) =>
+    onChange({ ...c, records: c.records.map((item) => (item.id === record.id ? record : item)) });
+  return (
+    <div className="tdv-record-collections">
+      {groups.map((group) => (
+        <Section
+          key={group.id}
+          variant="folio"
+          id={group.id}
+          title={group.title}
+          extra={
+            canEdit && (
+              <TdvAction title="Adicionar">
+                <p>
+                  Escolha a estrutura para registrar seus dados. Aquisição de Lavor usa PU e
+                  incorporação.
+                </p>
+                <div className="tdv-actions">
+                  {group.kinds.map((kind) => (
+                    <DialogClose key={kind} asChild>
+                      <Button
+                        variant="outline"
+                        disabled={c.records.length >= 200}
+                        onClick={() => {
+                          const id = uid();
+                          setEditingRecords((state) => ({ ...state, [id]: true }));
+                          onChange({
+                            ...c,
+                            records: [
+                              ...c.records,
+                              {
+                                id,
+                                kind: kind as TdvRecord["kind"],
+                                name: "",
+                                fields: Object.fromEntries(
+                                  RECORD_FIELDS[kind as TdvRecord["kind"]].map((field) => [
+                                    field,
+                                    "",
+                                  ]),
+                                ),
+                              },
+                            ],
+                          });
+                        }}
+                      >
+                        Adicionar {kind}
+                      </Button>
+                    </DialogClose>
+                  ))}
+                </div>
+              </TdvAction>
+            )
+          }
+        >
+          <div className="tdv-repertoire-grid">
+            {c.records
+              .filter((record) => group.kinds.includes(record.kind))
+              .map((record) => (
+                <article
+                  className={`tdv-repertoire-card tdv-repertoire-card--${record.kind.toLowerCase()}`}
+                  key={record.id}
+                >
+                  <header className="tdv-record-heading">
+                    <span>{record.kind}</span>
+                    {["Lavor", "Trama", "Fragmento", "Selo"].includes(record.kind) && (
+                      <Button
+                        className="tdv-expression-quick"
+                        variant="ghost"
+                        disabled={!canEdit || !c.ready}
+                        onClick={() => onUse(record.id)}
+                      >
+                        Usar {record.name || record.kind}
+                      </Button>
+                    )}
+                  </header>
+                  <TdvInscription
+                    label="Nome"
+                    short
+                    value={record.name}
+                    disabled={!canEdit}
+                    onChange={(name) => patch({ ...record, name })}
+                  />
+                  <div className="tdv-record-facts">
+                    {[...new Set([...RECORD_FIELDS[record.kind], ...Object.keys(record.fields)])]
+                      .filter((field) => editingRecords[record.id] || record.fields[field]?.trim())
+                      .map((field) => (
+                        <TdvInscription
+                          key={field}
+                          label={field}
+                          value={record.fields[field] ?? ""}
+                          disabled={!canEdit}
+                          onChange={(value) =>
+                            patch({ ...record, fields: { ...record.fields, [field]: value } })
+                          }
+                        />
+                      ))}
+                  </div>
+                  <div className="tdv-record-actions">
+                    {canEdit && (
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          setEditingRecords((state) => ({
+                            ...state,
+                            [record.id]: !state[record.id],
+                          }))
+                        }
+                      >
+                        {editingRecords[record.id] ? "Concluir edição" : "Editar estrutura"}
+                      </Button>
+                    )}
+                    <TdvRecordActions
+                      character={c}
+                      record={record}
+                      canEdit={canEdit}
+                      onChange={onChange}
+                    />
+                    <TdvAction title="Gerenciar">
+                      <p>Remover este registro não devolve PU nem remove aquisições do percurso.</p>
+                      <Button
+                        variant="destructive"
+                        disabled={!canEdit}
+                        onClick={() =>
+                          onChange({
+                            ...c,
+                            records: c.records.filter((item) => item.id !== record.id),
+                          })
+                        }
+                      >
+                        Remover {record.name || record.kind}
+                      </Button>
+                    </TdvAction>
+                  </div>
+                </article>
+              ))}
+          </div>
+          {!c.records.some((record) => group.kinds.includes(record.kind)) && (
+            <p className="tdv-empty-reading">
+              {group.id === "tdv-lavores"
+                ? "Nenhum Lavor incorporado ou em aprendizado."
+                : group.id === "tramas-fragmentos"
+                  ? "Nenhuma Trama, Fragmento ou Selo vinculado."
+                  : "Sem registros nesta parte da trajetória."}
+            </p>
+          )}
+        </Section>
+      ))}
+    </div>
+  );
+}
+
+function TdvEquipmentEntry({
+  record,
+  fields,
+  character: c,
+  canEdit,
+  onChange,
+}: {
+  record: TdvRecord;
+  fields: readonly string[];
+  character: TdvCharacter;
+  canEdit: boolean;
+  onChange: (c: TdvCharacter) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const patch = (next: TdvRecord) =>
+    onChange({ ...c, records: c.records.map((item) => (item.id === record.id ? next : item)) });
+  return (
+    <article className="tdv-equipment-entry">
+      <TdvInscription
+        label="Nome"
+        short
+        value={record.name}
+        disabled={!canEdit}
+        onChange={(name) => patch({ ...record, name })}
+      />
+      <div className="tdv-record-facts">
+        {[...new Set([...fields, ...Object.keys(record.fields)])]
+          .filter((field) => editing || record.fields[field]?.trim())
+          .map((field) => (
+            <TdvInscription
+              key={field}
+              label={field}
+              value={record.fields[field] ?? ""}
+              disabled={!canEdit}
+              onChange={(value) =>
+                patch({ ...record, fields: { ...record.fields, [field]: value } })
+              }
+            />
+          ))}
+      </div>
+      <div className="tdv-record-actions">
+        {canEdit && (
+          <Button variant="ghost" onClick={() => setEditing((value) => !value)}>
+            {editing ? "Concluir edição" : "Editar detalhes"}
+          </Button>
+        )}
+        <TdvRecordActions character={c} record={record} canEdit={canEdit} onChange={onChange} />
+        {canEdit && (
+          <TdvAction title="Remover">
+            <p>Retirar {record.name || record.kind} desta ficha?</p>
+            <DialogClose asChild>
+              <Button
+                variant="destructive"
+                onClick={() =>
+                  onChange({ ...c, records: c.records.filter((item) => item.id !== record.id) })
+                }
+              >
+                Remover item
+              </Button>
+            </DialogClose>
+          </TdvAction>
+        )}
+      </div>
+    </article>
   );
 }

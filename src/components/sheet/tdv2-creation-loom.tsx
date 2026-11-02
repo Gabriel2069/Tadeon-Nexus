@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ALINHAVOS,
   constitution,
@@ -5,7 +6,7 @@ import {
   finishCreation,
   type TdvCharacter,
 } from "@/lib/tdv2";
-import { TdvCheck } from "./tdv2-fields";
+import { TdvCheck, TdvAction } from "./tdv2-fields";
 import { Button } from "@/components/ui/button";
 
 /** The book's eight creation steps; no XP pool, class or free Lavor is inferred. */
@@ -20,6 +21,7 @@ export function TdvCreationLoom({
   canEdit: boolean;
   onSelect: (tab: string) => void;
 }) {
+  const [activeStep, setActiveStep] = useState(0);
   const stats = constitution(c),
     errors = creationErrors(c);
   const matrices = Object.values(c.matrices).sort().join(",") === "2,2,3,3";
@@ -68,8 +70,8 @@ export function TdvCreationLoom({
     <section className="tdv-creation-loom" aria-label="Criação da personagem pelo Livro II">
       <div className="tdv-creation-loom__head">
         <div>
-          <small>Oito passos · Livro II</small>
-          <h2>Dar forma à presença</h2>
+          <small>Livro II · {steps.filter((step) => step[3]).length}/8 passos</small>
+          <h2>Criação</h2>
         </div>
         <Button
           aria-label="Concluir criação TdV II"
@@ -79,30 +81,35 @@ export function TdvCreationLoom({
           Concluir
         </Button>
       </div>
-      <details className="tdv-creation-journey">
-        <summary>Explorar os oito passos e revisar a criação</summary>
+      <div className="tdv-creation-journey">
         <div className="tdv-creation-steps">
           {steps.map(([label, tab, emblem, done, hint], i) => (
             <button
               type="button"
               key={label}
-              onClick={() => onSelect(tab)}
+              onClick={() => {
+                setActiveStep(i);
+                onSelect(tab);
+              }}
               data-complete={done}
+              data-current={activeStep === i}
               aria-label={`Criação: ${label}`}
             >
               <span>
                 <small>0{i + 1}</small>
                 <strong>{label}</strong>
-                <span>{hint}</span>
+                <span className="sr-only">{hint}</span>
               </span>
             </button>
           ))}
         </div>
-        <details className="tdv-disclosure tdv-creation-review">
-          <summary>
-            Conferir a criação ·{" "}
-            {errors.length ? `${errors.length} pendências` : "pronta para jogar"}
-          </summary>
+        <p className="tdv-creation-guidance">
+          <strong>{steps[activeStep][0]}</strong> · {steps[activeStep][4]}
+        </p>
+        <TdvAction
+          title={`Revisar criação · ${errors.length ? `${errors.length} pendências` : "pronta"}`}
+          className="tdv-creation-review"
+        >
           <p>
             Matrizes começam em d6; distribua 3, 3, 2 e 2. Alinhavos começam em d4; escolha dois em
             grau 2 e quatro em grau 1. Os demais permanecem em grau 0.
@@ -135,8 +142,8 @@ export function TdvCreationLoom({
               <li key={e}>{e}</li>
             ))}
           </ul>
-        </details>
-      </details>
+        </TdvAction>
+      </div>
     </section>
   );
 }
@@ -152,7 +159,7 @@ export function TdvFamiliarities({
 }) {
   if (!c.creation) return null;
   const selected = c.creation.familiarities;
-  if (c.ready)
+  if (c.ready && !c.progression?.allowCreation)
     return selected.length ? (
       <div className="tdv-familiarities-reading">
         <small>Familiaridades iniciais · sem bônus</small>
@@ -161,10 +168,7 @@ export function TdvFamiliarities({
       </div>
     ) : null;
   return (
-    <details className="tdv-disclosure tdv-familiarities">
-      <summary>
-        Familiaridades de Feição · {selected.length}/4 <small>opcional · sem bônus</small>
-      </summary>
+    <TdvAction title={`Familiaridades · ${selected.length}/4`} className="tdv-familiarities">
       <p>
         Destaque até quatro Alinhavos em grau 0 para retratar sua formação. Todos continuam d4;
         familiaridade não altera grau, dado ou custo.
@@ -174,7 +178,11 @@ export function TdvFamiliarities({
           <button
             type="button"
             aria-pressed={selected.includes(name)}
-            disabled={!canEdit || c.ready || (!selected.includes(name) && selected.length >= 4)}
+            disabled={
+              !canEdit ||
+              (c.ready && !c.progression?.allowCreation) ||
+              (!selected.includes(name) && selected.length >= 4)
+            }
             key={name}
             onClick={() =>
               onChange({
@@ -193,6 +201,6 @@ export function TdvFamiliarities({
           </button>
         ))}
       </div>
-    </details>
+    </TdvAction>
   );
 }

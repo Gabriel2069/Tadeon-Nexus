@@ -1,7 +1,7 @@
 {
   "version": 1,
   "checkedAt": "2026-11-02",
-  "runtimeReference": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+  "runtimeReference": "f447350d9b8f8696b822de978c43800bcc554ef3",
   "integration": {
     "pr": 320,
     "branch": "feat/nex-047-visual-play",
@@ -124,14 +124,15 @@
         "src/components/sheet/tdv2-creation-loom.tsx",
         "src/components/sheet/tdv2-creation-loom.test.tsx",
         "src/components/sheet/tdv2-conditions.tsx",
-        "src/lib/tdv2-conditions.test.ts"
+        "src/lib/tdv2-conditions.test.ts",
+        "src/lib/tdv2-allocation.test.ts"
       ],
       "styles": [
         "src/styles/sheet-layout.css",
         "src/styles/sheet-premium.css",
         "src/styles/sheet-experience.css"
       ],
-      "boundary": "Rota mantém estado, regras derivadas, leitura cancelável e autosave por personagem/usuário/cargo. Seções recebem valores/callbacks; não criam estado persistido paralelo. Sheet UI mantém rótulos, recolhimento e material; sheet-premium é dono do material. Histórico/inventário montados explicitamente na ficha, sem observer de montagem; o arquivo de experiência ainda conserva bridges de outras áreas. NEX-025: vínculos recolhem no componente; títulos recebem foco para revelar seções. Dossiê em sheet-premium, densidade do modo Jogo em sheet-layout; índice sem captura global. useSheetChrome mede somente os dois cabeçalhos conhecidos do shell e a barra local, com observer e listener desmontados; publica offsets apenas no host da ficha. NEX-034/DEC-020: identidade relativa e compacta, títulos/ações com fluxo próprio, instrumentos por largura real do cartão e vínculos multilinha. Nenhuma mudança em regras ou persistência. NEX-035: radar SVG local, compartilhado pela Ficha e Forma de Poder; dados dependem somente de atributos e não mantêm observação de tamanho própria. NEX-036: narrativa e vínculos têm dobras independentes; registros adaptam-se à largura do cartão. Equilíbrio e Exposição somente apresentam valores e bases derivados pela rota, sem estado persistido paralelo. NEX-037: SheetEquilibriumSection apresenta o eixo e a tensão por props/callbacks; regras continuam na rota e getEquilibriumEffect. Radar compartilha proporção quadrada e largura útil na Ficha/Forma de Poder; motion legado deixa painéis materiais explícitos. NEX-038: instrumentos usam composição horizontal pela largura útil, e Equilíbrio/Exposição têm molduras alinhadas somente quando abertas. SheetExposureSection apresenta bases recebidas, sem cálculo paralelo. Densidade e tipografia das três guias pertencem a sheet-premium. TdV II: dados versionados e motor em tdv2.ts; cálculos legados só pertencem à edição anterior. Conversão é revisável e não infere equivalências numéricas. DEC-028: o modo de jogo é apresentação controlada pela rota sobre o mesmo objeto TdV II e motor. TdvPlayPresence recebe recursos/callbacks, TdvEmblem/TdvDie são SVGs declarativos. O painel de ação mantém a instância ao alternar abas; nenhuma autoridade duplicada. Fichas TdV II consultam o payload histórico sem sincronização na leitura; a edição anterior mantém sua operação existente. DEC-029: a criação mantém metadados opcionais retrocompatíveis no mesmo payload; a rota conserva CAS e identidade. Instrumentos SVG só leem valores derivados. Atlas de vínculos abre disclosures controlados sem alterar o personagem. Nome e narrativa têm aplicação/cancelamento explícitos; os campos da edição anterior conservam sua apresentação. DEC-030 supera a instância central de Motor: dados opcionais ficam em consulta contextual. TdvPlayPresence compartilha recursos/Condições, TdvActiveExpressions conserva uso em curso. Condições usam declaração exata em effect e prepareTest, sem novo estado persistente paralelo. Perfil e busca são apresentação por pessoa/ficha."
+      "boundary": "Rota mantém estado, regras derivadas, leitura cancelável e autosave por personagem/usuário/cargo. Seções recebem valores/callbacks; não criam estado persistido paralelo. Sheet UI mantém rótulos, recolhimento e material; sheet-premium é dono do material. Histórico/inventário montados explicitamente na ficha, sem observer de montagem; o arquivo de experiência ainda conserva bridges de outras áreas. NEX-025: vínculos recolhem no componente; títulos recebem foco para revelar seções. Dossiê em sheet-premium, densidade do modo Jogo em sheet-layout; índice sem captura global. useSheetChrome mede somente os dois cabeçalhos conhecidos do shell e a barra local, com observer e listener desmontados; publica offsets apenas no host da ficha. NEX-034/DEC-020: identidade relativa e compacta, títulos/ações com fluxo próprio, instrumentos por largura real do cartão e vínculos multilinha. Nenhuma mudança em regras ou persistência. NEX-035: radar SVG local, compartilhado pela Ficha e Forma de Poder; dados dependem somente de atributos e não mantêm observação de tamanho própria. NEX-036: narrativa e vínculos têm dobras independentes; registros adaptam-se à largura do cartão. Equilíbrio e Exposição somente apresentam valores e bases derivados pela rota, sem estado persistido paralelo. NEX-037: SheetEquilibriumSection apresenta o eixo e a tensão por props/callbacks; regras continuam na rota e getEquilibriumEffect. Radar compartilha proporção quadrada e largura útil na Ficha/Forma de Poder; motion legado deixa painéis materiais explícitos. NEX-038: instrumentos usam composição horizontal pela largura útil, e Equilíbrio/Exposição têm molduras alinhadas somente quando abertas. SheetExposureSection apresenta bases recebidas, sem cálculo paralelo. Densidade e tipografia das três guias pertencem a sheet-premium. TdV II: dados versionados e motor em tdv2.ts; cálculos legados só pertencem à edição anterior. Conversão é revisável e não infere equivalências numéricas. DEC-028: o modo de jogo é apresentação controlada pela rota sobre o mesmo objeto TdV II e motor. TdvPlayPresence recebe recursos/callbacks, TdvEmblem/TdvDie são SVGs declarativos. O painel de ação mantém a instância ao alternar abas; nenhuma autoridade duplicada. Fichas TdV II consultam o payload histórico sem sincronização na leitura; a edição anterior mantém sua operação existente. DEC-029: a criação mantém metadados opcionais retrocompatíveis no mesmo payload; a rota conserva CAS e identidade. Instrumentos SVG só leem valores derivados. Atlas de vínculos abre disclosures controlados sem alterar o personagem. Nome e narrativa têm aplicação/cancelamento explícitos; os campos da edição anterior conservam sua apresentação. DEC-030 supera a instância central de Motor: dados opcionais ficam em consulta contextual. TdvPlayPresence compartilha recursos/Condições, TdvActiveExpressions conserva uso em curso. Condições usam declaração exata em effect e prepareTest, sem novo estado persistente paralelo. Perfil e busca são apresentação por pessoa/ficha. DEC-031: escrita inline; dados expostos e operações em TdvAction. Distribuição inicial passa por allocateCreation. Delegação só é confiada pelo guard SQL da linha anterior; correções conservam registros em corrections. A revisão concluída só persiste em lote válido."
     },
     {
       "id": "knowledge",
@@ -440,6 +441,11 @@
       "path": "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
       "status": "active",
       "purpose": "Direção DEC-030, destinos de funções, condições explícitas e validação proporcional solicitada pelo usuário."
+    },
+    {
+      "path": "docs/v4/FICHA_LEITURA_E_ESCOLHAS.md",
+      "status": "active",
+      "purpose": "Destinos, criação/progressão, autorização e limites de DEC-031."
     }
   ],
   "tasks": [
@@ -1560,7 +1566,7 @@
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json"
       ],
-      "checkpoint": "DEC-030: recursos comuns às guias, navegação contextual, capacidades com consulta/desenvolvimento, condições explicitamente vinculadas ao motor existente, repertório contextual e perfis de jogo sobre os mesmos dados/CAS. Fonte e publicação próprios na PR 321. QA concentrado por instrução mais recente; não certifica os 15 tamanhos, hardware, contas reais ou autoridade transacional de NEX-048."
+      "checkpoint": "DEC-031: leitura, quadros uniformes, capacidades/radar coloridos, recursos neon, operações contextuais, criação limitada e progressão autorizada. Gates e publicação deste lote têm evidência própria na PR; não certifica V4 integral. docs/v4/FICHA_LEITURA_E_ESCOLHAS.md"
     },
     {
       "id": "NEX-047",
@@ -1583,7 +1589,7 @@
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json"
       ],
-      "checkpoint": "DEC-030: recursos comuns às guias, navegação contextual, capacidades com consulta/desenvolvimento, condições explicitamente vinculadas ao motor existente, repertório contextual e perfis de jogo sobre os mesmos dados/CAS. Fonte e publicação próprios na PR 321. QA concentrado por instrução mais recente; não certifica os 15 tamanhos, hardware, contas reais ou autoridade transacional de NEX-048."
+      "checkpoint": "DEC-031: leitura, quadros uniformes, capacidades/radar coloridos, recursos neon, operações contextuais, criação limitada e progressão autorizada. Gates e publicação deste lote têm evidência própria na PR; não certifica V4 integral. docs/v4/FICHA_LEITURA_E_ESCOLHAS.md"
     },
     {
       "id": "NEX-048",
@@ -1823,6 +1829,11 @@
       "id": "DEC-030",
       "decision": "Ficha como prancheta interativa: expandido padrão, recursos diretos, capacidades proporcionadas, vínculos compactos, desenvolvimento por ações e jogo digital/híbrido/apoio físico. A composição genérica de DEC-029 e a prioridade de jogo de DEC-028 são superadas pelo pedido atual.",
       "reason": "Pedido explícito de Tadeu. Condições têm efeitos declarados, sem gravidade/prosa inferindo penalidade. A instrução mais recente reduz QA repetitivo: quatro composições representativas e fluxos alterados substituem três varreduras sobrepostas, preservando Quality e regressões mecânicas. Sem migrations (DEC-024)."
+    },
+    {
+      "id": "DEC-031",
+      "decision": "Priorizar exposição e consulta na ficha, unificar materiais dos quadros e deslocar operações ocasionais para comandos; distribuição inicial limitada, Marcos diretos, correção arquivada e delegação pelo mestre.",
+      "reason": "Pedido explícito de Tadeu após PR 321. QA proporcional por escopo; autorização de reabertura e delegação exige guarda no servidor. Autoriza uma alteração aditiva e reversível da função de progressão sem regravar dados; o adiamento de backup geral permanece. Não inventar pacote de pontos, pré-requisitos ou bônus fora do Livro II."
     }
   ],
   "bridges": [

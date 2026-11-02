@@ -1,3 +1,4 @@
+import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -5,6 +6,18 @@ import { Input } from "@/components/ui/input";
 import { useId } from "react";
 import { DICE } from "@/lib/tdv2";
 
+// A departing selector must not return focus over a selector the player just opened.
+function preserveNextPopupFocus(event: Event) {
+  const next = document.activeElement?.closest(
+    '[data-slot="popover-content"][data-state="open"], [data-slot="dialog-content"][data-state="open"], [data-trigger-slot="popover-trigger"][data-state="open"]',
+  );
+  if (
+    next &&
+    next !== event.target &&
+    !(event.target instanceof Element && event.target.contains(next))
+  )
+    event.preventDefault();
+}
 export const ALINHAVO_STATES = [
   "Comum",
   "Iniciado",
@@ -33,6 +46,8 @@ export function TdvCompetency({
   onRoll,
   onDevelop,
   effects = [],
+  choiceAllowed,
+  allocationHint,
 }: {
   name: string;
   grade: number;
@@ -44,6 +59,8 @@ export function TdvCompetency({
   onRoll?: () => void;
   onDevelop?: () => void;
   effects?: { name: string; kind: string }[];
+  choiceAllowed?: (grade: number) => boolean;
+  allocationHint?: string;
 }) {
   const [open, setOpen] = useState(false);
   const state = matrix
@@ -53,8 +70,7 @@ export function TdvCompetency({
   const blocked = effects.some((effect) => effect.kind === "Impedimento");
   const face = (
     <span className="tdv-capability-die">
-      <small>d</small>
-      {DICE[grade]}
+      <TdvDie sides={DICE[grade]} />
     </span>
   );
   return (
@@ -78,14 +94,20 @@ export function TdvCompetency({
               {face}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="tdv-competency__choices" aria-label={`Escolher ${name}`}>
+          <PopoverContent
+            onCloseAutoFocus={preserveNextPopupFocus}
+            className="tdv-competency__choices"
+            aria-label={`Escolher ${name}`}
+          >
             <p>{name} · distribuição inicial</p>
+            <p className="tdv-note">{allocationHint} Devolva uma escolha para liberar espaço.</p>
             <div role="group" aria-label={matrix ? `Valor de ${name}` : `Grau inicial de ${name}`}>
               {(matrix ? [1, 2, 3] : [0, 1, 2]).map((value) => (
                 <Button
                   key={value}
                   variant="outline"
                   aria-pressed={grade === value}
+                  disabled={disabled || (choiceAllowed ? !choiceAllowed(value) : false)}
                   onClick={() => {
                     onChange?.(value);
                     setOpen(false);
@@ -111,7 +133,11 @@ export function TdvCompetency({
               {face}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="tdv-capability-popup" aria-label={`Capacidade ${name}`}>
+          <PopoverContent
+            onCloseAutoFocus={preserveNextPopupFocus}
+            className="tdv-capability-popup"
+            aria-label={`Capacidade ${name}`}
+          >
             <header>
               <small>{matrix ? "Matriz · Prumo" : "Alinhavo · Tento"}</small>
               <h3>{name}</h3>
