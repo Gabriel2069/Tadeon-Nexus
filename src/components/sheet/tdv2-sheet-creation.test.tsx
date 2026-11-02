@@ -36,13 +36,11 @@ it("applies only reviewed choices and preserves concurrent resources and records
   const change = vi.fn();
   const props = { character, onChange: change, canEdit: true, isMaster: true };
   const view = render(<Tdv2Sheet {...props} />);
-  fireEvent.mouseDown(screen.getByRole("tab", { name: "Percurso", exact: true }), {
+  fireEvent.mouseDown(screen.getByRole("tab", { name: "Percurso" }), {
     button: 0,
     ctrlKey: false,
   });
-  fireEvent.click(
-    await screen.findByRole("button", { name: "Correções e permissões", exact: true }),
-  );
+  fireEvent.click(await screen.findByRole("button", { name: "Correções e permissões" }));
   fireEvent.click(await screen.findByRole("button", { name: "Rever escolhas iniciais" }));
   expect(screen.getByRole("button", { name: "Retirar 1 PV" }).hasAttribute("disabled")).toBe(true);
   const updated = {

@@ -2457,6 +2457,12 @@
 .tdv-game-panel .tdv-competency__scale i { height: 2px; }
 .tdv-game-skills-toggle { min-height: 44px; font-size: .8rem; }
 .tdv-game-defense { min-width: 0; }
+.tdv-game-defense .tdv-protection-instrument { grid-template-columns: 5rem minmax(0,1fr); gap: .35rem .65rem; }
+.tdv-game-defense .tdv-protection-instrument > .tdv-defense { grid-column: 2; grid-row: 1; }
+.tdv-game-defense .tdv-protection-context { grid-column: 1/-1; grid-row: 2; }
+.tdv-game-defense .tdv-protection-context strong { font-size: 1rem; }
+.tdv-game-defense .tdv-protection-context > span { display: none; }
+
 .tdv-game-ready { min-width: 0; border-top: 1px solid #cdb88b25; padding-top: .5rem; }
 .tdv-game-ready h2 { display: flex; gap: .4rem; align-items: center; font: 1.2rem var(--font-cinzel); color: #d9c8a9; }
 .tdv-game-ready h2 svg { width: 1rem; height: 1rem; }
@@ -2476,18 +2482,18 @@
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-step { grid-row: 1; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-value > strong { font-size: 2rem; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-value > small { display: none; }
-.tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument { grid-template-columns: minmax(0,1fr) auto; gap: .1rem .5rem; }
+.tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument { grid-template-columns: minmax(0,1fr) minmax(8rem,.7fr); gap: .1rem .5rem; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument header { grid-column: 1; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-axis { grid-column: 1; margin-block: .2rem; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-poles { grid-column: 1; }
 .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-tension { grid-column: 2; grid-row: 1/4; margin: 0; }
 .tadeon-tdv2-sheet[data-presentation="game"][data-game-profile="hibrido"] .tdv-game-ready { grid-column: 2; grid-row: 2; }
 .tadeon-tdv2-sheet[data-presentation="game"][data-game-profile="hibrido"] .tdv-game-defense { grid-column: 2; grid-row: 3; }
-@container tdv-atlas (max-width: 400px) {
+@container tdv-atlas (max-width: 499px) {
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource { padding-inline: .1rem; }
- .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation { grid-template-columns: minmax(0,1fr) 44px; }
- .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-value { grid-column: 1; grid-row: 1/3; }
- .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-step { grid-column: 2; min-height: 44px; }
+ .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-value { grid-column: 1/-1; grid-row: 1; }
+ .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-step { grid-column: auto; grid-row: 2; min-height: 44px; }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-step:last-child { grid-row: 2; }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-value > strong { font-size: 1.65rem; }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-value > span { font-size: .65rem; }
@@ -2545,6 +2551,9 @@
 @container tdv-atlas (min-width: 500px) { .tdv-persona-layout { grid-template-columns: minmax(0,1.2fr) minmax(0,.9fr); gap: 1rem; } .tdv-persona-layout > [data-section="tdv-pessoal"] { grid-column: 1 / -1; } }
 @container tdv-atlas (min-width: 640px) { .tdv-alinhavos { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @container tdv-atlas (min-width: 700px) {
+ .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument { grid-template-columns: minmax(0,1fr); }
+ .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument :is(header,.tdv-domain-axis,.tdv-domain-poles,.tdv-domain-tension) { grid-column: 1; grid-row: auto; }
+
  .tdv-sheet-tabs { grid-template-columns: 4.75rem minmax(0,1fr); gap: 1.25rem; }
  .tdv-sheet-tabs > .tdv-tabs--sheet { grid-template-columns: minmax(0,1fr); position: sticky; top: var(--sheet-sticky-top,5rem); border-radius: 2rem 2rem 1rem 1rem; }
  .tdv-tabs--sheet > button { min-height: 70px; }
