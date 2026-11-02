@@ -330,6 +330,7 @@ export function TdvTestPanel({
           {physical ? "Conferir dados físicos" : "Rolar os dois Fios"}
           {prepared?.cost ? ` · ${prepared.cost} PE` : ""}
           {prepared?.piCost ? ` · ${prepared.piCost} PI` : ""}
+          {prepared?.bonus ? ` · ${prepared.bonus > 0 ? "+" : ""}${prepared.bonus} no Enlace` : ""}
         </Button>
         {physical && confirmedPhysical === physicalSignature && (
           <Button variant="ghost" disabled={!canEdit} onClick={() => setConfirmedPhysical("")}>
@@ -340,7 +341,7 @@ export function TdvTestPanel({
     </>
   );
   const probability = prepared
-    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt).success * 100
+    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt, prepared.bonus).success * 100
     : 0;
   const chance = prepared && (
     <div className="tdv-probability-instrument">
