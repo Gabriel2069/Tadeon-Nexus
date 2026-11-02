@@ -1,3 +1,4 @@
+import { TdvTestWeave } from "./tdv2-visual-instruments";
 import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -268,8 +269,8 @@ export function TdvTestPanel({
           ))}
         </div>
         <p className="tdv-note">
-          Fontes opostas se cancelam por Fio; aplique no máximo um deslocamento líquido. Matriz
-          Abalada é incluída no Prumo.
+          Fontes opostas se cancelam por Fio; no máximo uma categoria líquida. Matriz Abalada e
+          efeitos declarados de Condições já estão incluídos. Informe apenas outras fontes.
         </p>
         <TdvSelect
           label="Forçar um Fio"
@@ -338,18 +339,35 @@ export function TdvTestPanel({
       </div>
     </>
   );
-  const chance = (
-    <>
-      {prepared && (
-        <p className="tdv-note">
-          Chance exata de alcançar o limiar:{" "}
-          {(probabilityProfile(prepared.prumo, prepared.tento, request.dt).success * 100).toFixed(
-            1,
-          )}
-          %. Não presume acesso nem substitui a situação.
-        </p>
-      )}
-    </>
+  const probability = prepared
+    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt).success * 100
+    : 0;
+  const chance = prepared && (
+    <div className="tdv-probability-instrument">
+      <div>
+        <span>Chance de alcançar o limiar</span>
+        <strong>
+          {probability.toFixed(1)}
+          <small>%</small>
+        </strong>
+      </div>
+      <div
+        className="tdv-probability-instrument__scale"
+        role="meter"
+        aria-label="Chance exata de alcançar o limiar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={probability}
+      >
+        <span style={{ width: `${probability}%` }} />
+        {Array.from({ length: 21 }, (_, i) => (
+          <i key={i} />
+        ))}
+      </div>
+      <small>
+        Dados finais contra DT {request.dt}. Não presume acesso nem substitui a situação.
+      </small>
+    </div>
   );
   const errorNotice = (
     <>
@@ -364,6 +382,7 @@ export function TdvTestPanel({
     <>
       {last && (
         <div className="tdv-result" aria-live="polite">
+          <TdvTestWeave prumo={last.result.prumo} tento={last.result.tento} dt={last.result.dt} />
           <p>
             {last.result.quality}
             {last.result.critical ? " · Consonância crítica" : ""}

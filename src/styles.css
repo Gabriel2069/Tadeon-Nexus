@@ -1756,7 +1756,7 @@ body {
 [data-slot="input"],
 [data-slot="textarea"],
 [data-slot="select-trigger"],
-input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+input:not(.tadeon-dossier-field):not([type="range"]):not([type="checkbox"]):not([type="radio"]),
 textarea,
 select {
   border-color: color-mix(in srgb, var(--primary) 9%, var(--input));
@@ -3044,7 +3044,7 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
-details > summary::after {
+details:not(.tdv-disclosure) > summary::after {
   display: grid;
   width: 1.35rem;
   height: 1.35rem;
@@ -3071,7 +3071,7 @@ details[open] > summary {
   color: color-mix(in srgb, var(--foreground) 76%, var(--primary));
 }
 
-details[open] > summary::after {
+details[open]:not(.tdv-disclosure) > summary::after {
   border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
   color: var(--primary);
   background: rgb(217 215 164 / 7%);

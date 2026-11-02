@@ -1,3 +1,4 @@
+import { TdvInscription } from "@/components/sheet/tdv2-fields";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SheetDescriptionPanel } from "@/components/sheet/sheet-description-panel";
 import { Tdv2DossierDetails, Tdv2Belongings } from "@/components/sheet/tdv2-retained-tools";
@@ -648,19 +649,20 @@ function SheetPage() {
         <PageHeader
           section="sheet"
           eyebrow={presentation === "game" ? "Modo de jogo · TdV II" : "Ficha Integral · TdV II"}
-          title={sheet.name || "Ficha"}
-          className={`tadeon-sheet-commandbar${presentation === "game" ? " tadeon-sheet-play-header" : ""}`}
+          title={
+            <span className="tdv-character-name">
+              <TdvInscription
+                label="Nome da personagem"
+                value={sheet.name}
+                short
+                disabled={!canEdit}
+                onChange={(value) => update("name", value)}
+              />
+            </span>
+          }
+          className={`tadeon-sheet-commandbar tadeon-sheet-instrument-header${presentation === "game" ? " tadeon-sheet-play-header" : ""}`}
           actions={
             <div className="tadeon-sheet-commandbar__actions">
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Arquivo"
-                title="Arquivo"
-                onClick={() => navigate({ to: "/" })}
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -674,6 +676,16 @@ function SheetPage() {
                 </PopoverTrigger>
                 <PopoverContent aria-label="Registros históricos da ficha">
                   <div className="tdv-actions">
+                    {" "}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label="Arquivo"
+                      title="Arquivo"
+                      onClick={() => navigate({ to: "/" })}
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="outline"
                       onClick={() =>
@@ -704,6 +716,7 @@ function SheetPage() {
                 </PopoverContent>
               </Popover>
               <SheetExperienceBridge
+                compact
                 sheetId={id}
                 dropTarget={sheetHost}
                 canEdit={canEdit}
@@ -762,25 +775,13 @@ function SheetPage() {
             </div>
           </div>
         )}
-        <div className="tdv-field tdv-character-name">
-          <Label className="tadeon-dossier-label" htmlFor="tdv-character-name">
-            Nome<span className="sr-only"> da personagem</span>
-          </Label>
-          <Input
-            id="tdv-character-name"
-            className="tadeon-dossier-field"
-            value={sheet.name}
-            disabled={!canEdit}
-            onChange={(e) => update("name", e.target.value)}
-          />
-        </div>
         {tutorialStep !== null && (
           <div className="tdv-creation-note" role="region" aria-label="Guia da ficha TdV II">
             <h2>Comece pela Feição</h2>
             <p>
               Revise Origem, Ofício, Convicção, Limite, Vínculos e Âncora. Distribua as Matrizes e
-              os Alinhavos antes de concluir a criação. Na aba Ação estão os dois Fios, os recursos
-              e a recuperação; Expressão e memória guarda Lavores, Tramas e registros.
+              os Alinhavos antes de concluir a criação. Os recursos ficam sempre à mão. Em cena
+              reúne proteção e recuperação; Repertório guarda práticas e equipamentos.
             </p>
             <Button variant="outline" onClick={() => setTutorialStep(null)}>
               Concluir guia
@@ -788,6 +789,8 @@ function SheetPage() {
           </div>
         )}
         <Tdv2Sheet
+          key={`${user?.id}:${id}`}
+          preferenceKey={`${user?.id}:${id}`}
           name={sheet.name}
           presentation={presentation}
           character={parsed.data}
@@ -805,6 +808,7 @@ function SheetPage() {
           }
           narrative={
             <SheetDescriptionPanel
+              reading
               description={{ ...sheet.description, historia: parsed.data.history }}
               canEdit={canEdit}
               onChange={(description) =>

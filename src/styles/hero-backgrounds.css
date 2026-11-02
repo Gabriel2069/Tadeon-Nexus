@@ -60,3 +60,6 @@
 }
 @media (prefers-reduced-motion: reduce) { .tadeon-page-header__fabric { transition: none; } }
 @media (prefers-contrast: more) { .tadeon-page-header { border-color: var(--foreground); } .tadeon-page-header__fabric { opacity: .12; } }
+
+.tadeon-page-header.tadeon-sheet-instrument-header { border: 0; border-bottom: 1px solid #cab9944d; border-radius: 0; background: transparent; box-shadow: none; }
+.tadeon-sheet-instrument-header .tadeon-page-header__fabric { opacity: .1; }

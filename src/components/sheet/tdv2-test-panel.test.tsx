@@ -46,10 +46,13 @@ it("keeps ordinary competence distinct from limitation and disables read-only ro
   expect(screen.getByText("Categoria 0 · Limitado")).toBeTruthy();
   expect(screen.getByText("Grau 4 · Especialista")).toBeTruthy();
   const button = screen.getByRole("button", {
-    name: "Rolar Selagem · Grau 4 · Especialista · d12",
+    name: "Consultar Selagem · Grau 4 · Especialista · d12",
   }) as HTMLButtonElement;
-  expect(button.disabled).toBe(true);
+  expect(button.disabled).toBe(false);
   fireEvent.click(button);
+  const optional = screen.getByRole("button", { name: "Dados opcionais" }) as HTMLButtonElement;
+  expect(optional.disabled).toBe(true);
+  fireEvent.click(optional);
   expect(roll).not.toHaveBeenCalled();
 });
 it("confirms physical faces once without rerolling or silently repeating the operation", () => {

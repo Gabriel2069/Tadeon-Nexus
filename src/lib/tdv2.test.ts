@@ -437,3 +437,33 @@ it("reads physical faces through the same engine without calling the random sour
   const critical = resolveTest(c, request, () => 0.5, { prumo: 1, tento: 1 });
   expect(critical.character.scene.shaken).toContain("Nexo");
 });
+
+it("requires the book's group implication and capacity review only for the new creation flow", () => {
+  const c = ready();
+  const draft = {
+    ...c,
+    ready: false,
+    creation: {
+      groupReason: "",
+      familiarities: [] as (typeof ALINHAVOS)[number][],
+      reviewed: false,
+    },
+  };
+  expect(creationErrors(draft).join(" ")).toContain("primeira situação");
+  expect(creationErrors(draft).join(" ")).toContain("Condições iniciais");
+  draft.creation.groupReason = "Proteger o testemunho de Elen";
+  draft.creation.reviewed = true;
+  const completed = finishCreation(draft);
+  expect(completed.creation?.groupReason).toBe(draft.creation.groupReason);
+  expect(completed.resources).toEqual(constitution(completed).maximums);
+  expect(tdv2CharacterSchema.safeParse(c).success).toBe(true);
+});
+it("preserves optional familiarities without granting dice or PU", () => {
+  const c = newTdvCharacter();
+  c.creation!.familiarities = ["Luta", "Ciências", "Medicina", "Selagem"];
+  expect(tdv2CharacterSchema.safeParse(c).success).toBe(true);
+  expect(constitution(c).alinhavos.Luta).toBe(0);
+  expect(constitution(c).pu).toBe(0);
+  c.creation!.familiarities.push("Encenação");
+  expect(tdv2CharacterSchema.safeParse(c).success).toBe(false);
+});

@@ -25,7 +25,7 @@ export function TdvInscription({
     <>
       <span className="tdv-inscription__label">{label}</span>
       <strong id={`${id}-reading`}>{value || "Por definir"}</strong>
-      {!disabled && <small>editar</small>}
+      {!disabled && <small aria-hidden="true">↗</small>}
     </>
   );
   if (disabled)
@@ -132,7 +132,13 @@ export function TdvDisclosure({
   initiallyOpen,
   children,
   className = "",
+  open: controlledOpen,
+  onOpenChange,
+  elementRef,
 }: {
+  elementRef?: (element: HTMLDetailsElement | null) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   initiallyOpen: boolean;
   children: ReactNode;
   className?: string;
@@ -140,9 +146,13 @@ export function TdvDisclosure({
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <details
+      ref={elementRef}
       className={`tdv-disclosure ${className}`}
-      open={open}
-      onToggle={(e) => setOpen(e.currentTarget.open)}
+      open={controlledOpen ?? open}
+      onToggle={(e) => {
+        setOpen(e.currentTarget.open);
+        onOpenChange?.(e.currentTarget.open);
+      }}
     >
       {children}
     </details>

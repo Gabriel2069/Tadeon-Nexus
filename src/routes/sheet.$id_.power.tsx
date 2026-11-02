@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/page-header";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ProtectedShell } from "@/components/protected-shell";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -147,6 +147,10 @@ interface BaseRow {
   power_form_data: VPData;
 }
 
+function powerUpdate(stats: Stats, currents: Record<"pv" | "ps" | "pe" | "pa", number>, vp: VPData) {
+  return { stats: { ...stats, pv_current: currents.pv, ps_current: currents.ps, pe_current: currents.pe, pa_current: currents.pa }, power_form_data: vp };
+}
+
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
@@ -276,6 +280,7 @@ function PowerFormPage() {
   const [_upgradeCosts, setUpgradeCosts] = useState<UpgradeCosts>(DEFAULT_UPGRADE_COSTS);
   const [skillGroups, setSkillGroups] = useState<typeof SKILL_GROUPS>([]);
   const [loading, setLoading] = useState(true);
+  const loadedFingerprints = useRef(new Map<string,string>());
   const [defEquipOpen, setDefEquipOpen] = useState(false);
   const [fragmentsView, setFragmentsView] = useState(false);
   const canEdit = can("character:edit", {
@@ -285,11 +290,14 @@ function PowerFormPage() {
   });
 
   useEffect(() => {
+    let current = true;
+    setLoading(true);
     void (async () => {
       const [{ data, error }, { data: settingsJson }] = await Promise.all([
         supabase.from("character_sheets").select("*").eq("id", id).maybeSingle(),
         supabase.rpc("get_public_game_settings"),
       ]);
+      if (!current) return;
       if (error || !data) {
         toast.error("Ficha não encontrada.");
         void navigate({ to: "/" });
@@ -344,37 +352,28 @@ function PowerFormPage() {
         raw.rules_version === 2
           ? baseRow.power_form_data
           : syncFromBase(baseRow, baseRow.power_form_data);
-      const syncChanged = JSON.stringify(synced) !== JSON.stringify(baseRow.power_form_data);
-      setVp(synced);
-      setCurrents({
+      const initialCurrents = {
         pv: Number((baseRow.stats as Stats).pv_current ?? 0),
         ps: Number((baseRow.stats as Stats).ps_current ?? 0),
         pe: Number((baseRow.stats as Stats).pe_current ?? 0),
         pa: Number((baseRow.stats as Stats).pa_current ?? 0),
-      });
+      };
+      // Normalize for comparison, never for an automatic write during hydration.
+      loadedFingerprints.current.set(baseRow.id, JSON.stringify(powerUpdate(baseRow.stats,initialCurrents,synced)));
+      setVp(synced);
+      setCurrents(initialCurrents);
       const g = (settingsJson as Record<string, unknown> | null) ?? {};
       setRankTable((g.rank_table as RankRow[] | undefined) ?? []);
       setUpgradeCosts((g.upgrade_costs as UpgradeCosts | undefined) ?? DEFAULT_UPGRADE_COSTS);
       setSkillGroups((g.skill_groups as typeof SKILL_GROUPS | undefined) ?? []);
       setLoading(false);
-      const mayEdit = can("character:edit", {
-        appRole: role,
-        currentUserId: user?.id,
-        resourceOwnerId: baseRow.owner_id,
-      });
-      if (syncChanged && mayEdit) {
-        const { error: syncError } = await supabase
-          .from("character_sheets")
-          .update({ power_form_data: synced as never })
-          .eq("id", baseRow.id);
-        if (syncError) toast.error("Não foi possível sincronizar a Forma de Poder.");
-      }
     })();
+    return () => { current = false; };
   }, [id, navigate, role, user?.id, edition]);
 
   const powerDraft = useMemo(
-    () => (base ? { baseId: base.id, baseStats: base.stats, currents, vp } : null),
-    [base, currents, vp],
+    () => (!loading && base ? { baseId: base.id, baseStats: base.stats, currents, vp } : null),
+    [base, currents, vp, loading],
   );
   const {
     dirty,
@@ -386,21 +385,18 @@ function PowerFormPage() {
     enabled: canEdit,
     delay: 1200,
     save: async (draft) => {
-      const nextStats: Stats = {
-        ...draft.baseStats,
-        pv_current: draft.currents.pv,
-        ps_current: draft.currents.ps,
-        pe_current: draft.currents.pe,
-        pa_current: draft.currents.pa,
-      };
+      const payload = powerUpdate(draft.baseStats, draft.currents, draft.vp);
+      const fingerprint = JSON.stringify(payload);
+      if (loadedFingerprints.current.get(draft.baseId) === fingerprint) return;
       const { error } = await supabase
         .from("character_sheets")
         .update({
-          stats: nextStats as never,
-          power_form_data: draft.vp as never,
+          stats: payload.stats as never,
+          power_form_data: payload.power_form_data as never,
         })
         .eq("id", draft.baseId);
       if (error) throw error;
+      loadedFingerprints.current.set(draft.baseId, fingerprint);
     },
   });
 

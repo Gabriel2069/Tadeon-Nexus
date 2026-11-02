@@ -414,3 +414,10 @@ A reforma normativa altera a organização funcional da ficha e da condução, p
 Cada fólio mantém seu pigmento e cada seção recebe um emblema vetorial próprio: pessoa, Âncora, vínculos, recursos, Equilíbrio, dois Fios, condições, recuperação, expressão e percurso. Cantos, costuras e luz estática diferenciam a função sem transformar toda superfície em vidro. Dados assumem silhuetas com valores reais; o repertório prioriza leitura antes da edição.
 
 O modo de jogo apresenta presença e recursos junto das operações; no desktop forma uma trilha contextual, e no celular recompõe em faixa compacta. Os dois Fios precedem parâmetros avançados, ajuda e contexto opcional. A ficha integral conserva os cinco fólios e os campos. A referência enviada de Ordem orienta densidade e leitura imediata, preservando os materiais e regras do TdV. A Forma de Poder antiga fica no acesso histórico. Sem movimento ambiente, estado ou custos paralelos. Evidências e limites em `v4/FICHA_VISUAL_E_JOGO.md`.
+
+
+## DEC-029 — A ficha como instrumento
+
+Tadeu rejeitou o predomínio de formulário da PR 320. A apresentação passa a expressar a informação: retrato de Feição com nós reais, rosa de seis escolhas para Âncora, atlas operável de vínculos, recipientes para recursos, tecido bipolar para Equilíbrio, medidor calculado de probabilidade, diagrama dos Fios e percurso em nós de Marcos. Os textos pertencem à leitura da ficha e recebem edição deliberada, sem caixas permanentes ou contadores de redação.
+
+Materiais permanecem em seus proprietários; nenhum loop ambiente, grafo fictício ou autoridade paralela é introduzido. A criação tem percurso navegável pelos oito passos do Livro II, sem converter familiaridade em bônus nem conceder Lavores gratuitos pelo cliente. Relatório e limites em `v4/FICHA_COMO_INSTRUMENTO.md`.
