@@ -39,6 +39,7 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/FICHA_OPERACIONAL.md](v4/FICHA_OPERACIONAL.md) | active | Direção operacional da ficha, reconciliação com o Livro de Regras, destinos dos controles, persistência e limites. |
 | [v4/FICHA_VISUAL_E_JOGO.md](v4/FICHA_VISUAL_E_JOGO.md) | active | Diferenças, destinos das funções, criação d6/d4, apresentação de jogo, provas e limites do lote DEC-028. |
 | [v4/FICHA_COMO_INSTRUMENTO.md](v4/FICHA_COMO_INSTRUMENTO.md) | active | Diferenças compositivas e funcionais, conciliação da criação, cobertura e limitações de DEC-029. |
+| [v4/FICHA_PRANCHETA_INTERATIVA.md](v4/FICHA_PRANCHETA_INTERATIVA.md) | active | Direção DEC-030, destinos de funções, condições explícitas e validação proporcional solicitada pelo usuário. |
 
 ## Contratos e evidências
 
@@ -86,3 +87,4 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/sheet-reading-validation.json](v4/sheet-reading-validation.json) | Leitura/edição cancelável, Pilar, vínculos e condições; foco, encaixe de editores e dimensões em fixtures. |
 | [v4/sheet-play-validation.json](v4/sheet-play-validation.json) | Evidências do atlas autoral, modo de jogo, conferência física, mesma persistência e acesso histórico sem gravação. |
 | [v4/living-sheet-validation.json](v4/living-sheet-validation.json) | Capturas/hash e comprovação do lote de instrumentos visuais, criação e leitura natural. |
+| [v4/playbook-sheet-validation.json](v4/playbook-sheet-validation.json) | Provas e limites da ficha interativa, sem reutilizar contagens do ambiente perdido. |

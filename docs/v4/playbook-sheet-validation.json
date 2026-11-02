@@ -1,0 +1,42 @@
+{
+  "decision": "DEC-030",
+  "task": "NEX-046",
+  "state": "source verification; exact-head CI/deployment belongs to PR321",
+  "base": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+  "localFocusedUnitTests": 9,
+  "sourceCheckpoint": "550c09263b822d23222e6ffba9959fd9855fa021",
+  "dataMigration": false,
+  "realAccountWrites": 0,
+  "limits": [
+    "four representative responsive compositions, not all chapter50 dimensions",
+    "no hardware/account certification",
+    "transactional grants and full physical/offline reconciliation remain NEX-048"
+  ],
+  "localBrowser": {
+    "states": 72,
+    "viewports": [
+      [
+        320,
+        720
+      ],
+      [
+        568,
+        320
+      ],
+      [
+        820,
+        1180
+      ],
+      [
+        1440,
+        900
+      ]
+    ],
+    "roles": [
+      "mestre",
+      "espectador"
+    ],
+    "passed": true,
+    "note": "Final CI repeats the representative pass on the exact source; two final density-only CSS refinements are included there."
+  }
+}

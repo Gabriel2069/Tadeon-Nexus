@@ -2102,7 +2102,8 @@
 .tadeon-tdv2-sheet [data-slot="tabs-content"] { display: grid; gap: 1rem; min-width: 0; }
 .tadeon-tdv2-sheet [data-slot="tabs-content"][data-state="inactive"] { display: none; }
 .tdv-tabs--sheet { position: relative; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: .15rem; width: 100%; height: auto; padding: .3rem; border-radius: .8rem; }
-.tdv-tabs--sheet > button { display: grid; place-items: center; align-content: center; gap: .3rem; min-width: 0; min-height: 60px; padding: .4rem .05rem; white-space: normal; font: .8rem/1.1 var(--font-inter); }
+.tdv-tabs--sheet > button { display: grid; place-items: center; align-content: center; gap: .3rem; min-width: 0; min-height: 60px; padding: .4rem .05rem; white-space: normal; font: .75rem/1.1 var(--font-inter); }
+.tdv-tabs--sheet > button > span { white-space: nowrap; }
 .tdv-tabs--sheet > button > svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.4; }
 .tdv-tabs--sheet .tadeon-selection-plate { border-radius: .5rem; background: linear-gradient(110deg,rgb(var(--folio-rgb) / 18%),rgb(var(--folio-rgb) / 3%)); box-shadow: inset 0 -2px rgb(var(--folio-rgb) / 75%); }
 .tadeon-tdv2-sheet .tadeon-sheet-section--folio { --section-rgb: var(--folio-rgb); --sheet-section-radius: 0; --sheet-section-border: transparent; --sheet-section-surface: transparent; --sheet-section-shadow: none; padding: .65rem 0; overflow: visible; }
@@ -2370,6 +2371,7 @@
 .tdv-thread-console .tdv-field { width: 100%; }
 .tdv-test-dice--quick { display: block; padding: 0; border: 0; background: none; }
 .tdv-test-dice--quick > button { width: 100%; min-height: 48px; }
+@container tdv-atlas (min-width: 500px) { .tdv-persona-layout { grid-template-columns: minmax(0,1.2fr) minmax(0,.9fr); gap: 1rem; } .tdv-persona-layout > [data-section="tdv-pessoal"] { grid-column: 1 / -1; } }
 @container tdv-atlas (min-width: 640px) { .tdv-alinhavos { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @container tdv-atlas (min-width: 700px) {
  .tdv-sheet-tabs { grid-template-columns: 4.75rem minmax(0,1fr); gap: 1.25rem; }
@@ -2384,14 +2386,17 @@
  .tdv-resource-operation .tdv-resource-step { grid-row: 1; }
  .tdv-resource-arc { top: 2rem; }
  .tdv-matrices { grid-template-columns: repeat(4,minmax(0,1fr)); }
- .tdv-persona-layout { grid-template-columns: minmax(0,1.2fr) minmax(0,.9fr); gap: 1rem; }
- .tdv-persona-layout > [data-section="tdv-pessoal"] { grid-column: 1 / -1; }
  .tdv-repertoire-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
  .tdv-defense { grid-template-columns: repeat(4,minmax(0,1fr)); }
  .tdv-creation-steps { grid-template-columns: repeat(4,minmax(0,1fr)); }
 }
 @container tdv-atlas (min-width: 1100px) { .tdv-alinhavos { grid-template-columns: repeat(4,minmax(0,1fr)); } }
 @container tdv-atlas (max-width: 699px) {
+ .tdv-resource { padding-top: .5rem; }
+ .tdv-resource-operation { margin-top: .5rem; }
+ .tdv-resource-operation .tdv-resource-value { min-height: 44px; }
+ .tdv-resource-value > small { display: none; }
+ .tdv-resource-arc { top: 1.8rem; height: 3.5rem; }
  .tdv-domain-instrument { grid-template-columns: minmax(0,1fr) minmax(8rem,.7fr); gap: .2rem 1rem; }
  .tdv-domain-instrument header { grid-column: 1; }
  .tdv-domain-axis { grid-column: 1; grid-row: 2; }
