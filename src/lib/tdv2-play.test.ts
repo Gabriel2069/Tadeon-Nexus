@@ -29,7 +29,7 @@ import {
 } from "./tdv2-play";
 import { newOperation, registerOperationStep, type OperationStep } from "./tdv2-operations";
 function ready() {
-  let c = newTdvCharacter();
+  let c = newTdvCharacter("reference");
   Object.assign(c.face, {
     origin: "Cais",
     occupation: "Registradora",

@@ -112,10 +112,14 @@ export function SheetExperienceBridge({
   sheetId,
   dropTarget,
   canEdit,
+  mode: controlledMode,
+  onModeChange,
 }: {
   sheetId: string;
   dropTarget: HTMLElement | null;
   canEdit: boolean;
+  mode?: "edit" | "game";
+  onModeChange?: (mode: "edit" | "game") => void;
 }) {
   const active = useRef(true);
   useEffect(() => {
@@ -127,13 +131,19 @@ export function SheetExperienceBridge({
   const { user } = useAuth();
   const embedded = queryFlag("embed");
   const popout = queryFlag("popout");
-  const [mode, setMode] = useState<"edit" | "game">(() => {
+  const [localMode, setLocalMode] = useState<"edit" | "game">(() => {
     if (!sheetId || typeof window === "undefined") return "game";
     if (embedded || queryMode() === "game") return "game";
     if (queryMode() === "edit") return "edit";
     const stored = window.sessionStorage.getItem(`tadeon-sheet-mode:${sheetId}`);
     return stored === "edit" ? "edit" : "game";
   });
+  const mode = controlledMode ?? localMode;
+  const setMode = (change: (current: "edit" | "game") => "edit" | "game") => {
+    const next = change(mode);
+    if (onModeChange) onModeChange(next);
+    else setLocalMode(next);
+  };
   const [onlineCount, setOnlineCount] = useState(1);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -172,12 +182,12 @@ export function SheetExperienceBridge({
     root.dataset.tadeonSheetMode = mode;
     if (embedded) root.dataset.tadeonSheetEmbed = "tabletop";
     else delete root.dataset.tadeonSheetEmbed;
-    window.sessionStorage.setItem(storageKey, mode);
+    if (controlledMode === undefined) window.sessionStorage.setItem(storageKey, mode);
     return () => {
       delete root.dataset.tadeonSheetMode;
       delete root.dataset.tadeonSheetEmbed;
     };
-  }, [embedded, mode, sheetId, storageKey]);
+  }, [controlledMode, embedded, mode, sheetId, storageKey]);
 
   useEffect(() => {
     if (!sheetId || !user?.id) return;
@@ -263,13 +273,29 @@ export function SheetExperienceBridge({
           variant={mode === "game" ? "default" : "outline"}
           className="tadeon-sheet-game-button gap-1.5"
           data-state={mode === "game" ? "active" : "inactive"}
-          aria-label={mode === "game" ? "Editar" : "Jogo"}
+          aria-label={
+            controlledMode !== undefined
+              ? mode === "game"
+                ? "Ficha integral"
+                : "Modo de jogo"
+              : mode === "game"
+                ? "Editar"
+                : "Jogo"
+          }
           aria-pressed={mode === "game"}
           onClick={() => setMode((current) => (current === "game" ? "edit" : "game"))}
           title={mode === "game" ? "Voltar à edição completa" : "Ativar versão de jogo"}
         >
           {mode === "game" ? <Pencil className="h-4 w-4" /> : <Gamepad2 className="h-4 w-4" />}
-          <span>{mode === "game" ? "Editar" : "Jogo"}</span>
+          <span>
+            {controlledMode !== undefined
+              ? mode === "game"
+                ? "Ficha integral"
+                : "Modo de jogo"
+              : mode === "game"
+                ? "Editar"
+                : "Jogo"}
+          </span>
         </Button>
         <Button
           size="icon"

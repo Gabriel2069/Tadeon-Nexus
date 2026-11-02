@@ -68,6 +68,20 @@
       "bytes": 919258,
       "textRead": "complete",
       "visualReview": "A3 board and first catalog page inspected"
+    },
+    {
+      "file": "TdV_II_Livro_do_Jogador_Reedicao.docx",
+      "libraryFileId": "libfile_dcea04b97c308191be2c72c1a3d177f9",
+      "bytes": 20065487,
+      "textRead": "introdução e criação, linhas 1–300 e 1045–1112 da extração; não leitura integral da reedição",
+      "visualReview": "not a pagination review",
+      "reconciliation": "A distribuição de exemplo não é alocação obrigatória; base d6/d4 é rascunho anterior ao pacote inicial."
+    },
+    {
+      "file": "TdV_II_Livro_do_Jogador_Nota_Editorial.md",
+      "libraryFileId": "libfile_5ec6de69756c8191b3ab6cd34fa75fec",
+      "textRead": "complete, 49 lines",
+      "reconciliation": "Reedição editorial da fonte normativa já lida; sem alteração mecânica deliberada."
     }
   ],
   "localInstructionsRead": [

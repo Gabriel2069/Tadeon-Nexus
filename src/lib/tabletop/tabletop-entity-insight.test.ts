@@ -61,7 +61,7 @@ describe("resumo de ficha da Mesa", () => {
 
 describe("TdV II authorized summaries", () => {
   it("exposes current resources and development without narrative secrets or legacy points", () => {
-    const c = newTdvCharacter();
+    const c = newTdvCharacter("reference");
     c.face.occupation = "Registradora";
     c.face.origin = "Cais";
     c.notes = "SEGREDO PRIVADO";
@@ -85,7 +85,7 @@ describe("TdV II authorized summaries", () => {
     expect(JSON.stringify(summary)).not.toContain("PRIVAD");
   });
   it("keeps physical critical state visible together with Colapso", () => {
-    const c = newTdvCharacter();
+    const c = newTdvCharacter("reference");
     c.resources = { pv: 0, pi: 0, pe: 0 };
     for (const critical of ["Incapacitada", "À Beira", "Morta"] as const) {
       const summary = normalizeTabletopSheetSummary({

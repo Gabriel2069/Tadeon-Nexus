@@ -40,7 +40,7 @@ const token = [
   .map((v) => (typeof v === "string" ? v : Buffer.from(JSON.stringify(v)).toString("base64url")))
   .join(".");
 function character() {
-  const c = newTdvCharacter();
+  const c = newTdvCharacter("reference");
   Object.assign(c.face, {
     origin: "O cais",
     occupation: "Registradora",
@@ -119,6 +119,14 @@ try {
         row.tdv2_data.face.links[0].offer = "Abrigo e acesso aos arquivos do cais";
         row.tdv2_data.face.links[0].demand = "Preservar a identidade das testemunhas";
         row.tdv2_data.conditions = [{ id: "fixture-condition", name: "Ferida no braço", origin: "Estilhaços no cais", effect: "Dificulta ações que exigem o braço ferido", exit: "Receber cuidado e repouso adequado", intensity: "Leve" }];
+      }
+      if (process.env.NEXUS_PLAY_VIEW_ONLY === "1") {
+        row.power_form_enabled = true;
+        row.power_form_data = { notes: "Registro histórico preservado", attributes: { COR: 7 } };
+        row.tdv2_data.records.push(
+          { id: "play-lavor", kind: "Lavor", name: "Ler os vestígios do cais", fields: { Gatilho: "Examinar um objeto ligado a um testemunho", Efeito: "Reconhecer a marca de sua origem" } },
+          { id: "play-trama", kind: "Trama", name: "A memória dos fios", fields: { Alvo: "Um testemunho preservado", Sustentação: "Conforme a situação ficcional" } },
+        );
       }
       const writes = [],
         errors = [];
@@ -223,6 +231,8 @@ try {
         const target = {
           "sheet-critical": ".tdv-result",
           "sheet-records": "#tdv-expressao",
+          "play-repertoire": "#tdv-expressao",
+          "atlas-expression": "#tdv-expressao",
           "master-round": "#tdv-master-round",
           "master-pessoas": "#tdv-master-opposition",
           "master-investigação": "#tdv-master-sealing",
@@ -321,6 +331,54 @@ try {
       };
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
       await page.getByLabel("Nome da personagem", { exact: true }).waitFor();
+      if (process.env.NEXUS_PLAY_VIEW_ONLY === "1") {
+        assert(await page.locator('#tdv-feicao .tdv-emblem').count()===1,'Person instrument is mounted');
+        await geometry('atlas-person');
+        await page.getByRole('tab',{name:'Constituição',exact:true}).click();
+        assert(await page.locator('.tdv-competency .tdv-die').count()===25,'25 canonical dice instruments');
+        await geometry('atlas-capacities');
+        await page.getByRole('button',{name:'Modo de jogo',exact:true}).click();
+        const presence=page.getByRole('complementary',{name:'Presença em jogo',exact:true});
+        await presence.waitFor();await page.getByRole('tab',{name:'Agir',exact:true}).waitFor();
+        await geometry('play-action');
+        if(role==='mestre') {
+          await page.getByLabel('Usar dados físicos',{exact:true}).check();
+          await page.getByLabel('Face física de Prumo',{exact:true}).fill('6');
+          await page.getByLabel('Face física de Tento',{exact:true}).fill('3');
+          await page.getByRole('button',{name:'Conferir dados físicos',exact:true}).click();
+          await page.getByText('Enlace 9 / DT 10 · margem -1',{exact:true}).waitFor();
+          assert(writes.length===0,'Plain physical faces do not write or reroll');
+          assert(await page.getByRole('button',{name:'Conferir dados físicos',exact:true}).isDisabled(),'Physical confirmation cannot be silently repeated');
+          await geometry('play-physical-result');
+          await page.getByRole('button',{name:'Ficha integral',exact:true}).click();
+          await page.getByRole('tab',{name:'Ação',exact:true}).click();
+          await page.getByText('Enlace 9 / DT 10 · margem -1',{exact:true}).waitFor();
+          await page.getByRole('button',{name:'Modo de jogo',exact:true}).click();
+          await presence.getByRole('button',{name:/Ajustar PV$/}).click();
+          await page.getByRole('button',{name:'Retirar 1 PV',exact:true}).click();
+          await saved(()=>row.tdv2_data.resources.pv===9);
+        } else {
+          assert(await presence.getByRole('button',{name:/Ajustar PV$/}).isDisabled(),'Read-only resources disabled');
+          assert(await page.getByLabel('Usar dados físicos',{exact:true}).isDisabled(),'Read-only physical roll disabled');
+          assert(writes.length===0,'Readonly play made no writes');
+        }
+        await page.getByRole('tab',{name:'Repertório',exact:true}).click();await geometry('play-repertoire');
+        await page.getByRole('tab',{name:'Agir',exact:true}).click();
+        if(role==='mestre') await page.getByText('Enlace 9 / DT 10 · margem -1',{exact:true}).waitFor();
+        await page.reload();await page.getByRole('button',{name:'Ficha integral',exact:true}).waitFor();
+        await geometry('play-restored-mode');
+        await page.getByRole('button',{name:'Ficha integral',exact:true}).click();
+        await page.getByRole('tab',{name:'Expressão',exact:true}).click();await geometry('atlas-expression');
+        await page.getByRole('tab',{name:'Percurso',exact:true}).click();await geometry('atlas-development');
+        const beforeHistory = writes.length, historical = JSON.stringify(row.power_form_data);
+        await page.getByRole('button',{name:'Registros históricos',exact:true}).click();
+        await page.getByRole('button',{name:'Forma de Poder histórica',exact:true}).click();
+        await page.getByRole('note').filter({hasText:'Registro da Forma de Poder da edição anterior'}).waitFor();
+        await geometry('historical-power');
+        assert(writes.length===beforeHistory,'Historical record opening cannot write');
+        assert(JSON.stringify(row.power_form_data)===historical,'Historical payload preserved');
+        await context.close();continue;
+      }
       if (process.env.NEXUS_SHEET_READING_ONLY === "1") {
         await page.locator('#tdv-feicao').scrollIntoViewIfNeeded(); await geometry('reading-person');
         assert(await page.locator('.tdv-inscription:visible').count() === 5, 'Five inscriptions, without five default text fields');
@@ -520,7 +578,7 @@ try {
             await filter.selectOption("Trama");
             await page
               .locator("summary")
-              .filter({ hasText: "Trama · A trama consultável" })
+              .filter({ has: page.getByText("A trama consultável", { exact: true }) })
               .waitFor();
             assert(
               await page
@@ -845,6 +903,15 @@ try {
         await page.locator("summary").filter({ hasText: "Marca ·" }).click();
         await page.getByLabel("Gatilho", { exact: true }).fill("Quando a promessa é ameaçada");
         await page.getByLabel("Resíduo", { exact: true }).fill("O fio permanece quente");
+        await page.getByRole('tab',{name:'Constituição',exact:true}).click();
+        for(const [name,grade] of [['Ímpeto',2],['Cadência',3],['Nexo',3],['Lastro',2]]) {
+          await page.getByRole('button',{name:new RegExp('^Valor de '+name+':')}).click();
+          await page.getByRole('group',{name:'Valor de '+name,exact:true}).getByRole('button',{name:new RegExp('^'+grade+' ·')}).click();
+        }
+        for(const [name,grade] of [['Engenharia',2],['Investigação',2],['Atletismo',1],['Percepção',1],['Sociedade',1],['Iniciativa',1]]) {
+          await page.getByRole('button',{name:new RegExp('^Grau inicial de '+name+':')}).click();
+          await page.getByRole('group',{name:'Grau inicial de '+name,exact:true}).getByRole('button',{name:new RegExp('^'+grade+' ·')}).click();
+        }
         await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).click();
         await saved(() => row.rules_version === 2 && row.tdv2_data.ready);
         assert(
@@ -966,6 +1033,10 @@ try {
       }
       await context.close();
     }
+} catch (error) {
+  // Persist the failure before browser teardown; native runtime shutdown can hide stderr.
+  writeFileSync(output + "/failure.txt", error?.stack || String(error));
+  throw error;
 } finally {
   writeFileSync(output + "/server.log", serverLog);
   await browser?.close();

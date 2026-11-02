@@ -407,3 +407,10 @@ O menu lateral interpola a largura e conserva rótulos no DOM, sem desmontar ide
 ## NEX-040 — O TdV II como linguagem de uso
 
 A reforma normativa altera a organização funcional da ficha e da condução, preservando a identidade do site. Pessoa reúne Feição, Constituição e Desenvolvimento; Ação mantém os dois Fios e a continuidade de cena; Expressão/memória distingue capacidades, Condições e registros duradouros. O novo eixo de Equilíbrio não possui bônus universal. O desenvolvimento conserva cor e relevo local, sem loop decorativo. Controles se recompõem pela largura disponível, com campos rotulados e alvos de 44px. A edição anterior é identificada e a conversão exige revisão concreta.
+
+
+## DEC-028 — Atlas visual e instrumentos de partida
+
+Cada fólio mantém seu pigmento e cada seção recebe um emblema vetorial próprio: pessoa, Âncora, vínculos, recursos, Equilíbrio, dois Fios, condições, recuperação, expressão e percurso. Cantos, costuras e luz estática diferenciam a função sem transformar toda superfície em vidro. Dados assumem silhuetas com valores reais; o repertório prioriza leitura antes da edição.
+
+O modo de jogo apresenta presença e recursos junto das operações; no desktop forma uma trilha contextual, e no celular recompõe em faixa compacta. Os dois Fios precedem parâmetros avançados, ajuda e contexto opcional. A ficha integral conserva os cinco fólios e os campos. A referência enviada de Ordem orienta densidade e leitura imediata, preservando os materiais e regras do TdV. A Forma de Poder antiga fica no acesso histórico. Sem movimento ambiente, estado ou custos paralelos. Evidências e limites em `v4/FICHA_VISUAL_E_JOGO.md`.

@@ -173,19 +173,24 @@ export const tdv2CharacterSchema = z
   .strict();
 export type TdvCharacter = z.infer<typeof tdv2CharacterSchema>;
 export const uid = () => crypto.randomUUID();
-export function newTdvCharacter(): TdvCharacter {
+export function newTdvCharacter(distribution: "base" | "reference" = "base"): TdvCharacter {
   const value: TdvCharacter = {
     version: 2,
     ready: false,
-    matrices: { Ímpeto: 2, Cadência: 3, Nexo: 3, Lastro: 2 },
+    matrices:
+      distribution === "reference"
+        ? { Ímpeto: 2, Cadência: 3, Nexo: 3, Lastro: 2 }
+        : { Ímpeto: 1, Cadência: 1, Nexo: 1, Lastro: 1 },
     alinhavos: Object.fromEntries(
       ALINHAVOS.map((name) => [
         name,
-        ["Engenharia", "Investigação"].includes(name)
-          ? 2
-          : ["Atletismo", "Percepção", "Sociedade", "Iniciativa"].includes(name)
-            ? 1
-            : 0,
+        distribution === "base"
+          ? 0
+          : ["Engenharia", "Investigação"].includes(name)
+            ? 2
+            : ["Atletismo", "Percepção", "Sociedade", "Iniciativa"].includes(name)
+              ? 1
+              : 0,
       ]),
     ),
     face: {
@@ -213,6 +218,7 @@ export function newTdvCharacter(): TdvCharacter {
     history: "",
     notes: "",
   };
+  value.resources = constitution(value).maximums;
   return value;
 }
 export function constitution(character: TdvCharacter) {
@@ -569,10 +575,19 @@ export function readTest(prumo: number, tento: number, dt: number) {
                 : "Falha severa",
   };
 }
-export function resolveTest(c: TdvCharacter, r: TestRequest, random: () => number = Math.random) {
+export function resolveTest(
+  c: TdvCharacter,
+  r: TestRequest,
+  random: () => number = Math.random,
+  faces?: { prumo: number; tento: number },
+) {
   const dice = prepareTest(c, r),
     roll = (size: number) => Math.min(size, Math.floor(Math.max(0, random()) * size) + 1),
-    result = readTest(roll(dice.prumo), roll(dice.tento), r.dt);
+    validFace = (value: number, size: number) =>
+      Number.isInteger(value) && value >= 1 && value <= size;
+  if (faces && (!validFace(faces.prumo, dice.prumo) || !validFace(faces.tento, dice.tento)))
+    throw new Error("Confira as faces físicas: use inteiros entre 1 e o dado final de cada Fio.");
+  const result = readTest(faces?.prumo ?? roll(dice.prumo), faces?.tento ?? roll(dice.tento), r.dt);
   // A plain roll is transient; only mechanical effects or explicit records change the sheet.
   if (!(dice.cost || dice.piCost || dice.zero || result.criticalFailure || r.context || r.costs))
     return { result, dice, character: c };

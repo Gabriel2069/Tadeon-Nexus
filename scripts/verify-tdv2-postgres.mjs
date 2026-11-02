@@ -42,7 +42,9 @@ const auth = async (id) =>
 const valid = async (c) =>
   (await db.query("select private.tdv2_character_valid($1::jsonb) ok", [JSON.stringify(c)])).rows[0]
     .ok;
-let c = newTdvCharacter();
+assert.equal(await valid(newTdvCharacter()), true);
+checks++;
+let c = newTdvCharacter("reference");
 assert.equal(await valid(c), true);
 checks++;
 assert.equal(await valid({ ...c, version: undefined }), false);

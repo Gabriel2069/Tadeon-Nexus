@@ -1,3 +1,4 @@
+import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -48,7 +49,7 @@ export function TdvCompetency({
   const die = `d${DICE[grade]}`;
   const face = (
     <>
-      <span>{die}</span>
+      <TdvDie sides={DICE[grade]} />
       <small>{creation ? "escolher" : disabled ? "leitura" : "rolar"}</small>
     </>
   );
@@ -75,7 +76,7 @@ export function TdvCompetency({
           <PopoverContent className="tdv-competency__choices" aria-label={`Escolher ${name}`}>
             <p>{name} · distribuição inicial</p>
             <div role="group" aria-label={matrix ? `Valor de ${name}` : `Grau inicial de ${name}`}>
-              {(matrix ? [2, 3] : [0, 1, 2]).map((value) => (
+              {(matrix ? [1, 2, 3] : [0, 1, 2]).map((value) => (
                 <Button
                   key={value}
                   variant="outline"

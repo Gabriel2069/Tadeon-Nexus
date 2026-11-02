@@ -1289,3 +1289,17 @@ html body [data-slot="dialog-content"]:not([data-motion-surface]),
   .tadeon-page-header[data-page-header="sheet"] .tadeon-page-header__mark { width: 2.25rem; height: 2.25rem; }
   .tadeon-page-header[data-page-header="sheet"] .tadeon-page-header__eyebrow { margin-bottom: .15rem; }
 }
+
+/* Play keeps the route's tools, with presence carried by its instrument rail. */
+.tadeon-page-header.tadeon-sheet-play-header { padding-block: .6rem; }
+.tadeon-sheet-play-header .tadeon-page-header__mark { display: none; }
+.tadeon-sheet-play-header .tadeon-page-header__title { font-size: 1.35rem; }
+.tadeon-sheet-play-header .tadeon-page-header__eyebrow { font-size: .7rem; }
+
+.tadeon-page-header.tadeon-sheet-play-header .tadeon-page-header__main { grid-template-columns: minmax(0,1fr); padding: .65rem .8rem; }
+.tadeon-sheet-play-header .tadeon-page-header__identity { grid-column: 1; grid-row: 1; }
+.tadeon-sheet-play-header .tadeon-page-header__actions { grid-column: 1; grid-row: 2; max-width: none; }
+@media (min-width: 1180px) {
+ .tadeon-page-header.tadeon-sheet-play-header .tadeon-page-header__main { grid-template-columns: minmax(0,1fr) auto; }
+ .tadeon-sheet-play-header .tadeon-page-header__actions { grid-column: 2; grid-row: 1; }
+}
