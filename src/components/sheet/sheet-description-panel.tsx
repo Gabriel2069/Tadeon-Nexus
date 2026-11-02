@@ -1,3 +1,4 @@
+import { TdvInscription } from "./tdv2-fields";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollText, BookOpen, Heart, Target, NotebookPen } from "lucide-react";
@@ -6,33 +7,37 @@ export function SheetDescriptionPanel({
   description,
   canEdit,
   onChange,
+  reading = false,
 }: {
+  reading?: boolean;
   description: Description;
   canEdit: boolean;
   onChange: (v: Description) => void;
 }) {
   return (
-    <div className="tadeon-description-tab space-y-4">
-      <Card className="tadeon-description-hero">
-        <div className="tadeon-description-hero__mark" aria-hidden="true">
-          <ScrollText />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="tadeon-eyebrow">Arquivo narrativo</p>
-          <h2>Quem existe além dos números</h2>
-          <p>Passado, presença e desejos da personagem.</p>
-        </div>
-        <div className="tadeon-description-hero__progress">
-          <strong>
-            {
-              (Object.values(description) as string[]).filter((value) => value.trim().length > 0)
-                .length
-            }
-            <small>/4</small>
-          </strong>
-          <span>registros iniciados</span>
-        </div>
-      </Card>
+    <div className="tadeon-description-tab space-y-4" data-reading={reading}>
+      {!reading && (
+        <Card className="tadeon-description-hero">
+          <div className="tadeon-description-hero__mark" aria-hidden="true">
+            <ScrollText />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="tadeon-eyebrow">Arquivo narrativo</p>
+            <h2>Quem existe além dos números</h2>
+            <p>Passado, presença e desejos da personagem.</p>
+          </div>
+          <div className="tadeon-description-hero__progress">
+            <strong>
+              {
+                (Object.values(description) as string[]).filter((value) => value.trim().length > 0)
+                  .length
+              }
+              <small>/4</small>
+            </strong>
+            <span>registros iniciados</span>
+          </div>
+        </Card>
+      )}
       <div className="tadeon-description-grid">
         {(
           [
@@ -90,20 +95,31 @@ export function SheetDescriptionPanel({
                   <small>{kicker}</small>
                   <h3>{label}</h3>
                 </div>
-                <span className="tadeon-description-card__count">{words} palavras</span>
+                {!reading && (
+                  <span className="tadeon-description-card__count">{words} palavras</span>
+                )}
               </div>
               <details className="tadeon-description-card__guidance">
                 <summary>Ideias para escrever</summary>
                 <p className="tadeon-description-card__prompt">{prompt}</p>
               </details>
-              <Textarea
-                disabled={!canEdit}
-                value={value}
-                onChange={(event) => onChange({ ...description, [key]: event.target.value })}
-                rows={3}
-                aria-label={label}
-                placeholder={placeholder}
-              />
+              {reading ? (
+                <TdvInscription
+                  label={label}
+                  value={value}
+                  onChange={(v) => onChange({ ...description, [key]: v })}
+                  disabled={!canEdit}
+                />
+              ) : (
+                <Textarea
+                  disabled={!canEdit}
+                  value={value}
+                  onChange={(event) => onChange({ ...description, [key]: event.target.value })}
+                  rows={3}
+                  aria-label={label}
+                  placeholder={placeholder}
+                />
+              )}
             </Card>
           );
         })}

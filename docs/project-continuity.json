@@ -1,25 +1,25 @@
 {
   "version": 1,
   "checkedAt": "2026-11-02",
-  "runtimeReference": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+  "runtimeReference": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
   "integration": {
-    "pr": 319,
-    "branch": "feat/nex-046-sheet-reading",
+    "pr": 320,
+    "branch": "feat/nex-047-visual-play",
     "base": "main",
-    "baseCommit": "209c82a62236d107c73ced883f4bec7884529d62",
-    "sourceCommit": "d8d4d851fefc0fde12c95a5f5eac42db422ba18f",
-    "headCommit": "d8d4d851fefc0fde12c95a5f5eac42db422ba18f",
+    "baseCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+    "sourceCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
+    "headCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
     "state": "integrated",
-    "mergeCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41356255662",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41356255656",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41358118737",
+    "mergeCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190627",
+    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190598",
+    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184403",
     "production": "workflow-confirmed; HTTP200 and exact release marker",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41358118718",
-    "productionCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
-    "productionVerifiedAt": "2026-11-01T22:41:30.312Z",
+    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184380",
+    "productionCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+    "productionVerifiedAt": "2026-11-02T02:12:26.777Z",
     "productionHttpStatus": 200,
-    "note": "PR 319 publicada. O lote DEC-028 exige Quality, seis grupos visuais e agregador no próprio fonte; publicação somente por main."
+    "note": "PR 320 publicada com 703 testes e 642 estados TdV II; novo lote DEC-029 exige gates/publicação próprios."
   },
   "domains": [
     {
@@ -119,14 +119,17 @@
         "src/components/sheet/sheet-description-panel.tsx",
         "src/components/sheet/tdv2-retained-tools.tsx",
         "src/components/sheet/tdv2-emblem.tsx",
-        "src/components/sheet/tdv2-play-presence.tsx"
+        "src/components/sheet/tdv2-play-presence.tsx",
+        "src/components/sheet/tdv2-visual-instruments.tsx",
+        "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-creation-loom.test.tsx"
       ],
       "styles": [
         "src/styles/sheet-layout.css",
         "src/styles/sheet-premium.css",
         "src/styles/sheet-experience.css"
       ],
-      "boundary": "Rota mantém estado, regras derivadas, leitura cancelável e autosave por personagem/usuário/cargo. Seções recebem valores/callbacks; não criam estado persistido paralelo. Sheet UI mantém rótulos, recolhimento e material; sheet-premium é dono do material. Histórico/inventário montados explicitamente na ficha, sem observer de montagem; o arquivo de experiência ainda conserva bridges de outras áreas. NEX-025: vínculos recolhem no componente; títulos recebem foco para revelar seções. Dossiê em sheet-premium, densidade do modo Jogo em sheet-layout; índice sem captura global. useSheetChrome mede somente os dois cabeçalhos conhecidos do shell e a barra local, com observer e listener desmontados; publica offsets apenas no host da ficha. NEX-034/DEC-020: identidade relativa e compacta, títulos/ações com fluxo próprio, instrumentos por largura real do cartão e vínculos multilinha. Nenhuma mudança em regras ou persistência. NEX-035: radar SVG local, compartilhado pela Ficha e Forma de Poder; dados dependem somente de atributos e não mantêm observação de tamanho própria. NEX-036: narrativa e vínculos têm dobras independentes; registros adaptam-se à largura do cartão. Equilíbrio e Exposição somente apresentam valores e bases derivados pela rota, sem estado persistido paralelo. NEX-037: SheetEquilibriumSection apresenta o eixo e a tensão por props/callbacks; regras continuam na rota e getEquilibriumEffect. Radar compartilha proporção quadrada e largura útil na Ficha/Forma de Poder; motion legado deixa painéis materiais explícitos. NEX-038: instrumentos usam composição horizontal pela largura útil, e Equilíbrio/Exposição têm molduras alinhadas somente quando abertas. SheetExposureSection apresenta bases recebidas, sem cálculo paralelo. Densidade e tipografia das três guias pertencem a sheet-premium. TdV II: dados versionados e motor em tdv2.ts; cálculos legados só pertencem à edição anterior. Conversão é revisável e não infere equivalências numéricas. DEC-028: o modo de jogo é apresentação controlada pela rota sobre o mesmo objeto TdV II e motor. TdvPlayPresence recebe recursos/callbacks, TdvEmblem/TdvDie são SVGs declarativos. O painel de ação mantém a instância ao alternar abas; nenhuma autoridade duplicada. Fichas TdV II consultam o payload histórico sem sincronização na leitura; a edição anterior mantém sua operação existente."
+      "boundary": "Rota mantém estado, regras derivadas, leitura cancelável e autosave por personagem/usuário/cargo. Seções recebem valores/callbacks; não criam estado persistido paralelo. Sheet UI mantém rótulos, recolhimento e material; sheet-premium é dono do material. Histórico/inventário montados explicitamente na ficha, sem observer de montagem; o arquivo de experiência ainda conserva bridges de outras áreas. NEX-025: vínculos recolhem no componente; títulos recebem foco para revelar seções. Dossiê em sheet-premium, densidade do modo Jogo em sheet-layout; índice sem captura global. useSheetChrome mede somente os dois cabeçalhos conhecidos do shell e a barra local, com observer e listener desmontados; publica offsets apenas no host da ficha. NEX-034/DEC-020: identidade relativa e compacta, títulos/ações com fluxo próprio, instrumentos por largura real do cartão e vínculos multilinha. Nenhuma mudança em regras ou persistência. NEX-035: radar SVG local, compartilhado pela Ficha e Forma de Poder; dados dependem somente de atributos e não mantêm observação de tamanho própria. NEX-036: narrativa e vínculos têm dobras independentes; registros adaptam-se à largura do cartão. Equilíbrio e Exposição somente apresentam valores e bases derivados pela rota, sem estado persistido paralelo. NEX-037: SheetEquilibriumSection apresenta o eixo e a tensão por props/callbacks; regras continuam na rota e getEquilibriumEffect. Radar compartilha proporção quadrada e largura útil na Ficha/Forma de Poder; motion legado deixa painéis materiais explícitos. NEX-038: instrumentos usam composição horizontal pela largura útil, e Equilíbrio/Exposição têm molduras alinhadas somente quando abertas. SheetExposureSection apresenta bases recebidas, sem cálculo paralelo. Densidade e tipografia das três guias pertencem a sheet-premium. TdV II: dados versionados e motor em tdv2.ts; cálculos legados só pertencem à edição anterior. Conversão é revisável e não infere equivalências numéricas. DEC-028: o modo de jogo é apresentação controlada pela rota sobre o mesmo objeto TdV II e motor. TdvPlayPresence recebe recursos/callbacks, TdvEmblem/TdvDie são SVGs declarativos. O painel de ação mantém a instância ao alternar abas; nenhuma autoridade duplicada. Fichas TdV II consultam o payload histórico sem sincronização na leitura; a edição anterior mantém sua operação existente. DEC-029: a criação mantém metadados opcionais retrocompatíveis no mesmo payload; a rota conserva CAS e identidade. Instrumentos SVG só leem valores derivados. Atlas de vínculos abre disclosures controlados sem alterar o personagem. Nome e narrativa têm aplicação/cancelamento explícitos; os campos da edição anterior conservam sua apresentação."
     },
     {
       "id": "knowledge",
@@ -425,6 +428,11 @@
       "path": "docs/v4/FICHA_VISUAL_E_JOGO.md",
       "status": "active",
       "purpose": "Diferenças, destinos das funções, criação d6/d4, apresentação de jogo, provas e limites do lote DEC-028."
+    },
+    {
+      "path": "docs/v4/FICHA_COMO_INSTRUMENTO.md",
+      "status": "active",
+      "purpose": "Diferenças compositivas e funcionais, conciliação da criação, cobertura e limitações de DEC-029."
     }
   ],
   "tasks": [
@@ -1539,9 +1547,11 @@
         "docs/v4/sheet-operational-validation.json",
         "docs/v4/sheet-reading-validation.json",
         "docs/v4/FICHA_VISUAL_E_JOGO.md",
-        "docs/v4/sheet-play-validation.json"
+        "docs/v4/sheet-play-validation.json",
+        "docs/v4/FICHA_COMO_INSTRUMENTO.md",
+        "docs/v4/living-sheet-validation.json"
       ],
-      "checkpoint": "DEC-028: rascunho inicial d6/d4 sem distribuir o exemplo pelo jogador; distribuição de criação continua conforme o livro. Emblemas e dados autorais, repertório legível e modo de jogo sobre os mesmos dados/motor. Forma de Poder histórica separada, sem gravação na leitura de ficha TdV II. Integração física limitada a conferir faces pelo motor comum; aprovação, eventos idempotentes de servidor e conciliação offline continuam dependentes de NEX-048. Gates do novo lote registrados na PR própria, sem declarar a V4 integral."
+      "checkpoint": "DEC-029 substitui o acabamento genérico por retrato de Feição, rosa da Âncora com escolhas reais, atlas operável de vínculos, recipientes de recursos, Equilíbrio tecido, probabilidade/Enlace visuais e trajetória. Nome/narrativa em leitura com edição deliberada. Novos rascunhos incluem implicação na primeira situação, revisão de capacidade e familiaridades opcionais sem bônus. Dados antigos permanecem válidos. Não certifica a V4 integral ou concessões iniciais de Lavor por autoridade transacional."
     },
     {
       "id": "NEX-047",
@@ -1792,6 +1802,11 @@
       "id": "DEC-028",
       "decision": "Aprofundar a ficha como instrumento visual, usando a referência enviada de Ordem para densidade e leitura imediata, com identidade autoral por card/aba; começar rascunhos com Matrizes d6 e Alinhavos d4 e tornar Modo de jogo a apresentação de partida principal.",
       "reason": "Pedido explícito de Tadeu. d6/d4 são a base ainda não distribuída; o pacote legal de criação do Livro II permanece 3,3,2,2 e dois Alinhavos de grau 2/quatro de grau 1. Não redefinir fichas salvas. O novo modo compartilha dados/custos e isola a Forma de Poder histórica sem apagá-la. DEC-024 permanece vigente para este lote sem migration."
+    },
+    {
+      "id": "DEC-029",
+      "decision": "Recompor a ficha como instrumentos visuais e conteúdos de leitura, com linguagem própria por card e guia; o pedido rejeita a solução anterior ainda semelhante a formulário.",
+      "reason": "Pedido explícito de Tadeu: composições mais expressivas, ferramentas de visualização e edição natural sem molduras permanentes de campos. Inclui conciliação da criação com os oito passos do Livro II, familiaridades sem bônus, implicação e revisão final. Preservar dados, permissões, custos, equipamentos e acesso histórico; nenhuma concessão inicial de Lavor é fabricada."
     }
   ],
   "bridges": [
@@ -2115,6 +2130,10 @@
     {
       "path": "docs/v4/sheet-play-validation.json",
       "purpose": "Evidências do atlas autoral, modo de jogo, conferência física, mesma persistência e acesso histórico sem gravação."
+    },
+    {
+      "path": "docs/v4/living-sheet-validation.json",
+      "purpose": "Capturas/hash e comprovação do lote de instrumentos visuais, criação e leitura natural."
     }
   ],
   "integrationHistory": [
@@ -2598,6 +2617,25 @@
       "productionVerifiedAt": "2026-11-01T21:30:28.202Z",
       "productionHttpStatus": 200,
       "note": "Última integração publicada; PR 318 conserva os gates, HTTP200/SHA e integridade do pacote. O novo lote de leitura exige gates próprios."
+    },
+    {
+      "pr": 319,
+      "branch": "feat/nex-046-sheet-reading",
+      "base": "main",
+      "baseCommit": "209c82a62236d107c73ced883f4bec7884529d62",
+      "sourceCommit": "d8d4d851fefc0fde12c95a5f5eac42db422ba18f",
+      "headCommit": "d8d4d851fefc0fde12c95a5f5eac42db422ba18f",
+      "state": "integrated",
+      "mergeCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+      "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41356255662",
+      "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41356255656",
+      "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41358118737",
+      "production": "workflow-confirmed; HTTP200 and exact release marker",
+      "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41358118718",
+      "productionCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+      "productionVerifiedAt": "2026-11-01T22:41:30.312Z",
+      "productionHttpStatus": 200,
+      "note": "PR 319 publicada. O lote DEC-028 exige Quality, seis grupos visuais e agregador no próprio fonte; publicação somente por main."
     }
   ]
 }

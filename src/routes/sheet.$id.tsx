@@ -1,3 +1,4 @@
+import { TdvInscription } from "@/components/sheet/tdv2-fields";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SheetDescriptionPanel } from "@/components/sheet/sheet-description-panel";
 import { Tdv2DossierDetails, Tdv2Belongings } from "@/components/sheet/tdv2-retained-tools";
@@ -762,16 +763,13 @@ function SheetPage() {
             </div>
           </div>
         )}
-        <div className="tdv-field tdv-character-name">
-          <Label className="tadeon-dossier-label" htmlFor="tdv-character-name">
-            Nome<span className="sr-only"> da personagem</span>
-          </Label>
-          <Input
-            id="tdv-character-name"
-            className="tadeon-dossier-field"
+        <div className="tdv-character-name">
+          <TdvInscription
+            label="Nome da personagem"
             value={sheet.name}
+            short
             disabled={!canEdit}
-            onChange={(e) => update("name", e.target.value)}
+            onChange={(value) => update("name", value)}
           />
         </div>
         {tutorialStep !== null && (
@@ -805,6 +803,7 @@ function SheetPage() {
           }
           narrative={
             <SheetDescriptionPanel
+              reading
               description={{ ...sheet.description, historia: parsed.data.history }}
               canEdit={canEdit}
               onChange={(description) =>

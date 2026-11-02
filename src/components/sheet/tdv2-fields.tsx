@@ -1,4 +1,5 @@
 import { useId, useState, type ReactNode } from "react";
+import { TdvEmblem } from "./tdv2-emblem";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -120,6 +121,20 @@ export function TdvChoices({
             />
             <span>
               <i aria-hidden="true" />
+              {label === "Pilar escolhido como Âncora" && (
+                <TdvEmblem
+                  kind={
+                    {
+                      Origem: "historia",
+                      Ofício: "armas",
+                      Convicção: "pessoa",
+                      Limite: "condicoes",
+                      Marca: "uso",
+                      Vínculo: "vinculos",
+                    }[option] ?? "pessoa"
+                  }
+                />
+              )}
               {option}
             </span>
           </label>
@@ -132,7 +147,11 @@ export function TdvDisclosure({
   initiallyOpen,
   children,
   className = "",
+  open: controlledOpen,
+  onOpenChange,
 }: {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   initiallyOpen: boolean;
   children: ReactNode;
   className?: string;
@@ -141,8 +160,11 @@ export function TdvDisclosure({
   return (
     <details
       className={`tdv-disclosure ${className}`}
-      open={open}
-      onToggle={(e) => setOpen(e.currentTarget.open)}
+      open={controlledOpen ?? open}
+      onToggle={(e) => {
+        setOpen(e.currentTarget.open);
+        onOpenChange?.(e.currentTarget.open);
+      }}
     >
       {children}
     </details>

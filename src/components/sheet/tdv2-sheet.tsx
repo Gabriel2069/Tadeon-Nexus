@@ -1,3 +1,11 @@
+import {
+  TdvLinkAtlas,
+  TdvFeicaoPortrait,
+  TdvAnchorSeal,
+  TdvResourceVessel,
+  TdvEquilibriumWeave,
+} from "./tdv2-visual-instruments";
+import { TdvCreationLoom, TdvFamiliarities } from "./tdv2-creation-loom";
 import { TdvEmblem } from "./tdv2-emblem";
 import { TdvPlayPresence } from "./tdv2-play-presence";
 import {
@@ -49,9 +57,7 @@ import {
   addMilestone,
   addTension,
   constitution,
-  creationErrors,
   equilibriumBand,
-  finishCreation,
   invest,
   recover,
   setResource,
@@ -100,12 +106,12 @@ export function Tdv2Sheet({
     [care, setCare] = useState(false),
     [rebuilt, setRebuilt] = useState(false),
     [window, setWindow] = useState("");
+  const [openLinks, setOpenLinks] = useState<Record<string, boolean>>({});
   const [anchorMode, setAnchorMode] = useState<"Sustentar" | "Redirecionar">("Sustentar");
   const [consequence, setConsequence] = useState(""),
     [outcome, setOutcome] = useState(""),
     [careAction, setCareAction] = useState("");
   const stats = constitution(c),
-    errors = creationErrors(c),
     disabled = !canEdit;
   const investmentGrade =
     kind === "Matriz"
@@ -158,62 +164,12 @@ export function Tdv2Sheet({
           ))}
         </div>
         {!c.ready && (
-          <div className="tdv-creation" role="status">
-            <div className="tdv-creation-head">
-              <h2>Preparar a personagem</h2>
-              <Button
-                aria-label="Concluir criação TdV II"
-                title="Concluir criação TdV II"
-                disabled={disabled || errors.length > 0}
-                onClick={() => run(() => finishCreation(c))}
-              >
-                Concluir
-              </Button>
-            </div>
-            <div className="tdv-allocation" aria-label="Distribuição inicial">
-              {[
-                ["Matrizes d10", Object.values(c.matrices).filter((v) => v === 3).length, 2],
-                ["Matrizes d8", Object.values(c.matrices).filter((v) => v === 2).length, 2],
-                ["Alinhavos d8", Object.values(c.alinhavos).filter((v) => v === 2).length, 2],
-                ["Alinhavos d6", Object.values(c.alinhavos).filter((v) => v === 1).length, 4],
-              ].map(([label, value, total]) => (
-                <div
-                  key={label}
-                  data-complete={value === total}
-                  data-over={Number(value) > Number(total)}
-                >
-                  <small>{label}</small>
-                  <strong>
-                    {value}/{total}
-                  </strong>
-                  <span aria-hidden="true">
-                    {Array.from({ length: Number(total) }, (_, i) => (
-                      <i key={i} data-filled={i < Number(value)} />
-                    ))}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <details className="tdv-creation-review">
-              <summary>
-                {errors.length
-                  ? `Ver ${errors.length} pendências da revisão`
-                  : "Conferir a distribuição inicial"}
-              </summary>
-              <p>
-                A ficha começa com Matrizes d6 e Alinhavos d4. Distribua 3, 3, 2, 2 nas Matrizes e
-                escolha dois Alinhavos de grau 2 e quatro de grau 1. Revise Feição, Matrizes e
-                Alinhavos antes de concluir.
-              </p>
-              {errors.length > 0 && (
-                <ul>
-                  {errors.map((error) => (
-                    <li key={error}>{error}</li>
-                  ))}
-                </ul>
-              )}
-            </details>
-          </div>
+          <TdvCreationLoom
+            character={c}
+            onChange={onChange}
+            canEdit={canEdit}
+            onSelect={presentation === "game" ? setGameTab : setTab}
+          />
         )}
         <Tabs
           className="tdv-sheet-tabs"
@@ -257,6 +213,7 @@ export function Tdv2Sheet({
             <div className="tdv-persona-layout">
               <div className="tdv-persona-dossier">
                 <Section id="tdv-feicao" title="Feição">
+                  <TdvFeicaoPortrait character={c} />
                   <div className="tdv-grid tdv-grid--identity">
                     {(
                       [
@@ -313,21 +270,24 @@ export function Tdv2Sheet({
                 </div>
                 <div className="tdv-anchor">
                   <div className="tdv-anchor-foundation">
-                    <TdvChoices
-                      label="Pilar escolhido como Âncora"
-                      value={c.face.anchor.pillar}
-                      options={PILLARS}
-                      onChange={(v) =>
-                        upd("face", {
-                          ...c.face,
-                          anchor: {
-                            ...c.face.anchor,
-                            pillar: v as TdvCharacter["face"]["anchor"]["pillar"],
-                          },
-                        })
-                      }
-                      disabled={disabled}
-                    />
+                    <div className="tdv-anchor-rose">
+                      <TdvAnchorSeal shaken={c.face.anchor.shaken} pillar={c.face.anchor.pillar} />
+                      <TdvChoices
+                        label="Pilar escolhido como Âncora"
+                        value={c.face.anchor.pillar}
+                        options={PILLARS}
+                        onChange={(v) =>
+                          upd("face", {
+                            ...c.face,
+                            anchor: {
+                              ...c.face.anchor,
+                              pillar: v as TdvCharacter["face"]["anchor"]["pillar"],
+                            },
+                          })
+                        }
+                        disabled={disabled}
+                      />
+                    </div>
                     <FaceField
                       label="A que parte de mim consigo retornar?"
                       value={c.face.anchor.detail}
@@ -397,11 +357,24 @@ export function Tdv2Sheet({
               {personaExtra}
             </div>
             <Section id="tdv-vinculos" title="Vínculos">
+              <TdvLinkAtlas
+                name={name}
+                character={c}
+                onSelect={(id) => setOpenLinks((previous) => ({ ...previous, [id]: true }))}
+              />
               <div className="tdv-folios tdv-link-list">
                 {c.face.links.map((link, index) => (
                   <TdvDisclosure
                     key={link.id}
                     initiallyOpen={(!c.ready && index === 0) || newLinkId === link.id}
+                    open={
+                      openLinks[link.id] ?? ((!c.ready && index === 0) || newLinkId === link.id)
+                    }
+                    onOpenChange={(open) =>
+                      setOpenLinks((previous) =>
+                        previous[link.id] === open ? previous : { ...previous, [link.id]: open },
+                      )
+                    }
                     className="tdv-folio tdv-link-folio"
                   >
                     <summary className="tdv-link-summary">
@@ -517,6 +490,16 @@ export function Tdv2Sheet({
                 Novo vínculo
               </Button>
             </Section>
+            {c.creation && (
+              <Section id="tdv-grupo" title="Laço com a primeira situação" emblem="vinculos">
+                <TdvInscription
+                  label="Razão para entrar na primeira situação"
+                  value={c.creation.groupReason}
+                  onChange={(v) => onChange({ ...c, creation: { ...c.creation!, groupReason: v } })}
+                  disabled={disabled}
+                />
+              </Section>
+            )}
           </TabsContent>
           <TabsContent value="constituicao" data-sheet-content>
             <Section id="tdv-constituicao" title="Matrizes e Alinhavos">
@@ -551,6 +534,10 @@ export function Tdv2Sheet({
                   ))}
                 </div>
               </div>
+              <div className="tdv-alinhavos-heading">
+                <h3>O que os gestos sabem</h3>
+                <span>21 Alinhavos · toque para operar</span>
+              </div>
               <div className="tdv-alinhavos">
                 {ALINHAVOS.map((name) => (
                   <TdvCompetency
@@ -559,11 +546,27 @@ export function Tdv2Sheet({
                     grade={stats.alinhavos[name] ?? 0}
                     creation={!c.ready}
                     disabled={disabled}
-                    onChange={(v) => upd("alinhavos", { ...c.alinhavos, [name]: v })}
+                    onChange={(v) =>
+                      onChange({
+                        ...c,
+                        alinhavos: { ...c.alinhavos, [name]: v },
+                        ...(c.creation && v > 0
+                          ? {
+                              creation: {
+                                ...c.creation,
+                                familiarities: c.creation.familiarities.filter(
+                                  (value) => value !== name,
+                                ),
+                              },
+                            }
+                          : {}),
+                      })
+                    }
                     onRoll={() => setRollChoice({ alinhavo: name })}
                   />
                 ))}
               </div>
+              <TdvFamiliarities character={c} onChange={onChange} canEdit={canEdit} />
             </Section>
             <div className="tdv-state-layout">
               <Section id="tdv-recursos" title="Recursos e proteção">
@@ -573,6 +576,11 @@ export function Tdv2Sheet({
                       <small>
                         {{ pv: "Vitalidade · PV", pi: "Inteireza · PI", pe: "Esforço · PE" }[key]}
                       </small>
+                      <TdvResourceVessel
+                        kind={key}
+                        value={c.resources[key]}
+                        maximum={stats.maximums[key]}
+                      />
                       <TdvResourceActions
                         name={key.toUpperCase()}
                         value={c.resources[key]}
@@ -661,17 +669,7 @@ export function Tdv2Sheet({
                   </div>
                   <p>{equilibriumBand(c.equilibrium)}</p>
                 </div>
-                <div className="tdv-equilibrium-axis" aria-hidden="true">
-                  <div className="tdv-equilibrium-axis__ticks">
-                    {Array.from({ length: 21 }, (_, i) => (
-                      <i key={i} data-center={i === 10} />
-                    ))}
-                  </div>
-                  <span
-                    className="tdv-equilibrium-axis__pin"
-                    style={{ left: `${(c.equilibrium + 10) * 5}%` }}
-                  />
-                </div>
+                <TdvEquilibriumWeave value={c.equilibrium} tension={c.tension} />
                 <div className="tdv-equilibrium-poles">
                   <span>
                     Medo <small>−10</small>
@@ -693,9 +691,7 @@ export function Tdv2Sheet({
                   disabled={disabled}
                   onChange={(e) => upd("equilibrium", Number(e.target.value))}
                 />
-                <p className="tdv-note">
-                  Nenhum bônus universal. A faixa contextualiza Feição, Lavores e Tramas.
-                </p>
+
                 <div className="tdv-tension-steps" aria-hidden="true">
                   {[-3, -2, -1, 0, 1, 2, 3].map((value) => (
                     <span key={value} data-active={value === c.tension}>
@@ -724,9 +720,15 @@ export function Tdv2Sheet({
                     Tensão +1
                   </Button>
                 </div>
-                <p className="tdv-note">
-                  Ao atingir ±4: desloca Equilíbrio em 1 e zera Tensão, sem carregar excedente.
-                </p>
+                <details className="tdv-disclosure">
+                  <summary>Leitura do Equilíbrio e da Tensão</summary>
+                  <p className="tdv-note">
+                    Nenhum bônus universal. A faixa contextualiza Feição, Lavores e Tramas.
+                  </p>
+                  <p className="tdv-note">
+                    Ao atingir ±4: desloca Equilíbrio em 1 e zera Tensão, sem carregar excedente.
+                  </p>
+                </details>
               </Section>
             </div>
           </TabsContent>
@@ -939,7 +941,11 @@ export function Tdv2Sheet({
               {c.records
                 .filter((record) => record.kind === recordKind)
                 .map((record, index) => (
-                  <TdvDisclosure key={record.id} initiallyOpen={!record.name}>
+                  <TdvDisclosure
+                    key={record.id}
+                    initiallyOpen={!record.name}
+                    className={`tdv-repertoire-card tdv-repertoire-card--${record.kind.toLowerCase()}`}
+                  >
                     <summary className="tdv-record-summary">
                       <span className="tdv-record-summary__title">
                         <TdvEmblem
@@ -960,7 +966,7 @@ export function Tdv2Sheet({
                       </span>
                       {Object.entries(record.fields)
                         .filter(([, value]) => value.trim())
-                        .slice(0, 2)
+                        .slice(0, record.kind === "Lavor" ? 5 : 3)
                         .map(([key, value]) => (
                           <span className="tdv-record-summary__fact" key={key}>
                             <b>{key}</b>

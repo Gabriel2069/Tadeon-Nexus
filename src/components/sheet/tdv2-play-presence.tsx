@@ -1,3 +1,4 @@
+import { TdvResourceVessel } from "./tdv2-visual-instruments";
 import { TdvResourceActions } from "./tdv2-competencies";
 import { TdvEmblem } from "./tdv2-emblem";
 import { constitution, setResource, type TdvCharacter } from "@/lib/tdv2";
@@ -31,6 +32,7 @@ export function TdvPlayPresence({
         {(["pv", "pi", "pe"] as const).map((key) => (
           <div className="tdv-resource" data-resource={key} key={key}>
             <small>{{ pv: "Vitalidade", pi: "Inteireza", pe: "Esforço" }[key]}</small>
+            <TdvResourceVessel kind={key} value={c.resources[key]} maximum={stats.maximums[key]} />
             <TdvResourceActions
               name={key.toUpperCase()}
               value={c.resources[key]}

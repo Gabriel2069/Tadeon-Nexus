@@ -94,6 +94,16 @@ export const tdv2CharacterSchema = z
   .object({
     version: z.literal(2),
     ready: z.boolean(),
+    creation: z
+      .object({
+        groupReason: text,
+        familiarities: z
+          .array(z.enum(ALINHAVOS))
+          .max(4)
+          .refine((values) => new Set(values).size === values.length, "Não repita familiaridades."),
+        reviewed: z.boolean(),
+      })
+      .optional(),
     matrices: z.object({ Ímpeto: degree, Cadência: degree, Nexo: degree, Lastro: degree }),
     alinhavos: z.record(z.string(), z.number().int().min(0).max(4)),
     face: z.object({
@@ -204,6 +214,9 @@ export function newTdvCharacter(distribution: "base" | "reference" = "base"): Td
       ],
       anchor: { pillar: "Convicção", detail: "", shaken: false },
     },
+    ...(distribution === "base"
+      ? { creation: { groupReason: "", familiarities: [], reviewed: false } }
+      : {}),
     resources: { pv: 10, pi: 11, pe: 10 },
     guard: { modifier: 0, source: "", broken: false },
     equilibrium: 0,
@@ -273,6 +286,16 @@ export function constitution(character: TdvCharacter) {
 }
 export function creationErrors(c: TdvCharacter): string[] {
   const errors: string[] = [];
+  if (!c.ready && c.creation) {
+    if (!c.creation.groupReason.trim())
+      errors.push("Estabeleça uma razão concreta para se implicar na primeira situação.");
+    if (c.creation.familiarities.some((name) => (c.alinhavos[name] ?? 0) !== 0))
+      errors.push("Familiaridades de Feição identificam somente Alinhavos de grau 0, sem bônus.");
+    if (!c.creation.reviewed)
+      errors.push(
+        "Confira permissões ficcionais, equipamento, Condições iniciais e capacidade na revisão final.",
+      );
+  }
   if (Object.values(c.matrices).sort().join(",") !== "2,2,3,3")
     errors.push("Distribua 3, 3, 2 e 2 entre as quatro Matrizes.");
   const grades = ALINHAVOS.map((name) => c.alinhavos[name] ?? 0);

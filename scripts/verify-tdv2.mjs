@@ -177,7 +177,7 @@ try {
                   "inventory",
                 ].includes(k),
               ),
-              "Legacy column mutation",
+              "Legacy column mutation: " + JSON.stringify({keys:Object.keys(patch),patch,url:page.url()}),
             );
             assert(url.searchParams.has("updated_at"), "Missing CAS");
             if (url.searchParams.get("updated_at") !== "eq." + row.updated_at) {
@@ -233,6 +233,7 @@ try {
           "sheet-records": "#tdv-expressao",
           "play-repertoire": "#tdv-expressao",
           "atlas-expression": "#tdv-expressao",
+          "play-physical-result": ".tdv-result",
           "master-round": "#tdv-master-round",
           "master-pessoas": "#tdv-master-opposition",
           "master-investigação": "#tdv-master-sealing",
@@ -330,13 +331,22 @@ try {
         }
       };
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
-      await page.getByLabel("Nome da personagem", { exact: true }).waitFor();
+      await page.locator(".tdv-character-name").waitFor();
       if (process.env.NEXUS_PLAY_VIEW_ONLY === "1") {
         assert(await page.locator('#tdv-feicao .tdv-emblem').count()===1,'Person instrument is mounted');
         await geometry('atlas-person');
+        assert(await page.locator('.tdv-feicao-portrait svg').count()===1,'Figural Feição is mounted');
+        await page.getByRole('button',{name:'Ver vínculo com Elen',exact:true}).click();
+        await page.getByLabel('Oferta do vínculo 1',{exact:true}).waitFor();
+        await page.locator('#tdv-vinculos').scrollIntoViewIfNeeded();await geometry('atlas-relations');
+        await page.locator('.tdv-link-summary').first().click();
+        await page.locator('#tdv-ancora').scrollIntoViewIfNeeded();await geometry('atlas-anchor');
         await page.getByRole('tab',{name:'Constituição',exact:true}).click();
         assert(await page.locator('.tdv-competency .tdv-die').count()===25,'25 canonical dice instruments');
         await geometry('atlas-capacities');
+        assert(await page.locator('#tdv-recursos .tdv-vessel').count()===3,'Three resource vessels read actual resources');
+        await page.locator('#tdv-recursos').scrollIntoViewIfNeeded();await geometry('atlas-resources');
+        await page.locator('#tdv-equilibrio').scrollIntoViewIfNeeded();await geometry('atlas-equilibrium');
         await page.getByRole('button',{name:'Modo de jogo',exact:true}).click();
         const presence=page.getByRole('complementary',{name:'Presença em jogo',exact:true});
         await presence.waitFor();await page.getByRole('tab',{name:'Agir',exact:true}).waitFor();
@@ -381,7 +391,8 @@ try {
       }
       if (process.env.NEXUS_SHEET_READING_ONLY === "1") {
         await page.locator('#tdv-feicao').scrollIntoViewIfNeeded(); await geometry('reading-person');
-        assert(await page.locator('.tdv-inscription:visible').count() === 5, 'Five inscriptions, without five default text fields');
+        assert(await page.locator('.tadeon-tdv2-sheet .tdv-inscription:visible').count() === 5, 'Five core inscriptions, without five default text fields');
+        assert(await page.locator('.tdv-character-name .tdv-inscription').count()===1,'Name is a reading instrument too');
         assert(await page.getByRole('textbox',{name:'Convicção',exact:true}).count() === 0, 'Reading is not a permanently mounted form');
         const targets = await page.locator('button.tdv-inscription:visible,.tdv-choices label > span:visible').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return [r.width,r.height];}));
         assert(targets.every(([w,h])=>w>=43.9&&h>=43.9),'Reading and pillar touch targets >=44px: '+JSON.stringify(targets));
@@ -466,7 +477,7 @@ try {
           await page.getByRole('button',{name:'Restaurar 1 PV',exact:true}).click();await saved(()=>row.tdv2_data.resources.pv===10);
         } else assert(await competence.isDisabled(),'Readonly cannot roll');
         await page.getByRole('tab',{name:'Percurso',exact:true}).click();
-        assert(await page.locator('.tdv-development-track > span').count()===21,'Twenty milestones plus the origin');await geometry('instruments-development');
+        assert(await page.locator('.tdv-trajectory > g').count()===21,'Twenty milestones plus the origin');await geometry('instruments-development');
         await context.close();continue;
       }
       if (process.env.NEXUS_LAYOUT_ONLY === "1") {
@@ -549,7 +560,7 @@ try {
         await saved(() => row.tdv2_data.resources.pe === 0);
       } else {
         assert(
-          await page.getByLabel("Nome da personagem", { exact: true }).isDisabled(),
+          (await page.getByRole("button", { name: "Editar Nome da personagem", exact: true }).count()) === 0,
           "Readonly name enabled",
         );
         assert(
@@ -889,7 +900,7 @@ try {
             .count()) === 0,
           "Existing sheet still blocked behind conversion",
         );
-        await page.getByRole("heading", { name: "Preparar a personagem", exact: true }).waitFor();
+        await page.getByRole("heading", { name: "Dar forma à presença", exact: true }).waitFor();
         await geometry("sheet-adaptation-review");
         assert(
           await page
@@ -912,6 +923,13 @@ try {
           await page.getByRole('button',{name:new RegExp('^Grau inicial de '+name+':')}).click();
           await page.getByRole('group',{name:'Grau inicial de '+name,exact:true}).getByRole('button',{name:new RegExp('^'+grade+' ·')}).click();
         }
+        await page.getByRole('tab',{name:'Pessoa',exact:true}).click();
+        await page.getByRole('button',{name:'Editar Razão para entrar na primeira situação',exact:true}).click();
+        await page.getByRole('textbox',{name:'Razão para entrar na primeira situação',exact:true}).fill('Proteger Elen e recuperar o testemunho do cais');
+        await page.getByRole('button',{name:'Aplicar Razão para entrar na primeira situação',exact:true}).click();
+        await page.locator('.tdv-creation-journey > summary').click();
+        await page.locator('.tdv-creation-review > summary').click();
+        await page.getByLabel('Conferi permissões ficcionais, equipamento, Condições iniciais e capacidade',{exact:true}).check();
         await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).click();
         await saved(() => row.rules_version === 2 && row.tdv2_data.ready);
         assert(
@@ -957,9 +975,9 @@ try {
           "Inventory organizer missing",
         );
         await page.getByRole("tab", { name: "Percurso", exact: true }).click();
-        await page
-          .getByLabel("História", { exact: true })
-          .fill("História revisada sem apagar a personalidade");
+        await page.getByRole('button',{name:'Editar História',exact:true}).click();
+        await page.getByRole('textbox',{name:'História',exact:true}).fill('História revisada sem apagar a personalidade');
+        await page.getByRole('button',{name:'Aplicar História',exact:true}).click();
         await page.getByRole("button", { name: "Salvar", exact: true }).click();
         await saved(
           () => row.description.historia === "História revisada sem apagar a personalidade",

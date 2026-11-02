@@ -1,0 +1,113 @@
+{
+  "decision": "DEC-029",
+  "task": "NEX-046",
+  "baseCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+  "state": "source snapshot; exact-source CI and production evidence belong to the delivery PR",
+  "dataMigration": false,
+  "realAccountWrites": 0,
+  "browserSuite": {
+    "viewports": "15 exact chapter-50 dimensions",
+    "roles": [
+      "mestre",
+      "espectador"
+    ],
+    "expectedPlayStates": 375,
+    "preservedTdv2States": 387,
+    "checks": [
+      "actual six-pillar portrait state",
+      "six native Anchor choices",
+      "link node opens the correct editor without writes",
+      "three actual resource vessels",
+      "bipolar equilibrium and tension",
+      "calculated probability and two-thread result",
+      "transient result retained through tabs and modes",
+      "physical confirmation guard",
+      "readonly disabled mutations, enabled reading",
+      "historical payload unchanged by viewing",
+      "group implication and final creation review",
+      "narrative apply saves both compatible representations"
+    ]
+  },
+  "local": {
+    "check": {
+      "passed": true,
+      "suites": 167,
+      "tests": 707,
+      "build": true
+    },
+    "styles": {
+      "modules": 57,
+      "links": 12,
+      "overrideBudgetGrowth": false
+    },
+    "postgres": {
+      "passed": true,
+      "checks": 42,
+      "engine": "PostgreSQL/PGlite isolated"
+    },
+    "audit": {
+      "high": 0,
+      "critical": 0,
+      "moderate": 15,
+      "dependencyChanges": false
+    },
+    "browser": {
+      "newVisualStates": 75,
+      "mechanicalStates": 99,
+      "viewports": "new instruments: 390x844, 820x1180, 1440x900; existing mechanical regression: 320/390/820/1440 with height 1000",
+      "passed": true,
+      "productionWrites": 0,
+      "readingEditorStates": 22,
+      "instrumentStates": 10
+    }
+  },
+  "screenshots": [
+    {
+      "path": "docs/v4/evidence/living-person-1440.png",
+      "sha256": "c5e51b2e626370c5ebc064986f9591a3de178d799be083180b5a14190eb2c7d4"
+    },
+    {
+      "path": "docs/v4/evidence/living-person-390.png",
+      "sha256": "a1a61831b0d2343b445406e35ce919e6496b9117e5d6d7af8ed46c333f482c40"
+    },
+    {
+      "path": "docs/v4/evidence/living-anchor-390.png",
+      "sha256": "83c86c41a10064e11fb9717773d3673fe54292c83c6c24836b3254bf44028564"
+    },
+    {
+      "path": "docs/v4/evidence/living-links-390.png",
+      "sha256": "7da715700bd1fa1472364e740a571211ff1dbf4e201b5c7cf5fc637e69c2792f"
+    },
+    {
+      "path": "docs/v4/evidence/living-resources-390.png",
+      "sha256": "7e51adb27caf0acee06531f9b70c2bf4d6ccc7012ab43afb742a1c6cafb19953"
+    },
+    {
+      "path": "docs/v4/evidence/living-equilibrium-390.png",
+      "sha256": "239b2b9314b50b8614e6e550640435ebf41ae4147ca96d063d11e16d01c9af3c"
+    },
+    {
+      "path": "docs/v4/evidence/living-roll-1440.png",
+      "sha256": "6acfb77878a2035492403efeeb501d7ecc6b661566ad9cfa3a3ea2d03060a690"
+    },
+    {
+      "path": "docs/v4/evidence/living-repertoire-820.png",
+      "sha256": "ec3a985c8df9e388e51a364820c8034269fb96b9715d97429906cbdaf1a4bbcd"
+    },
+    {
+      "path": "docs/v4/evidence/living-path-390.png",
+      "sha256": "3b3d925d007b67be84dc8319eb8b4123d1ae9e8b5b1385958b3c2203f5085457"
+    }
+  ],
+  "limits": [
+    "synthetic accounts and emulated viewports",
+    "no complete V4 or book certification",
+    "server-authorized initial free Lavor grants still pending",
+    "no real accounts/hardware or FPS/INP certification"
+  ],
+  "comparison": {
+    "before": "docs/v4/evidence/play-person-390.png",
+    "after": "docs/v4/evidence/living-person-390.png",
+    "base": "PR320 / 172eafa8d17dc98b026607f4c20e10cd9e48d44b"
+  }
+}

@@ -1,3 +1,4 @@
+import { TdvTrajectory } from "./tdv2-visual-instruments";
 import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -156,25 +157,7 @@ export function TdvDevelopment({
           </span>
         </div>
       </div>
-      <div
-        className="tdv-development-track"
-        role="meter"
-        aria-label="Desenvolvimento"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent}
-      >
-        {Array.from({ length: 21 }, (_, i) => (
-          <span
-            key={i}
-            data-passed={i * 5 <= percent}
-            data-current={i * 5 === percent}
-            aria-hidden="true"
-          >
-            {i % 5 === 0 ? i * 5 : ""}
-          </span>
-        ))}
-      </div>
+      <TdvTrajectory count={percent / 5} />
       <p>
         Marcos de 5% · 2 PU por Marco. A faixa orienta o desenvolvimento; não acrescenta bônus aos
         testes.
