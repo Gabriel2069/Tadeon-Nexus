@@ -20,7 +20,7 @@ it("offers the full creation review on an older draft without changing its saved
 });
 
 afterEach(cleanup);
-it("applies only reviewed choices and preserves concurrent resources and records", () => {
+it("applies only reviewed choices and preserves concurrent resources and records", async () => {
   const character = newTdvCharacter("reference");
   character.ready = true;
   character.progression = { allowCreation: true, allowMilestones: false };
@@ -36,7 +36,14 @@ it("applies only reviewed choices and preserves concurrent resources and records
   const change = vi.fn();
   const props = { character, onChange: change, canEdit: true, isMaster: true };
   const view = render(<Tdv2Sheet {...props} />);
-  fireEvent.click(screen.getByRole("button", { name: "Rever escolhas iniciais" }));
+  fireEvent.mouseDown(screen.getByRole("tab", { name: "Percurso", exact: true }), {
+    button: 0,
+    ctrlKey: false,
+  });
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Correções e permissões", exact: true }),
+  );
+  fireEvent.click(await screen.findByRole("button", { name: "Rever escolhas iniciais" }));
   expect(screen.getByRole("button", { name: "Retirar 1 PV" }).hasAttribute("disabled")).toBe(true);
   const updated = {
     ...character,
