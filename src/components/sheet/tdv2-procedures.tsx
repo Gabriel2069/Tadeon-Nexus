@@ -1,3 +1,11 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -32,6 +40,7 @@ function commit(onChange: Props["onChange"], action: () => TdvCharacter) {
   }
 }
 export function TdvGuard({ character: c, onChange, canEdit }: Props) {
+  const [open, setOpen] = useState(false);
   const [g, setG] = useState({
     ...c.guard,
     protection: c.guard.protection ?? 0,
@@ -39,72 +48,100 @@ export function TdvGuard({ character: c, onChange, canEdit }: Props) {
     totalCover: c.guard.totalCover ?? "",
   });
   return (
-    <TdvAction title="Proteção e cobertura">
-      <div className="tdv-grid">
-        <TdvSelect
-          label="Proteção ordinária combinada"
-          value={String(g.protection)}
-          options={["0", "1", "2"]}
-          onChange={(v) => setG({ ...g, protection: Number(v) })}
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        if (value)
+          setG({
+            ...c.guard,
+            protection: c.guard.protection ?? 0,
+            protectionSource: c.guard.protectionSource ?? "",
+            totalCover: c.guard.totalCover ?? "",
+          });
+        setOpen(value);
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button variant="outline" className="tdv-guard-command">
+          Proteção e cobertura
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="tdv-operation-dialog">
+        <DialogHeader>
+          <DialogTitle>Proteção e cobertura</DialogTitle>
+          <DialogDescription>Posição, escudo e abordagens impedidas.</DialogDescription>
+        </DialogHeader>
+        <div className="tdv-grid">
+          <TdvSelect
+            label="Proteção ordinária combinada"
+            value={String(g.protection)}
+            options={["0", "1", "2"]}
+            onChange={(v) => setG({ ...g, protection: Number(v) })}
+            disabled={!canEdit}
+          />
+          <TdvField
+            label="Escudo ou cobertura efetivamente interposta"
+            value={g.protectionSource}
+            onChange={(protectionSource) => setG({ ...g, protectionSource })}
+            disabled={!canEdit}
+          />
+          <TdvField
+            label="Cobertura total e abordagens que impede"
+            value={g.totalCover}
+            onChange={(totalCover) => setG({ ...g, totalCover })}
+            disabled={!canEdit}
+          />
+          <TdvNumber
+            label="Modificação extraordinária expressa"
+            value={g.modifier}
+            min={-100}
+            max={100}
+            onChange={(modifier) => setG({ ...g, modifier })}
+            disabled={!canEdit}
+          />
+          <TdvField
+            label="Regra da modificação extraordinária"
+            value={g.source}
+            onChange={(source) => setG({ ...g, source })}
+            disabled={!canEdit}
+          />
+        </div>
+        <TdvCheck
+          label="Guarda quebrada ou ausente"
+          value={g.broken}
+          onChange={(broken) => setG({ ...g, broken })}
           disabled={!canEdit}
         />
-        <TdvField
-          label="Escudo ou cobertura efetivamente interposta"
-          value={g.protectionSource}
-          onChange={(protectionSource) => setG({ ...g, protectionSource })}
+        <p className="tdv-note">
+          Proteção parcial ou escudo: +1. Cobertura dominante estável: +2. A soma ordinária para em
+          +2; cobertura total impede a abordagem incompatível. Perder proteção não apaga a base de
+          Cadência.
+        </p>
+        <Button
           disabled={!canEdit}
-        />
-        <TdvField
-          label="Cobertura total e abordagens que impede"
-          value={g.totalCover}
-          onChange={(totalCover) => setG({ ...g, totalCover })}
-          disabled={!canEdit}
-        />
-        <TdvNumber
-          label="Modificação extraordinária expressa"
-          value={g.modifier}
-          min={-100}
-          max={100}
-          onChange={(modifier) => setG({ ...g, modifier })}
-          disabled={!canEdit}
-        />
-        <TdvField
-          label="Regra da modificação extraordinária"
-          value={g.source}
-          onChange={(source) => setG({ ...g, source })}
-          disabled={!canEdit}
-        />
-      </div>
-      <TdvCheck
-        label="Guarda quebrada ou ausente"
-        value={g.broken}
-        onChange={(broken) => setG({ ...g, broken })}
-        disabled={!canEdit}
-      />
-      <p className="tdv-note">
-        Proteção parcial ou escudo: +1. Cobertura dominante estável: +2. A soma ordinária para em
-        +2; cobertura total impede a abordagem incompatível. Perder proteção não apaga a base de
-        Cadência.
-      </p>
-      <Button
-        disabled={!canEdit}
-        onClick={() =>
-          commit(onChange, () =>
-            configureGuard(
-              c,
-              g.protection,
-              g.protectionSource,
-              g.totalCover,
-              g.modifier,
-              g.source,
-              g.broken,
-            ),
-          )
-        }
-      >
-        Aplicar proteção declarada
-      </Button>
-    </TdvAction>
+          onClick={() => {
+            try {
+              onChange(
+                configureGuard(
+                  c,
+                  g.protection,
+                  g.protectionSource,
+                  g.totalCover,
+                  g.modifier,
+                  g.source,
+                  g.broken,
+                ),
+              );
+              setOpen(false);
+            } catch (e) {
+              toast.error((e as Error).message);
+            }
+          }}
+        >
+          Aplicar proteção declarada
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }
 export function TdvLinkUse({

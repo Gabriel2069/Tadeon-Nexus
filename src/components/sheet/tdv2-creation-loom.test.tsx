@@ -5,7 +5,7 @@ import { useState } from "react";
 import { newTdvCharacter, type TdvCharacter } from "@/lib/tdv2";
 import { TdvCreationLoom, TdvFamiliarities } from "./tdv2-creation-loom";
 afterEach(cleanup);
-it("keeps the eight book steps navigable and requires a real final review", () => {
+it("keeps the eight book steps navigable without making prose review a hard gate", () => {
   const initial = newTdvCharacter("reference");
   Object.assign(initial.face, {
     origin: "Cais",
@@ -31,7 +31,7 @@ it("keeps the eight book steps navigable and requires a real final review", () =
 
   expect(
     screen.getByRole("button", { name: "Concluir criação TdV II" }).hasAttribute("disabled"),
-  ).toBe(true);
+  ).toBe(false);
   fireEvent.click(screen.getByRole("button", { name: "Criação: Equipar" }));
   expect(select).toHaveBeenCalledWith("expressao");
   fireEvent.click(screen.getByRole("button", { name: /Revisar criação ·/ }));

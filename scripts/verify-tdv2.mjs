@@ -265,6 +265,8 @@ try {
       await installDesignFonts(page);
       const geometry = async (label) => {
         const target = {
+          "interactive-scene": "#tdv-protecao",
+          "interactive-digital-cockpit": ".tdv-game-panel",
           "sheet-critical": ".tdv-result",
           "sheet-records": ".tdv-record-collections",
           "play-repertoire": ".tdv-record-collections",

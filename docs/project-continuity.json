@@ -446,6 +446,11 @@
       "path": "docs/v4/FICHA_LEITURA_E_ESCOLHAS.md",
       "status": "active",
       "purpose": "Destinos, criação/progressão, autorização e limites de DEC-031."
+    },
+    {
+      "path": "docs/v4/FICHA_PAINEL_E_PROGRESSAO.md",
+      "status": "active",
+      "purpose": "DEC-032: destinos, selagem numérica, progressão por clique, painel condensado e limites."
     }
   ],
   "tasks": [
@@ -1834,6 +1839,11 @@
       "id": "DEC-031",
       "decision": "Priorizar exposição e consulta na ficha, unificar materiais dos quadros e deslocar operações ocasionais para comandos; distribuição inicial limitada, Marcos diretos, correção arquivada e delegação pelo mestre.",
       "reason": "Pedido explícito de Tadeu após PR 321. QA proporcional por escopo; autorização de reabertura e delegação exige guarda no servidor. Autoriza uma alteração aditiva e reversível da função de progressão sem regravar dados; o adiamento de backup geral permanece. Não inventar pacote de pontos, pré-requisitos ou bônus fora do Livro II."
+    },
+    {
+      "id": "DEC-032",
+      "decision": "Painel de jogo condensado, Tramas/Fragmentos alternados, cores anteriores das Matrizes e progressão unidirecional por clique com PU; regressão exclusiva do mestre.",
+      "reason": "Pedido explícito de Tadeu. Selagem valida o pacote numérico sem impor preenchimento de prosa. Marco pode selar distribuição válida no mesmo evento; nenhum rascunho real é normalizado. Carga usa volume, mãos, suporte e acesso conforme Livro II (5). QA proporcional aos fluxos alterados, quatro larguras e papéis mestre/espectador; sem varredura V4 integral."
     }
   ],
   "bridges": [

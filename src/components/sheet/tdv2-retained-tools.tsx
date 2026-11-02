@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { SelectionPlate } from "@/components/selection-plate";
+import { useState, useRef } from "react";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TdvRecordActions } from "./tdv2-procedures";
@@ -74,7 +75,16 @@ export function Tdv2Belongings({
             "Propriedades",
             "Porte e acesso",
           ],
-          ["Equipamento", "Inventário", "Descrição", "Porte e acesso", "Integridade"],
+          [
+            "Equipamento",
+            "Inventário",
+            "Descrição",
+            "Volume",
+            "Mãos ocupadas",
+            "Suporte",
+            "Porte e acesso",
+            "Integridade",
+          ],
         ] as const
       ).map(([kind, title, ...fields]) => {
         const records = c.records.filter((r) => r.kind === kind);
@@ -131,6 +141,12 @@ export function Tdv2Belongings({
               </div>
             }
           >
+            {kind === "Equipamento" && (
+              <p className="tdv-cargo-reading">
+                <strong>Carga</strong> Volume, mãos ocupadas, suportes e acesso. O que dificulta uma
+                abordagem deve ser reorganizado, dividido ou deixado para trás.
+              </p>
+            )}
             <div className="tdv-equipment-list">
               {records.map((record) => (
                 <TdvEquipmentEntry
@@ -173,13 +189,15 @@ export function TdvRecordCollection({
   canEdit: boolean;
   onUse: (id: string) => void;
 }) {
+  const phenomenonRail = useRef<HTMLDivElement>(null);
+  const [phenomenon, setPhenomenon] = useState<"Trama" | "Fragmento" | "Selo">("Trama");
   const [editingRecords, setEditingRecords] = useState<Record<string, boolean>>({});
   const groups = [
     { id: "tdv-lavores", title: "Lavores", kinds: ["Lavor"] },
     {
       id: "tramas-fragmentos",
       title: "Tramas e Fragmentos",
-      kinds: ["Trama", "Fragmento", "Selo"],
+      kinds: [phenomenon],
     },
     {
       id: "tdv-permanencias",
@@ -199,48 +217,92 @@ export function TdvRecordCollection({
           title={group.title}
           extra={
             canEdit && (
-              <TdvAction title="Adicionar">
-                <p>
-                  Escolha a estrutura para registrar seus dados. Aquisição de Lavor usa PU e
-                  incorporação.
-                </p>
-                <div className="tdv-actions">
-                  {group.kinds.map((kind) => (
-                    <DialogClose key={kind} asChild>
-                      <Button
-                        variant="outline"
-                        disabled={c.records.length >= 200}
-                        onClick={() => {
-                          const id = uid();
-                          setEditingRecords((state) => ({ ...state, [id]: true }));
-                          onChange({
-                            ...c,
-                            records: [
-                              ...c.records,
-                              {
-                                id,
-                                kind: kind as TdvRecord["kind"],
-                                name: "",
-                                fields: Object.fromEntries(
-                                  RECORD_FIELDS[kind as TdvRecord["kind"]].map((field) => [
-                                    field,
-                                    "",
-                                  ]),
-                                ),
-                              },
-                            ],
-                          });
-                        }}
-                      >
-                        Adicionar {kind}
-                      </Button>
-                    </DialogClose>
-                  ))}
-                </div>
-              </TdvAction>
+              <div className="tdv-actions">
+                {group.kinds.map((kind) => (
+                  <AddItemDialog<Record<string, string>>
+                    key={kind}
+                    title={`Adicionar ${kind}`}
+                    triggerLabel={`Adicionar ${kind}`}
+                    composition={
+                      kind === "Trama"
+                        ? "trama"
+                        : kind === "Fragmento"
+                          ? "fragmento"
+                          : kind === "Selo"
+                            ? "selo"
+                            : "lavor"
+                    }
+                    initial={{
+                      nome: "",
+                      ...Object.fromEntries(
+                        RECORD_FIELDS[kind as TdvRecord["kind"]].map((field) => [field, ""]),
+                      ),
+                    }}
+                    fields={[
+                      { key: "nome", label: "Nome" },
+                      ...RECORD_FIELDS[kind as TdvRecord["kind"]].map((key) => ({
+                        key,
+                        label: key,
+                        type: ([
+                          "Expressão",
+                          "Efeito",
+                          "Descrição",
+                          "Resíduo",
+                          "Preço/limite",
+                          "Gesto",
+                        ].includes(key)
+                          ? "textarea"
+                          : "text") as "textarea" | "text",
+                      })),
+                    ]}
+                    onAdd={(row) => {
+                      if (c.records.length >= 200) return;
+                      onChange({
+                        ...c,
+                        records: [
+                          ...c.records,
+                          {
+                            id: uid(),
+                            kind: kind as TdvRecord["kind"],
+                            name: row.nome,
+                            fields: Object.fromEntries(
+                              Object.entries(row).filter(([key]) => key !== "nome"),
+                            ),
+                          },
+                        ],
+                      });
+                    }}
+                  />
+                ))}
+              </div>
             )
           }
         >
+          {group.id === "tramas-fragmentos" && (
+            <div
+              ref={phenomenonRail}
+              data-selection-rail=""
+              className="tdv-phenomenon-switch"
+              aria-label="Tipo de expressão"
+            >
+              <SelectionPlate
+                host={phenomenonRail}
+                activeKey={phenomenon}
+                selector='button[aria-pressed="true"]'
+              />
+              {(["Trama", "Fragmento", "Selo"] as const).map((kind) => (
+                <Button
+                  key={kind}
+                  variant="ghost"
+                  aria-pressed={phenomenon === kind}
+                  onClick={() => setPhenomenon(kind)}
+                >
+                  {kind === "Trama" ? "Tramas" : kind === "Fragmento" ? "Fragmentos" : "Selos"}
+                  <small>{c.records.filter((r) => r.kind === kind).length}</small>
+                </Button>
+              ))}
+            </div>
+          )}
           <div className="tdv-repertoire-grid">
             {c.records
               .filter((record) => group.kinds.includes(record.kind))
@@ -328,7 +390,7 @@ export function TdvRecordCollection({
               {group.id === "tdv-lavores"
                 ? "Nenhum Lavor incorporado ou em aprendizado."
                 : group.id === "tramas-fragmentos"
-                  ? "Nenhuma Trama, Fragmento ou Selo vinculado."
+                  ? `Nenhum registro de ${phenomenon} vinculado.`
                   : "Sem registros nesta parte da trajetória."}
             </p>
           )}

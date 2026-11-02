@@ -296,42 +296,18 @@ export function constitution(character: TdvCharacter) {
     spent,
   };
 }
+/** Sealing the numerical allocation does not require typing the character's fiction. */
 export function creationErrors(c: TdvCharacter): string[] {
   const errors: string[] = [];
-  if (!c.ready && c.creation) {
-    if (!c.creation.groupReason.trim())
-      errors.push("Estabeleça uma razão concreta para se implicar na primeira situação.");
-    if (c.creation.familiarities.some((name) => (c.alinhavos[name] ?? 0) !== 0))
-      errors.push("Familiaridades de Feição identificam somente Alinhavos de grau 0, sem bônus.");
-    if (!c.creation.reviewed)
-      errors.push(
-        "Confira permissões ficcionais, equipamento, Condições iniciais e capacidade na revisão final.",
-      );
-  }
   if (Object.values(c.matrices).sort().join(",") !== "2,2,3,3")
-    errors.push("Distribua 3, 3, 2 e 2 entre as quatro Matrizes.");
+    errors.push("Matrizes: duas d10 e duas d8.");
   const grades = ALINHAVOS.map((name) => c.alinhavos[name] ?? 0);
   if (
     grades.filter((n) => n === 2).length !== 2 ||
     grades.filter((n) => n === 1).length !== 4 ||
     grades.some((n) => n > 2)
   )
-    errors.push("Escolha dois Alinhavos em grau 2 e quatro em grau 1; os demais ficam em 0.");
-  if (
-    [c.face.origin, c.face.occupation, c.face.conviction, c.face.limit, c.face.anchor.detail].some(
-      (v) => !v.trim(),
-    )
-  )
-    errors.push(
-      "Complete Origem, Ofício, Convicção, Limite e a forma concreta de retorno da Âncora.",
-    );
-  if (!c.face.links.some((l) => l.node.trim() && l.nature.trim()))
-    errors.push("Registre pelo menos um Vínculo com Nó e Natureza.");
-  if (c.face.anchor.pillar === "Marca" && !Object.values(c.face.mark).every((v) => v.trim()))
-    errors.push("Uma Marca usada como Âncora precisa de Gatilho, Manifestação e Resíduo.");
-  const mark = Object.values(c.face.mark);
-  if (mark.some((v) => v.trim()) && !mark.every((v) => v.trim()))
-    errors.push("Complete os três elementos da Marca ou deixe-a não manifestada.");
+    errors.push("Alinhavos: dois d8 e quatro d6; os demais d4.");
   return errors;
 }
 export function finishCreation(c: TdvCharacter): TdvCharacter {
@@ -423,8 +399,63 @@ export function allocateCreation(
   };
 }
 export function grantMilestone(c: TdvCharacter): TdvCharacter {
-  const number = c.milestones.length + 1;
-  return addMilestone(c, `Marco ${number}`, `Reconhecido na trajetória · ${number * 5}%`);
+  const base = c.ready ? c : { ...finishCreation(c), resources: c.resources };
+  const number = base.milestones.length + 1;
+  return addMilestone(base, `Marco ${number}`, `Reconhecido na trajetória · ${number * 5}%`);
+}
+export function advanceCapability(c: TdvCharacter, name: string, matrix: boolean): TdvCharacter {
+  const stats = constitution(c),
+    grade = matrix ? stats.matrices[name as Matrix] : (stats.alinhavos[name] ?? 0);
+  if (!c.ready) return allocateCreation(c, name, grade + 1, matrix);
+  if (matrix && grade === 4)
+    throw new Error("O avanço transcendente exige reconhecimento expresso do mestre.");
+  return invest(c, {
+    kind: matrix ? "Matriz" : "Alinhavo",
+    target: name,
+    cost: matrix ? grade + 3 : 2,
+    reason: `Prática incorporada · ${name}`,
+    transcendent: false,
+  });
+}
+export function reverseCapability(c: TdvCharacter, name: string, matrix: boolean): TdvCharacter {
+  if (!c.ready) {
+    const grade = matrix ? c.matrices[name as Matrix] : (c.alinhavos[name] ?? 0);
+    return allocateCreation(c, name, grade - 1, matrix);
+  }
+  let index = -1;
+  for (let i = c.investments.length - 1; i >= 0; i--) {
+    if (
+      c.investments[i].target === name &&
+      c.investments[i].kind === (matrix ? "Matriz" : "Alinhavo")
+    ) {
+      index = i;
+      break;
+    }
+  }
+  if (index < 0) throw new Error("Este é o valor inicial. Não há avanço comprado para reverter.");
+  const entry = c.investments[index],
+    next = {
+      ...c,
+      investments: c.investments.filter((_, i) => i !== index),
+      corrections: [
+        ...(c.corrections ?? []),
+        {
+          id: uid(),
+          at: new Date().toISOString(),
+          kind: "Investimento" as const,
+          payload: JSON.stringify(entry),
+        },
+      ],
+    };
+  const max = constitution(next).maximums;
+  return {
+    ...next,
+    resources: {
+      pv: Math.min(next.resources.pv, max.pv),
+      pi: Math.min(next.resources.pi, max.pi),
+      pe: Math.min(next.resources.pe, max.pe),
+    },
+  };
 }
 /** Corrections retain the previous record; spent PU can never become negative. */
 export function reverseProgression(c: TdvCharacter, kind: "Marco" | "Investimento"): TdvCharacter {

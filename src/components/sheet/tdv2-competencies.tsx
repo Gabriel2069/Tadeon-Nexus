@@ -42,12 +42,16 @@ export function TdvCompetency({
   shaken = false,
   disabled = false,
   creation = false,
-  onChange,
   onRoll,
   onDevelop,
   effects = [],
   choiceAllowed,
   allocationHint,
+  onAdvance,
+  onReverse,
+  advanceCost,
+  availablePU = 0,
+  canReverse = false,
 }: {
   name: string;
   grade: number;
@@ -61,6 +65,11 @@ export function TdvCompetency({
   effects?: { name: string; kind: string }[];
   choiceAllowed?: (grade: number) => boolean;
   allocationHint?: string;
+  onAdvance?: () => void;
+  onReverse?: () => void;
+  advanceCost?: number;
+  availablePU?: number;
+  canReverse?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const state = matrix
@@ -82,108 +91,90 @@ export function TdvCompetency({
       data-affected={effects.length > 0 || undefined}
     >
       <h3>{name}</h3>
-      {creation ? (
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              className="tdv-competency__die"
-              disabled={disabled}
-              aria-label={`${matrix ? "Valor" : "Grau inicial"} de ${name}: ${grade}, ${die}`}
-            >
-              {face}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            onCloseAutoFocus={preserveNextPopupFocus}
-            className="tdv-competency__choices"
-            aria-label={`Escolher ${name}`}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            className="tdv-competency__die"
+            aria-label={`${creation ? "Distribuir" : "Consultar"} ${name} · ${state} · ${die}`}
           >
-            <p>{name} · distribuição inicial</p>
-            <p className="tdv-note">{allocationHint} Devolva uma escolha para liberar espaço.</p>
-            <div role="group" aria-label={matrix ? `Valor de ${name}` : `Grau inicial de ${name}`}>
-              {(matrix ? [1, 2, 3] : [0, 1, 2]).map((value) => (
-                <Button
-                  key={value}
-                  variant="outline"
-                  aria-pressed={grade === value}
-                  disabled={disabled || (choiceAllowed ? !choiceAllowed(value) : false)}
-                  onClick={() => {
-                    onChange?.(value);
-                    setOpen(false);
-                  }}
-                >
-                  {value} · d{DICE[value]}
-                  <small>
-                    {matrix ? `Categoria ${MATRIX_CATEGORIES[value]}` : ALINHAVO_STATES[value]}
-                  </small>
-                </Button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-      ) : (
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              className="tdv-competency__die"
-              aria-label={`Consultar ${name} · ${state} · ${die}`}
-            >
-              {face}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            onCloseAutoFocus={preserveNextPopupFocus}
-            className="tdv-capability-popup"
-            aria-label={`Capacidade ${name}`}
-          >
-            <header>
-              <small>{matrix ? "Matriz · Prumo" : "Alinhavo · Tento"}</small>
-              <h3>{name}</h3>
-              <strong>{die}</strong>
-            </header>
-            <p>
-              {state}
-              {shaken ? " · Abalada nesta cena" : ""}
+            {face}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          onCloseAutoFocus={preserveNextPopupFocus}
+          className="tdv-capability-popup"
+          aria-label={`Capacidade ${name}`}
+        >
+          <header>
+            <small>{matrix ? "Matriz · Prumo" : "Alinhavo · Tento"}</small>
+            <h3>{name}</h3>
+            <strong>{die}</strong>
+          </header>
+          <p>
+            {state}
+            {shaken ? " · Abalada nesta cena" : ""}
+          </p>
+          {effects.map((effect, i) => (
+            <p className="tdv-capability-effect" key={i}>
+              {effect.kind} · {effect.name}
             </p>
-            {effects.map((effect, index) => (
-              <p className="tdv-capability-effect" key={index}>
-                {effect.kind} · {effect.name}
-              </p>
-            ))}
-            {(shaken || effects.length > 0) && (
-              <p className="tdv-note">
-                {blocked
-                  ? "Capacidade impedida até a saída declarada."
-                  : "Proveito cancela uma fonte por vez; o deslocamento líquido é de uma categoria por Fio."}
-              </p>
-            )}
-            <div className="tdv-actions">
-              <Button
-                variant="outline"
-                disabled={disabled || !onDevelop}
-                onClick={() => {
-                  setOpen(false);
-                  onDevelop?.();
-                }}
-              >
-                Desenvolver
-              </Button>
-              <Button
-                variant="ghost"
-                disabled={disabled || blocked}
-                onClick={() => {
-                  setOpen(false);
-                  onRoll?.();
-                }}
-              >
-                Dados opcionais
-              </Button>
+          ))}
+          <div className="tdv-capability-advance">
+            <Button
+              variant="ghost"
+              aria-label={`Reverter ${name}`}
+              disabled={disabled || !canReverse}
+              title={canReverse ? "Correção pelo mestre" : "Somente o mestre pode regredir"}
+              onClick={() => {
+                onReverse?.();
+                setOpen(false);
+              }}
+            >
+              −
+            </Button>
+            <div>
+              <strong>
+                {grade >= (matrix ? 5 : 4)
+                  ? "Escala concluída"
+                  : `d${DICE[grade]} → d${DICE[grade + 1]}`}
+              </strong>
+              <small>
+                {creation ? allocationHint : `${advanceCost ?? 0} PU · saldo ${availablePU} PU`}
+              </small>
             </div>
-          </PopoverContent>
-        </Popover>
-      )}
+            <Button
+              variant="outline"
+              aria-label={`Avançar ${name}`}
+              disabled={
+                disabled ||
+                grade >= (matrix ? 5 : 4) ||
+                (!creation && availablePU < (advanceCost ?? 0)) ||
+                (creation && choiceAllowed ? !choiceAllowed(grade + 1) : false)
+              }
+              onClick={() => {
+                if (matrix && grade === 4 && !creation) onDevelop?.();
+                else onAdvance?.();
+                setOpen(false);
+              }}
+            >
+              +
+            </Button>
+          </div>
+          {!creation && onRoll && (
+            <Button
+              variant="ghost"
+              disabled={disabled || blocked}
+              onClick={() => {
+                setOpen(false);
+                onRoll?.();
+              }}
+            >
+              Dados opcionais
+            </Button>
+          )}
+        </PopoverContent>
+      </Popover>
       <div className="tdv-competency__scale" aria-hidden="true">
         {Array.from({ length: matrix ? 6 : 5 }, (_, value) => (
           <i key={value} data-filled={value <= grade} data-current={value === grade} />
@@ -263,11 +254,11 @@ export function TdvDevelopment({
 }
 
 export function TdvResourceActions({
+  onChange,
   name,
   value,
   maximum,
   disabled,
-  onChange,
 }: {
   name: string;
   value: number;
