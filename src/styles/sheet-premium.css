@@ -2490,6 +2490,7 @@
 .tadeon-tdv2-sheet[data-presentation="game"][data-game-profile="hibrido"] .tdv-game-ready { grid-column: 2; grid-row: 2; }
 .tadeon-tdv2-sheet[data-presentation="game"][data-game-profile="hibrido"] .tdv-game-defense { grid-column: 2; grid-row: 3; }
 @container tdv-atlas (max-width: 499px) {
+ .tdv-game-skills { grid-template-columns: repeat(2,minmax(0,1fr)); }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource { padding-inline: .1rem; }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation { grid-template-columns: repeat(2,minmax(0,1fr)); }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-operation .tdv-resource-value { grid-column: 1/-1; grid-row: 1; }
