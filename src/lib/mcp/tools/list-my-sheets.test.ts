@@ -23,7 +23,7 @@ beforeEach(() => {
   fixture.order.mockImplementation(async () => ({ data: fixture.rows, error: null }));
 });
 it("returns edition-specific progress without leaking the character payload or applying legacy Rank", async () => {
-  let c = newTdvCharacter();
+  let c = newTdvCharacter("reference");
   Object.assign(c.face, {
     origin: "Cais",
     occupation: "Registradora",

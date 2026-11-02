@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-01; referência de runtime: `209c82a62236d107c73ced883f4bec7884529d62`. PR #318 em `feat/nex-046-sheet-instruments`; integração: `integrated`. Não é prova de deploy.
+Snapshot: 2026-11-02; referência de runtime: `413fe24b7511415fa1af94f3dec62c89d34bc160`. PR #319 em `feat/nex-046-sheet-reading`; integração: `integrated`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 
@@ -454,7 +454,7 @@ Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMEN
 - Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.
 - Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco.
 
-Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json).
+Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json), [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json).
 
 ## NEX-047 — V4 fase 4: Visão de Partida e integração física/digital
 
@@ -462,7 +462,7 @@ Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/v
 - Isolar e identificar Forma de Poder legada, preservando URL/flag/payload e impedindo gravação por simples leitura.
 - Implementar dois Fios, cartões/repertório, físico/híbrido/digital, conciliação explícita, offline/retry e aprovação sem cobranças duplicadas.
 
-Evidências: pendentes; não declarar concluído.
+Evidências: [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json).
 
 ## NEX-048 — V4: autoridade transacional de ações, custos e Resto
 
@@ -517,3 +517,4 @@ Evidências: pendentes; não declarar concluído.
 | DEC-025 | Preservar a organização aprovada da Ficha e intensificar materiais, cores, cantos, encaixes e visualização; fechar a implementação das fases iniciais com evidências proporcionais e prosseguir sem reabrir o bloqueio de backup. | Pedido explícito de Tadeu nesta rodada. A validação técnica não certifica dispositivos físicos, contas reais ou serviços restaurados; DEC-024 continua vigente. Nenhuma remoção de função ou migração de dados está autorizada por esta mudança visual. |
 | DEC-026 | A ficha deve funcionar como ficha física ampliada por recursos digitais, com leitura e operação próprias para cada informação. Registro narrativo de rolagens é opcional, e dados já salvos devem ser preservados. | Pedido explícito de Tadeu em 01/11: melhorar visualização além do acabamento, conferir níveis/graus/dados com o Livro de Regras e retirar burocracia de diário. O livro não cria nível universal e não exige anotação de cada Resto. |
 | DEC-027 | Priorizar leitura visual e operações diretas na ficha, com escrita sob demanda e revisão dos encaixes e sobreposições. | Pedido explícito de Tadeu após aprovar a PR 318: ficha interativa, prática e visual, preservando os campos descritivos pertinentes e evitando formulário exaustivo. |
+| DEC-028 | Aprofundar a ficha como instrumento visual, usando a referência enviada de Ordem para densidade e leitura imediata, com identidade autoral por card/aba; começar rascunhos com Matrizes d6 e Alinhavos d4 e tornar Modo de jogo a apresentação de partida principal. | Pedido explícito de Tadeu. d6/d4 são a base ainda não distribuída; o pacote legal de criação do Livro II permanece 3,3,2,2 e dois Alinhavos de grau 2/quatro de grau 1. Não redefinir fichas salvas. O novo modo compartilha dados/custos e isola a Forma de Poder histórica sem apagá-la. DEC-024 permanece vigente para este lote sem migration. |

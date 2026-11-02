@@ -1,3 +1,4 @@
+import { TdvEmblem } from "./tdv2-emblem";
 import { FabricFilaments } from "@/components/fabric-filaments";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,6 +32,17 @@ const SECTION_HELP: Record<string, string> = {
   "sec-notas": "Notas de campo e registros livres da personagem.",
 };
 const SECTION_PRESENTATION: Record<string, { index: string; kicker: string }> = {
+  "tdv-recursos": { index: "•", kicker: "Reserva e proteção" },
+  "tdv-equilibrio": { index: "•", kicker: "Eixo do Véu" },
+  "tdv-motor": { index: "•", kicker: "Dois Fios · uma ação" },
+  "tdv-condicoes": { index: "•", kicker: "O que altera a cena" },
+  "tdv-recuperacao": { index: "•", kicker: "Recompor a continuidade" },
+  "tdv-cena": { index: "•", kicker: "Estado compartilhado" },
+  "tdv-uso": { index: "•", kicker: "Manifestação em curso" },
+  "tdv-expressao": { index: "•", kicker: "Repertório vivo" },
+  "tdv-desenvolvimento": { index: "•", kicker: "Marcos e Urdume" },
+  "tdv-historia": { index: "•", kicker: "Memória da pessoa" },
+
   "tdv-feicao": { index: "•", kicker: "Presença em cena" },
   "tdv-pessoal": { index: "•", kicker: "História e particularidades" },
   "tdv-ancora": { index: "•", kicker: "Continuidade e retorno" },
@@ -80,12 +92,14 @@ export function Section({
   extra,
   id,
   className = "",
+  emblem,
 }: {
   title: string;
   children: React.ReactNode;
   extra?: React.ReactNode;
   id?: string;
   className?: string;
+  emblem?: string;
 }) {
   const presentationKey = id ?? title.toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, "-");
   const presentation = SECTION_PRESENTATION[presentationKey] ?? {
@@ -130,7 +144,20 @@ export function Section({
         <div className="tadeon-sheet-section__heading">
           <div className="tadeon-sheet-section__title-group">
             <span className="tadeon-sheet-section__index" aria-hidden="true">
-              {presentation.index}
+              {emblem || (id?.startsWith("tdv-") && !id.startsWith("tdv-master-")) ? (
+                <TdvEmblem
+                  kind={
+                    emblem ??
+                    (id === "tdv-feicao"
+                      ? "pessoa"
+                      : id === "tdv-desenvolvimento"
+                        ? "percurso"
+                        : (id?.replace("tdv-", "") ?? "pessoa"))
+                  }
+                />
+              ) : (
+                presentation.index
+              )}
             </span>
             <span className="min-w-0">
               <small>{presentation.kicker}</small>

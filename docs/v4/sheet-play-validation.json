@@ -1,0 +1,118 @@
+{
+  "decision": "DEC-028",
+  "tasks": [
+    "NEX-046",
+    "NEX-047"
+  ],
+  "baseCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+  "checkedAt": "2026-11-02",
+  "status": "source gates and publication recorded in the delivery PR",
+  "local": {
+    "targeted": "28 tests passed before final source checks",
+    "postgres": {
+      "passed": true,
+      "checks": 42,
+      "engine": "PostgreSQL/PGlite isolated",
+      "productionWrites": 0
+    },
+    "browser": {
+      "observed": "native screenshot/interaction review of the new mode in 390x844, 820x1180 and 1440x900; complete checks must pass in exact-source CI",
+      "existingMechanics": "full regression running at source freeze; no completion claimed"
+    },
+    "check": {
+      "passed": true,
+      "suites": 166,
+      "tests": 703,
+      "includes": [
+        "styles",
+        "continuity",
+        "surfaces",
+        "eslint",
+        "types",
+        "tests",
+        "production build"
+      ]
+    },
+    "audit": {
+      "high": 0,
+      "critical": 0,
+      "moderate": 15,
+      "dependenciesChanged": false
+    }
+  },
+  "preserved": [
+    "all integral folios",
+    "historical power URL/flag/payload",
+    "same character engine and costs",
+    "CAS and actor permissions",
+    "existing tabletop tools"
+  ],
+  "screenshots": [
+    {
+      "path": "docs/v4/evidence/play-person-390.png",
+      "sha256": "d7285529d585caf74643bdf13cef98827080a497d83c8b15f7fe5f52cc33a23c"
+    },
+    {
+      "path": "docs/v4/evidence/play-capacities-390.png",
+      "sha256": "0e1258961603b3beb81ab2eed60817e7277d0b0d2f6541f305e44a447559b24c"
+    },
+    {
+      "path": "docs/v4/evidence/play-action-390.png",
+      "sha256": "fd8a344bf9013cd66dcb40c51afe42fad552ad199a04675de67cc5190759eefb"
+    },
+    {
+      "path": "docs/v4/evidence/play-physical-390.png",
+      "sha256": "c832325dd7d26c6c2ee85692b0fc57d3f391700d22184502aebac9fcf1257030"
+    },
+    {
+      "path": "docs/v4/evidence/play-action-1440.png",
+      "sha256": "c3f346ad91dd147e2a6494c2d0ac877d47f8feefb0296c036b6b680bcea26b0b"
+    },
+    {
+      "path": "docs/v4/evidence/play-repertoire-820.png",
+      "sha256": "f2a820745d5fa4c2224cf4585fcab0d4f6caea42b0bc1b558aedcb317f15fcbe"
+    }
+  ],
+  "limits": [
+    "synthetic accounts and intercepted persistence",
+    "no real hardware or production-account certification",
+    "no FPS/INP claim",
+    "no server-idempotency/offline-approval certification",
+    "no complete V4 certification"
+  ],
+  "browserSuite": {
+    "viewports": "15 exact chapter-50 CSS dimensions",
+    "roles": [
+      "mestre",
+      "espectador"
+    ],
+    "expectedNewStates": 255,
+    "requiredCI": [
+      "Quality",
+      "navigation",
+      "utilities",
+      "tabletop",
+      "sheet",
+      "tdv2",
+      "play",
+      "browser aggregate"
+    ],
+    "checks": [
+      "initial d6/d4 draft and legal allocated completion",
+      "one set of 25 canonical dice instruments",
+      "same physical-roll engine without reroll",
+      "explicit confirmation guard",
+      "same result through tabs/modes",
+      "resource update through existing autosave/CAS",
+      "read-only disabled writes and enabled navigation",
+      "mode restored by account/character session",
+      "populated repertoire summaries",
+      "historical payload preserved without read writes"
+    ]
+  },
+  "comparison": {
+    "before": "docs/v4/evidence/reading-person-390.png",
+    "after": "docs/v4/evidence/play-person-390.png",
+    "scope": "same integral Pessoa on base/main and current source; game is a new presentation"
+  }
+}

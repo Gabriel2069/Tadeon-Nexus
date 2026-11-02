@@ -1,6 +1,8 @@
 # Estado de continuidade do Tadeon Nexus
 
-Verificado em 01/11/2026 (America/Sao_Paulo). Entrada curta de retomada; o registro único de tarefas e responsáveis é [project-continuity.json](../project-continuity.json).
+Verificado em 02/11/2026 (America/Sao_Paulo). Entrada curta de retomada; o registro único de tarefas e responsáveis é [project-continuity.json](../project-continuity.json).
+
+Checkpoint DEC-028: PR 319 publicada em `413fe24`, HTTP200/SHA exato em 2026-11-01T22:41:30.312Z. Novo lote: atlas visual com emblemas/dados próprios, rascunho d6/d4 e Modo de jogo sobre o mesmo motor. Forma de Poder histórica preservada sem sincronização na consulta de fichas atuais. Validação/publicação deste lote são independentes: [diferenças e limites](../v4/FICHA_VISUAL_E_JOGO.md). NEX-046 permanece ativo; NEX-047 tem implementação parcial de apresentação, sem certificar eventos/autoridade de NEX-048.
 
 Checkpoint de ficha: PR 318 integrada em `209c82a`, publicada com HTTP200/SHA exato em 2026-11-01T21:30:28.202Z. 697 testes e 222 estados TdV II no fonte exato; fixtures não certificam contas/aparelhos reais. DEC-027 autoriza aprofundar a leitura interativa: inscrições, Pilar, vínculos e condições com edição sob demanda e encaixe por largura real. Validação deste lote em `docs/v4/sheet-reading-validation.json`; gates/publicação próprios ainda necessários.
 

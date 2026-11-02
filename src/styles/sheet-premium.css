@@ -2239,7 +2239,7 @@
 .tdv-competency__scale i { width: .65rem; height: .2rem; background: rgb(var(--folio-rgb) / 16%); }
 .tdv-competency__scale i[data-filled="true"] { background: rgb(var(--folio-rgb) / 65%); }
 .tdv-competency__scale i[data-current="true"] { height: .4rem; background: rgb(var(--folio-rgb)); }
-.tdv-competency__die { grid-column: 2; grid-row: 2 / 4; display: grid; gap: 0; align-content: center; min-width: 44px; min-height: 48px; padding: .35rem; border: 1px solid rgb(var(--folio-rgb) / 38%); border-radius: .8rem .2rem .8rem .2rem; background: linear-gradient(145deg,rgb(var(--folio-rgb) / 18%),transparent 70%),#10161d; }
+.tdv-competency__die { grid-column: 2; grid-row: 2 / 4; display: grid; gap: 0; align-content: center; min-width: 44px; min-height: 48px; padding: .35rem; border: 0; border-radius: .8rem .2rem .8rem .2rem; background: transparent; box-shadow: none; }
 .tdv-competency__die > span { font: 500 1.25rem/1.1 var(--font-cinzel); }
 .tdv-competency__die > small { font: 400 .7rem/1.1 var(--font-inter); color: var(--muted-foreground); }
 .tdv-competency.tdv-matrix { padding: .7rem; }
@@ -2325,3 +2325,99 @@ button.tdv-inscription:focus-visible { outline: 2px solid var(--foreground); out
 .tdv-condition__reading dd { white-space: pre-wrap; overflow-wrap: anywhere; font: 400 1rem/1.4 var(--font-inter); }
 .tdv-condition .tdv-choices { grid-column: 1 / -1; }
 .tdv-condition-empty { padding: .5rem 0; color: var(--muted-foreground); }
+
+/* Instrument atlas: each role has its own cut, pigment and thread engraving. */
+.tdv-emblem { display: block; width: 100%; height: 100%; color: rgb(var(--folio-rgb,217 215 164)); }
+.tdv-emblem__frame { fill: currentColor; fill-opacity: .045; stroke: currentColor; stroke-opacity: .25; }
+.tadeon-tdv2-sheet .tadeon-sheet-section__index:has(.tdv-emblem) { width: 3.25rem; height: 3.25rem; padding: .15rem; border: 0; background: none; box-shadow: none; flex: none; }
+.tadeon-tdv2-sheet .tadeon-sheet-section__title-group { min-width: 0; }
+.tadeon-tdv2-sheet .tadeon-sheet-section { --folio-rgb: var(--section-rgb,217 215 164); border-radius: .3rem 1.5rem .3rem 1rem; }
+.tadeon-tdv2-sheet [data-section="tdv-feicao"] { --section-rgb: 210 187 124; border-left-width: 3px; }
+.tadeon-tdv2-sheet [data-section="tdv-ancora"] { --section-rgb: 142 187 165; border-radius: 1.8rem .35rem 1.8rem .35rem; }
+.tadeon-tdv2-sheet [data-section="tdv-vinculos"] { --section-rgb: 192 156 120; border-style: solid dashed solid solid; }
+.tadeon-tdv2-sheet [data-section="tdv-pessoal"] { --section-rgb: 168 163 140; }
+.tadeon-tdv2-sheet [data-section="tdv-constituicao"] { --section-rgb: 177 158 211; border-radius: .25rem 1.8rem .25rem 1.8rem; }
+.tadeon-tdv2-sheet [data-section="tdv-recursos"] { --section-rgb: 201 128 139; }
+.tadeon-tdv2-sheet [data-section="tdv-equilibrio"] { --section-rgb: 139 180 204; border-radius: 1.4rem .3rem .3rem 1.4rem; }
+.tadeon-tdv2-sheet [data-section="tdv-motor"] { --section-rgb: 138 194 211; border-radius: .3rem .3rem 1.8rem .3rem; }
+.tadeon-tdv2-sheet [data-section="tdv-condicoes"] { --section-rgb: 198 145 139; }
+.tadeon-tdv2-sheet [data-section="tdv-uso"] { --section-rgb: 148 193 161; }
+.tadeon-tdv2-sheet [data-section="tdv-expressao"] { --section-rgb: 151 183 158; border-radius: 1.6rem .3rem .3rem 1.6rem; }
+.tadeon-tdv2-sheet [data-section="tdv-desenvolvimento"] { --section-rgb: 218 173 109; }
+.tadeon-tdv2-sheet [data-section="tdv-historia"] { --section-rgb: 183 161 189; }
+.tadeon-tdv2-sheet [data-section="sec-armas"] { --section-rgb: 198 149 124; }
+.tadeon-tdv2-sheet [data-section="sec-inv"] { --section-rgb: 169 182 143; }
+.tdv-die { position: relative; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; color: inherit; }
+.tdv-die > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tdv-die > b { position: relative; font: 600 1.2rem/1 var(--font-cinzel); }
+.tdv-competency__die:hover, .tdv-competency__die:focus-visible { background: rgb(var(--folio-rgb) / 9%); }
+.tdv-competency__die > .tdv-die { font-size: inherit; }
+.tdv-matrix .tdv-competency__scale { gap: 4px; }
+.tdv-matrix .tdv-competency__scale i { height: .35rem; transform: skewY(-25deg); }
+.tdv-matrix[data-capability="Ímpeto"] { --folio-rgb: 210 143 132; }
+.tdv-matrix[data-capability="Cadência"] { --folio-rgb: 137 190 197; }
+.tdv-matrix[data-capability="Nexo"] { --folio-rgb: 178 158 211; }
+.tdv-matrix[data-capability="Lastro"] { --folio-rgb: 177 190 141; }
+.tdv-play-presence { display: grid; gap: .45rem; padding: .6rem; border-block: 1px solid rgb(138 194 211 / 30%); background: linear-gradient(110deg,rgb(138 194 211 / 9%),transparent 65%); }
+.tdv-play-person { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.tdv-play-person > .tdv-emblem { width: 3rem; height: 3rem; flex: none; }
+.tdv-play-person > div { min-width: 0; }
+.tdv-play-person small { color: var(--muted-foreground); font: 400 .85rem/1.3 var(--font-inter); }
+.tdv-play-person strong { display: block; font: 600 1.8rem/1.05 var(--font-cinzel); overflow-wrap: anywhere; font-size: 1.5rem; }
+.tdv-play-person p { font: 400 .85rem/1.4 var(--font-inter); color: var(--muted-foreground); }
+.tdv-play-resources { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .5rem; min-width: 0; }
+.tdv-play-state { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; font: 400 .9rem/1.4 var(--font-inter); }
+.tdv-play-state b { color: rgb(138 194 211); font-weight: 600; }
+.tadeon-sheet-page[data-sheet-view="game"] .tdv-character-name,
+.tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout > .tdv-overview,
+.tadeon-tdv2-sheet[data-presentation="game"] #tdv-recursos .tdv-resources { display: none; }
+.tadeon-tdv2-sheet[data-presentation="game"] .tdv-tabs--sheet > button { min-height: 48px; }
+.tadeon-tdv2-sheet[data-presentation="game"] .tdv-folio-number { display: none; }
+.tadeon-tdv2-sheet[data-presentation="game"] #tdv-motor .tdv-note { margin-block: .35rem; }
+@container tdv-atlas (min-width: 850px) {
+ .tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout { grid-template-columns: minmax(14rem,.36fr) minmax(0,1fr); align-items: start; }
+ .tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout > .tdv-play-presence { position: sticky; top: var(--sheet-sticky-top,5rem); }
+ .tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout > .tdv-sheet-tabs { min-width: 0; }
+ .tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout > .tdv-creation { grid-column: 1 / -1; }
+}
+@media (max-width: 639px) {
+ .tadeon-tdv2-sheet .tadeon-sheet-section__index:has(.tdv-emblem) { width: 2.75rem; height: 2.75rem; }
+ .tadeon-tdv2-sheet .tadeon-sheet-section__heading { gap: .45rem; }
+}
+
+.tdv-physical-dice { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; }
+.tdv-physical-dice > div { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: .5rem; }
+.tdv-dice-source { padding-block: .25rem; }
+@media (max-height: 500px) { .tadeon-tdv2-sheet[data-presentation="game"] > .tdv-presentation-layout > .tdv-play-presence { position: static; } }
+.tdv-thread-console { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; }
+.tdv-thread-control { min-width: 0; }
+.tdv-thread-console .tdv-thread-control { display: grid; justify-items: center; gap: .4rem; padding: .65rem .45rem; border-bottom: 1px solid rgb(var(--folio-rgb) / 40%); background: linear-gradient(165deg,rgb(var(--folio-rgb) / 12%),transparent); }
+.tdv-thread-console .tdv-thread-control > .tdv-die { width: 4rem; height: 4rem; color: rgb(var(--folio-rgb)); }
+.tdv-thread-console .tdv-die b { font-size: 1.55rem; }
+.tdv-thread-console .tdv-field { width: 100%; }
+.tdv-thread-console > .tdv-field:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,1fr) 5rem; align-items: center; gap: .5rem; }
+.tdv-test-dice--quick { display: block; padding: 0; border: 0; background: none; }
+.tdv-test-dice--quick > button { width: 100%; min-height: 48px; }
+.tdv-play-resources .tdv-resource { padding: .4rem .5rem; }
+.tdv-play-resources .tdv-resource-level { margin-block: .35rem; }
+.tdv-play-resources .tdv-resource-value { padding: 0; gap: .15rem; }
+.tdv-play-resources .tdv-resource-value strong { font-size: 1.6rem; }
+
+.tdv-record-summary__title { display: flex; align-items: center; gap: .65rem; }
+.tdv-record-summary__title > .tdv-emblem { width: 2.8rem; height: 2.8rem; flex: none; }
+.tdv-record-summary__title > span { display: grid; gap: .2rem; min-width: 0; }
+.tdv-record-summary__title small { color: rgb(var(--folio-rgb)); font: 500 .8rem/1.3 var(--font-inter); }
+.tdv-record-summary__title strong { font: 600 1.35rem/1.15 var(--font-cinzel); overflow-wrap: anywhere; }
+.tdv-record-summary__fact { display: grid; grid-template-columns: minmax(4rem,.35fr) minmax(0,1fr); gap: .6rem; padding-block: .4rem; border-top: 1px solid var(--border); font: 400 .95rem/1.4 var(--font-inter); overflow-wrap: anywhere; }
+.tdv-record-summary__fact b { color: var(--muted-foreground); font-weight: 400; }
+
+.tdv-presentation-layout { display: grid; gap: .85rem; min-width: 0; }
+.tdv-allocation { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; margin-block: .6rem; }
+.tdv-allocation > div { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .4rem; padding: .55rem; border-bottom: 1px solid var(--border); }
+.tdv-allocation small { font: 400 .85rem/1.3 var(--font-inter); }
+.tdv-allocation strong { font: 500 1.2rem/1 var(--font-cinzel); }
+.tdv-allocation > div > span { grid-column: 1 / -1; display: flex; gap: .35rem; }
+.tdv-allocation i { flex: 1; height: .3rem; background: rgb(var(--folio-rgb) / 15%); }
+.tdv-allocation i[data-filled="true"] { background: rgb(var(--folio-rgb)); }
+.tdv-allocation [data-complete="true"] { border-color: #8fbc9b; }
+.tdv-allocation [data-over="true"] { color: #df9ba3; }

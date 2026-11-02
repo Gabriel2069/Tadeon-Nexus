@@ -29,7 +29,7 @@ import {
   orderInitiative,
 } from "./tdv2-master";
 function ready() {
-  const c = newTdvCharacter();
+  const c = newTdvCharacter("reference");
   c.face.origin = "Cais";
   c.face.occupation = "Registradora";
   c.face.conviction = "Preservar testemunhos";
@@ -64,7 +64,7 @@ describe("TdV II canonical character and motor", () => {
     expect(tdv2CharacterSchema.parse(c)).toEqual(c);
   });
   it("requires real face, an established anchor and the 2/4 training package", () => {
-    expect(() => finishCreation(newTdvCharacter())).toThrow();
+    expect(() => finishCreation(newTdvCharacter("reference"))).toThrow();
     const c = ready();
     c.alinhavos.Selagem = 2;
     expect(creationErrors(c).join(" ")).toContain("dois Alinhavos");
@@ -330,7 +330,7 @@ it("prepares an explicit narrative draft without inferring mechanics or changing
   expect(c.matrices).toEqual(newTdvCharacter().matrices);
   expect(c.milestones).toEqual([]);
   expect(c.investments).toEqual([]);
-  expect(c.resources).toEqual({ pv: 10, pi: 11, pe: 10 });
+  expect(c.resources).toEqual({ pv: 8, pi: 8, pe: 7 });
   expect(c.face.links[0]).toMatchObject({ node: "Elen", nature: "Confiança", state: "Tensionado" });
   expect(c.history).toBe("História preservada");
   expect(c.notes).toContain("Registro anterior");
@@ -385,7 +385,7 @@ describe("existing dossiers in the current rules", () => {
 });
 
 it("rolls an ordinary unrecorded test without changing the character or creating a diary entry", () => {
-  const c = { ...newTdvCharacter(), ready: true };
+  const c = { ...newTdvCharacter("reference"), ready: true };
   const rolled = resolveTest(
     c,
     {
@@ -400,9 +400,40 @@ it("rolls an ordinary unrecorded test without changing the character or creating
       extraordinary: false,
       counterpart: "",
     },
-    () => .25,
+    () => 0.25,
   );
   expect(rolled.character).toBe(c);
   expect(rolled.character.scene.tests).toBeUndefined();
   expect(rolled.result.enlace).toBe(6);
+});
+
+it("starts a new unallocated sheet at d6 matrices and d4 Alinhavos", () => {
+  const c = newTdvCharacter();
+  expect(Object.values(c.matrices)).toEqual([1, 1, 1, 1]);
+  expect(Object.values(c.alinhavos).every((value) => value === 0)).toBe(true);
+  expect(c.resources).toEqual({ pv: 8, pi: 8, pe: 7 });
+  expect(c.ready).toBe(false);
+  expect(creationErrors(c).join(" ")).toContain("Distribua 3");
+});
+it("reads physical faces through the same engine without calling the random source", () => {
+  const c = ready();
+  let randomCalls = 0;
+  const result = resolveTest(
+    c,
+    { ...request, force: "Prumo" },
+    () => {
+      randomCalls++;
+      return 0.5;
+    },
+    { prumo: 8, tento: 3 },
+  );
+  expect(randomCalls).toBe(0);
+  expect(result.result.enlace).toBe(11);
+  expect(result.character.resources.pe).toBe(c.resources.pe - 1);
+  expect(() => resolveTest(c, request, () => 0.5, { prumo: 99, tento: 2 })).toThrow(
+    "faces físicas",
+  );
+  expect(c.resources.pe).toBe(10);
+  const critical = resolveTest(c, request, () => 0.5, { prumo: 1, tento: 1 });
+  expect(critical.character.scene.shaken).toContain("Nexo");
 });

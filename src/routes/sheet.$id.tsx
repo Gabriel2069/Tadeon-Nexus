@@ -1,3 +1,4 @@
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SheetDescriptionPanel } from "@/components/sheet/sheet-description-panel";
 import { Tdv2DossierDetails, Tdv2Belongings } from "@/components/sheet/tdv2-retained-tools";
 import { AutosaveConflictError, SHEET_CONFLICT_MESSAGE } from "@/lib/autosave-conflict";
@@ -196,6 +197,26 @@ function SheetPage() {
   const { edition } = Route.useSearch();
   const { user, role } = useAuth();
   const navigate = useNavigate();
+  const presentationKey = `tadeon-sheet-presentation-v2:${user?.id ?? "anonymous"}:${id}`;
+  const [presentation, setPresentation] = useState<"edit" | "game">(() => {
+    try {
+      return new URLSearchParams(window.location.search).get("mode") === "game" ||
+        window.sessionStorage.getItem(presentationKey) === "game"
+        ? "game"
+        : "edit";
+    } catch {
+      return "edit";
+    }
+  });
+  const changePresentation = (value: "edit" | "game") => {
+    setPresentation(value);
+    try {
+      window.sessionStorage.setItem(presentationKey, value);
+    } catch {
+      /* Optional presentation memory. */
+    }
+  };
+
   const [sheetHost, setSheetHost] = useState<HTMLDivElement | null>(null);
   useSheetChrome(sheetHost);
   const [sheet, setSheet] = useState<SheetData | null>(null);
@@ -621,13 +642,14 @@ function SheetPage() {
         ref={setSheetHost}
         data-page-layout
         data-sheet-presentation="fabric"
+        data-sheet-view={presentation}
         className="tadeon-page tadeon-sheet-page pb-28"
       >
         <PageHeader
           section="sheet"
-          eyebrow="Ficha Integral · TdV II"
+          eyebrow={presentation === "game" ? "Modo de jogo · TdV II" : "Ficha Integral · TdV II"}
           title={sheet.name || "Ficha"}
-          className="tadeon-sheet-commandbar"
+          className={`tadeon-sheet-commandbar${presentation === "game" ? " tadeon-sheet-play-header" : ""}`}
           actions={
             <div className="tadeon-sheet-commandbar__actions">
               <Button
@@ -639,21 +661,55 @@ function SheetPage() {
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              {sheet.power_form_enabled && (
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    navigate({
-                      to: "/sheet/$id/power",
-                      params: { id },
-                      search: { edition: "legacy" },
-                    })
-                  }
-                >
-                  Forma de Poder · registro
-                </Button>
-              )}
-              <SheetExperienceBridge sheetId={id} dropTarget={sheetHost} canEdit={canEdit} />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Registros históricos"
+                    title="Registros históricos"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent aria-label="Registros históricos da ficha">
+                  <div className="tdv-actions">
+                    <Button
+                      variant="outline"
+                      onClick={() =>
+                        navigate({
+                          to: "/sheet/$id",
+                          params: { id },
+                          search: { edition: "legacy" },
+                        })
+                      }
+                    >
+                      Ficha da edição anterior
+                    </Button>
+                    {sheet.power_form_enabled && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          navigate({
+                            to: "/sheet/$id/power",
+                            params: { id },
+                            search: { edition: "legacy" },
+                          })
+                        }
+                      >
+                        Forma de Poder histórica
+                      </Button>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+              <SheetExperienceBridge
+                sheetId={id}
+                dropTarget={sheetHost}
+                canEdit={canEdit}
+                mode={presentation}
+                onModeChange={changePresentation}
+              />
               <span className="tadeon-sheet-save-state">
                 <SaveStatus
                   compact
@@ -712,6 +768,7 @@ function SheetPage() {
           </Label>
           <Input
             id="tdv-character-name"
+            className="tadeon-dossier-field"
             value={sheet.name}
             disabled={!canEdit}
             onChange={(e) => update("name", e.target.value)}
@@ -731,6 +788,8 @@ function SheetPage() {
           </div>
         )}
         <Tdv2Sheet
+          name={sheet.name}
+          presentation={presentation}
           character={parsed.data}
           canEdit={canEdit}
           isMaster={role === "mestre"}

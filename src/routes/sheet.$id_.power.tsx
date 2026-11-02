@@ -339,7 +339,11 @@ function PowerFormPage() {
         power_form_data: (raw.power_form_data as VPData) ?? {},
       };
       setBase(baseRow);
-      const synced = syncFromBase(baseRow, baseRow.power_form_data);
+      // Current-edition historical records are snapshots, never resynchronized on read.
+      const synced =
+        raw.rules_version === 2
+          ? baseRow.power_form_data
+          : syncFromBase(baseRow, baseRow.power_form_data);
       const syncChanged = JSON.stringify(synced) !== JSON.stringify(baseRow.power_form_data);
       setVp(synced);
       setCurrents({

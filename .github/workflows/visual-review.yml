@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [navigation, utilities, tabletop, sheet, tdv2]
+        suite: [navigation, utilities, tabletop, sheet, tdv2, play]
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
@@ -208,6 +208,13 @@ jobs:
           NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2-reading
           NEXUS_AUDIT_VIEWPORTS: chapter50
           NEXUS_SHEET_READING_ONLY: "1"
+        run: node scripts/verify-tdv2.mjs
+      - name: Conferir atlas ilustrado e modo de jogo nos 15 tamanhos
+        if: matrix.suite == 'play'
+        env:
+          NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2-play
+          NEXUS_AUDIT_VIEWPORTS: chapter50
+          NEXUS_PLAY_VIEW_ONLY: "1"
         run: node scripts/verify-tdv2.mjs
       - name: Publicar métricas de comparação no log
         if: always()

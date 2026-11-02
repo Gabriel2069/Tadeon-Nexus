@@ -1,3 +1,4 @@
+import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -46,6 +47,9 @@ export function TdvTestPanel({
     counterpart: "",
     context: { intention: "", approach: "", change: "", point: "", risk: false },
   });
+  const [physical, setPhysical] = useState(false);
+  const [confirmedPhysical, setConfirmedPhysical] = useState("");
+  const [faces, setFaces] = useState({ prumo: 1, tento: 1 });
   const [remember, setRemember] = useState(!quick);
   const [last, setLast] = useState<ReturnType<typeof resolveTest> | null>(null);
   const upd = <K extends keyof TestRequest>(key: K, value: TestRequest[K]) =>
@@ -64,6 +68,7 @@ export function TdvTestPanel({
     helper: auxiliary ? helper : undefined,
     costs: declaredCosts,
   };
+  const physicalSignature = JSON.stringify({ request: effective, faces });
   let prepared: ReturnType<typeof prepareTest> | null = null,
     error = "";
   try {
@@ -71,13 +76,17 @@ export function TdvTestPanel({
   } catch (e) {
     error = (e as Error).message;
   }
-  return (
-    <div className="tdv-test-panel">
+  const intro = (
+    <>
       <p className="tdv-note">
         {quick
-          ? "Escolha os dois Fios e o limiar acordado. Sem risco, resolva pela ficção. A rolagem não cria registro automático; custos e efeitos continuam sendo aplicados."
+          ? "Escolha os Fios e o limiar. Role quando a incerteza mudar a situação."
           : "Declare intenção, abordagem e limiar antes de rolar. Sem risco relevante, resolva diretamente pela ficção."}
       </p>
+    </>
+  );
+  const context = (
+    <>
       {quick && (
         <TdvCheck
           label="Registrar a próxima rolagem"
@@ -117,6 +126,10 @@ export function TdvTestPanel({
           />
         </>
       )}
+    </>
+  );
+  const help = (
+    <>
       <TdvDisclosure initiallyOpen={false}>
         <summary>Auxílio: um Prumo, um Tento, um teste</summary>
         <TdvCheck
@@ -154,21 +167,71 @@ export function TdvTestPanel({
           distintas; seus ganhos não desaparecem pela falha de outra pessoa.
         </p>
       </TdvDisclosure>
-      <div className="tdv-grid tdv-grid--three">
-        <TdvSelect
-          label="Matriz de Prumo"
-          value={request.matrix}
-          options={MATRICES}
-          onChange={(v) => upd("matrix", v as Matrix)}
-          disabled={!canEdit}
-        />
-        <TdvSelect
-          label="Alinhavo de Tento"
-          value={request.alinhavo}
-          options={ALINHAVOS}
-          onChange={(v) => upd("alinhavo", v)}
-          disabled={!canEdit}
-        />
+    </>
+  );
+  const physicalControls = (
+    <>
+      {quick && !resolver && (
+        <div className="tdv-dice-source">
+          <TdvCheck
+            label="Usar dados físicos"
+            value={physical}
+            onChange={setPhysical}
+            disabled={!canEdit}
+          />
+        </div>
+      )}
+      {physical && prepared && (
+        <div className="tdv-physical-dice">
+          <div>
+            <TdvDie sides={prepared.prumo} />
+            <TdvNumber
+              label="Face física de Prumo"
+              value={faces.prumo}
+              min={1}
+              max={prepared.prumo}
+              onChange={(prumo) => setFaces({ ...faces, prumo })}
+              disabled={!canEdit}
+            />
+          </div>
+          <div>
+            <TdvDie sides={prepared.tento} />
+            <TdvNumber
+              label="Face física de Tento"
+              value={faces.tento}
+              min={1}
+              max={prepared.tento}
+              onChange={(tento) => setFaces({ ...faces, tento })}
+              disabled={!canEdit}
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
+  const selection = (
+    <>
+      <div className={`tdv-grid tdv-grid--three${quick ? " tdv-thread-console" : ""}`}>
+        <div className="tdv-thread-control">
+          {quick && prepared && <TdvDie sides={prepared.prumo} />}
+          <TdvSelect
+            label="Matriz de Prumo"
+            value={request.matrix}
+            options={MATRICES}
+            onChange={(v) => upd("matrix", v as Matrix)}
+            disabled={!canEdit}
+          />
+        </div>
+        <div className="tdv-thread-control">
+          {quick && prepared && <TdvDie sides={prepared.tento} />}
+          <TdvSelect
+            label="Alinhavo de Tento"
+            value={request.alinhavo}
+            options={ALINHAVOS}
+            onChange={(v) => upd("alinhavo", v)}
+            disabled={!canEdit}
+          />
+        </div>
         <TdvNumber
           label="DT ou Defesa"
           value={request.dt}
@@ -178,6 +241,10 @@ export function TdvTestPanel({
           disabled={!canEdit}
         />
       </div>
+    </>
+  );
+  const advanced = (
+    <>
       <details className="tdv-disclosure">
         <summary>Proveito, Desproveito e Forçar</summary>
         <div className="tdv-grid">
@@ -226,32 +293,53 @@ export function TdvTestPanel({
           />
         )}
       </details>
-      <div className="tdv-test-dice">
-        <div>
-          <small>Fio de Prumo</small>
-          <strong>{prepared ? `d${prepared.prumo}` : "~"}</strong>
-        </div>
-        <span aria-hidden="true">+</span>
-        <div>
-          <small>Fio de Tento</small>
-          <strong>{prepared ? `d${prepared.tento}` : "~"}</strong>
-        </div>
+    </>
+  );
+  const roll = (
+    <>
+      <div className={`tdv-test-dice${quick ? " tdv-test-dice--quick" : ""}`}>
+        {!quick && (
+          <>
+            <div>
+              <small>Fio de Prumo</small>
+              <strong>{prepared ? `d${prepared.prumo}` : "~"}</strong>
+            </div>
+            <span aria-hidden="true">+</span>
+            <div>
+              <small>Fio de Tento</small>
+              <strong>{prepared ? `d${prepared.tento}` : "~"}</strong>
+            </div>
+          </>
+        )}
         <Button
-          disabled={!canEdit || !prepared}
+          disabled={!canEdit || !prepared || (physical && confirmedPhysical === physicalSignature)}
           onClick={() => {
             try {
-              const rolled = resolver ? resolver(effective) : resolveTest(character, effective);
+              const rolled = resolver
+                ? resolver(effective)
+                : resolveTest(character, effective, undefined, physical ? faces : undefined);
               if (rolled.character !== character) onChange(rolled.character);
               setLast(rolled);
+              if (physical) setConfirmedPhysical(physicalSignature);
             } catch (e) {
               toast.error((e as Error).message);
             }
           }}
         >
-          Rolar os dois Fios{prepared?.cost ? ` · ${prepared.cost} PE` : ""}
+          {physical ? "Conferir dados físicos" : "Rolar os dois Fios"}
+          {prepared?.cost ? ` · ${prepared.cost} PE` : ""}
           {prepared?.piCost ? ` · ${prepared.piCost} PI` : ""}
         </Button>
+        {physical && confirmedPhysical === physicalSignature && (
+          <Button variant="ghost" disabled={!canEdit} onClick={() => setConfirmedPhysical("")}>
+            Conferir outra rolagem
+          </Button>
+        )}
       </div>
+    </>
+  );
+  const chance = (
+    <>
       {prepared && (
         <p className="tdv-note">
           Chance exata de alcançar o limiar:{" "}
@@ -261,11 +349,19 @@ export function TdvTestPanel({
           %. Não presume acesso nem substitui a situação.
         </p>
       )}
+    </>
+  );
+  const errorNotice = (
+    <>
       {error && (
         <p className="tdv-note" role="status">
           {error}
         </p>
       )}
+    </>
+  );
+  const result = (
+    <>
       {last && (
         <div className="tdv-result" aria-live="polite">
           <p>
@@ -308,6 +404,35 @@ export function TdvTestPanel({
             </p>
           )}
         </div>
+      )}
+    </>
+  );
+  return (
+    <div className="tdv-test-panel">
+      {intro}
+      {quick ? (
+        <>
+          {selection}
+          {physicalControls}
+          {roll}
+          {chance}
+          {errorNotice}
+          {result}
+          {advanced}
+          {help}
+          {context}
+        </>
+      ) : (
+        <>
+          {context}
+          {help}
+          {selection}
+          {advanced}
+          {roll}
+          {chance}
+          {errorNotice}
+          {result}
+        </>
       )}
     </div>
   );

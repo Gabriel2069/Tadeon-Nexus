@@ -15,7 +15,7 @@ it("offers an immediate roll without narrative fields or a persisted diary entry
   const onChange = vi.fn();
   render(
     <TdvTestPanel
-      character={{ ...newTdvCharacter(), ready: true }}
+      character={{ ...newTdvCharacter("reference"), ready: true }}
       onChange={onChange}
       canEdit
       quick
@@ -51,4 +51,27 @@ it("keeps ordinary competence distinct from limitation and disables read-only ro
   expect(button.disabled).toBe(true);
   fireEvent.click(button);
   expect(roll).not.toHaveBeenCalled();
+});
+it("confirms physical faces once without rerolling or silently repeating the operation", () => {
+  const onChange = vi.fn();
+  render(
+    <TdvTestPanel
+      character={{ ...newTdvCharacter("reference"), ready: true }}
+      onChange={onChange}
+      canEdit
+      quick
+    />,
+  );
+  fireEvent.click(screen.getByLabelText("Usar dados físicos"));
+  fireEvent.change(screen.getByLabelText("Face física de Prumo"), { target: { value: "6" } });
+  fireEvent.change(screen.getByLabelText("Face física de Tento"), { target: { value: "3" } });
+  const confirm = screen.getByRole("button", {
+    name: "Conferir dados físicos",
+  }) as HTMLButtonElement;
+  fireEvent.click(confirm);
+  expect(confirm.disabled).toBe(true);
+  expect(onChange).not.toHaveBeenCalled();
+  expect(screen.getByText("Enlace 9 / DT 10 · margem -1")).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Conferir outra rolagem" }));
+  expect(confirm.disabled).toBe(false);
 });

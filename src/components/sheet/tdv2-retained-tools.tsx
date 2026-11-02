@@ -18,7 +18,9 @@ export function Tdv2DossierDetails({
       <TdvDisclosure
         initiallyOpen={Boolean(
           sheet.age ||
-            (["wound", "question", "lifeCycleTrait"] as const).some((key) => sheet.identity_data[key]?.trim()),
+          (["wound", "question", "lifeCycleTrait"] as const).some((key) =>
+            sheet.identity_data[key]?.trim(),
+          ),
         )}
       >
         <summary>Dados complementares</summary>
@@ -85,6 +87,7 @@ export function Tdv2Belongings({
         return (
           <Section
             key={kind}
+            emblem={kind === "Arma" ? "armas" : "inventario"}
             id={kind === "Arma" ? "sec-armas" : "sec-inv"}
             title={title}
             extra={
