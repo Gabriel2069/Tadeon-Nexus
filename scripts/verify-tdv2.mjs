@@ -128,6 +128,7 @@ try {
           { id: "play-trama", kind: "Trama", name: "A memória dos fios", fields: { Alvo: "Um testemunho preservado", Sustentação: "Conforme a situação ficcional" } },
         );
       }
+      let historicalEditing = false;
       const writes = [],
         errors = [];
       const context = await browser.newContext({
@@ -165,6 +166,12 @@ try {
           assert(role === "mestre", "Readonly mutation");
           writes.push({ path, patch });
           if (path.includes("/character_sheets")) {
+            if (historicalEditing) {
+              assert(new URL(page.url()).pathname.endsWith("/power"), "Historical write outside historical route");
+              assert(Object.keys(patch).sort().join(",")==="power_form_data,stats", "Historical edit changed current-edition fields");
+              row={...row,...patch};
+              body={id:sheetId};
+            } else {
             assert(
               Object.keys(patch).every((k) =>
                 [
@@ -190,6 +197,8 @@ try {
               updated_at: new Date(Date.parse(row.updated_at) + 1000).toISOString(),
             };
             body = { id: sheetId, updated_at: row.updated_at };
+
+            }
           } else if (path.includes("/game_settings")) {
             assert(Object.keys(patch).join(",") === "tdv2_state", "Legacy master mutation");
             assert(
@@ -338,6 +347,7 @@ try {
         assert(await page.locator('.tdv-feicao-portrait svg').count()===1,'Figural Feição is mounted');
         await page.getByRole('button',{name:'Ver vínculo com Elen',exact:true}).click();
         await page.getByLabel('Oferta do vínculo 1',{exact:true}).waitFor();
+        assert(await page.locator('.tdv-link-summary').first().evaluate(el=>el===document.activeElement),'Map selection focuses its real link folio');
         await page.locator('#tdv-vinculos').scrollIntoViewIfNeeded();await geometry('atlas-relations');
         await page.locator('.tdv-link-summary').first().click();
         await page.locator('#tdv-ancora').scrollIntoViewIfNeeded();await geometry('atlas-anchor');
@@ -384,9 +394,27 @@ try {
         await page.getByRole('button',{name:'Registros históricos',exact:true}).click();
         await page.getByRole('button',{name:'Forma de Poder histórica',exact:true}).click();
         await page.getByRole('note').filter({hasText:'Registro da Forma de Poder da edição anterior'}).waitFor();
+        // Cover the legacy autosave debounce, including normalization of missing resource keys.
+        await page.waitForTimeout(1600);
         await geometry('historical-power');
         assert(writes.length===beforeHistory,'Historical record opening cannot write');
         assert(JSON.stringify(row.power_form_data)===historical,'Historical payload preserved');
+        if (role==='mestre' && [390,1440].includes(width)) {
+          const currentEdition=JSON.stringify(row.tdv2_data);
+          historicalEditing=true;
+          const information=page.locator('.tadeon-vp-card').filter({has:page.getByRole('heading',{name:'Informações',exact:true})});
+          await information.getByRole('textbox').first().fill('Forma histórica revisada');
+          const deadline=Date.now()+10000;
+          while(row.power_form_data.name!=='Forma histórica revisada') { if(Date.now()>deadline) throw Error('Historical intentional edit was not saved');await page.waitForTimeout(100); }
+          assert(JSON.stringify(row.tdv2_data)===currentEdition,'Historical edit overwrote current edition');
+          assert(row.power_form_data.notes==='Registro histórico preservado','Historical notes erased');
+          const writesBeforeReload=writes.length;
+          await page.reload();
+          await page.getByRole('note').filter({hasText:'Registro da Forma de Poder da edição anterior'}).waitFor();
+          await page.waitForTimeout(1600);
+          assert(writes.length===writesBeforeReload,'Historical reload wrote an unchanged projection');
+          await geometry('historical-edited');
+        }
         await context.close();continue;
       }
       if (process.env.NEXUS_SHEET_READING_ONLY === "1") {

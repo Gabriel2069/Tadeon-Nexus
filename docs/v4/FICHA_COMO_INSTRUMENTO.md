@@ -6,7 +6,7 @@ Tadeu rejeitou a solução anterior: trocar cores e símbolos de cabeçalho não
 | --- | --- |
 | Feição | Retrato vetorial de fios com seis nós vinculados aos pilares realmente estabelecidos. Origem, Ofício, Convicção e Limite têm leitura tipográfica natural e edição com aplicar/cancelar. Marca continua opcional e explicitamente não manifestada. |
 | Âncora | Rosa de seis pilares com seleção nativa ao redor de um selo tecido. Estado Assentada/Abalada vem da personagem; escolha, Sustentar/Redirecionar e Reassentar mantêm regras e callbacks. |
-| Vínculos | Atlas com nomes/relações reais. Tocar um nó abre o respectivo fólio; oferta, cobrança e estados continuam disponíveis, inclusive em somente leitura. Não cria ou grava um vínculo por abrir sua leitura. |
+| Vínculos | Atlas com nomes/relações reais. Tocar um nó abre o respectivo fólio, leva-o à vista e move o foco ao resumo; oferta, cobrança e estados continuam disponíveis, inclusive em somente leitura. Não cria ou grava um vínculo por abrir sua leitura. |
 | Constituição | Radar e dados canônicos preservados. Alinhavos têm leitura de prática, ação e dado; familiaridades opcionais não são grau nem benefício. |
 | Recursos | Três recipientes distintos: Vitalidade, Inteireza e Esforço, preenchidos pelo valor atual/máximo real. Os ajustes continuam nas operações existentes. O modo de jogo usa a versão compacta. |
 | Equilíbrio | Duas tramas se encontram no valor bipolar; ponteiro e marcas de tensão vêm do estado real. Escala não é vida ou bônus universal. Ajustes continuam visíveis; explicações têm dobra própria. |
@@ -23,9 +23,11 @@ A criação oferece oito destinos reais: Feição, Matrizes, Alinhavos, Recursos
 
 Metadados opcionais `creation` guardam razão concreta para entrar na primeira situação, até quatro familiaridades de Feição e revisão final. A revisão confere permissões ficcionais, equipamento, Condições iniciais e capacidade; não autoriza poder ou gasto. Novos rascunhos precisam de implicação e revisão para concluir. Fichas antigas sem esses metadados permanecem válidas, sem redefinição ou migração em massa. Na conclusão, recursos vão aos máximos pelo `finishCreation` existente.
 
-Familiaridades identificam apenas Alinhavos de grau 0; não alteram dado, grau ou PU. A seleção libera a vaga ao elevar o Alinhavo na criação. Marca pode permanecer não manifestada, conforme o livro. Equipamentos continuam nas ferramentas existentes da Expressão, e Condições iniciais em Ação.
+Familiaridades identificam apenas Alinhavos de grau 0; não alteram dado, grau ou PU. A seleção libera a vaga ao elevar o Alinhavo na criação. Depois da criação, familiaridades são exibidas como formação inicial, sem repetir d4 como se fosse o dado atual após investimentos. Marca pode permanecer não manifestada, conforme o livro. Equipamentos continuam nas ferramentas existentes da Expressão, e Condições iniciais em Ação.
 
 O cenário pode conceder Lavores iniciais explicitamente e igualmente ao grupo. A interface explica essa regra e não fabrica concessão gratuita, aprovação do Mestre ou PU retroativo. A concessão inicial gratuita operacional, com autoridade de servidor, continua uma lacuna da etapa transacional NEX-048; a compra/incorporação existente permanece. Este relatório não declara toda a criação digital ou o livro integralmente implementados.
+
+A leitura histórica também deixa de produzir writes de normalização. O rascunho só fica disponível após a hidratação, respostas antigas são invalidadas e o payload é comparado à projeção carregada antes de salvar. Mudanças reais continuam usando o autosave existente; sincronização legada é apresentada em memória e só é persistida com edição real. O teste espera além do debounce e exige zero writes na consulta. Em 390/1440, também edita deliberadamente a forma histórica, confirma persistência e verifica que a ficha atual não foi alterada; recarregar não repete gravações.
 
 ## Validação e limites
 
@@ -36,3 +38,5 @@ Os desenhos são SVG local sem observadores, dependências ou animações ambien
 Sem migrations, exclusão de registros ou escrita em conta real. DEC-024 continua vigente. Rollback: reverter a apresentação mantendo a definição opcional de `creation` no schema de leitura. O parser anterior rejeita chaves de topo desconhecidas; um revert integral e cego não é um rollback compatível com novos rascunhos salvos. Exportar os payloads completos antes de regressão. Manter o schema novo ao retornar os componentes anteriores conserva os metadados sem apagar registros. Nenhuma migração automática foi aplicada.
 
 Permanecem pendentes: concessões iniciais autorizadas pelo servidor, eventos transacionais/idempotentes e conciliação física/offline completa (NEX-048), demais estados densos e dispositivos/contas reais. Integração/publicação e SHA final são registrados na PR, sem confundir screenshots locais com produção.
+
+O ambiente local ficou indisponível no fechamento. A composição, capturas e regressão locais foram preservadas; os ajustes finais de foco, familiaridades e leitura histórica exigem os gates do novo fonte no GitHub. Nenhum resultado anterior é usado para certificar esse código final.

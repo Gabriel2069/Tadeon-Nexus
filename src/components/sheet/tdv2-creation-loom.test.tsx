@@ -56,3 +56,14 @@ it("limits optional familiarity choices to four and releases a choice when desel
   fireEvent.click(screen.getByRole("button", { name: /Luta/ }));
   expect(screen.getByRole("button", { name: /Engenharia/ }).hasAttribute("disabled")).toBe(false);
 });
+
+it("shows initial familiarities as formation rather than stale current dice after advancement", () => {
+ const c = newTdvCharacter("reference"); c.ready=true;
+ c.creation={groupReason:"O cais",familiarities:["Luta"],reviewed:true};
+ c.milestones=[{id:"m",event:"Uma mudança",incorporation:"Prática"}];
+ c.investments=[{id:"i",kind:"Alinhavo",target:"Luta",cost:2,reason:"Treinamento",transcendent:false}];
+ render(<TdvFamiliarities character={c} onChange={()=>{}} canEdit/>);
+ expect(screen.getByText("Luta")).toBeTruthy();
+ expect(screen.queryByText("d4")).toBeNull();
+ expect(screen.queryAllByRole("button")).toHaveLength(0);
+});

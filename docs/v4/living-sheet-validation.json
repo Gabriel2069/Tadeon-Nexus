@@ -11,7 +11,7 @@
       "mestre",
       "espectador"
     ],
-    "expectedPlayStates": 375,
+    "expectedPlayStates": 377,
     "preservedTdv2States": 387,
     "checks": [
       "actual six-pillar portrait state",
@@ -25,7 +25,11 @@
       "readonly disabled mutations, enabled reading",
       "historical payload unchanged by viewing",
       "group implication and final creation review",
-      "narrative apply saves both compatible representations"
+      "narrative apply saves both compatible representations",
+      "link map brings the selected real folio into view and focuses its summary",
+      "initial familiarities do not claim stale d4 after investment",
+      "historical read makes zero writes after the autosave debounce",
+      "intentional historical edit persists while leaving TdV II data unchanged; reload creates no duplicate writes"
     ]
   },
   "local": {
@@ -59,7 +63,8 @@
       "productionWrites": 0,
       "readingEditorStates": 22,
       "instrumentStates": 10
-    }
+    },
+    "snapshot": "Completed before the final focus/familiarity/historical-hydration fixes; these final changes require exact-source GitHub CI after local runtime became unavailable."
   },
   "screenshots": [
     {

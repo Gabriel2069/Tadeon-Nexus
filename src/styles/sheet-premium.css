@@ -2534,3 +2534,11 @@ button.tdv-inscription:focus-visible { outline: 2px solid var(--foreground); out
 .tdv-repertoire-card--costura { --record-rgb: 186 157 205; border-inline: 3px double #b997c4; border-radius: .8rem .15rem; }
 .tdv-repertoire-card--resto { --record-rgb: 185 169 147; border-bottom-style: dashed; border-radius: .15rem .15rem 1rem .15rem; }
 .tadeon-description-tab[data-reading="true"] .tdv-inscription__label { display: none; }
+
+.tdv-link-folio { scroll-margin-block-start: calc(var(--sheet-sticky-top,5rem) + .6rem); }
+.tdv-familiarities-reading { display: grid; gap: .35rem; margin-top: .7rem; padding-block: .7rem; border-top: 1px solid #a397bf44; }
+.tdv-familiarities-reading small,.tdv-familiarities-reading span { color: var(--muted-foreground); font: 400 .8rem/1.3 var(--font-inter); }
+.tdv-familiarities-reading p { font: 500 1.1rem/1.3 var(--font-cinzel); }
+.tdv-link-atlas__nodes button,.tdv-creation-steps button,.tdv-familiarities button { transition: background-color 140ms ease,color 140ms ease,border-color 140ms ease; }
+@media (hover: hover) { .tdv-link-atlas__nodes button:hover,.tdv-creation-steps button:hover,.tdv-familiarities button:not(:disabled):hover { background-color: #cec59512; color: #e3d9bd; border-color: #c7bc96; } }
+@media (prefers-reduced-motion: reduce) { .tdv-link-atlas__nodes button,.tdv-creation-steps button,.tdv-familiarities button { transition: none; } }
