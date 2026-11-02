@@ -40,6 +40,20 @@ export async function verifyInteractive({
     await page.keyboard.press("Escape");
     await popup.waitFor({ state: "detached" });
   };
+  // Measure resting hit regions, not the transient scale of route arrival.
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForFunction(() =>
+    document
+      .getAnimations()
+      .every(
+        (animation) =>
+          animation.playState !== "running" ||
+          !Number.isFinite(animation.effect?.getComputedTiming().endTime),
+      ),
+  );
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  );
   assert(
     (await page.locator(".tadeon-tdv2-sheet").getAttribute("data-presentation")) === "edit",
     "Expanded default",
