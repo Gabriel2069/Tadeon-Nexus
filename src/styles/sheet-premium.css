@@ -2154,11 +2154,22 @@
 .tdv-item-composition :is(input,textarea):focus-visible { outline: none; box-shadow: none; border-color: transparent; }
 .tdv-item-composition label { color: rgb(var(--folio-rgb)); margin-bottom: .3rem; }
 .tdv-item-composition :is(input,textarea) { border: 0; border-bottom: 1px solid rgb(var(--folio-rgb) / 35%); border-radius: .3rem .3rem 0 0; background: #070c1438; }
-.tdv-guard-reading { display: flex; align-items: center; gap: .8rem; padding: .65rem .7rem; margin-bottom: .75rem; border-left: 2px solid #79b9ce; background: linear-gradient(90deg,#79b9ce12,transparent); }
-.tdv-guard-reading > svg { width: 2rem; height: 2rem; stroke-width: 1.2; color: #8bcde1; }
-.tdv-guard-reading > div { display: grid; }
-.tdv-guard-reading strong { font: 500 2.5rem/1 var(--font-cinzel); color: #b4dfeb; }
-.tdv-guard-reading small,.tdv-guard-reading > span { color: #a8c2cd; font: .85rem/1.3 var(--font-inter); }
+/* A positional shield and four distinct thresholds, never a second resource meter. */
+.tdv-protection-instrument { display: grid; grid-template-columns: 7.25rem minmax(0,1fr); align-items: center; gap: .65rem 1rem; margin-bottom: .7rem; }
+.tdv-guard-sigil { position: relative; width: 100%; aspect-ratio: 120/136; color: #9bc9cf; }
+.tdv-guard-sigil > svg { width: 100%; height: 100%; fill: #89bec50a; stroke: currentColor; stroke-width: 1; }
+.tdv-guard-sigil > div { position: absolute; inset: 23% 10% 19%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem; }
+.tdv-guard-sigil small { font: .8rem var(--font-inter); letter-spacing: .08em; text-transform: uppercase; }
+.tdv-guard-sigil strong { font: 500 2.7rem/1 var(--font-cinzel); color: #d9efec; }
+.tdv-guard-sigil span { font: .7rem var(--font-inter); }
+.tdv-protection-instrument[data-broken="true"] .tdv-guard-sigil { color: #d28f84; }
+.tdv-protection-instrument[data-broken="true"] .tdv-guard-sigil > svg { stroke-dasharray: 5 3; }
+.tdv-protection-context { display: grid; gap: .3rem; min-width: 0; }
+.tdv-protection-context strong { color: #d8e5de; font: 1.2rem var(--font-cinzel); }
+.tdv-protection-context span { font: .85rem/1.4 var(--font-inter); color: #b1beb7; overflow-wrap: anywhere; }
+.tdv-protection-instrument > .tdv-defense { grid-column: 1/-1; }
+.tdv-guard-command { min-height: 44px; }
+
 .tdv-guard-reading > span { margin-left: auto; max-width: 50%; overflow-wrap: anywhere; }
 .tdv-protection-note { padding: .65rem; border-left: 1px solid #8bcde1; }
 .tdv-allocation-status { color: #cdb6e7; font: .9rem/1.6 var(--font-inter); padding: .6rem; border-left: 2px solid #b19ed3; }
@@ -2344,10 +2355,17 @@
 .tdv-link-exchange > span { display: grid; gap: .15rem; font: .9rem var(--font-inter); }
 .tdv-link-exchange b { font-weight: 400; color: #c2b29a; }
 .tdv-link-editor { display: grid; gap: .5rem; }
-.tdv-defense { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; padding-block: .75rem; margin-block: .75rem; border-block: 1px solid var(--border); }
-.tdv-defense > div { display: grid; gap: .3rem; text-align: center; }
-.tdv-defense dt { color: var(--muted-foreground); font: .85rem var(--font-inter); }
-.tdv-defense dd { font: 500 1.5rem var(--font-cinzel); }
+.tdv-defense { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; margin: 0; }
+.tdv-defense > div { --defense-rgb: 210 143 132; display: grid; grid-template-columns: 1.1rem minmax(0,1fr) auto; align-items: center; gap: .3rem .5rem; padding: .65rem .6rem; border-top: 1px solid rgb(var(--defense-rgb) / 45%); background: linear-gradient(135deg,rgb(var(--defense-rgb) / 10%),transparent 85%); }
+.tdv-defense [data-defense="Evasão"] { --defense-rgb: 137 190 197; }
+.tdv-defense [data-defense="Lucidez"] { --defense-rgb: 178 158 211; }
+.tdv-defense [data-defense="Firmeza"] { --defense-rgb: 204 186 133; }
+.tdv-defense svg { width: 1.1rem; height: 1.1rem; color: rgb(var(--defense-rgb)); stroke-width: 1.5; }
+.tdv-defense dt { color: #e3ded2; font: .92rem var(--font-inter); min-width: 0; }
+.tdv-defense dt small { display: block; font-size: .68rem; color: #aaa99f; }
+.tdv-defense dd { font: 500 1.65rem/1 var(--font-cinzel); color: rgb(var(--defense-rgb)); }
+.tdv-defense > div > span { grid-column: 2/-1; font: .65rem var(--font-inter); color: #aaa99f; }
+
 .tdv-development-instrument { margin-bottom: 1rem; min-width: 0; }
 .tdv-development-instrument__reading { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem 1rem; }
 .tdv-development-instrument__reading > strong { color: rgb(var(--folio-rgb)); font: 500 3.5rem var(--font-cinzel); }
@@ -2404,6 +2422,58 @@
 .tdv-expression-budget strong { color: #e1e9ca; font-size: 1.1rem; }
 .tdv-active-expressions { padding: .65rem .7rem; border-left: 2px solid #93b591; background: linear-gradient(90deg,#90b4890c,transparent); }
 .tdv-active-expressions > h3 { color: #b9d3a7; font: 500 1.4rem var(--font-cinzel); margin-bottom: .35rem; }
+.tdv-capability-advance { display: grid; grid-template-columns: 44px minmax(0,1fr) 44px; align-items: center; gap: .5rem; margin-block: .9rem; }
+.tdv-capability-advance > div { display: grid; text-align: center; gap: .25rem; }
+.tdv-capability-advance small { font: .8rem var(--font-inter); color: #bcb5a5; }
+.tdv-phenomenon-switch { position: relative; display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .8rem; }
+.tdv-phenomenon-switch button { min-height: 44px; gap: .5rem; }
+.tdv-phenomenon-switch [aria-pressed="true"] { color: #dac5eb; }
+.tdv-phenomenon-switch small { font: .7rem var(--font-mono); opacity: .7; }
+.tdv-cargo-reading { display: flex; flex-wrap: wrap; gap: .4rem; color: #b6c6a4; font: .85rem/1.4 var(--font-inter); padding-block: .5rem .9rem; }
+.tdv-cargo-reading strong { color: #d5e6ba; }
+.tdv-item-dialog[data-item-kind="trama"] { --folio-rgb: 178 158 211; }
+.tdv-item-dialog[data-item-kind="fragmento"],.tdv-item-dialog[data-item-kind="selo"] { --folio-rgb: 137 190 197; }
+.tdv-game-panel { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); align-items: start; gap: .75rem 1rem; }
+.tdv-game-toolbelt { grid-column: 1/-1; display: flex; flex-wrap: wrap; gap: .25rem; border-block: 1px solid #cdb88b25; padding-block: .25rem; }
+.tdv-game-toolbelt button { min-height: 44px; gap: .4rem; font: .9rem var(--font-inter); }
+.tdv-game-toolbelt svg { width: 1rem; height: 1rem; color: #cdb88b; }
+.tdv-game-capacities { grid-row: span 2; min-width: 0; }
+.tdv-game-matrices { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .5rem; border-bottom: 1px solid #cdb88b25; padding-bottom: .65rem; }
+.tdv-game-skills { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .35rem .6rem; padding-top: .5rem; }
+.tdv-game-panel .tdv-competency { min-width: 0; padding: .25rem; }
+.tdv-game-panel .tdv-competency h3 { font-size: 1rem; overflow-wrap: anywhere; }
+.tdv-game-panel .tdv-competency > p { font-size: .65rem; }
+.tdv-game-panel .tdv-competency__die { min-height: 44px; }
+.tdv-game-panel .tdv-matrix .tdv-competency__die { height: 3.3rem; }
+.tdv-game-panel .tdv-competency__scale { gap: .15rem; }
+.tdv-game-panel .tdv-competency__scale i { height: 2px; }
+.tdv-game-skills-toggle { min-height: 44px; font-size: .8rem; }
+.tdv-game-defense { min-width: 0; }
+.tdv-game-ready { min-width: 0; border-top: 1px solid #cdb88b25; padding-top: .5rem; }
+.tdv-game-ready h2 { display: flex; gap: .4rem; align-items: center; font: 1.2rem var(--font-cinzel); color: #d9c8a9; }
+.tdv-game-ready h2 svg { width: 1rem; height: 1rem; }
+.tdv-game-ready-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .3rem; }
+.tdv-game-ready-list button { display: grid; gap: .2rem; text-align: left; min-height: 44px; padding: .4rem; overflow-wrap: anywhere; }
+.tdv-game-ready-list strong { font: 1rem var(--font-cinzel); color: #e4d8c2; }
+.tdv-game-ready-list span { font: .75rem var(--font-inter); color: #aca998; }
+.tdv-game-expression-list { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+.tdv-game-expression-list button { min-height: 44px; display: flex; gap: .3rem; white-space: normal; }
+.tdv-game-expression-list small { font-size: .65rem; opacity: .7; }
+.tdv-game-tools-dialog { --tadeon-dialog-width: 70rem; width: min(70rem,calc(100vw - 1.5rem)); max-width: 70rem; }
+.tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource { min-height: 0; padding: .5rem .65rem; }
+.tadeon-tdv2-sheet[data-presentation="game"] .tdv-resource-arc { max-height: 5rem; }
+@container tdv-atlas (max-width: 650px) {
+ .tdv-game-panel { grid-template-columns: minmax(0,1fr); }
+ .tdv-game-capacities { grid-row: auto; }
+ .tdv-game-matrices { grid-template-columns: repeat(4,minmax(0,1fr)); }
+ .tdv-game-skills { grid-template-columns: repeat(3,minmax(0,1fr)); }
+ .tdv-game-panel .tdv-matrix h3 { font-size: .9rem; }
+ .tdv-game-defense .tdv-protection-instrument { grid-template-columns: 5rem minmax(0,1fr); }
+ .tdv-game-defense .tdv-protection-instrument > .tdv-defense { grid-column: 2; grid-row: 1/3; }
+ .tdv-game-defense .tdv-protection-context { grid-column: 1/-1; }
+ .tdv-game-panel .tdv-defense > div { padding: .35rem; }
+ .tdv-game-panel .tdv-defense dt small,.tdv-game-panel .tdv-defense > div > span { display: none; }
+}
 .tdv-game-profiles { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
 .tdv-game-profiles button { min-height: 44px; padding: .4rem .65rem; border-bottom: 2px solid transparent; color: #bcb5a5; font: .9rem var(--font-inter); }
 .tdv-game-profiles [aria-pressed="true"] { border-color: #d6be8f; color: #eee1c2; }
@@ -2458,7 +2528,7 @@
  .tdv-radar-view { grid-column: 2; grid-row: 1; }
  .tdv-matrices { grid-column: 1; grid-row: 1; grid-template-columns: repeat(2,minmax(0,1fr)); }
  .tdv-repertoire-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
- .tdv-defense { grid-template-columns: repeat(4,minmax(0,1fr)); }
+ .tdv-protection-instrument { grid-template-columns: 7.25rem minmax(0,1fr); }
  .tdv-creation-steps { grid-template-columns: repeat(4,minmax(0,1fr)); }
 }
 @container tdv-atlas (min-width: 1100px) { .tdv-alinhavos { grid-template-columns: repeat(4,minmax(0,1fr)); } }

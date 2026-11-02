@@ -10,6 +10,9 @@ import {
   constitution,
   contested,
   creationErrors,
+  advanceCapability,
+  reverseCapability,
+  grantMilestone,
   finishCreation,
   invest,
   newTdvCharacter,
@@ -63,13 +66,13 @@ describe("TdV II canonical character and motor", () => {
     expect(s.pu).toBe(0);
     expect(tdv2CharacterSchema.parse(c)).toEqual(c);
   });
-  it("requires real face, an established anchor and the 2/4 training package", () => {
-    expect(() => finishCreation(newTdvCharacter("reference"))).toThrow();
+  it("validates numerical creation without demanding a prose form", () => {
+    expect(() => finishCreation(newTdvCharacter())).toThrow();
     const c = ready();
     c.alinhavos.Selagem = 2;
-    expect(creationErrors(c).join(" ")).toContain("dois Alinhavos");
+    expect(creationErrors(c).join(" ")).toContain("dois d8");
     c.face.anchor.pillar = "Marca";
-    expect(creationErrors(c).join(" ")).toContain("Marca");
+    expect(creationErrors(c).join(" ")).toContain("dois d8");
   });
   it.each([
     [7, 3, 10, true, "Êxito", 4],
@@ -413,7 +416,7 @@ it("starts a new unallocated sheet at d6 matrices and d4 Alinhavos", () => {
   expect(Object.values(c.alinhavos).every((value) => value === 0)).toBe(true);
   expect(c.resources).toEqual({ pv: 8, pi: 8, pe: 7 });
   expect(c.ready).toBe(false);
-  expect(creationErrors(c).join(" ")).toContain("Distribua 3");
+  expect(creationErrors(c).join(" ")).toContain("duas d10");
 });
 it("reads physical faces through the same engine without calling the random source", () => {
   const c = ready();
@@ -438,7 +441,7 @@ it("reads physical faces through the same engine without calling the random sour
   expect(critical.character.scene.shaken).toContain("Nexo");
 });
 
-it("requires the book's group implication and capacity review only for the new creation flow", () => {
+it("keeps implication and review optional without discarding their data", () => {
   const c = ready();
   const draft = {
     ...c,
@@ -449,8 +452,8 @@ it("requires the book's group implication and capacity review only for the new c
       reviewed: false,
     },
   };
-  expect(creationErrors(draft).join(" ")).toContain("primeira situação");
-  expect(creationErrors(draft).join(" ")).toContain("Condições iniciais");
+  expect(creationErrors(draft)).toEqual([]);
+
   draft.creation.groupReason = "Proteger o testemunho de Elen";
   draft.creation.reviewed = true;
   const completed = finishCreation(draft);
@@ -466,4 +469,29 @@ it("preserves optional familiarities without granting dice or PU", () => {
   expect(constitution(c).pu).toBe(0);
   c.creation!.familiarities.push("Encenação");
   expect(tdv2CharacterSchema.safeParse(c).success).toBe(false);
+});
+
+it("seals the numerical package with a Marco without requiring prose or healing resources", () => {
+  const c = newTdvCharacter("reference");
+  c.face.origin = "";
+  c.face.anchor.detail = "";
+  c.face.links = [];
+  c.resources.pv = 3;
+  const next = grantMilestone(c);
+  expect(next.ready).toBe(true);
+  expect(next.resources.pv).toBe(3);
+  expect(next.milestones).toHaveLength(1);
+  expect(constitution(next).pu).toBe(2);
+});
+it("buys one capability step at the actual PU cost and archives a master correction", () => {
+  let c = grantMilestone(newTdvCharacter("reference"));
+  const grade = constitution(c).alinhavos.Luta ?? 0;
+  c = advanceCapability(c, "Luta", false);
+  expect(constitution(c).alinhavos.Luta).toBe(grade + 1);
+  expect(constitution(c).pu).toBe(0);
+  expect(() => advanceCapability(c, "Luta", false)).toThrow();
+  const restored = reverseCapability(c, "Luta", false);
+  expect(constitution(restored).alinhavos.Luta).toBe(grade);
+  expect(constitution(restored).pu).toBe(2);
+  expect(restored.corrections).toHaveLength(1);
 });

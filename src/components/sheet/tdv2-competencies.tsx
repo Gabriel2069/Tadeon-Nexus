@@ -161,7 +161,7 @@ export function TdvCompetency({
               +
             </Button>
           </div>
-          {!creation && (
+          {!creation && onRoll && (
             <Button
               variant="ghost"
               disabled={disabled || blocked}
@@ -254,6 +254,7 @@ export function TdvDevelopment({
 }
 
 export function TdvResourceActions({
+  onChange,
   name,
   value,
   maximum,

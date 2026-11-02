@@ -316,6 +316,9 @@ await db.exec("reset role");
 await db.exec(
   readFileSync("supabase/migrations/20261102153325_tdv_sheet_authorized_corrections.sql", "utf8"),
 );
+await db.exec(
+  readFileSync("supabase/migrations/20261102183118_tdv_progression_without_form_gate.sql", "utf8"),
+);
 await auth(master);
 let authorized = { ...c, progression: { allowCreation: false, allowMilestones: false } };
 await update(authorized);
@@ -357,10 +360,12 @@ const reopened = {
 };
 await update(reopened);
 await auth(player);
-await update({
-  ...reopened,
-  face: { ...reopened.face, anchor: { ...reopened.face.anchor, pillar: "Origem" } },
-});
+await assert.rejects(() =>
+  update({
+    ...reopened,
+    face: { ...reopened.face, anchor: { ...reopened.face.anchor, pillar: "Origem" } },
+  }),
+);
 checks++;
 await assert.rejects(() =>
   update({ ...reopened, progression: { allowMilestones: true, allowCreation: true } }),
@@ -395,6 +400,30 @@ checks++;
 await db.exec("reset role; set role anon");
 await assert.rejects(() => db.query("select * from character_sheets"));
 checks++;
+// Drafts can advance, but only the mestre can reverse even before numerical sealing.
+await auth(master);
+const draft = newTdvCharacter("reference");
+draft.face.origin = "";
+draft.face.occupation = "";
+draft.face.conviction = "";
+draft.face.limit = "";
+draft.face.anchor.detail = "";
+draft.face.links = [];
+await update(draft);
+await auth(player);
+await assert.rejects(() => update({ ...draft, alinhavos: { ...draft.alinhavos, Engenharia: 0 } }));
+checks++;
+await update(finishCreation(draft));
+checks++;
+await auth(master);
+await update(newTdvCharacter());
+await auth(player);
+const increased = newTdvCharacter();
+increased.matrices.Ímpeto = 2;
+await update(increased);
+checks++;
+await assert.rejects(() => update(newTdvCharacter()));
+checks++;
 console.log(
   JSON.stringify({
     passed: true,
@@ -404,6 +433,7 @@ console.log(
       "20261027093709_tdv_ii_versioned_rules",
       "20261027191353_tdv_ii_operational_play",
       "20261102153325_tdv_sheet_authorized_corrections",
+      "20261102183118_tdv_progression_without_form_gate",
     ],
     legacyUnchanged: true,
   }),

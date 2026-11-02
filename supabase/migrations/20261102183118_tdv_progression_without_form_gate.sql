@@ -104,7 +104,7 @@ begin
       if new.tdv2_data->'matrices' is distinct from old.tdv2_data->'matrices'
          or new.tdv2_data->'alinhavos' is distinct from old.tdv2_data->'alinhavos'
          or new.tdv2_data#>'{face,anchor,pillar}' is distinct from old.tdv2_data#>'{face,anchor,pillar}'
-         or new.tdv2_data->'creation' is distinct from old.tdv2_data->'creation' then
+         or new.tdv2_data#>'{creation,familiarities}' is distinct from old.tdv2_data#>'{creation,familiarities}' then
         raise exception 'Only a mestre may revise initial choices';
       end if;
       if jsonb_array_length(new.tdv2_data->'investments')<jsonb_array_length(old.tdv2_data->'investments')

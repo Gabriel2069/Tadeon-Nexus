@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { SelectionPlate } from "@/components/selection-plate";
+import { useState, useRef } from "react";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TdvRecordActions } from "./tdv2-procedures";
@@ -188,6 +189,7 @@ export function TdvRecordCollection({
   canEdit: boolean;
   onUse: (id: string) => void;
 }) {
+  const phenomenonRail = useRef<HTMLDivElement>(null);
   const [phenomenon, setPhenomenon] = useState<"Trama" | "Fragmento" | "Selo">("Trama");
   const [editingRecords, setEditingRecords] = useState<Record<string, boolean>>({});
   const groups = [
@@ -268,7 +270,17 @@ export function TdvRecordCollection({
           }
         >
           {group.id === "tramas-fragmentos" && (
-            <div className="tdv-phenomenon-switch" aria-label="Tipo de expressão">
+            <div
+              ref={phenomenonRail}
+              data-selection-rail=""
+              className="tdv-phenomenon-switch"
+              aria-label="Tipo de expressão"
+            >
+              <SelectionPlate
+                host={phenomenonRail}
+                activeKey={phenomenon}
+                selector='button[aria-pressed="true"]'
+              />
               {(["Trama", "Fragmento", "Selo"] as const).map((kind) => (
                 <Button
                   key={kind}

@@ -422,9 +422,16 @@ export function reverseCapability(c: TdvCharacter, name: string, matrix: boolean
     const grade = matrix ? c.matrices[name as Matrix] : (c.alinhavos[name] ?? 0);
     return allocateCreation(c, name, grade - 1, matrix);
   }
-  const index = c.investments.findLastIndex(
-    (entry) => entry.target === name && entry.kind === (matrix ? "Matriz" : "Alinhavo"),
-  );
+  let index = -1;
+  for (let i = c.investments.length - 1; i >= 0; i--) {
+    if (
+      c.investments[i].target === name &&
+      c.investments[i].kind === (matrix ? "Matriz" : "Alinhavo")
+    ) {
+      index = i;
+      break;
+    }
+  }
   if (index < 0) throw new Error("Este é o valor inicial. Não há avanço comprado para reverter.");
   const entry = c.investments[index],
     next = {
