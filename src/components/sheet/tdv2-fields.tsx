@@ -149,7 +149,9 @@ export function TdvDisclosure({
   className = "",
   open: controlledOpen,
   onOpenChange,
+  elementRef,
 }: {
+  elementRef?: (element: HTMLDetailsElement | null) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   initiallyOpen: boolean;
@@ -159,6 +161,7 @@ export function TdvDisclosure({
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <details
+      ref={elementRef}
       className={`tdv-disclosure ${className}`}
       open={controlledOpen ?? open}
       onToggle={(e) => {

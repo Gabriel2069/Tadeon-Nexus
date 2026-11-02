@@ -22,7 +22,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import AttributeRadar from "./attribute-radar";
-import { useState, type ReactNode } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import {
   TdvDisclosure,
   TdvField,
@@ -107,6 +107,14 @@ export function Tdv2Sheet({
     [rebuilt, setRebuilt] = useState(false),
     [window, setWindow] = useState("");
   const [openLinks, setOpenLinks] = useState<Record<string, boolean>>({});
+  const linkElements = useRef(new Map<string, HTMLDetailsElement>());
+  const [selectedLink,setSelectedLink] = useState<{id:string;request:number}|null>(null);
+  useEffect(()=>{
+    if(!selectedLink)return;
+    const element=linkElements.current.get(selectedLink.id);
+    element?.scrollIntoView({block:"start",behavior:"auto"});
+    element?.querySelector("summary")?.focus({preventScroll:true});
+  },[selectedLink]);
   const [anchorMode, setAnchorMode] = useState<"Sustentar" | "Redirecionar">("Sustentar");
   const [consequence, setConsequence] = useState(""),
     [outcome, setOutcome] = useState(""),
@@ -360,12 +368,13 @@ export function Tdv2Sheet({
               <TdvLinkAtlas
                 name={name}
                 character={c}
-                onSelect={(id) => setOpenLinks((previous) => ({ ...previous, [id]: true }))}
+                onSelect={(id) => { setOpenLinks((previous) => ({ ...previous, [id]: true })); setSelectedLink(previous=>({id,request:(previous?.request??0)+1})); }}
               />
               <div className="tdv-folios tdv-link-list">
                 {c.face.links.map((link, index) => (
                   <TdvDisclosure
                     key={link.id}
+                    elementRef={element=>{if(element)linkElements.current.set(link.id,element);else linkElements.current.delete(link.id);}}
                     initiallyOpen={(!c.ready && index === 0) || newLinkId === link.id}
                     open={
                       openLinks[link.id] ?? ((!c.ready && index === 0) || newLinkId === link.id)

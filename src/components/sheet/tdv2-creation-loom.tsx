@@ -154,6 +154,7 @@ export function TdvFamiliarities({
 }) {
   if (!c.creation) return null;
   const selected = c.creation.familiarities;
+  if (c.ready) return selected.length ? <div className="tdv-familiarities-reading"><small>Familiaridades iniciais · sem bônus</small><p>{selected.join(" · ")}</p><span>Os dados atuais estão nos Alinhavos.</span></div> : null;
   return (
     <details className="tdv-disclosure tdv-familiarities">
       <summary>
