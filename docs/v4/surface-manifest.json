@@ -89,6 +89,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -213,6 +214,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -316,6 +318,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -419,6 +422,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -522,6 +526,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -626,6 +631,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -754,6 +760,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -1162,6 +1169,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -1326,6 +1334,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -1503,6 +1512,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -1654,6 +1664,7 @@
         "src/lib/tabletop/visibility-tooling.ts",
         "src/lib/tdv2-master.ts",
         "src/lib/tdv2-operations.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -1777,6 +1788,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -1951,6 +1963,7 @@
         "src/lib/tabletop/visibility-tooling.ts",
         "src/lib/tdv2-conversion.ts",
         "src/lib/tdv2-play.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/use-serialized-autosave.ts",
@@ -2177,6 +2190,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/use-serialized-autosave.ts",
@@ -2304,6 +2318,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utils.ts",
@@ -2724,6 +2739,7 @@
         "src/lib/tabletop/visibility-geometry.ts",
         "src/lib/tabletop/visibility-renderer.ts",
         "src/lib/tabletop/visibility-tooling.ts",
+        "src/lib/tdv2-round.ts",
         "src/lib/tdv2.ts",
         "src/lib/use-material-light.ts",
         "src/lib/utility-areas.ts",
@@ -62747,8 +62763,17 @@
       "guards": []
     },
     "src/lib/tabletop/tabletop-entity-insight.ts": {
-      "sha256": "228554c1c48e910f689d8df2554c592d906ccdb9f785216db7e112a19650f1cc",
+      "sha256": "bfe1163135608571b46a576003c1e48b82b41bcd1885e641c74a5b377d398429",
       "imports": [
+        {
+          "specifier": "../tdv2-round",
+          "names": [
+            "publicTdvConstitution"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": "src/lib/tdv2-round.ts"
+        },
         {
           "specifier": "@/lib/tdv2",
           "names": [
@@ -62757,7 +62782,7 @@
             "characterStateLabel",
             "withResourceConditions"
           ],
-          "line": 1,
+          "line": 2,
           "kind": "static",
           "target": "src/lib/tdv2.ts"
         },
@@ -62766,7 +62791,7 @@
           "names": [
             "z"
           ],
-          "line": 7,
+          "line": 8,
           "kind": "static",
           "target": null
         }
@@ -63969,7 +63994,7 @@
       "guards": []
     },
     "src/lib/tdv2-round.ts": {
-      "sha256": "e0f585c6d864da290dca6c503fb1306cd95125351155663298773cfa2da9212c",
+      "sha256": "dbc98663135269f512be62f4f2876793ec12e64eb32f8eb38985d3beb1182145",
       "imports": [],
       "renders": [],
       "actions": [],

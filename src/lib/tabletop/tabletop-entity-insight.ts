@@ -1,3 +1,4 @@
+import { publicTdvConstitution } from "../tdv2-round";
 import {
   constitution,
   tdv2CharacterSchema,
@@ -102,19 +103,7 @@ export function normalizeTabletopSheetSummary(row: Record<string, unknown>): Tab
       condition: characterStateLabel(parsed),
       guard: derived.guard,
       resources: parsed.resources,
-      ...(parsed.foundation
-        ? {
-            mechanicsRevision: "VIII",
-            maximums: derived.maximums,
-            defenses: {
-              Guarda: derived.guard,
-              Resistência: derived.defenses.Resistência,
-              Evasão: derived.defenses.Evasão,
-              Firmeza: derived.defenses.Firmeza,
-            },
-            capacity: derived.capacity,
-          }
-        : {}),
+      ...publicTdvConstitution(Boolean(parsed.foundation), derived),
       activeConditions: parsed.conditions
         .map((c) => c.name.trim().slice(0, 80))
         .filter(Boolean)

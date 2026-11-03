@@ -1,3 +1,4 @@
+import { publicTdvConstitution } from "./tdv2-round";
 import { describe, it, expect } from "vitest";
 import { publicTdvRound, mergeTdvRound } from "./tdv2-round";
 import { parseTabletopRealtimeEvent } from "./tabletop/realtime-protocol";
@@ -53,5 +54,22 @@ describe("public TdV round boundary", () => {
         { sceneId: event.sceneId, now: 1000 },
       ),
     ).toBeNull();
+  });
+});
+
+it("keeps old projections unchanged and exposes only the current numerical constitution", () => {
+  const d = {
+    maximums: { pv: 12, pi: 10, pe: 9 },
+    guard: 8,
+    defenses: { Resistência: 10, Evasão: 11, Firmeza: 10 },
+    capacity: 9,
+    privateNotes: "SECRET",
+  };
+  expect(publicTdvConstitution(false, d)).toEqual({});
+  expect(publicTdvConstitution(true, d)).toEqual({
+    mechanicsRevision: "VIII",
+    maximums: { pv: 12, pi: 10, pe: 9 },
+    defenses: { Guarda: 8, Resistência: 10, Evasão: 11, Firmeza: 10 },
+    capacity: 9,
   });
 });
