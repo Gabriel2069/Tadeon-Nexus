@@ -59,7 +59,31 @@ export async function verifyInstruments({
     await tab(name);
     await top();
     await geometry("instruments-" + state);
-    if (name === "Feição" && [320, 1440].includes(width)) await geometry("instruments-links");
+    if (name === "Feição" && [320, 1440].includes(width)) {
+      await geometry("instruments-links");
+      const links = await page
+        .locator(".tdv-link-summary")
+        .evaluateAll((es) =>
+          es.map((e) => ({
+            display: getComputedStyle(e).display,
+            name: e.querySelector("strong").getBoundingClientRect().bottom,
+            nature: e.querySelector("small").getBoundingClientRect().top,
+            exchange: [...e.querySelectorAll(".tdv-link-exchange > span")].map((s) => ({
+              label: s.querySelector("b").getBoundingClientRect().bottom,
+              value: s.querySelector("span").getBoundingClientRect().top,
+            })),
+          })),
+        );
+      assert(
+        links.every(
+          (e) =>
+            e.display === "grid" &&
+            e.nature >= e.name - 1 &&
+            e.exchange.every((s) => s.value >= s.label - 1),
+        ),
+        "Link identity and reciprocity have separate reading lines: " + JSON.stringify(links),
+      );
+    }
   }
   for (const name of ["Feição", "Transformação"]) {
     await tab(name);
@@ -90,17 +114,15 @@ export async function verifyInstruments({
   }
   await tab("Ação");
   if (width === 1440) {
-    const labels = await page
-      .locator(".tdv-tabs--sheet > button > span")
-      .evaluateAll((es) =>
-        es.map((e) => ({
-          text: e.textContent,
-          width: e.clientWidth,
-          scroll: e.scrollWidth,
-          height: e.getBoundingClientRect().height,
-          line: parseFloat(getComputedStyle(e).lineHeight),
-        })),
-      );
+    const labels = await page.locator(".tdv-tabs--sheet > button > span").evaluateAll((es) =>
+      es.map((e) => ({
+        text: e.textContent,
+        width: e.clientWidth,
+        scroll: e.scrollWidth,
+        height: e.getBoundingClientRect().height,
+        line: parseFloat(getComputedStyle(e).lineHeight),
+      })),
+    );
     assert(
       labels.every((e) => e.scroll <= e.width + 1 && e.height <= e.line * 1.2),
       "Desktop folio names remain whole: " + JSON.stringify(labels),

@@ -32208,7 +32208,7 @@
       ]
     },
     "src/components/sheet/tdv2-sheet.tsx": {
-      "sha256": "e0b105310f78e47c56841c21351c1888120aa00026c380270b17e0c4790160a0",
+      "sha256": "6977af5ff7354df0e64139d7c463ea17f2622f598ed818fadda9fa219096d590",
       "imports": [
         {
           "specifier": "./tdv2-surface-context",
@@ -32650,11 +32650,19 @@
         },
         {
           "component": "span",
+          "line": 442
+        },
+        {
+          "component": "span",
           "line": 446
         },
         {
           "component": "b",
           "line": 447
+        },
+        {
+          "component": "span",
+          "line": 448
         },
         {
           "component": "div",

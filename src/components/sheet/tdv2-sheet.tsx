@@ -439,13 +439,13 @@ export function Tdv2Sheet({
                       {link.offer && (
                         <span>
                           <b>Oferece</b>
-                          {link.offer}
+                          <span>{link.offer}</span>
                         </span>
                       )}
                       {link.demand && (
                         <span>
                           <b>Cobra</b>
-                          {link.demand}
+                          <span>{link.demand}</span>
                         </span>
                       )}
                     </span>
