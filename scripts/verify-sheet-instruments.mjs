@@ -290,11 +290,11 @@ export async function verifyInstruments({
     "Automatic incapacitation",
   );
   assert(
-    (await page.getByRole("button", { name: /^Colapsando/ }).count()) === 1,
+    (await page.locator(".tdv-condition-chip").filter({ hasText: "Colapsando" }).count()) === 1,
     "Automatic collapse",
   );
   assert(
-    (await page.getByRole("button", { name: /^Sucumbindo/ }).count()) === 1,
+    (await page.locator(".tdv-condition-chip").filter({ hasText: "Sucumbindo" }).count()) === 1,
     "Effort state without a general penalty",
   );
   await top();
