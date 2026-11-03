@@ -1866,6 +1866,11 @@
       "id": "DEC-035",
       "decision": "Refinar painel de jogo: trilha compacta de cinco atalhos, busca de Alinhavos com normalização de acentos, coleções completas acessíveis e estado de Âncora explícito.",
       "reason": "Pedido de Tadeu; manter recursos, dados, motor e permissões existentes. Nenhuma migração ou gravação de preferências adicional. Busca é local e funciona também em leitura."
+    },
+    {
+      "id": "DEC-036",
+      "decision": "Corrigir encaixes estreitos nos dois modos: recursos com alvos independentes, guias em duas linhas, capacidades com nome em faixa própria e cabeçalho que pode recompor os comandos.",
+      "reason": "Relato de conflitos no celular por Tadeu. Preservar funções/dados, corrigir no proprietário e verificar colisão real entre retângulos de controles; sem migration."
     }
   ],
   "bridges": [
