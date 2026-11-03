@@ -59,6 +59,7 @@ export async function verifyInstruments({
     await tab(name);
     await top();
     await geometry("instruments-" + state);
+    if (name === "Feição" && [320, 1440].includes(width)) await geometry("instruments-links");
   }
   for (const name of ["Feição", "Transformação"]) {
     await tab(name);
@@ -88,6 +89,23 @@ export async function verifyInstruments({
     );
   }
   await tab("Ação");
+  if (width === 1440) {
+    const labels = await page
+      .locator(".tdv-tabs--sheet > button > span")
+      .evaluateAll((es) =>
+        es.map((e) => ({
+          text: e.textContent,
+          width: e.clientWidth,
+          scroll: e.scrollWidth,
+          height: e.getBoundingClientRect().height,
+          line: parseFloat(getComputedStyle(e).lineHeight),
+        })),
+      );
+    assert(
+      labels.every((e) => e.scroll <= e.width + 1 && e.height <= e.line * 1.2),
+      "Desktop folio names remain whole: " + JSON.stringify(labels),
+    );
+  }
   assert(
     (await page.locator(".tdv-competency").count()) === 25,
     "Canonical capabilities preserved",

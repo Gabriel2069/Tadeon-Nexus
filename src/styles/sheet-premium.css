@@ -2626,9 +2626,10 @@
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument { grid-template-columns: minmax(0,1fr); }
  .tadeon-tdv2-sheet[data-presentation="game"] .tdv-domain-instrument :is(header,.tdv-domain-axis,.tdv-domain-poles,.tdv-domain-tension) { grid-column: 1; grid-row: auto; }
 
- .tdv-sheet-tabs { grid-template-columns: 4.75rem minmax(0,1fr); gap: 1.25rem; }
+ .tdv-sheet-tabs { grid-template-columns: 5.5rem minmax(0,1fr); gap: 1.25rem; }
  .tdv-sheet-tabs > .tdv-tabs--sheet { grid-template-columns: minmax(0,1fr); position: sticky; top: var(--sheet-sticky-top,5rem); border-radius: 2rem 2rem 1rem 1rem; }
  .tdv-tabs--sheet > button { min-height: 70px; }
+ .tdv-tabs--sheet > button > span { white-space: nowrap; }
  .tdv-tabs--sheet .tadeon-selection-plate { border-radius: 1.55rem; box-shadow: inset 2px 0 rgb(var(--folio-rgb) / 75%); }
  .tdv-sheet-tabs > [data-slot="tabs-content"] { grid-column: 2; grid-row: 1; margin-top: 0; }
  .tdv-cockpit { grid-template-columns: minmax(0,1fr) minmax(12rem,.35fr); }
