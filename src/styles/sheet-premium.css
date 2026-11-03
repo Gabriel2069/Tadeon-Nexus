@@ -2719,8 +2719,8 @@
 .tdv-game-skill-heading { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .65rem; padding-top: .6rem; }
 .tdv-game-skill-heading h2 { flex: 1 1 6rem; color: #d8c4e5; font: 1.25rem var(--font-cinzel); }
 .tdv-game-skill-heading h2 small { margin-left: .35rem; font: .7rem var(--font-mono); color: #a799b3; }
-.tdv-game-search { position: relative; flex: 1 1 8rem; min-width: 0; max-width: 14rem; }
-.tdv-game-search > svg { position: absolute; left: .5rem; top: .9rem; width: .9rem; height: .9rem; color: #b5a2c7; pointer-events: none; }
+.tdv-game-search { display: block; position: relative; flex: 1 1 8rem; min-width: 0; max-width: 14rem; }
+.tdv-game-search > svg { position: absolute; left: .5rem; top: 50%; transform: translateY(-50%); width: .9rem; height: .9rem; color: #b5a2c7; pointer-events: none; }
 .tdv-game-search input { min-height: 44px; padding-left: 1.8rem; background: #080d1540; border: 0; border-bottom: 1px solid #b5a2c74a; border-radius: .5rem .5rem 0 0; }
 .tdv-game-empty { padding: .7rem .25rem; color: #b8acbe; font: .9rem var(--font-inter); }
 .tdv-game-ready h2 > small { margin-left: auto; font: .7rem var(--font-inter); color: #bcb29f; }

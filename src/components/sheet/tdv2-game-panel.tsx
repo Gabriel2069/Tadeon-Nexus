@@ -145,9 +145,10 @@ export function TdvGamePanel({
           <h2>
             Alinhavos <small>{visibleSkills.length}</small>
           </h2>
-          <label className="tdv-game-search">
+          <label className="tdv-game-search tadeon-dossier-label">
             <Search aria-hidden="true" />
             <Input
+              className="tadeon-dossier-field"
               type="search"
               aria-label="Buscar Alinhavo no modo de jogo"
               placeholder="Buscar…"

@@ -210,6 +210,7 @@ export async function verifyInstruments({
     "Trained skills prioritized",
   );
   const search = page.getByRole("searchbox", { name: "Buscar Alinhavo no modo de jogo" });
+  assert((await search.boundingBox()).height >= 44, "Game search retains touch target size");
   await search.fill("canalizacao");
   assert(
     (await page.locator(".tdv-game-skills .tdv-competency").count()) === 1,
