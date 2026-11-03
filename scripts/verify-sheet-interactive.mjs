@@ -91,7 +91,7 @@ export async function verifyInteractive({
   await tab("Ação");
   const capability = page.getByRole("button", { name: /Consultar Nexo ·/ });
   await capability.click();
-  let popup = page.getByRole("dialog", { name: "Capacidade Nexo", exact: true });
+  let popup = page.getByRole("dialog", { name: "Capacidade Ímpeto", exact: true });
   await fit(popup);
   await geometry("interactive-capability");
   assert(
@@ -125,13 +125,13 @@ export async function verifyInteractive({
       "Inline returns to reading",
     );
     await tab("Transformação");
-    await page.getByRole("button", { name: "Conceder Marco · +5% e 2 PU", exact: true }).click();
+    await page.getByRole("button", { name: "Conceder Marco · +5% e 3 PU", exact: true }).click();
     await saved(() => getRow().tdv2_data.milestones.length === 1);
     await tab("Ação");
     await page.getByRole("button", { name: /^Consultar Luta ·/ }).click();
     popup = page.getByRole("dialog", { name: "Capacidade Luta", exact: true });
     assert(
-      (await popup.getByText("2 PU · saldo 2 PU", { exact: true }).count()) === 1,
+      (await popup.getByText("3 PU · saldo 3 PU", { exact: true }).count()) === 1,
       "Actual advancement price and balance",
     );
     await popup.getByRole("button", { name: "Avançar Luta", exact: true }).click();
@@ -158,10 +158,10 @@ export async function verifyInteractive({
         .getByRole("button", { name: "Rever escolhas iniciais", exact: true })
         .click();
       const beforeReview = writes.length;
-      await page.getByRole("button", { name: /^Distribuir Nexo ·/ }).click();
+      await page.getByRole("button", { name: /^Distribuir Ímpeto ·/ }).click();
       await page
-        .getByRole("dialog", { name: "Capacidade Nexo", exact: true })
-        .getByRole("button", { name: "Reverter Nexo", exact: true })
+        .getByRole("dialog", { name: "Capacidade Ímpeto", exact: true })
+        .getByRole("button", { name: "Reverter Ímpeto", exact: true })
         .click();
       assert(
         await page
@@ -369,8 +369,8 @@ export async function verifyInteractive({
         );
       }
     };
-    await pick("Ímpeto", 3, true);
-    await pick("Cadência", 3, true);
+    await pick("Ímpeto", 2, true);
+    await pick("Cadência", 2, true);
     await pick("Nexo", 2, true);
     await pick("Lastro", 2, true);
     for (const [name, grade] of [
@@ -380,6 +380,7 @@ export async function verifyInteractive({
       ["Percepção", 1],
       ["Sociedade", 1],
       ["Iniciativa", 1],
+      ["Medicina", 2],
     ])
       await pick(name, grade, false);
     await page.getByRole("button", { name: /^Familiaridades ·/ }).click();
@@ -391,7 +392,7 @@ export async function verifyInteractive({
     await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).click();
     await saved(() => getRow().tdv2_data.ready);
     assert(
-      (await page.getByRole("button", { name: /^Distribuir Nexo ·/ }).count()) === 0,
+      (await page.getByRole("button", { name: /^Distribuir Ímpeto ·/ }).count()) === 0,
       "Completed creation locks distribution",
     );
   }

@@ -132,9 +132,9 @@ export function TdvTestPanel({
   const help = (
     <>
       <TdvDisclosure initiallyOpen={false}>
-        <summary>Auxílio: um Prumo, um Tento, um teste</summary>
+        <summary>Entrelaçar: contribuições indispensáveis, um teste</summary>
         <TdvCheck
-          label="Receber um Tento de outra pessoa"
+          label="Entrelaçar com o Tento de outra pessoa indispensável à execução"
           value={auxiliary}
           onChange={setAuxiliary}
           disabled={!canEdit}
@@ -233,10 +233,19 @@ export function TdvTestPanel({
             disabled={!canEdit}
           />
         </div>
+        {character.foundation && (
+          <TdvSelect
+            label="Leitura principal anunciada"
+            value={request.reading ?? "Enlace"}
+            options={["Enlace", "Ascendente", "Retorno", "Desvio", "Arremate"]}
+            onChange={(v) => upd("reading", v as TestRequest["reading"])}
+            disabled={!canEdit}
+          />
+        )}
         <TdvNumber
           label="DT ou Defesa"
           value={request.dt}
-          min={2}
+          min={request.reading === "Desvio" ? 0 : request.reading === "Arremate" ? 1 : 2}
           max={100}
           onChange={(v) => upd("dt", v)}
           disabled={!canEdit}
@@ -285,6 +294,17 @@ export function TdvTestPanel({
           onChange={(v) => upd("extraordinary", v)}
           disabled={!canEdit}
         />
+        {character.foundation && request.reading === "Arremate" && (
+          <TdvSelect
+            label="Fio do Arremate"
+            value={request.arremate?.thread ?? "Tento"}
+            options={["Prumo", "Tento"]}
+            onChange={(thread) =>
+              upd("arremate", { thread: thread as "Prumo" | "Tento", minimum: request.dt })
+            }
+            disabled={!canEdit}
+          />
+        )}
         {request.force && character.resources.pe === 0 && (
           <TdvField
             label="Contrapartida acordada para Forçar a 0 PE"
@@ -341,7 +361,11 @@ export function TdvTestPanel({
     </>
   );
   const probability = prepared
-    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt, prepared.bonus).success * 100
+    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt, prepared.bonus, {
+        reading: request.reading,
+        arremate: request.arremate,
+        balanceTolerance: request.balanceTolerance,
+      }).success * 100
     : 0;
   const chance = prepared && (
     <div className="tdv-probability-instrument">
@@ -391,7 +415,11 @@ export function TdvTestPanel({
           />
           <p>
             {last.result.quality}
-            {last.result.critical ? " · Consonância crítica" : ""}
+            {last.result.critical
+              ? character.foundation
+                ? " · Dupla máxima crítica"
+                : " · Consonância crítica"
+              : ""}
           </p>
           <div className="tdv-grid tdv-grid--three">
             {Object.entries({
@@ -416,8 +444,9 @@ export function TdvTestPanel({
           </p>
           {last.result.criticalFailure ? (
             <p>
-              Matriz {request.matrix} Abalada até o fim da cena. A dupla unidade prevalece sobre o
-              limiar e sobre Consonância.
+              {character.foundation
+                ? "Dupla unidade: a consequência crítica depende da intervenção e da situação."
+                : `Matriz ${request.matrix} Abalada até o fim da cena. A dupla unidade prevalece sobre o limiar e sobre Consonância.`}
             </p>
           ) : (
             <p>

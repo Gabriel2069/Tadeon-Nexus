@@ -29,7 +29,7 @@ import {
 } from "./tdv2-play";
 import { newOperation, registerOperationStep, type OperationStep } from "./tdv2-operations";
 function ready() {
-  let c = newTdvCharacter("reference");
+  let c = newTdvCharacter("reference", "legacy");
   Object.assign(c.face, {
     origin: "Cais",
     occupation: "Registradora",
@@ -354,7 +354,7 @@ describe("TdV II operational procedures", () => {
     expect(repaired.records.find((r) => r.id === "gear")?.fields.Integridade).toBe("Danificado");
   });
   it("keeps progress and pressure distinct, preserves earned progress after a failed step", () => {
-    let op = newOperation("Prolongada");
+    let op = newOperation("Prolongada", "legacy");
     op.objective = "Abrir a passagem";
     const step: OperationStep = {
       stageIds: [op.stages[0].id],
@@ -386,7 +386,7 @@ describe("TdV II operational procedures", () => {
     );
   });
   it("only advances a second prolonged stage if elevated reach really covers both", () => {
-    const op = { ...newOperation("Prolongada"), objective: "Abrir passagem" };
+    const op = { ...newOperation("Prolongada", "legacy"), objective: "Abrir passagem" };
     const step: OperationStep = {
       stageIds: op.stages.slice(0, 2).map((s) => s.id),
       intention: "Duas frentes",

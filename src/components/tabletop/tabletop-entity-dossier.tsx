@@ -172,10 +172,22 @@ export function TabletopEntityDossier({
                       <div key={key} data-resource={key}>
                         <small>{key.toUpperCase()}</small>
                         <strong>{resourceLabel(value)}</strong>
+                        {sheetSummary.maximums && key in sheetSummary.maximums && (
+                          <small>/{sheetSummary.maximums[key as "pv" | "pi" | "pe"]}</small>
+                        )}
                       </div>
                     ))}
                   </div>
                   <div className="tadeon-entity-dossier__indices">
+                    {sheetSummary.mechanicsRevision === "VIII" &&
+                      Object.entries(sheetSummary.defenses ?? {})
+                        .filter(([key]) => key !== "Guarda")
+                        .map(([name, value]) => (
+                          <span key={name}>
+                            {name}
+                            <strong>{value ?? "∅"}</strong>
+                          </span>
+                        ))}
                     {sheetSummary.rulesVersion === 2 && (
                       <span>
                         <Shield aria-hidden="true" /> Guarda

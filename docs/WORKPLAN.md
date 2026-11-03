@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-02; referência de runtime: `6de0a770b443bec028444cd16f35114f16f42e42`. PR #323 em `feat/dec032-game-panel`; integração: `integrated`. Não é prova de deploy.
+Snapshot: 2026-11-03; referência de runtime: `c878253bfdb185a569ffc5f97c94dd595a2ec6b3`. PR #null em `feat/fundacao-viii`; integração: `working`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 
@@ -60,6 +60,7 @@ Cada PR usa IDs desta fila e declara dependências. Trabalho sobre o mesmo propr
 | NEX-048 | V4: autoridade transacional de ações, custos e Resto | Planejado | 1 | session | NEX-043, NEX-010, NEX-011 |
 | NEX-049 | V4 fase 5: Mesa, Mestre e Nexus integrados | Planejado | 1 | tabletop | NEX-047, NEX-048 |
 | NEX-050 | V4 fase 6: prova integral, acabamento e rollout | Planejado | 1 | delivery | NEX-045, NEX-046, NEX-047, NEX-049, NEX-009 |
+| NEX-051 | Fundação VIII: cálculos, ficha e Malha na composição existente | Em andamento | 1 | session | NEX-046 |
 
 ## NEX-001 — Preparação estrutural
 
@@ -486,6 +487,14 @@ Evidências: pendentes; não declarar concluído.
 
 Evidências: pendentes; não declarar concluído.
 
+## NEX-051 — Fundação VIII: cálculos, ficha e Malha na composição existente
+
+- Novas criações e aquisições obedecem aos orçamentos, custos e patamares da Fundação VIII.
+- Ficha, jogo, Mestre e Mesa compartilham constituição, estados e permissões persistentes.
+- Legado permanece legível; conversão reconhecida preserva fonte, preços e escolhas; calibração não definida permanece assistida.
+
+Evidências: [docs/v4/FUNDACAO_VIII.md](../docs/v4/FUNDACAO_VIII.md), [docs/rules/fundacao-viii.md](../docs/rules/fundacao-viii.md).
+
 ## Decisões vigentes
 
 | ID | Decisão | Motivo |
@@ -526,3 +535,4 @@ Evidências: pendentes; não declarar concluído.
 | DEC-034 | Personalizar Proteção e Organizar, graduar visualmente o risco, acompanhar a cor de Tramas/Fragmentos/Selos e reunir narrativa e memória em Feição; Marca como tríptico de manifestação. | Pedido explícito de Tadeu. Remover apenas o quadro de Implicação, preservando creation.groupReason nos dados. Nenhuma regra, autorização ou migration alterada. |
 | DEC-035 | Refinar painel de jogo: trilha compacta de cinco atalhos, busca de Alinhavos com normalização de acentos, coleções completas acessíveis e estado de Âncora explícito. | Pedido de Tadeu; manter recursos, dados, motor e permissões existentes. Nenhuma migração ou gravação de preferências adicional. Busca é local e funciona também em leitura. |
 | DEC-036 | Corrigir encaixes estreitos nos dois modos: recursos com alvos independentes, guias em duas linhas, capacidades com nome em faixa própria e cabeçalho que pode recompor os comandos. | Relato de conflitos no celular por Tadeu. Preservar funções/dados, corrigir no proprietário e verificar colisão real entre retângulos de controles; sem migration. |
+| DEC-037 | Aplicar a Fundação Mecânica VIII por revisão explícita: novos cálculos e campos no mesmo padrão visual; preservar fichas anteriores e oferecer adaptação autorizada sem redistribuição automática. | Plano aprovado por Tadeu em 03/11/2026. Motor, desenvolvimento, Frentes, três Extremos, Malha, projeção e persistência devem concordar, sem inventar parâmetros reservados à calibração. |

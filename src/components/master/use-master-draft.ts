@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /** Manual persistence: a completed request never acknowledges newer edits. */
-export function useMasterDraft<T>(persist: (snapshot: T, signal: AbortSignal) => Promise<void>) {
+export function useMasterDraft<T>(
+  persist: (snapshot: T, signal: AbortSignal) => Promise<void | T>,
+) {
   const [value, setValue] = useState<T | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -44,9 +46,13 @@ export function useMasterDraft<T>(persist: (snapshot: T, signal: AbortSignal) =>
     setError(null);
     const pending = (async () => {
       try {
-        await persist(snapshot, abort.signal);
+        const authoritative = await persist(snapshot, abort.signal);
         if (!active.current || abort.signal.aborted) return false;
         const clean = revision.current === version;
+        if (clean && authoritative !== undefined) {
+          current.current = authoritative;
+          setValue(authoritative);
+        }
         setDirty(!clean);
         setSavedAt(new Date());
         return clean;

@@ -53,11 +53,17 @@ export function TdvCompetency({
   availablePU = 0,
   canReverse = false,
   familiar = false,
+  ceiling,
+  nexoSteps = 0,
+  onNexo,
   temporaryEffects = [],
   onAddEffect,
   onRemoveEffect,
 }: TdvEffectControls & {
   familiar?: boolean;
+  ceiling?: number;
+  nexoSteps?: number;
+  onNexo?: () => void;
   name: string;
   grade: number;
   matrix?: boolean;
@@ -159,8 +165,10 @@ export function TdvCompetency({
             </Button>
             <div>
               <strong>
-                {grade >= (matrix ? 5 : 4)
-                  ? "Escala concluída"
+                {grade >= (ceiling ?? (matrix ? 5 : 4))
+                  ? grade >= (matrix ? 5 : 4)
+                    ? "Escala concluída"
+                    : "Limite deste patamar"
                   : `d${DICE[grade]} → d${DICE[grade + 1]}`}
               </strong>
               <small>
@@ -172,7 +180,7 @@ export function TdvCompetency({
               aria-label={`Avançar ${name}`}
               disabled={
                 disabled ||
-                grade >= (matrix ? 5 : 4) ||
+                grade >= (ceiling ?? (matrix ? 5 : 4)) ||
                 (!creation && availablePU < (advanceCost ?? 0)) ||
                 (creation && choiceAllowed ? !choiceAllowed(grade + 1) : false)
               }
@@ -185,6 +193,17 @@ export function TdvCompetency({
               +
             </Button>
           </div>
+          {!creation && !matrix && nexoSteps > 0 && (
+            <Button
+              disabled={disabled || grade >= (ceiling ?? 4)}
+              onClick={() => {
+                onNexo?.();
+                setOpen(false);
+              }}
+            >
+              Aplicar Passada de Nexo · {nexoSteps} disponíveis
+            </Button>
+          )}
           {!creation && onRoll && (
             <Button
               variant="ghost"
@@ -217,21 +236,35 @@ export function TdvDevelopment({
   percent,
   available,
   spent,
+  milestonePU = 2,
 }: {
   percent: number;
   available: number;
   spent: number;
+  milestonePU?: number;
 }) {
   const band =
-    percent < 25
-      ? "Práticas fundamentais"
-      : percent < 50
-        ? "Práticas especializadas"
-        : percent < 75
-          ? "Combinações e transformação"
-          : percent < 100
-            ? "Domínio excepcional"
-            : "Integração da trajetória";
+    milestonePU === 3
+      ? percent < 20
+        ? "Práticas fundamentais"
+        : percent < 40
+          ? "Especialização"
+          : percent < 60
+            ? "Costuras complexas"
+            : percent < 80
+              ? "Manifestações extraordinárias"
+              : percent < 100
+                ? "Capacidades transcendentes"
+                : "Conclusão excepcional"
+      : percent < 25
+        ? "Práticas fundamentais"
+        : percent < 50
+          ? "Práticas especializadas"
+          : percent < 75
+            ? "Combinações e transformação"
+            : percent < 100
+              ? "Domínio excepcional"
+              : "Integração da trajetória";
   return (
     <div className="tdv-development-instrument">
       <div className="tdv-development-instrument__reading">
@@ -270,8 +303,8 @@ export function TdvDevelopment({
         <span>100%</span>
       </div>
       <p>
-        Marcos de 5% · 2 PU por Marco. A faixa orienta o desenvolvimento; não acrescenta bônus aos
-        testes.
+        Marcos de 5% · {milestonePU} PU por Marco. A faixa orienta o desenvolvimento; não acrescenta
+        bônus aos testes.
       </p>
     </div>
   );

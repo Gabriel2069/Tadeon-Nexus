@@ -3,6 +3,17 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { useMasterDraft } from "./use-master-draft";
 afterEach(cleanup);
+it("accepts server-normalized action counters without leaving the draft dirty", async () => {
+  const { result } = renderHook(() =>
+    useMasterDraft(async (snapshot: { impulses: number }) => ({ ...snapshot, impulses: 1 })),
+  );
+  act(() => result.current.load({ impulses: 2 }));
+  await act(async () => {
+    expect(await result.current.save()).toBe(true);
+  });
+  expect(result.current.value).toEqual({ impulses: 1 });
+  expect(result.current.dirty).toBe(false);
+});
 function deferred() {
   let resolve!: () => void;
   let reject!: (e: Error) => void;

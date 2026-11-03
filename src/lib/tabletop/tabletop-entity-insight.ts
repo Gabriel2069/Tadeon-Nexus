@@ -1,4 +1,9 @@
-import { constitution, tdv2CharacterSchema, characterStateLabel } from "@/lib/tdv2";
+import {
+  constitution,
+  tdv2CharacterSchema,
+  characterStateLabel,
+  withResourceConditions,
+} from "@/lib/tdv2";
 import { z } from "zod";
 
 const finiteResource = z.number().finite().min(-1_000_000).max(1_000_000);
@@ -7,6 +12,10 @@ export const tabletopSheetSummarySchema = z
   .object({
     rulesVersion: z.literal(2).optional(),
     guard: finiteResource.nullable().optional(),
+    mechanicsRevision: z.string().max(80).optional(),
+    maximums: z.object({ pv: finiteResource, pi: finiteResource, pe: finiteResource }).optional(),
+    defenses: z.record(z.string(), finiteResource.nullable()).optional(),
+    capacity: finiteResource.nullable().optional(),
     sheetId: z.uuid(),
     name: z.string().trim().min(1).max(160),
     occupation: z.string().trim().max(160),
@@ -79,7 +88,7 @@ export function activeTabletopConditionNames(value: unknown) {
 
 export function normalizeTabletopSheetSummary(row: Record<string, unknown>): TabletopSheetSummary {
   if (row.rules_version === 2) {
-    const parsed = tdv2CharacterSchema.parse(row.tdv2_data),
+    const parsed = withResourceConditions(tdv2CharacterSchema.parse(row.tdv2_data)),
       derived = constitution(parsed);
     return tabletopSheetSummarySchema.parse({
       rulesVersion: 2,
@@ -93,6 +102,19 @@ export function normalizeTabletopSheetSummary(row: Record<string, unknown>): Tab
       condition: characterStateLabel(parsed),
       guard: derived.guard,
       resources: parsed.resources,
+      ...(parsed.foundation
+        ? {
+            mechanicsRevision: "VIII",
+            maximums: derived.maximums,
+            defenses: {
+              Guarda: derived.guard,
+              Resistência: derived.defenses.Resistência,
+              Evasão: derived.defenses.Evasão,
+              Firmeza: derived.defenses.Firmeza,
+            },
+            capacity: derived.capacity,
+          }
+        : {}),
       activeConditions: parsed.conditions
         .map((c) => c.name.trim().slice(0, 80))
         .filter(Boolean)

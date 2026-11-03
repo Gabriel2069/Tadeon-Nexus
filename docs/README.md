@@ -43,6 +43,8 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/FICHA_LEITURA_E_ESCOLHAS.md](v4/FICHA_LEITURA_E_ESCOLHAS.md) | active | Destinos, criação/progressão, autorização e limites de DEC-031. |
 | [v4/FICHA_PAINEL_E_PROGRESSAO.md](v4/FICHA_PAINEL_E_PROGRESSAO.md) | active | DEC-032: destinos, selagem numérica, progressão por clique, painel condensado e limites. |
 | [v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](v4/FICHA_INSTRUMENTOS_E_ESTADOS.md) | active | DEC-033: destinos das guias, instrumentos, efeitos, estados zero, persistência aditiva e reversão compatível. |
+| [rules/fundacao-viii.md](rules/fundacao-viii.md) | reference | Fonte integral fornecida por Tadeu: Fundação V e consolidação VIII; precedência e parâmetros em calibração explícitos. |
+| [v4/FUNDACAO_VIII.md](v4/FUNDACAO_VIII.md) | active | DEC-037: diferenças implementadas, preservação visual/dados, autoridade, validação e limites da revisão VIII. |
 
 ## Contratos e evidências
 

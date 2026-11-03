@@ -11,32 +11,23 @@ import {
 describe("Tadeon Nexus official pack", () => {
   it("exposes one canonical archive instead of duplicated projections", () => {
     expect(TADEON_NEXUS_OFFICIAL_PACKS).toHaveLength(1);
-    expect(TADEON_NEXUS_OFFICIAL_PACKS[0].fileName).toBe(
-      "tadeon-nexus-canonico-atual.zip",
-    );
+    expect(TADEON_NEXUS_OFFICIAL_PACKS[0].fileName).toBe("tadeon-nexus-canonico-atual.zip");
   });
 
-  it.each(TADEON_NEXUS_OFFICIAL_PACKS)(
-    "keeps $title importable and complete",
-    (pack) => {
-      const bytes = readFileSync(
-        resolve(process.cwd(), `public${pack.assetPath}`),
-      );
-      const preview = parseKnowledgeArchive(new Uint8Array(bytes), {
-        archiveName: pack.fileName,
-      });
+  it.each(TADEON_NEXUS_OFFICIAL_PACKS)("keeps $title importable and complete", (pack) => {
+    const bytes = readFileSync(resolve(process.cwd(), `public${pack.assetPath}`));
+    const preview = parseKnowledgeArchive(new Uint8Array(bytes), {
+      archiveName: pack.fileName,
+    });
 
-      expect(preview.pages).toHaveLength(pack.pages);
-      expect(preview.relations).toHaveLength(pack.relations);
-      expect(preview.attachments).toHaveLength(0);
-      expect(preview.warnings).toEqual([]);
-    },
-  );
+    expect(preview.pages).toHaveLength(pack.pages);
+    expect(preview.relations).toHaveLength(pack.relations);
+    expect(preview.attachments).toHaveLength(0);
+    expect(preview.warnings).toEqual([]);
+  });
 
   it("keeps the complete canonical graph importable", () => {
-    const bytes = readFileSync(
-      resolve(process.cwd(), `public${TADEON_NEXUS_LOTE_01.assetPath}`),
-    );
+    const bytes = readFileSync(resolve(process.cwd(), `public${TADEON_NEXUS_LOTE_01.assetPath}`));
     const preview = parseKnowledgeArchive(new Uint8Array(bytes), {
       archiveName: TADEON_NEXUS_LOTE_01.fileName,
     });
@@ -46,20 +37,24 @@ describe("Tadeon Nexus official pack", () => {
     expect(preview.attachments).toHaveLength(0);
     expect(preview.warnings).toEqual([]);
 
+    expect(preview.pages.filter((page) => page.status === "canonical")).toHaveLength(124);
+    expect(preview.pages.filter((page) => page.status === "review")).toHaveLength(80);
     expect(
-      preview.pages.filter((page) => page.status === "canonical"),
-    ).toHaveLength(123);
+      preview.pages.filter(
+        (page) => (page.properties as Record<string, unknown>).rules_version === 2,
+      ),
+    ).toHaveLength(18);
     expect(
-      preview.pages.filter((page) => page.status === "review"),
-    ).toHaveLength(80);
-    expect(preview.pages.filter(page => (page.properties as Record<string,unknown>).rules_version === 2)).toHaveLength(17);
-    expect(preview.pages.filter(page => (page.properties as Record<string,unknown>).rules_edition === "historical-v1").every(page=>page.status === "review")).toBe(true);
+      preview.pages
+        .filter(
+          (page) => (page.properties as Record<string, unknown>).rules_edition === "historical-v1",
+        )
+        .every((page) => page.status === "review"),
+    ).toBe(true);
     expect(
       preview.source_types.filter(
         (sourceType) =>
-          !KNOWLEDGE_NODE_TYPES.includes(
-            sourceType as (typeof KNOWLEDGE_NODE_TYPES)[number],
-          ),
+          !KNOWLEDGE_NODE_TYPES.includes(sourceType as (typeof KNOWLEDGE_NODE_TYPES)[number]),
       ),
     ).toEqual([]);
     expect(

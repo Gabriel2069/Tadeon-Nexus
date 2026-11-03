@@ -13,7 +13,7 @@ import {
   tdv2CharacterSchema,
 } from "./tdv2";
 import { payDeclared, recordOutcome } from "./tdv2-play";
-const ready = () => ({ ...newTdvCharacter("reference"), ready: true });
+const ready = () => ({ ...newTdvCharacter("reference", "legacy"), ready: true });
 const request = {
   matrix: "Nexo" as const,
   alinhavo: "Investigação",

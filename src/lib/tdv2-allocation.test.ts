@@ -9,7 +9,7 @@ import {
 } from "./tdv2";
 describe("creation allocation and correction", () => {
   it("starts d6/d4 and reuses a released choice without generating PU", () => {
-    let c = newTdvCharacter();
+    let c = newTdvCharacter("base", "legacy");
     expect(Object.values(c.matrices)).toEqual([1, 1, 1, 1]);
     expect(new Set(Object.values(c.alinhavos))).toEqual(new Set([0]));
     c = allocateCreation(allocateCreation(c, "Ímpeto", 3, true), "Cadência", 3, true);
@@ -23,7 +23,7 @@ describe("creation allocation and correction", () => {
     expect(allocateCreation(c, "Engenharia", 2, false).alinhavos.Engenharia).toBe(2);
   });
   it("locks completed choices and requires explicit authorization", () => {
-    const c = { ...newTdvCharacter("reference"), ready: true };
+    const c = { ...newTdvCharacter("reference", "legacy"), ready: true };
     expect(() => allocateCreation(c, "Nexo", 2, true)).toThrow(/mestre/);
     expect(
       allocateCreation(
@@ -35,7 +35,7 @@ describe("creation allocation and correction", () => {
     ).toBe(2);
   });
   it("grants and reverses Marcos without losing the earlier record", () => {
-    const c = { ...newTdvCharacter("reference"), ready: true };
+    const c = { ...newTdvCharacter("reference", "legacy"), ready: true };
     const granted = grantMilestone(c);
     expect(constitution(granted)).toMatchObject({ development: 5, pu: 2 });
     const reversed = reverseProgression(granted, "Marco");
@@ -43,7 +43,7 @@ describe("creation allocation and correction", () => {
     expect(JSON.parse(reversed.corrections![0].payload)).toEqual(granted.milestones[0]);
   });
   it("cannot reverse spent PU; reverses the investment before the Marco", () => {
-    let c = grantMilestone({ ...newTdvCharacter("reference"), ready: true });
+    let c = grantMilestone({ ...newTdvCharacter("reference", "legacy"), ready: true });
     c = invest(c, {
       kind: "Alinhavo",
       target: "Luta",

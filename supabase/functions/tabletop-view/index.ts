@@ -844,6 +844,10 @@ Deno.serve(async (request) => {
           condition: characterStateLabel(c),
           guard: derived.guard,
           resources: c.resources,
+          maximums: derived.maximums,
+          defenses: c.foundation ? {Guarda:derived.guard,Resistência:derived.defenses.Resistência,Evasão:derived.defenses.Evasão,Firmeza:derived.defenses.Firmeza} : derived.defenses,
+          capacity: derived.capacity,
+          mechanicsRevision: c.foundation?.revision ?? "Livro II anterior",
           activeConditions: c.conditions
             .map((x) => boundedText(x.name, 80))
             .filter(Boolean)

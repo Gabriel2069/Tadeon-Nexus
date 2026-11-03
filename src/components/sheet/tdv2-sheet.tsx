@@ -1,3 +1,10 @@
+import {
+  TdvFoundationConversion,
+  TdvFoundationDevelopment,
+  TdvFrontRecovery,
+  TdvConvictionUse,
+  TdvBondProgress,
+} from "./tdv2-foundation-controls";
 import { TdvSurfaceContext } from "./tdv2-surface-context";
 import { TdvGamePanel } from "./tdv2-game-panel";
 import { TdvProtection } from "./tdv2-protection";
@@ -41,6 +48,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Section } from "./sheet-ui";
 import {
   ALINHAVOS,
+  CONVICTIONS,
+  LIMITS,
+  BOND_GRADES,
+  capabilityCost,
+  capabilityCeiling,
+  spendNexoStep,
   DICE,
   LINK_STATES,
   MATRICES,
@@ -184,9 +197,11 @@ export function Tdv2Sheet({
         ? stats.alinhavos[target]
         : undefined;
   const investmentCost =
-    kind === "Matriz" ? (investmentGrade ?? 0) + 3 : kind === "Alinhavo" ? 2 : cost;
+    kind === "Matriz" || kind === "Alinhavo"
+      ? capabilityCost(c, investmentGrade ?? 0, kind === "Matriz")
+      : cost;
   const investmentAtLimit =
-    investmentGrade !== undefined && investmentGrade >= (kind === "Matriz" ? 5 : 4);
+    investmentGrade !== undefined && investmentGrade >= capabilityCeiling(c, kind === "Matriz");
   const upd = <K extends keyof TdvCharacter>(key: K, value: TdvCharacter[K]) =>
     onChange({ ...c, [key]: value });
   const run = (action: () => TdvCharacter) => {
@@ -207,8 +222,10 @@ export function Tdv2Sheet({
       return false;
     }
   };
-  const matrixAllocation = `${6 - Object.values(c.matrices).reduce((sum, value) => sum + value - 1, 0)} avanços restantes · duas d10 e duas d8`;
-  const skillAllocation = `${2 - Object.values(c.alinhavos).filter((n) => n === 2).length} escolhas d8 · ${4 - Object.values(c.alinhavos).filter((n) => n === 1).length} escolhas d6`;
+  const matrixAllocation = `${(c.foundation ? 4 : 6) - Object.values(c.matrices).reduce((sum, value) => sum + value - 1, 0)} Passadas restantes · ${c.foundation ? "uma redução opcional a d4" : "duas d10 e duas d8"}`;
+  const skillAllocation = c.foundation
+    ? `${6 + 2 * c.matrices.Nexo - Object.values(c.alinhavos).reduce((a, b) => a + b, 0)} Passadas restantes · teto d8`
+    : `${2 - Object.values(c.alinhavos).filter((n) => n === 2).length} escolhas d8 · ${4 - Object.values(c.alinhavos).filter((n) => n === 1).length} escolhas d6`;
   const conditionSeverity = c.conditions.some((item) => item.intensity === "Crítica")
     ? "Crítica"
     : c.conditions.some((item) => item.intensity === "Grave")
@@ -272,26 +289,67 @@ export function Tdv2Sheet({
                   />
                 ))}
               </div>
+              {c.foundation && (
+                <TdvAction title="Convicção e Limite">
+                  <TdvSelect
+                    label="Categoria de Convicção"
+                    value={c.face.convictionCategory ?? ""}
+                    options={CONVICTIONS}
+                    onChange={(v) =>
+                      upd("face", {
+                        ...c.face,
+                        convictionCategory: v as typeof c.face.convictionCategory,
+                      })
+                    }
+                    disabled={disabled || (c.ready && !isMaster)}
+                  />
+                  <TdvSelect
+                    label="Categoria de Limite"
+                    value={c.face.limitCategory ?? ""}
+                    options={LIMITS}
+                    onChange={(v) =>
+                      upd("face", { ...c.face, limitCategory: v as typeof c.face.limitCategory })
+                    }
+                    disabled={disabled || (c.ready && !isMaster)}
+                  />
+                </TdvAction>
+              )}
+              {c.foundation && (
+                <TdvInscription
+                  label="Consequência do Limite"
+                  value={c.face.limitConsequence ?? ""}
+                  onChange={(limitConsequence) => upd("face", { ...c.face, limitConsequence })}
+                  disabled={disabled}
+                />
+              )}
+              <TdvConvictionUse character={c} onChange={onChange} canEdit={!disabled} />
               <div
                 className="tdv-mark-reading"
-                data-manifested={Object.values(c.face.mark).some((value) => value.trim())}
+                data-manifested={Object.values(c.face.mark).some((value) => value?.trim())}
               >
                 <h3>
                   <span aria-hidden="true">◇</span> Marca
                 </h3>
-                {markEditing || Object.values(c.face.mark).some((value) => value.trim()) ? (
+                {markEditing || Object.values(c.face.mark).some((value) => value?.trim()) ? (
                   <div className="tdv-mark-triptych">
                     {(
                       [
                         ["trigger", "Gatilho"],
                         ["manifestation", "Manifestação"],
                         ["residue", "Resíduo"],
+                        ...(c.foundation
+                          ? ([
+                              ["effect", "Efeito"],
+                              ["counterpart", "Contrapartida"],
+                              ["ending", "Encerramento"],
+                            ] as const)
+                          : []),
                       ] as const
                     ).map(([key, label]) => (
                       <TdvInscription
                         key={key}
                         label={label}
-                        value={c.face.mark[key]}
+                        value={c.face.mark[key] ?? ""}
                         disabled={disabled}
                         onChange={(value) =>
                           upd("face", { ...c.face, mark: { ...c.face.mark, [key]: value } })
@@ -302,7 +360,7 @@ export function Tdv2Sheet({
                 ) : (
                   <p>Não manifestada</p>
                 )}
-                {canEdit && !Object.values(c.face.mark).some((value) => value.trim()) && (
+                {canEdit && !Object.values(c.face.mark).some((value) => value?.trim()) && (
                   <Button
                     variant="ghost"
                     disabled={disabled}
@@ -486,18 +544,32 @@ export function Tdv2Sheet({
                     <TdvSelect
                       label={`Estado do vínculo ${index + 1}`}
                       value={link.state}
-                      options={LINK_STATES}
+                      options={c.foundation ? BOND_GRADES : LINK_STATES}
                       onChange={(v) =>
                         upd("face", {
                           ...c.face,
                           links: c.face.links.map((l) =>
-                            l.id === link.id ? { ...l, state: v as typeof link.state } : l,
+                            l.id === link.id
+                              ? {
+                                  ...l,
+                                  state: v as typeof link.state,
+                                  ...(c.foundation
+                                    ? { grade: BOND_GRADES.findIndex((s) => s === v) }
+                                    : {}),
+                                }
+                              : l,
                           ),
                         })
                       }
-                      disabled={disabled}
+                      disabled={disabled || Boolean(c.foundation && c.ready && !isMaster)}
                     />
                   </div>
+                  <TdvBondProgress
+                    character={c}
+                    onChange={onChange}
+                    canEdit={canEdit}
+                    linkId={link.id}
+                  />
                   <TdvLinkUse
                     character={c}
                     linkId={link.id}
@@ -626,12 +698,13 @@ export function Tdv2Sheet({
                     )
                   }
                   canReverse={
-                    isMaster &&
+                    (isMaster || !c.ready) &&
                     (c.ready && !initialDraft
                       ? c.investments.some((i) => i.target === matrix && i.kind === "Matriz")
-                      : c.matrices[matrix] > 1)
+                      : c.matrices[matrix] > (c.foundation ? 0 : 1))
                   }
-                  advanceCost={stats.matrices[matrix] + 3}
+                  advanceCost={capabilityCost(c, stats.matrices[matrix], true)}
+                  ceiling={capabilityCeiling(c, true)}
                   availablePU={stats.pu}
                   shaken={c.scene.shaken.includes(matrix)}
                   creation={initialUnlocked}
@@ -720,12 +793,17 @@ export function Tdv2Sheet({
                   )
                 }
                 canReverse={
-                  isMaster &&
+                  (isMaster || !c.ready) &&
                   (c.ready && !initialDraft
-                    ? c.investments.some((i) => i.target === name && i.kind === "Alinhavo")
+                    ? c.investments.some(
+                        (i) => i.target === name && (i.kind === "Alinhavo" || i.kind === "Nexo"),
+                      )
                     : (c.alinhavos[name] ?? 0) > 0)
                 }
-                advanceCost={2}
+                advanceCost={capabilityCost(c, stats.alinhavos[name] ?? 0, false)}
+                ceiling={capabilityCeiling(c, false)}
+                nexoSteps={stats.nexoSteps}
+                onNexo={() => run(() => spendNexoStep(c, name))}
                 availablePU={stats.pu}
                 creation={initialUnlocked}
                 disabled={!canEdit}
@@ -835,51 +913,57 @@ export function Tdv2Sheet({
               </p>
             </Section>
             <Section variant="folio" id="tdv-recuperacao" title="Recuperação">
-              <TdvSelect
-                label="Profundidade da recuperação"
-                value={recovery}
-                options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
-                onChange={setRecovery}
-                disabled={disabled}
-              />
-              <TdvField
-                label="Nova janela real de recuperação"
-                value={window}
-                onChange={setWindow}
-                disabled={disabled}
-              />
-              <TdvCheck
-                label="Houve cuidado corporal adequado"
-                value={care}
-                onChange={setCare}
-                disabled={disabled}
-              />
-              <TdvCheck
-                label="Houve reconstrução real da continuidade para PI pleno"
-                value={rebuilt}
-                onChange={setRebuilt}
-                disabled={disabled}
-              />
-              <Button
-                disabled={disabled || !c.ready}
-                onClick={() =>
-                  run(() =>
-                    recover(
-                      c,
-                      recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
-                      care,
-                      rebuilt,
-                      window,
-                    ),
-                  )
-                }
-              >
-                Aplicar recuperação
-              </Button>
-              <p className="tdv-note">
-                Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2 só
-                com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
-              </p>
+              {c.foundation ? (
+                <TdvFrontRecovery character={c} onChange={onChange} canEdit={!disabled} />
+              ) : (
+                <>
+                  <TdvSelect
+                    label="Profundidade da recuperação"
+                    value={recovery}
+                    options={["Pausa breve", "Repouso profundo", "Recuperação plena"]}
+                    onChange={setRecovery}
+                    disabled={disabled}
+                  />
+                  <TdvField
+                    label="Nova janela real de recuperação"
+                    value={window}
+                    onChange={setWindow}
+                    disabled={disabled}
+                  />
+                  <TdvCheck
+                    label="Houve cuidado corporal adequado"
+                    value={care}
+                    onChange={setCare}
+                    disabled={disabled}
+                  />
+                  <TdvCheck
+                    label="Houve reconstrução real da continuidade para PI pleno"
+                    value={rebuilt}
+                    onChange={setRebuilt}
+                    disabled={disabled}
+                  />
+                  <Button
+                    disabled={disabled || !c.ready}
+                    onClick={() =>
+                      run(() =>
+                        recover(
+                          c,
+                          recovery as "Pausa breve" | "Repouso profundo" | "Recuperação plena",
+                          care,
+                          rebuilt,
+                          window,
+                        ),
+                      )
+                    }
+                  >
+                    Aplicar recuperação
+                  </Button>
+                  <p className="tdv-note">
+                    Repetir o mesmo intervalo não multiplica recuperação. Pausa: PE +2, PI +1, PV +2
+                    só com cuidado. Repouso: PE máximo, PI +3, PV +5 com cuidado ou +2 sem.
+                  </p>
+                </>
+              )}
             </Section>
           </TdvAction>
         </div>
@@ -897,7 +981,28 @@ export function Tdv2Sheet({
       </TabsContent>
       <TabsContent value="percurso" data-sheet-content>
         <Section variant="folio" id="tdv-desenvolvimento" title="Desenvolvimento e PU">
-          <TdvDevelopment percent={stats.development} available={stats.pu} spent={stats.spent} />
+          <TdvDevelopment
+            percent={stats.development}
+            available={stats.pu}
+            spent={stats.spent}
+            milestonePU={c.foundation ? 3 : 2}
+          />
+          <TdvFoundationConversion
+            character={c}
+            onChange={onChange}
+            canEdit={canEdit && isMaster}
+          />
+          <TdvFoundationDevelopment
+            character={c}
+            onChange={onChange}
+            canEdit={!disabled}
+            isMaster={isMaster}
+          />
+          {stats.nexoSteps > 0 && (
+            <p className="tdv-cargo-reading">
+              {stats.nexoSteps} Passadas de Nexo reservadas · aplicar nos menus dos Alinhavos.
+            </p>
+          )}
           <div className="tdv-milestone-actions">
             {mayGrantMilestone && (
               <Button
@@ -912,11 +1017,26 @@ export function Tdv2Sheet({
                   run(() => grantMilestone(c));
                 }}
               >
-                Conceder Marco · +5% e 2 PU
+                Conceder Marco · +5% e {c.foundation ? 3 : 2} PU
               </Button>
             )}
             {isMaster && (
               <TdvAction title="Correções e permissões">
+                {c.foundation && (
+                  <TdvCheck
+                    label="Reconhecer requisitos extraordinários nesta ficha"
+                    value={Boolean(c.progression?.allowExtraordinary)}
+                    disabled={disabled}
+                    onChange={(allowExtraordinary) =>
+                      upd("progression", {
+                        allowCreation: false,
+                        allowMilestones: false,
+                        ...c.progression,
+                        allowExtraordinary,
+                      })
+                    }
+                  />
+                )}
                 <p>
                   Corrigir preserva o registro anterior. Um Marco com PU já investidos exige
                   reverter o investimento primeiro.
@@ -946,7 +1066,7 @@ export function Tdv2Sheet({
 
                 <div className="tdv-actions">
                   <Button
-                    disabled={disabled || !c.milestones.length || stats.pu < 2}
+                    disabled={disabled || !c.milestones.length || stats.pu < (c.foundation ? 3 : 2)}
                     onClick={() => run(() => reverseProgression(c, "Marco"))}
                   >
                     Reverter último Marco
@@ -964,6 +1084,7 @@ export function Tdv2Sheet({
                   disabled={disabled}
                   onChange={(value) =>
                     upd("progression", {
+                      ...c.progression,
                       allowCreation: c.progression?.allowCreation ?? false,
                       allowMilestones: value,
                     })
@@ -1111,6 +1232,7 @@ export function Tdv2Sheet({
             character={c}
             onChange={onChange}
             canEdit={canEdit && !initialDraft}
+            canAdjudicate={isMaster}
             physical={presentation === "game" && gameProfile === "fisico"}
             onInspectState={() => {
               if (presentation === "game") {
@@ -1254,12 +1376,7 @@ export function Tdv2Sheet({
                       target,
                       reason,
                       transcendent,
-                      cost:
-                        kind === "Matriz"
-                          ? stats.matrices[target as Matrix] + 3
-                          : kind === "Alinhavo"
-                            ? 2
-                            : cost,
+                      cost: investmentCost,
                     });
                     setDevelopmentOpen(false);
                     setReason("");

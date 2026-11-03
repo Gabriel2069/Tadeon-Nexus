@@ -24,6 +24,11 @@ const {
   invest,
   setResourceModifier,
   addCapabilityEffect,
+  grantPractice,
+  grantMilestone,
+  advanceCapability,
+  constitution,
+  adoptFoundation,
 } = await import(pathToFileURL(testRoot + "/engine.mjs"));
 const db = new PGlite();
 let checks = 0;
@@ -47,9 +52,9 @@ const auth = async (id) =>
 const valid = async (c) =>
   (await db.query("select private.tdv2_character_valid($1::jsonb) ok", [JSON.stringify(c)])).rows[0]
     .ok;
-assert.equal(await valid(newTdvCharacter()), true);
+assert.equal(await valid(newTdvCharacter("base", "legacy")), true);
 checks++;
-let c = newTdvCharacter("reference");
+let c = newTdvCharacter("reference", "legacy");
 assert.equal(await valid(c), true);
 checks++;
 assert.equal(await valid({ ...c, version: undefined }), false);
@@ -395,7 +400,7 @@ await assert.rejects(() =>
       player,
       "Forged grant",
       JSON.stringify({
-        ...newTdvCharacter(),
+        ...newTdvCharacter("base", "legacy"),
         progression: { allowCreation: true, allowMilestones: false },
       }),
     ],
@@ -407,7 +412,7 @@ await assert.rejects(() => db.query("select * from character_sheets"));
 checks++;
 // Drafts can advance, but only the mestre can reverse even before numerical sealing.
 await auth(master);
-const draft = newTdvCharacter("reference");
+const draft = newTdvCharacter("reference", "legacy");
 draft.face.origin = "";
 draft.face.occupation = "";
 draft.face.conviction = "";
@@ -421,18 +426,18 @@ checks++;
 await update(finishCreation(draft));
 checks++;
 await auth(master);
-await update(newTdvCharacter());
+await update(newTdvCharacter("base", "legacy"));
 await auth(player);
-const increased = newTdvCharacter();
+const increased = newTdvCharacter("base", "legacy");
 increased.matrices.Ímpeto = 2;
 await update(increased);
 checks++;
-await assert.rejects(() => update(newTdvCharacter()));
+await assert.rejects(() => update(newTdvCharacter("base", "legacy")));
 checks++;
 // Optional DEC-033 payloads obey the same capacity calculations on the server.
 await db.exec("reset role");
 await db.exec(readFileSync("supabase/migrations/20261102234203_tdv_resource_effects.sql", "utf8"));
-const effectsBase = finishCreation(newTdvCharacter("reference"));
+const effectsBase = finishCreation(newTdvCharacter("reference", "legacy"));
 const raised = setResourceModifier(effectsBase, "pv", 5, 15);
 assert.equal(await valid(raised), true);
 checks++;
@@ -467,6 +472,135 @@ await assert.rejects(() =>
   update({ ...raised, progression: { allowMilestones: true, allowCreation: true } }),
 );
 checks++;
+// New revision and old payloads coexist under the same constraint and RLS.
+await db.exec("reset role");
+await db.exec(
+  "alter table public.character_sheets add column updated_at timestamptz default now()",
+);
+await db.exec(readFileSync("supabase/migrations/20261103200854_tdv_foundation_viii.sql", "utf8"));
+assert.equal(await valid(newTdvCharacter("base", "VIII")), true);
+checks++;
+assert.equal(await valid(newTdvCharacter("reference", "VIII")), true);
+checks++;
+assert.equal(await valid(newTdvCharacter("reference", "legacy")), true);
+checks++;
+let modern = finishCreation(newTdvCharacter("reference", "VIII"));
+assert.equal(await valid(modern), true);
+checks++;
+await auth(master);
+await update(modern);
+checks++;
+await auth(player);
+await assert.rejects(() => update(grantPractice(modern, "Crédito forjado", 2)));
+checks++;
+await assert.rejects(() => update({ ...modern, foundation: undefined }));
+checks++;
+await assert.rejects(() =>
+  update({ ...modern, foundation: { ...modern.foundation, nexoHighWater: 5 } }),
+);
+checks++;
+await assert.rejects(() =>
+  update({ ...modern, crisisMarks: { dying: 1, collapse: 0, surrender: 0 } }),
+);
+checks++;
+await auth(master);
+modern = grantPractice(grantMilestone(modern), "Treino reconhecido", 2);
+await update(modern);
+checks++;
+await auth(player);
+const bought = advanceCapability(modern, "Luta", false);
+assert.equal(await valid(bought), true);
+await update(bought);
+checks++;
+assert.equal(
+  await valid({ ...bought, investments: bought.investments.map((e) => ({ ...e, cost: 2 })) }),
+  false,
+);
+checks++;
+await assert.rejects(() => update(modern));
+checks++;
+const adapted = adoptFoundation(finishCreation(newTdvCharacter("reference", "legacy")));
+assert.equal(await valid(adapted), true);
+checks++;
+await assert.rejects(() => update(adapted));
+checks++;
+await auth(master);
+await update(newTdvCharacter("base", "VIII"));
+await auth(player);
+let modernDraft = newTdvCharacter("base", "VIII");
+modernDraft.matrices.Ímpeto = 2;
+await update(modernDraft);
+modernDraft.matrices.Ímpeto = 1;
+await update(modernDraft);
+checks++;
+await auth(master);
+await update(modern);
+let masterRow = (
+  await db.query("select tdv2_revision from game_settings where id=$1", [settingsId])
+).rows[0];
+await saveMaster(masterRow.tdv2_revision, state);
+await auth(player);
+const exhausted = { ...modern, resources: { ...modern.resources, pe: 0 } };
+await update(exhausted);
+checks++;
+const projected = (
+  await db.query("select properties from tabletop_entities where id=$1", [entityId])
+).rows[0].properties.tdv2_round;
+assert.equal(projected.impulses, 1);
+assert.equal(projected.responses, 0);
+checks++;
+await auth(master);
+masterRow = (
+  await db.query("select tdv2_revision,tdv2_state from game_settings where id=$1", [settingsId])
+).rows[0];
+const stamp = (
+  await db.query("select updated_at::text stamp from character_sheets where id=$1", [sheet])
+).rows[0].stamp;
+const actionCharacter = {
+  ...exhausted,
+  resources: { ...exhausted.resources, pv: exhausted.resources.pv - 1 },
+};
+await assert.rejects(() =>
+  db.query("select public.apply_tdv2_scene_action($1,$2,$3,$4,$5,$6)", [
+    sheet,
+    stamp,
+    JSON.stringify(actionCharacter),
+    settingsId,
+    Number(masterRow.tdv2_revision) + 100,
+    JSON.stringify(masterRow.tdv2_state),
+  ]),
+);
+checks++;
+assert.equal(
+  (
+    await db.query("select tdv2_data->'resources'->>'pv' pv from character_sheets where id=$1", [
+      sheet,
+    ])
+  ).rows[0].pv,
+  String(exhausted.resources.pv),
+);
+checks++;
+await db.query("select public.apply_tdv2_scene_action($1,$2,$3,$4,$5,$6)", [
+  sheet,
+  stamp,
+  JSON.stringify(actionCharacter),
+  settingsId,
+  masterRow.tdv2_revision,
+  JSON.stringify(masterRow.tdv2_state),
+]);
+checks++;
+await auth(player);
+await assert.rejects(() =>
+  db.query("select public.apply_tdv2_scene_action($1,$2,$3,$4,$5,$6)", [
+    sheet,
+    stamp,
+    JSON.stringify(actionCharacter),
+    settingsId,
+    masterRow.tdv2_revision,
+    JSON.stringify(masterRow.tdv2_state),
+  ]),
+);
+checks++;
 console.log(
   JSON.stringify({
     passed: true,
@@ -478,6 +612,7 @@ console.log(
       "20261102153325_tdv_sheet_authorized_corrections",
       "20261102183118_tdv_progression_without_form_gate",
       "20261102234203_tdv_resource_effects",
+      "20261103200854_tdv_foundation_viii",
     ],
     legacyUnchanged: true,
   }),

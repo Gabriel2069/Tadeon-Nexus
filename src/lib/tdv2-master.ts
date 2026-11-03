@@ -1,6 +1,6 @@
 import { operationSchema } from "./tdv2-operations";
 import { z } from "zod";
-import { POSITIONS, uid } from "./tdv2";
+import { POSITIONS, uid, isSuccumbing, type TdvCharacter } from "./tdv2";
 const text = z.string().max(12000);
 export const tdvMasterSchema = z.object({
   version: z.literal(2),
@@ -35,6 +35,8 @@ export const tdvMasterSchema = z.object({
         impulses: z.number().int().min(0).max(2),
         response: z.boolean(),
         position: z.enum(POSITIONS),
+        maxImpulses: z.number().int().min(0).max(2).optional(),
+        ordinaryResponse: z.boolean().optional(),
       }),
     )
     .max(100),
@@ -142,11 +144,26 @@ export function spendResponse(state: TdvMasterState, id: string): TdvMasterState
     }),
   };
 }
-export function nextRound(state: TdvMasterState): TdvMasterState {
+export function nextRound(
+  state: TdvMasterState,
+  sheets: { id: string; tdv2_data: TdvCharacter }[] = [],
+): TdvMasterState {
   return {
     ...state,
     round: state.round + 1,
-    participants: state.participants.map((p) => ({ ...p, impulses: 2, response: true })),
+    participants: state.participants.map((p) => {
+      const sheet = sheets.find((s) => s.id === p.sheetId),
+        exhausted = sheet
+          ? isSuccumbing(sheet.tdv2_data)
+          : p.maxImpulses === 1 && p.ordinaryResponse === false;
+      return {
+        ...p,
+        maxImpulses: exhausted ? 1 : 2,
+        ordinaryResponse: !exhausted,
+        impulses: exhausted ? 1 : 2,
+        response: !exhausted,
+      };
+    }),
   };
 }
 export function orderInitiative(state: TdvMasterState): TdvMasterState {

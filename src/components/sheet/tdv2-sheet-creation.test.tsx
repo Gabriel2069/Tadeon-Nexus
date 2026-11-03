@@ -7,7 +7,7 @@ import { Tdv2Sheet } from "./tdv2-sheet";
 import { newTdvCharacter } from "@/lib/tdv2";
 
 it("offers the full creation review on an older draft without changing its saved data on read", () => {
-  const character = newTdvCharacter("reference");
+  const character = newTdvCharacter("reference", "legacy");
   const before = JSON.stringify(character);
   const change = vi.fn();
   const html = renderToStaticMarkup(
@@ -22,7 +22,7 @@ it("offers the full creation review on an older draft without changing its saved
 
 afterEach(cleanup);
 it("applies only reviewed choices and preserves concurrent resources and records", async () => {
-  const character = newTdvCharacter("reference");
+  const character = newTdvCharacter("reference", "legacy");
   character.ready = true;
   character.progression = { allowCreation: true, allowMilestones: false };
   Object.assign(character.face, {

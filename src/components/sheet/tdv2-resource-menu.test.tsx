@@ -7,7 +7,7 @@ import { newTdvCharacter, constitution, setResource, setResourceModifier } from 
 afterEach(cleanup);
 it("confirms current value and maximum modifier atomically, then exposes zero-resource consequences", () => {
   function Fixture() {
-    const [c, set] = useState(newTdvCharacter("reference"));
+    const [c, set] = useState(newTdvCharacter("reference", "legacy"));
     const s = constitution(c);
     return (
       <>

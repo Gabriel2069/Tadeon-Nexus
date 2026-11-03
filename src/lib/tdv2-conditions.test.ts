@@ -20,7 +20,7 @@ const request = {
   counterpart: "",
 };
 function fixture() {
-  const c = newTdvCharacter("reference");
+  const c = newTdvCharacter("reference", "legacy");
   c.ready = true;
   c.matrices.Nexo = 2;
   c.conditions = [
