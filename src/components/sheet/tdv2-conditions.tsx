@@ -124,7 +124,9 @@ export function TdvConditions({
                       onClick={() => {
                         onChange({
                           ...c,
-                          ...(item.id === "tdv-zero-pv" && c.resources.pv > 0
+                          ...(item.id === "tdv-zero-pv" &&
+                          c.resources.pv > 0 &&
+                          c.critical !== "Morta"
                             ? { critical: "Ativa" as const }
                             : {}),
                           conditions: c.conditions.filter((x) => x.id !== item.id),

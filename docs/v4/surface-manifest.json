@@ -3256,6 +3256,7 @@
     "src/components/sheet/sheet-exposure-section.test.tsx",
     "src/components/sheet/sheet-identity-section.test.tsx",
     "src/components/sheet/sheet-ui.test.tsx",
+    "src/components/sheet/tdv2-conditions.test.tsx",
     "src/components/sheet/tdv2-creation-loom.test.tsx",
     "src/components/sheet/tdv2-fields.test.tsx",
     "src/components/sheet/tdv2-resource-menu.test.tsx",
@@ -28141,7 +28142,7 @@
       ]
     },
     "src/components/sheet/tdv2-conditions.tsx": {
-      "sha256": "c159448482d4f76f757482438eaba07f1ded8fcf401032e96f4a99edffce1736",
+      "sha256": "8fb96d8d1ff4eaa0a768176e222d08a98ee4c3d518a6ccbe661714cd41baf0b3",
       "imports": [
         {
           "specifier": "react",
@@ -28307,71 +28308,71 @@
         },
         {
           "component": "div",
-          "line": 141
+          "line": 143
         },
         {
           "component": "TdvField",
-          "line": 142
+          "line": 144
         },
         {
           "component": "TdvChoices",
-          "line": 149
+          "line": 151
         },
         {
           "component": "TdvField",
-          "line": 158
+          "line": 160
         },
         {
           "component": "TdvSelect",
-          "line": 170
+          "line": 172
         },
         {
           "component": "TdvSelect",
-          "line": 196
+          "line": 198
         },
         {
           "component": "small",
-          "line": 213
+          "line": 215
         },
         {
           "component": "TdvField",
-          "line": 217
+          "line": 219
         },
         {
           "component": "details",
-          "line": 223
-        },
-        {
-          "component": "summary",
-          "line": 224
-        },
-        {
-          "component": "TdvField",
           "line": 225
         },
         {
+          "component": "summary",
+          "line": 226
+        },
+        {
+          "component": "TdvField",
+          "line": 227
+        },
+        {
           "component": "div",
-          "line": 233
+          "line": 235
         },
         {
           "component": "Button",
-          "line": 234
+          "line": 236
         },
         {
           "component": "Button",
-          "line": 244
+          "line": 246
         },
         {
           "component": "Button",
-          "line": 257
+          "line": 259
         },
         {
           "component": "Button",
-          "line": 265
+          "line": 267
         },
         {
           "component": "Plus",
-          "line": 284
+          "line": 286
         }
       ],
       "actions": [
@@ -28403,13 +28404,13 @@
           "component": "Button",
           "line": 124,
           "event": "onClick",
-          "expression": "{() => { onChange({ ...c, ...(item.id === \"tdv-zero-pv\" && c.resources.pv > 0 ? { critical: \"Ativa\" as const } : {}), conditions: c.conditions.filter((x) => x.id !== item.id), }); setOpen(null); addRef.current?.focus(); }}",
+          "expression": "{() => { onChange({ ...c, ...(item.id === \"tdv-zero-pv\" && c.resources.pv > 0 && c.critical !== \"Morta\" ? { critical: \"Ativa\" as const } : {}), conditions: c.conditions.filter((x) => x.id !== item.id), }); setOpen(null); addRef.current?.foc",
           "label": null,
           "certification": "source-only"
         },
         {
           "component": "TdvField",
-          "line": 147,
+          "line": 149,
           "event": "onChange",
           "expression": "{(name) => update(item.id, { name })}",
           "label": null,
@@ -28417,7 +28418,7 @@
         },
         {
           "component": "TdvChoices",
-          "line": 154,
+          "line": 156,
           "event": "onChange",
           "expression": "{(value) => update(item.id, { intensity: value as Condition[\"intensity\"] }) }",
           "label": null,
@@ -28425,7 +28426,7 @@
         },
         {
           "component": "TdvField",
-          "line": 162,
+          "line": 164,
           "event": "onChange",
           "expression": "{(effect) => update(item.id, { effect: impact ? declareConditionImpact(effect, impact.kind, impact.target) : effect, }) }",
           "label": null,
@@ -28433,7 +28434,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 175,
+          "line": 177,
           "event": "onChange",
           "expression": "{(kind) => { if (kind === \"Descrição apenas\") { setPending((previous) => { const next = { ...previous }; delete next[item.id]; return next; }); update(item.id, { effect: declareConditionImpact(item.effect, \"Descrição apenas\", \"\"), }); } els",
           "label": null,
@@ -28441,7 +28442,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 201,
+          "line": 203,
           "event": "onChange",
           "expression": "{(target) => { if (target !== \"Escolha a capacidade\") update(item.id, { effect: declareConditionImpact( item.effect, application as \"Desproveito\" | \"Impedimento\", target, ), }); }}",
           "label": null,
@@ -28449,7 +28450,7 @@
         },
         {
           "component": "TdvField",
-          "line": 221,
+          "line": 223,
           "event": "onChange",
           "expression": "{(exit) => update(item.id, { exit })}",
           "label": null,
@@ -28457,7 +28458,7 @@
         },
         {
           "component": "TdvField",
-          "line": 229,
+          "line": 231,
           "event": "onChange",
           "expression": "{(origin) => update(item.id, { origin })}",
           "label": null,
@@ -28465,7 +28466,7 @@
         },
         {
           "component": "Button",
-          "line": 236,
+          "line": 238,
           "event": "onClick",
           "expression": "{() => { setDraft(null); setOpen(null); addRef.current?.focus(); }}",
           "label": null,
@@ -28473,7 +28474,7 @@
         },
         {
           "component": "Button",
-          "line": 246,
+          "line": 248,
           "event": "onClick",
           "expression": "{() => { onChange({ ...c, conditions: [...c.conditions, item] }); setDraft(null); setEditing(false); setOpen(null); }}",
           "label": null,
@@ -28481,7 +28482,7 @@
         },
         {
           "component": "Button",
-          "line": 257,
+          "line": 259,
           "event": "onClick",
           "expression": "{() => setEditing(false)}",
           "label": null,
@@ -28489,7 +28490,7 @@
         },
         {
           "component": "Button",
-          "line": 270,
+          "line": 272,
           "event": "onClick",
           "expression": "{() => { const item: Condition = { id: uid(), name: \"\", origin: \"\", effect: \"\", exit: \"\", intensity: \"Leve\", }; setDraft(item); setOpen(item.id); setEditing(true); }}",
           "label": null,
@@ -28509,39 +28510,39 @@
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 146
+          "line": 148
         },
         {
           "expression": "TdvChoices disabled={!canEdit}",
-          "line": 153
+          "line": 155
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 161
+          "line": 163
         },
         {
           "expression": "TdvSelect disabled={!canEdit}",
-          "line": 174
+          "line": 176
         },
         {
           "expression": "TdvSelect disabled={!canEdit}",
-          "line": 200
+          "line": 202
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 220
+          "line": 222
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 228
+          "line": 230
         },
         {
           "expression": "Button disabled={!item.name.trim()}",
-          "line": 245
+          "line": 247
         },
         {
           "expression": "Button disabled={!canEdit || c.conditions.length >= 100}",
-          "line": 269
+          "line": 271
         }
       ]
     },
