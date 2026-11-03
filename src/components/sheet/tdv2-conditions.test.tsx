@@ -7,7 +7,7 @@ afterEach(cleanup);
 it.each(["Incapacitada", "À Beira", "Morta"] as const)(
   "ends a recovered physical condition while respecting critical state %s",
   (critical) => {
-    const zero = setResource(newTdvCharacter("reference"), "pv", 0);
+    const zero = setResource(newTdvCharacter("reference", "legacy"), "pv", 0);
     const c: TdvCharacter = { ...zero, critical, resources: { ...zero.resources, pv: 1 } };
     const change = vi.fn();
     render(<TdvConditions character={c} onChange={change} canEdit />);
@@ -23,7 +23,7 @@ it("keeps incapacitation active while Vitality remains zero", () => {
   const change = vi.fn();
   render(
     <TdvConditions
-      character={setResource(newTdvCharacter("reference"), "pv", 0)}
+      character={setResource(newTdvCharacter("reference", "legacy"), "pv", 0)}
       onChange={change}
       canEdit
     />,

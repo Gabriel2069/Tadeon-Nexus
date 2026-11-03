@@ -10,6 +10,7 @@ import {
   type TdvCharacter,
   type TdvRecord,
   type TdvActiveExpression,
+  BOND_GRADES,
 } from "./tdv2";
 export const VERTENTES = ["Corpórea", "Cônscia", "Cinética", "Canalizada"] as const;
 export const INTEGRITY = ["Apto", "Danificado", "Inutilizado"] as const;
@@ -74,7 +75,22 @@ export function recordOutcome(
   required(outcome.principal, "Registre a consequência principal.");
   if (outcome.redobra.trim())
     required(outcome.support, "Redobra exige outra continuidade capaz de sustentar o Resto.");
-  const result = readTest(test.prumo, test.tento, test.dt, test.modifier ?? 0);
+  const result = readTest(
+    test.prumo,
+    test.tento,
+    test.dt,
+    test.modifier ?? 0,
+    test.prumoSize && test.tentoSize
+      ? {
+          prumo: test.prumoSize,
+          tento: test.tentoSize,
+          revision: test.revision,
+          reading: test.reading,
+          arremate: test.arremate,
+          balanceTolerance: test.balanceTolerance,
+        }
+      : undefined,
+  );
   return rest(c, `Resto: ${test.intention}`, {
     Teste: testId,
     Intenção: test.intention,
@@ -93,13 +109,42 @@ export function recordOutcome(
 export function activateLink(
   c: TdvCharacter,
   id: string,
-  mode: "Abrir" | "Sustentar" | "Cobrar",
+  mode: "Abrir" | "Sustentar" | "Cobrar" | "Exigir",
   effect: string,
   contribution: string,
   newState?: TdvCharacter["face"]["links"][number]["state"],
 ): TdvCharacter {
   const link = c.face.links.find((l) => l.id === id);
   if (!link) throw new Error("Vínculo não encontrado.");
+  if (c.foundation) {
+    required(effect, "Declare a concessão ou oportunidade permitida pela relação.");
+    const grade = link.grade ?? BOND_GRADES.findIndex((s) => s === link.state);
+    if (grade <= 0)
+      throw new Error("Vínculo rompido ou grau ainda não revisado: não concede apoio ordinário.");
+    if (mode === "Cobrar" || mode === "Exigir") {
+      required(contribution, "Declare o risco relacional antes de Exigir.");
+      return {
+        ...c,
+        face: {
+          ...c.face,
+          links: c.face.links.map((l) =>
+            l.id === id
+              ? {
+                  ...l,
+                  grade: grade - 1,
+                  state: BOND_GRADES[grade - 1],
+                  demand: effect,
+                  tension: contribution,
+                }
+              : l,
+          ),
+        },
+      };
+    }
+    required(contribution, "Declare a participação e o risco relacional.");
+    required(effect, "Declare a oportunidade permitida pela relação.");
+    return c;
+  }
   required(effect, "Declare a mudança que a relação realmente permite.");
   required(
     contribution,
@@ -157,8 +202,8 @@ export function configureGuard(
   };
 }
 export function opposedRead(
-  a: { prumo: number; tento: number; permission: boolean },
-  b: { prumo: number; tento: number; permission: boolean },
+  a: { prumo: number; tento: number; permission: boolean; prumoSize?: number; tentoSize?: number },
+  b: { prumo: number; tento: number; permission: boolean; prumoSize?: number; tentoSize?: number },
 ) {
   for (const side of [a, b])
     for (const n of [side.prumo, side.tento])
@@ -183,8 +228,24 @@ export function opposedRead(
   return {
     winner,
     margin: winner === "Empate" ? 0 : Math.abs(ar.enlace - br.enlace),
-    a: { ...ar, critical: winner === "A" && ar.consonance },
-    b: { ...br, critical: winner === "B" && br.consonance },
+    a: {
+      ...ar,
+      critical:
+        winner === "A" &&
+        a.prumoSize !== undefined &&
+        a.tentoSize !== undefined &&
+        a.prumo === a.prumoSize &&
+        a.tento === a.tentoSize,
+    },
+    b: {
+      ...br,
+      critical:
+        winner === "B" &&
+        b.prumoSize !== undefined &&
+        b.tentoSize !== undefined &&
+        b.prumo === b.prumoSize &&
+        b.tento === b.tentoSize,
+    },
   };
 }
 export const PHYSICAL_INTENTS = [
@@ -196,6 +257,8 @@ export const PHYSICAL_INTENTS = [
   "Outra mudança",
 ] as const;
 export interface PhysicalConsequence {
+  prumoSize?: number;
+  tentoSize?: number;
   modifier?: number;
   eventId?: string;
   intention: (typeof PHYSICAL_INTENTS)[number];
@@ -210,7 +273,11 @@ export interface PhysicalConsequence {
   effect: string;
   extension: string;
   extensionSource:
-    "Margem elevada" | "Consonância com alcance" | "Propriedade expressa" | "Costura legítima";
+    | "Margem elevada"
+    | "Consonância com alcance"
+    | "Crítico por dupla máxima"
+    | "Propriedade expressa"
+    | "Costura legítima";
   extensionRule: string;
   brink: boolean;
   window: string;
@@ -223,22 +290,33 @@ export function applyPhysicalConsequence(c: TdvCharacter, s: PhysicalConsequence
     throw new Error("A abordagem está impedida. Crie acesso; cobertura total não é apenas +2.");
   const stats = constitution(c),
     dt = s.defense === "Guarda" ? stats.guard : stats.defenses[s.defense];
-  if (dt === null)
+  if (dt === null || dt === undefined)
     throw new Error(
       "A Guarda está ausente; escolha o limiar admissível pela abordagem, sem segunda Defesa.",
     );
   for (const n of [s.prumo, s.tento])
     if (!Number.isInteger(n) || n < 1 || n > 20)
       throw new Error("Informe os dois resultados originais do ataque.");
-  const result = readTest(s.prumo, s.tento, dt, s.modifier ?? 0);
+  const result = readTest(
+    s.prumo,
+    s.tento,
+    dt,
+    s.modifier ?? 0,
+    c.foundation
+      ? { prumo: s.prumoSize ?? 20, tento: s.tentoSize ?? 20, revision: "VIII" }
+      : undefined,
+  );
   if (!result.success)
     throw new Error(
       "O ataque não alcançou o limiar; não aplique a consequência principal como êxito.",
     );
   if (s.extension.trim()) {
-    if (s.extensionSource === "Margem elevada" && result.margin < 4)
+    if (s.extensionSource === "Margem elevada" && (c.foundation || result.margin < 4))
       throw new Error("A margem não autoriza esta extensão.");
-    if (s.extensionSource === "Consonância com alcance" && !result.critical)
+    if (
+      ["Consonância com alcance", "Crítico por dupla máxima"].includes(s.extensionSource) &&
+      !result.critical
+    )
       throw new Error("Não houve Consonância bem-sucedida.");
     if (["Propriedade expressa", "Costura legítima"].includes(s.extensionSource))
       required(s.extensionRule, "Nomeie a propriedade ou relação que autoriza a extensão.");
@@ -250,7 +328,7 @@ export function applyPhysicalConsequence(c: TdvCharacter, s: PhysicalConsequence
       s.reductionSource,
       "Armadura não concede RD universal; informe a redução expressamente escrita.",
     );
-  if (s.intention === "Ferir" && (s.damage < 1 || s.damage > 3))
+  if (s.intention === "Ferir" && (c.foundation || s.damage < 1 || s.damage > 3))
     required(s.damageSource, "Dano fora de 1–3 PV exige uma fonte singular expressa.");
   if (s.intention !== "Ferir" && s.damage !== 0)
     throw new Error(
@@ -262,9 +340,29 @@ export function applyPhysicalConsequence(c: TdvCharacter, s: PhysicalConsequence
   if (s.intention === "Ferir") {
     const damage = Math.max(0, s.damage - s.reduction);
     next = setResource(c, "pv", c.resources.pv - damage);
-    if (c.resources.pv === 0 && damage > 0 && s.brink) {
+    if (next.resources.pv === 0 && damage > 0 && s.brink) {
       required(s.window, "À Beira exige uma janela de estabilização anunciada.");
-      next = { ...next, critical: "À Beira", deathWindow: s.window };
+      next = {
+        ...next,
+        critical: "À Beira",
+        deathWindow: s.window,
+        ...(c.foundation
+          ? {
+              conditions: [
+                ...next.conditions.filter((i) => i.name !== "Morrendo"),
+                {
+                  id: uid(),
+                  name: "Morrendo",
+                  origin: s.effect,
+                  effect:
+                    "Ameaça real à vida; exige estabilização ou interrupção da fonte perigosa.",
+                  exit: s.window,
+                  intensity: "Crítica" as const,
+                },
+              ],
+            }
+          : {}),
+      };
     }
   }
   if (s.intention === "Quebrar Guarda")

@@ -6,6 +6,7 @@ import { TdvField, TdvChoices, TdvSelect } from "./tdv2-fields";
 import {
   MATRICES,
   ALINHAVOS,
+  CONDITION_BRANCHES,
   conditionImpact,
   declareConditionImpact,
   uid,
@@ -119,7 +120,8 @@ export function TdvConditions({
                         !canEdit ||
                         !item.exit.trim() ||
                         (item.id === "tdv-zero-pv" && c.resources.pv === 0) ||
-                        (item.id === "tdv-zero-pi" && c.resources.pi === 0)
+                        (item.id === "tdv-zero-pi" && c.resources.pi === 0) ||
+                        (item.id === "tdv-zero-pe" && c.resources.pe === 0)
                       }
                       onClick={() => {
                         onChange({
@@ -141,6 +143,43 @@ export function TdvConditions({
                 </>
               ) : (
                 <div className="tdv-condition-editor">
+                  {c.foundation && (
+                    <TdvSelect
+                      label="Condição prevista"
+                      value={item.name}
+                      options={Object.values(CONDITION_BRANCHES).flat()}
+                      disabled={!canEdit}
+                      onChange={(name) => {
+                        const branch = Object.keys(CONDITION_BRANCHES).find((k) =>
+                          (
+                            CONDITION_BRANCHES[
+                              k as keyof typeof CONDITION_BRANCHES
+                            ] as readonly string[]
+                          ).includes(name),
+                        ) as keyof typeof CONDITION_BRANCHES;
+                        const index = (CONDITION_BRANCHES[branch] as readonly string[]).indexOf(
+                          name,
+                        );
+                        update(item.id, {
+                          name,
+                          branch,
+                          ...(branch !== "Situacional"
+                            ? {
+                                grade: index + 1,
+                                intensity: (["Leve", "Grave", "Crítica"] as const)[index],
+                              }
+                            : { grade: undefined }),
+                          ...(name === "Morrendo"
+                            ? {
+                                effect:
+                                  "Ameaça real à vida; requer estabilização ou interrupção da fonte perigosa.",
+                                exit: "Estabilização e cuidado pertinentes",
+                              }
+                            : {}),
+                        });
+                      }}
+                    />
+                  )}
                   <TdvField
                     label={`Nome da condição ${index + 1}`}
                     value={item.name}

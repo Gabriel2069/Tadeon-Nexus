@@ -251,7 +251,11 @@ try {
               "Missing/stale master CAS",
             );
             settings = { ...settings, ...patch, tdv2_revision: settings.tdv2_revision + 1 };
-            body = { id: settings.id, tdv2_revision: settings.tdv2_revision };
+            body = {
+              id: settings.id,
+              tdv2_revision: settings.tdv2_revision,
+              tdv2_state: settings.tdv2_state,
+            };
           } else throw Error("Unexpected PATCH " + path);
         } else if (path.endsWith("/user")) body = user;
         else if (path.includes("/user_roles")) body = [{ user_id: userId, role }];

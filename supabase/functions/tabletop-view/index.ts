@@ -1,4 +1,4 @@
-import { publicTdvRound } from "../../../src/lib/tdv2-round.ts";
+import { publicTdvRound, publicTdvConstitution } from "../../../src/lib/tdv2-round.ts";
 import {
   tdv2CharacterSchema,
   constitution,
@@ -844,6 +844,7 @@ Deno.serve(async (request) => {
           condition: characterStateLabel(c),
           guard: derived.guard,
           resources: c.resources,
+          ...publicTdvConstitution(Boolean(c.foundation), derived),
           activeConditions: c.conditions
             .map((x) => boundedText(x.name, 80))
             .filter(Boolean)

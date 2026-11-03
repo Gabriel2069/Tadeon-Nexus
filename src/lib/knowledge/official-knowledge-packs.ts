@@ -17,13 +17,13 @@ export const TADEON_NEXUS_CANONICO_ATUAL: OfficialKnowledgePack = {
   title: "Nexus canônico atual",
   eyebrow: "Biblioteca unificada",
   description:
-    "Livro de Regras TdV II v2.0 integrado ao acervo: regras atuais identificadas, fontes anteriores preservadas como histórico para revisão.",
+    "Fundação Mecânica VIII integrada ao acervo: nova criação, desenvolvimento e Malha; texto anterior preservado e parâmetros em calibração identificados.",
   assetPath: "/nexus-packs/tadeon-nexus-canonico-atual.zip",
   fileName: "tadeon-nexus-canonico-atual.zip",
-  pages: 203,
-  relations: 314,
-  expectedBytes: 510485,
-  sha256: "e3063430958304e15a5b39c75fc0767234357c5e48a8a47794755c5ba4e7d17d",
+  pages: 204,
+  relations: 315,
+  expectedBytes: 534812,
+  sha256: "17e7798cbf540162c10b11be46f84c1a2d07debd68dbe80c36178ad2aaca2b70",
   recommended: true,
 };
 

@@ -235,7 +235,7 @@ export async function verifyInstruments({
   await settle();
   await resourceTargets();
   assert(
-    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 6,
+    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 8,
     "Trained skills prioritized",
   );
   const search = page.getByRole("searchbox", { name: "Buscar Alinhavo no modo de jogo" });
@@ -253,7 +253,7 @@ export async function verifyInstruments({
   );
   await search.fill("");
   assert(
-    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 6,
+    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 8,
     "Clearing restores trained skills",
   );
   const cramped = await page
@@ -290,18 +290,24 @@ export async function verifyInstruments({
     "Automatic incapacitation",
   );
   assert(
-    (await page.getByRole("button", { name: /^Colapso/ }).count()) === 1,
+    (await page.locator(".tdv-condition-chip").filter({ hasText: "Colapsando" }).count()) === 1,
     "Automatic collapse",
   );
   assert(
-    (await page.getByRole("button", { name: /^Esforço esgotado/ }).count()) === 1,
+    (await page.locator(".tdv-condition-chip").filter({ hasText: "Sucumbindo" }).count()) === 1,
     "Effort state without a general penalty",
   );
   await top();
   await geometry("instruments-zero");
   if (role === "mestre" && [320, 1440].includes(width)) {
-    await page.getByRole("button", { name: "Morrendo: 3 de 3", exact: true }).click();
-    await saved(() => getRow().tdv2_data.crisisMarks?.dying === 3);
+    assert(
+      await page.getByRole("button", { name: "Morrendo: 1 de 3", exact: true }).isDisabled(),
+      "Zero PV alone is not a life threat",
+    );
+    for (const value of [1, 2, 3]) {
+      await page.getByRole("button", { name: `Colapsando: ${value} de 3`, exact: true }).click();
+      await saved(() => getRow().tdv2_data.crisisMarks?.collapse === value);
+    }
     await geometry("instruments-risk-three");
     assert(getRow().tdv2_data.critical !== "Morta", "Risk marks never declare death automatically");
   }

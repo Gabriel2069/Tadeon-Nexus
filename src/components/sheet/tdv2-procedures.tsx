@@ -118,8 +118,8 @@ export function TdvGuard({ character: c, onChange, canEdit }: Props) {
         />
         <p className="tdv-note">
           Proteção parcial ou escudo: +1. Cobertura dominante estável: +2. A soma ordinária para em
-          +2; cobertura total impede a abordagem incompatível. Perder proteção não apaga a base de
-          Cadência.
+          +2; cobertura total impede a abordagem incompatível. A proteção contextual não muda as
+          demais Defesas.
         </p>
         <Button
           disabled={!canEdit}
@@ -162,7 +162,7 @@ export function TdvLinkUse({
       <TdvSelect
         label="Modo do Vínculo"
         value={mode}
-        options={["Abrir", "Sustentar", "Cobrar"]}
+        options={c.foundation ? ["Abrir", "Sustentar", "Exigir"] : ["Abrir", "Sustentar", "Cobrar"]}
         onChange={setMode}
         disabled={!canEdit}
       />
@@ -182,7 +182,13 @@ export function TdvLinkUse({
         disabled={!canEdit || !c.ready}
         onClick={() =>
           commit(onChange, () =>
-            activateLink(c, linkId, mode as "Abrir" | "Sustentar" | "Cobrar", effect, contribution),
+            activateLink(
+              c,
+              linkId,
+              mode as "Abrir" | "Sustentar" | "Cobrar" | "Exigir",
+              effect,
+              contribution,
+            ),
           )
         }
       >

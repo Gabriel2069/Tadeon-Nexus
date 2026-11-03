@@ -1,25 +1,17 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-02",
-  "runtimeReference": "6de0a770b443bec028444cd16f35114f16f42e42",
+  "checkedAt": "2026-11-03",
+  "runtimeReference": "c878253bfdb185a569ffc5f97c94dd595a2ec6b3",
   "integration": {
-    "pr": 323,
-    "branch": "feat/dec032-game-panel",
+    "pr": null,
+    "branch": "feat/fundacao-viii",
     "base": "main",
-    "baseCommit": "5a1757ce92a91a88004ce6e340d68df01ae28590",
-    "sourceCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
-    "headCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
-    "state": "integrated",
-    "mergeCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426790",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426926",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188120",
-    "production": "workflow-confirmed; HTTP200 and exact release marker",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188038",
-    "productionCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
-    "productionVerifiedAt": "2026-11-02T19:38:14Z",
-    "productionHttpStatus": 200,
-    "note": "PR 323 publicada; pacote 510485 bytes, SHA256 e3063430958304e15a5b39c75fc0767234357c5e48a8a47794755c5ba4e7d17d. Lote DEC-033 exige gates e publicação próprios."
+    "baseCommit": "c878253bfdb185a569ffc5f97c94dd595a2ec6b3",
+    "sourceCommit": null,
+    "headCommit": null,
+    "state": "working",
+    "production": "not published; prior production c878253",
+    "note": "DEC-037 / NEX-051: candidato da Fundação VIII; gates e publicação próprios."
   },
   "domains": [
     {
@@ -125,7 +117,8 @@
         "src/components/sheet/tdv2-creation-loom.test.tsx",
         "src/components/sheet/tdv2-conditions.tsx",
         "src/lib/tdv2-conditions.test.ts",
-        "src/lib/tdv2-allocation.test.ts"
+        "src/lib/tdv2-allocation.test.ts",
+        "src/components/sheet/tdv2-foundation-controls.tsx"
       ],
       "styles": [
         "src/styles/sheet-layout.css",
@@ -205,7 +198,8 @@
         "src/lib/tdv2-master.ts",
         "src/components/master/tdv2-master.tsx",
         "src/components/master/tdv2-campaign-presences.tsx",
-        "src/lib/master-sheet-reading.ts"
+        "src/lib/master-sheet-reading.ts",
+        "src/components/master/tdv2-malha.tsx"
       ],
       "styles": [
         "src/styles/master-panel-navigation.css",
@@ -456,6 +450,16 @@
       "path": "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
       "status": "active",
       "purpose": "DEC-033: destinos das guias, instrumentos, efeitos, estados zero, persistência aditiva e reversão compatível."
+    },
+    {
+      "path": "docs/rules/fundacao-viii.md",
+      "status": "reference",
+      "purpose": "Fonte integral fornecida por Tadeu: Fundação V e consolidação VIII; precedência e parâmetros em calibração explícitos."
+    },
+    {
+      "path": "docs/v4/FUNDACAO_VIII.md",
+      "status": "active",
+      "purpose": "DEC-037: diferenças implementadas, preservação visual/dados, autoridade, validação e limites da revisão VIII."
     }
   ],
   "tasks": [
@@ -1655,6 +1659,25 @@
         "Certificar implantação por SHA atual, relatar módulos/dispositivos/contas não certificados e resíduos; não publicar V4 como final com falhas críticas/altas ou manifesto aberto."
       ],
       "evidence": []
+    },
+    {
+      "id": "NEX-051",
+      "title": "Fundação VIII: cálculos, ficha e Malha na composição existente",
+      "domain": "session",
+      "status": "active",
+      "priority": 1,
+      "dependsOn": [
+        "NEX-046"
+      ],
+      "acceptance": [
+        "Novas criações e aquisições obedecem aos orçamentos, custos e patamares da Fundação VIII.",
+        "Ficha, jogo, Mestre e Mesa compartilham constituição, estados e permissões persistentes.",
+        "Legado permanece legível; conversão reconhecida preserva fonte, preços e escolhas; calibração não definida permanece assistida."
+      ],
+      "evidence": [
+        "docs/v4/FUNDACAO_VIII.md",
+        "docs/rules/fundacao-viii.md"
+      ]
     }
   ],
   "decisions": [
@@ -1871,6 +1894,11 @@
       "id": "DEC-036",
       "decision": "Corrigir encaixes estreitos nos dois modos: recursos com alvos independentes, guias em duas linhas, capacidades com nome em faixa própria e cabeçalho que pode recompor os comandos.",
       "reason": "Relato de conflitos no celular por Tadeu. Preservar funções/dados, corrigir no proprietário e verificar colisão real entre retângulos de controles; sem migration."
+    },
+    {
+      "id": "DEC-037",
+      "decision": "Aplicar a Fundação Mecânica VIII por revisão explícita: novos cálculos e campos no mesmo padrão visual; preservar fichas anteriores e oferecer adaptação autorizada sem redistribuição automática.",
+      "reason": "Plano aprovado por Tadeu em 03/11/2026. Motor, desenvolvimento, Frentes, três Extremos, Malha, projeção e persistência devem concordar, sem inventar parâmetros reservados à calibração."
     }
   ],
   "bridges": [
@@ -2723,6 +2751,25 @@
       "productionVerifiedAt": "2026-11-02T02:12:26.777Z",
       "productionHttpStatus": 200,
       "note": "PR 320 publicada com 703 testes e 642 estados TdV II; novo lote DEC-029 exige gates/publicação próprios."
+    },
+    {
+      "pr": 323,
+      "branch": "feat/dec032-game-panel",
+      "base": "main",
+      "baseCommit": "5a1757ce92a91a88004ce6e340d68df01ae28590",
+      "sourceCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
+      "headCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
+      "state": "integrated",
+      "mergeCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
+      "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426790",
+      "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426926",
+      "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188120",
+      "production": "workflow-confirmed; HTTP200 and exact release marker",
+      "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188038",
+      "productionCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
+      "productionVerifiedAt": "2026-11-02T19:38:14Z",
+      "productionHttpStatus": 200,
+      "note": "PR 323 publicada; pacote 510485 bytes, SHA256 e3063430958304e15a5b39c75fc0767234357c5e48a8a47794755c5ba4e7d17d. Lote DEC-033 exige gates e publicação próprios."
     }
   ]
 }

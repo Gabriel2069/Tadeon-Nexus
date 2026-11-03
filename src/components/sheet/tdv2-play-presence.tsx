@@ -18,6 +18,7 @@ export function TdvPlayPresence({
   character: c,
   onChange,
   canEdit,
+  canAdjudicate = false,
   physical = false,
   onInspectState,
 }: {
@@ -25,6 +26,7 @@ export function TdvPlayPresence({
   character: TdvCharacter;
   onChange: (c: TdvCharacter) => void;
   canEdit: boolean;
+  canAdjudicate?: boolean;
   physical?: boolean;
   onInspectState?: () => void;
 }) {
@@ -200,7 +202,11 @@ export function TdvPlayPresence({
           </Button>
         </div>
       )}
-      <TdvCrisisTrackers character={c} onChange={onChange} canEdit={canEdit} />
+      <TdvCrisisTrackers
+        character={c}
+        onChange={onChange}
+        canEdit={canEdit && (!c.foundation || canAdjudicate)}
+      />
       <TdvConditions character={c} onChange={onChange} canEdit={canEdit} />
       {!c.ready && (
         <p className="tdv-note">

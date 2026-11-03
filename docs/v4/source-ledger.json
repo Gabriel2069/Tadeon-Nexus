@@ -82,6 +82,13 @@
       "libraryFileId": "libfile_5ec6de69756c8191b3ab6cd34fa75fec",
       "textRead": "complete, 49 lines",
       "reconciliation": "Reedição editorial da fonte normativa já lida; sem alteração mecânica deliberada."
+    },
+    {
+      "file": "Texto colado(8).txt",
+      "sha256": "11a3207d329cb50b810ac2d692459b65261ee72a87adb7e0a728028f10762d9a",
+      "bytes": 65355,
+      "textRead": "complete",
+      "scope": "Fundação V + Fundação VIII; supersedes mechanical clauses explicitly reformed, preserves V4 presentation and unspecified content."
     }
   ],
   "localInstructionsRead": [

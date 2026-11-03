@@ -1,3 +1,4 @@
+import { TdvMalha } from "./tdv2-malha";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -84,7 +85,7 @@ function OperationEditor({
     evidence: "",
     rest: "",
     participants: "",
-    resolution: "Ficção direta",
+    resolution: o.computation ? "Teste" : "Ficção direta",
     prumo: 1,
     tento: 1,
     broadens: false,
@@ -94,8 +95,10 @@ function OperationEditor({
   return (
     <TdvDisclosure initiallyOpen={!o.name}>
       <summary>
-        {o.kind} · {o.name || "Nova operação"} · {o.stages.filter((s) => s.done).length}/
-        {o.stages.length}
+        {o.kind} · {o.name || "Nova operação"} ·{" "}
+        {o.computation
+          ? `${o.computation.progress}/${o.computation.target || "definir"}`
+          : `${o.stages.filter((s) => s.done).length}/${o.stages.length}`}
       </summary>
       <div className="tdv-grid">
         <TdvField
@@ -132,38 +135,72 @@ function OperationEditor({
           </select>
         </div>
       </div>
-      <div className="tdv-folios">
-        {o.stages.map((stage) => (
-          <div className="tdv-folio" key={stage.id}>
-            <TdvField
-              label="Etapa ou movimento conceitual"
-              value={stage.name}
-              onChange={(name) =>
-                onChange({
-                  ...o,
-                  stages: o.stages.map((x) => (x.id === stage.id ? { ...x, name } : x)),
-                })
-              }
-              short
-            />
-            <p>{stage.done ? `Concluída: ${stage.evidence}` : "Aberta"}</p>
-            {!stage.done && (
-              <TdvCheck
-                label={`Esta intervenção abrange ${stage.name}`}
-                value={step.stageIds.includes(stage.id)}
-                onChange={(checked) =>
-                  set(
-                    "stageIds",
-                    checked
-                      ? [...step.stageIds, stage.id]
-                      : step.stageIds.filter((id) => id !== stage.id),
-                  )
+      {o.computation && (
+        <div className="tdv-grid">
+          <TdvSelect
+            label="Contribuição anunciada"
+            value={o.computation.reading}
+            options={["Ascendente", "Retorno"]}
+            disabled={o.history.length > 0}
+            onChange={(reading) =>
+              onChange({
+                ...o,
+                computation: { ...o.computation!, reading: reading as "Ascendente" | "Retorno" },
+              })
+            }
+          />
+          <TdvNumber
+            label="Total necessário do Cômputo"
+            value={o.computation.target}
+            min={1}
+            max={1000000}
+            disabled={o.history.length > 0}
+            onChange={(target) => onChange({ ...o, computation: { ...o.computation!, target } })}
+          />
+          <p className="tdv-cargo-reading" role="status">
+            <strong>
+              {o.computation.progress}/{o.computation.target || "definir"}
+            </strong>{" "}
+            Só o sucesso no Enlace soma a contribuição. Oportunidades e consequências continuam
+            necessárias.
+          </p>
+        </div>
+      )}
+      <TdvMalha operation={o} onChange={onChange} />
+      {!o.computation && (
+        <div className="tdv-folios">
+          {o.stages.map((stage) => (
+            <div className="tdv-folio" key={stage.id}>
+              <TdvField
+                label="Etapa ou movimento conceitual"
+                value={stage.name}
+                onChange={(name) =>
+                  onChange({
+                    ...o,
+                    stages: o.stages.map((x) => (x.id === stage.id ? { ...x, name } : x)),
+                  })
                 }
+                short
               />
-            )}
-          </div>
-        ))}
-      </div>
+              <p>{stage.done ? `Concluída: ${stage.evidence}` : "Aberta"}</p>
+              {!stage.done && (
+                <TdvCheck
+                  label={`Esta intervenção abrange ${stage.name}`}
+                  value={step.stageIds.includes(stage.id)}
+                  onChange={(checked) =>
+                    set(
+                      "stageIds",
+                      checked
+                        ? [...step.stageIds, stage.id]
+                        : step.stageIds.filter((id) => id !== stage.id),
+                    )
+                  }
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
       <TdvDisclosure initiallyOpen={false}>
         <summary>Registrar uma intervenção</summary>
         <div className="tdv-grid">
@@ -183,7 +220,7 @@ function OperationEditor({
         <TdvSelect
           label="Como a intervenção foi resolvida"
           value={step.resolution}
-          options={["Ficção direta", "Teste"]}
+          options={o.computation ? ["Teste"] : ["Ficção direta", "Teste"]}
           onChange={(v) => set("resolution", v as typeof step.resolution)}
         />
         {step.resolution === "Teste" && (
@@ -248,7 +285,7 @@ export function TdvPhysicalResolution({
   busy,
 }: {
   roster: TdvRosterRow[];
-  onApply: (row: TdvRosterRow, c: TdvCharacter) => Promise<boolean>;
+  onApply: (row: TdvRosterRow, c: TdvCharacter, useResponse?: boolean) => Promise<boolean>;
   busy: boolean;
 }) {
   const [target, setTarget] = useState(""),
@@ -257,6 +294,8 @@ export function TdvPhysicalResolution({
       intention: "Ferir",
       prumo: 1,
       tento: 1,
+      prumoSize: 8,
+      tentoSize: 6,
       defense: "Guarda",
       damage: 1,
       damageSource: "",
@@ -270,6 +309,7 @@ export function TdvPhysicalResolution({
       brink: false,
       window: "",
     });
+  const [payResponse, setPayResponse] = useState(true);
   const row = roster.find((r) => r.id === target);
   const alreadyApplied = !!row?.tdv2_data.records.some((r) => r.fields.Acontecimento === v.eventId);
   const set = <K extends keyof PhysicalConsequence>(key: K, value: PhysicalConsequence[K]) =>
@@ -325,10 +365,38 @@ export function TdvPhysicalResolution({
         <TdvSelect
           label="Único limiar admissível pela abordagem"
           value={v.defense}
-          options={["Guarda", "Resistência", "Evasão", "Lucidez", "Firmeza"]}
+          options={
+            row?.tdv2_data.foundation
+              ? ["Guarda", "Resistência", "Evasão", "Firmeza"]
+              : ["Guarda", "Resistência", "Evasão", "Lucidez", "Firmeza"]
+          }
           onChange={(n) => set("defense", n as typeof v.defense)}
           disabled={busy}
         />
+        {row?.tdv2_data.foundation && (
+          <>
+            <TdvSelect
+              label="Dado de Prumo do atacante"
+              value={String(v.prumoSize ?? 8)}
+              options={["4", "6", "8", "10", "12", "20"]}
+              onChange={(n) => set("prumoSize", Number(n))}
+            />
+            <TdvSelect
+              label="Dado de Tento do atacante"
+              value={String(v.tentoSize ?? 6)}
+              options={["4", "6", "8", "10", "12", "20"]}
+              onChange={(n) => set("tentoSize", Number(n))}
+            />
+          </>
+        )}
+        {row?.tdv2_data.foundation && v.defense === "Evasão" && (
+          <TdvCheck
+            label="Consumir Resposta nesta aplicação (desmarcar apenas se já declarada ou por exceção expressa)"
+            value={payResponse}
+            onChange={setPayResponse}
+            disabled={busy}
+          />
+        )}
         <TdvNumber
           label="Prumo original do ataque"
           value={v.prumo}
@@ -359,7 +427,11 @@ export function TdvPhysicalResolution({
           disabled={busy || v.intention !== "Ferir"}
         />
         <TdvField
-          label="Fonte singular para dano fora de 1 a 3 PV"
+          label={
+            row?.tdv2_data.foundation
+              ? "Dados de dano e fonte do impacto rolado"
+              : "Fonte singular para dano fora de 1 a 3 PV"
+          }
           value={v.damageSource}
           onChange={(n) => set("damageSource", n)}
           disabled={busy}
@@ -384,7 +456,7 @@ export function TdvPhysicalResolution({
         disabled={busy}
       />
       <TdvDisclosure initiallyOpen={false}>
-        <summary>Extensão e estado À Beira</summary>
+        <summary>Extensão e estado {row?.tdv2_data.foundation ? "Morrendo" : "À Beira"}</summary>
         <TdvField
           label="Extensão concreta da consequência"
           value={v.extension}
@@ -396,7 +468,7 @@ export function TdvPhysicalResolution({
           value={v.extensionSource}
           options={[
             "Margem elevada",
-            "Consonância com alcance",
+            "Crítico por dupla máxima",
             "Propriedade expressa",
             "Costura legítima",
           ]}
@@ -410,7 +482,11 @@ export function TdvPhysicalResolution({
           disabled={busy}
         />
         <TdvCheck
-          label="Uma nova consequência física a 0 PV leva a À Beira"
+          label={
+            row?.tdv2_data.foundation
+              ? "A perda de Vitalidade envolve ameaça real à vida"
+              : "Uma nova consequência física a 0 PV leva a À Beira"
+          }
           value={v.brink}
           onChange={(n) => set("brink", n)}
           disabled={busy}
@@ -428,7 +504,11 @@ export function TdvPhysicalResolution({
         onClick={() => {
           try {
             const consequence = applyPhysicalConsequence(row!.tdv2_data, v);
-            void onApply(row!, consequence.character);
+            void onApply(
+              row!,
+              consequence.character,
+              Boolean(row!.tdv2_data.foundation && v.defense === "Evasão" && payResponse),
+            );
           } catch (e) {
             toast.error((e as Error).message);
           }

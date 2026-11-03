@@ -37,6 +37,10 @@ import {
   POSITIONS,
   RECORD_FIELDS,
   constitution,
+  MATRICES,
+  ALINHAVOS,
+  isSuccumbing,
+  type Matrix,
   readTest,
   resolveTest,
   tdv2CharacterSchema,
@@ -93,7 +97,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
       .update({ tdv2_state: parsed as never })
       .eq("id", snapshot.id)
       .eq("tdv2_revision", revision.current)
-      .select("id,tdv2_revision")
+      .select("id,tdv2_revision,tdv2_state")
       .abortSignal(signal)
       .maybeSingle();
     if (error) throw error;
@@ -102,6 +106,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
       throw new Error("A condução mudou em outra janela.");
     }
     revision.current = data.tdv2_revision;
+    return { ...snapshot, state: tdvMasterSchema.parse(data.tdv2_state) };
   });
   useEffect(() => {
     if (!draft.value || !user || role !== "mestre") return;
@@ -112,6 +117,8 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
     return () => window.clearTimeout(timer);
   }, [draft.value, user, role]);
   const latest = useRef<TdvMasterState | null>(null);
+  const [initiativeMatrix, setInitiativeMatrix] = useState<Matrix>("Cadência");
+  const [initiativeSkill, setInitiativeSkill] = useState<string>("Iniciativa");
   const initiativeAbort = useRef<AbortController | null>(null);
   useEffect(() => () => initiativeAbort.current?.abort(), []);
   latest.current = draft.value?.state ?? null;
@@ -244,8 +251,10 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
           name: row.name,
           cadence: c.matrices["Cadência"],
           score: null,
-          impulses: 2,
-          response: true,
+          impulses: isSuccumbing(row.tdv2_data) ? 1 : 2,
+          response: !isSuccumbing(row.tdv2_data),
+          maxImpulses: isSuccumbing(row.tdv2_data) ? 1 : 2,
+          ordinaryResponse: !isSuccumbing(row.tdv2_data),
           position: "Disputada",
         },
       ],
@@ -260,8 +269,8 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
     initiativeAbort.current = controller;
     try {
       const rolled = resolveTest(row.tdv2_data, {
-        matrix: "Cadência",
-        alinhavo: "Iniciativa",
+        matrix: initiativeMatrix,
+        alinhavo: initiativeSkill,
         dt: 2,
         prumoPro: 0,
         prumoDes: 0,
@@ -272,7 +281,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
         counterpart: "",
         context: {
           intention: "Disputar Iniciativa",
-          approach: "Cadência e Iniciativa",
+          approach: "Disputa de prioridade pela abordagem pertinente",
           change: `Rodada ${s.round}`,
           point: s.objective,
           risk: true,
@@ -313,28 +322,67 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
       if (!controller.signal.aborted) setBusy(null);
     }
   };
-  const applyToSheet = async (row: RosterRow, character: TdvCharacter) => {
+  const applyToSheet = async (row: RosterRow, character: TdvCharacter, useResponse = false) => {
     if (busy) return false;
     setBusy(row.id);
     const controller = new AbortController();
     initiativeAbort.current = controller;
     try {
+      const snapshot = draft.value!;
+      let scene = snapshot.state;
+      if (useResponse) {
+        const participant = scene.participants.find((p) => p.sheetId === row.id);
+        if (!participant || isSuccumbing(character))
+          throw new Error(
+            "Sem Resposta ordinária disponível; a exceção exige autorização expressa.",
+          );
+        scene = spendResponse(scene, participant.id);
+      }
       const { data, error } = await supabase
-        .from("character_sheets")
-        .update({ tdv2_data: tdv2CharacterSchema.parse(character) as never })
-        .eq("id", row.id)
-        .eq("updated_at", row.updated_at)
-        .select("updated_at")
-        .abortSignal(controller.signal)
-        .maybeSingle();
+        .rpc(
+          "apply_tdv2_scene_action" as never,
+          {
+            p_sheet_id: row.id,
+            p_sheet_updated_at: row.updated_at,
+            p_character: tdv2CharacterSchema.parse(character),
+            p_settings_id: snapshot.id,
+            p_scene_revision: revision.current,
+            p_scene: scene,
+          } as never,
+        )
+        .abortSignal(controller.signal);
       if (controller.signal.aborted) return false;
       if (error || !data)
         throw new Error(
-          "A ficha mudou durante a ação. Recarregue a condução antes de aplicar a consequência; seus dados originais continuam na ferramenta.",
+          "A ficha ou a cena mudou. Recarregue antes de aplicar a consequência; nada foi cobrado parcialmente.",
         );
+      const result = data as unknown as {
+        sheetUpdatedAt: string;
+        sceneRevision: number;
+        scene: unknown;
+      };
+      const persisted = tdvMasterSchema.parse(result.scene);
+      revision.current = result.sceneRevision;
+      if (latest.current === snapshot.state) draft.load({ id: snapshot.id, state: persisted });
+      else if (latest.current)
+        draft.update("state", {
+          ...latest.current,
+          participants: latest.current.participants.map((p) => {
+            const authoritative = persisted.participants.find((x) => x.id === p.id);
+            return authoritative
+              ? {
+                  ...p,
+                  impulses: authoritative.impulses,
+                  response: authoritative.response,
+                  maxImpulses: authoritative.maxImpulses,
+                  ordinaryResponse: authoritative.ordinaryResponse,
+                }
+              : p;
+          }),
+        });
       setRoster((previous) =>
         previous.map((r) =>
-          r.id === row.id ? { ...r, tdv2_data: character, updated_at: data.updated_at } : r,
+          r.id === row.id ? { ...r, tdv2_data: character, updated_at: result.sheetUpdatedAt } : r,
         ),
       );
       toast.success(
@@ -598,8 +646,20 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
             </p>
           </Section>
           <Section id="tdv-master-round" title={`Rodada ${s.round}`}>
+            <TdvSelect
+              label="Matriz da disputa de prioridade"
+              value={initiativeMatrix}
+              options={MATRICES}
+              onChange={(v) => setInitiativeMatrix(v as Matrix)}
+            />
+            <TdvSelect
+              label="Alinhavo da disputa de prioridade"
+              value={initiativeSkill}
+              options={ALINHAVOS}
+              onChange={setInitiativeSkill}
+            />
             <div className="tdv-actions">
-              <Button variant="outline" onClick={() => run(() => nextRound(s))}>
+              <Button variant="outline" onClick={() => run(() => nextRound(s, roster))}>
                 Iniciar próxima rodada
               </Button>
               <Button variant="outline" onClick={() => run(() => orderInitiative(s))}>
@@ -607,9 +667,9 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
               </Button>
             </div>
             <p className="tdv-note">
-              Ordem primariamente ficcional. Quando disputada: Cadência + Iniciativa; maior Enlace,
-              depois Cadência. Persistindo empate, a ordem anterior permanece para decisão da
-              ficção. Impulsos não acumulam.
+              Ordem primariamente ficcional. Quando disputada: abordagem pertinente pelo Motor;
+              maior Enlace, depois Cadência. Persistindo empate, a ordem anterior permanece para
+              decisão da ficção. Impulsos não acumulam.
             </p>
             <div className="tdv-master-participants">
               {s.participants.map((p) => (
@@ -680,7 +740,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
                       disabled={Boolean(busy)}
                       onClick={() => void rollInitiative(p.id)}
                     >
-                      Rolar Iniciativa
+                      Disputar prioridade
                     </Button>
                   </div>
                 </div>
@@ -996,8 +1056,9 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
           <Section id="tdv-master-reference" title="Referência do Motor">
             <p>
               Prumo + Tento = Enlace. Maior Fio é Ascendente; menor é Retorno; Prumo − Tento é
-              Desvio. Iguais produzem Consonância; só há crítico se a intenção for alcançada, exceto
-              (1,1), que é Falha Crítica.
+              Desvio Bruto. O Desvio Relativo compara as faixas proporcionais dos dados. O crítico
+              exige dupla máxima e cumprimento da condição principal; (1,1) é Falha Crítica.
+              Igualdade não basta.
             </p>
             <dl className="tdv-reference-dts">
               {DIFFICULTIES.map((dt, index) => (
@@ -1111,6 +1172,8 @@ function OppositionMotor() {
               1 + Math.floor(Math.random() * prumo),
               1 + Math.floor(Math.random() * tento),
               dt,
+              0,
+              { prumo, tento, revision: "VIII" },
             ),
           )
         }
@@ -1120,7 +1183,7 @@ function OppositionMotor() {
       {result && (
         <p role="status">
           Prumo {result.prumo} + Tento {result.tento} = Enlace {result.enlace} · {result.quality}
-          {result.critical ? " · Consonância crítica" : ""} · Desvio {result.desvio}.{" "}
+          {result.critical ? " · Dupla máxima crítica" : ""} · Desvio {result.desvio}.{" "}
           {result.criticalFailure ? "Matriz da oposição Abalada até o fim da cena." : ""}
         </p>
       )}

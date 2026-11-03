@@ -13,7 +13,7 @@ export default defineTool({
   name: "get_sheet",
   title: "Get character sheet",
   description:
-    "Returns the full character sheet (attributes, abilities, inventory, conditions, notes) for the given sheet id, subject to the caller's access. For rules_version 2, tdv2_data is authoritative; the other rule columns preserve the previous edition and must not be combined with TdV II mechanics.",
+    "Returns the full character sheet (attributes, abilities, inventory, conditions, notes) for the given sheet id, subject to the caller's access. For rules_version 2, tdv2_data is authoritative; foundation.revision VIII selects the reformed constitution and progression, absence preserves historical rules; the other rule columns preserve the previous edition and must not be combined with TdV II mechanics.",
   inputSchema: {
     sheet_id: z.string().uuid().describe("UUID of the character sheet to fetch."),
   },

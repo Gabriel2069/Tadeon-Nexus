@@ -6,7 +6,7 @@ import { newTdvCharacter, type TdvCharacter } from "@/lib/tdv2";
 import { TdvCreationLoom, TdvFamiliarities } from "./tdv2-creation-loom";
 afterEach(cleanup);
 it("keeps the eight book steps navigable without making prose review a hard gate", () => {
-  const initial = newTdvCharacter("reference");
+  const initial = newTdvCharacter("reference", "legacy");
   Object.assign(initial.face, {
     origin: "Cais",
     occupation: "Registradora",
@@ -46,7 +46,7 @@ it("keeps the eight book steps navigable without making prose review a hard gate
 });
 it("limits optional familiarity choices to four and releases a choice when deselected", () => {
   function Fixture() {
-    const [c, set] = useState(newTdvCharacter());
+    const [c, set] = useState(newTdvCharacter("base", "legacy"));
     return <TdvFamiliarities character={c} onChange={set} canEdit />;
   }
   render(<Fixture />);
@@ -59,7 +59,7 @@ it("limits optional familiarity choices to four and releases a choice when desel
 });
 
 it("shows initial familiarities as formation rather than stale current dice after advancement", () => {
-  const c = newTdvCharacter("reference");
+  const c = newTdvCharacter("reference", "legacy");
   c.ready = true;
   c.creation = { groupReason: "O cais", familiarities: ["Luta"], reviewed: true };
   c.milestones = [{ id: "m", event: "Uma mudança", incorporation: "Prática" }];

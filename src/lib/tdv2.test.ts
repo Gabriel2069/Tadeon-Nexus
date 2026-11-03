@@ -32,7 +32,7 @@ import {
   orderInitiative,
 } from "./tdv2-master";
 function ready() {
-  const c = newTdvCharacter("reference");
+  const c = newTdvCharacter("reference", "legacy");
   c.face.origin = "Cais";
   c.face.occupation = "Registradora";
   c.face.conviction = "Preservar testemunhos";
@@ -67,7 +67,7 @@ describe("TdV II canonical character and motor", () => {
     expect(tdv2CharacterSchema.parse(c)).toEqual(c);
   });
   it("validates numerical creation without demanding a prose form", () => {
-    expect(() => finishCreation(newTdvCharacter())).toThrow();
+    expect(() => finishCreation(newTdvCharacter("base", "legacy"))).toThrow();
     const c = ready();
     c.alinhavos.Selagem = 2;
     expect(creationErrors(c).join(" ")).toContain("dois d8");
@@ -330,10 +330,11 @@ it("prepares an explicit narrative draft without inferring mechanics or changing
   const before = structuredClone(row),
     c = draftFromLegacy(row);
   expect(c.ready).toBe(false);
-  expect(c.matrices).toEqual(newTdvCharacter().matrices);
+  expect(c.matrices).toEqual(newTdvCharacter("base", "legacy").matrices);
   expect(c.milestones).toEqual([]);
   expect(c.investments).toEqual([]);
-  expect(c.resources).toEqual({ pv: 8, pi: 8, pe: 7 });
+  expect(c.resources).toEqual({ pv: 10, pi: 8, pe: 7 });
+  expect(c.foundation?.revision).toBe("VIII");
   expect(c.face.links[0]).toMatchObject({ node: "Elen", nature: "Confiança", state: "Tensionado" });
   expect(c.history).toBe("História preservada");
   expect(c.notes).toContain("Registro anterior");
@@ -388,7 +389,7 @@ describe("existing dossiers in the current rules", () => {
 });
 
 it("rolls an ordinary unrecorded test without changing the character or creating a diary entry", () => {
-  const c = { ...newTdvCharacter("reference"), ready: true };
+  const c = { ...newTdvCharacter("reference", "legacy"), ready: true };
   const rolled = resolveTest(
     c,
     {
@@ -414,9 +415,10 @@ it("starts a new unallocated sheet at d6 matrices and d4 Alinhavos", () => {
   const c = newTdvCharacter();
   expect(Object.values(c.matrices)).toEqual([1, 1, 1, 1]);
   expect(Object.values(c.alinhavos).every((value) => value === 0)).toBe(true);
-  expect(c.resources).toEqual({ pv: 8, pi: 8, pe: 7 });
+  expect(c.resources).toEqual({ pv: 10, pi: 8, pe: 7 });
+  expect(c.foundation?.revision).toBe("VIII");
   expect(c.ready).toBe(false);
-  expect(creationErrors(c).join(" ")).toContain("duas d10");
+  expect(creationErrors(c).join(" ")).toContain("quatro Passadas");
 });
 it("reads physical faces through the same engine without calling the random source", () => {
   const c = ready();
@@ -462,7 +464,7 @@ it("keeps implication and review optional without discarding their data", () => 
   expect(tdv2CharacterSchema.safeParse(c).success).toBe(true);
 });
 it("preserves optional familiarities without granting dice or PU", () => {
-  const c = newTdvCharacter();
+  const c = newTdvCharacter("base", "legacy");
   c.creation!.familiarities = ["Luta", "Ciências", "Medicina", "Selagem"];
   expect(tdv2CharacterSchema.safeParse(c).success).toBe(true);
   expect(constitution(c).alinhavos.Luta).toBe(0);
@@ -472,7 +474,7 @@ it("preserves optional familiarities without granting dice or PU", () => {
 });
 
 it("seals the numerical package with a Marco without requiring prose or healing resources", () => {
-  const c = newTdvCharacter("reference");
+  const c = newTdvCharacter("reference", "legacy");
   c.face.origin = "";
   c.face.anchor.detail = "";
   c.face.links = [];
@@ -484,7 +486,7 @@ it("seals the numerical package with a Marco without requiring prose or healing 
   expect(constitution(next).pu).toBe(2);
 });
 it("buys one capability step at the actual PU cost and archives a master correction", () => {
-  let c = grantMilestone(newTdvCharacter("reference"));
+  let c = grantMilestone(newTdvCharacter("reference", "legacy"));
   const grade = constitution(c).alinhavos.Luta ?? 0;
   c = advanceCapability(c, "Luta", false);
   expect(constitution(c).alinhavos.Luta).toBe(grade + 1);

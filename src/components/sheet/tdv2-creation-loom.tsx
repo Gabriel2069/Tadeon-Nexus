@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ALINHAVOS,
   constitution,
+  creationErrors as allocationErrors,
   creationErrors,
   finishCreation,
   type TdvCharacter,
@@ -24,18 +25,33 @@ export function TdvCreationLoom({
   const [activeStep, setActiveStep] = useState(0);
   const stats = constitution(c),
     errors = creationErrors(c);
-  const matrices = Object.values(c.matrices).sort().join(",") === "2,2,3,3";
+  const matrices = c.foundation
+    ? !allocationErrors(c).some((e) => e.startsWith("Matrizes"))
+    : Object.values(c.matrices).sort().join(",") === "2,2,3,3";
   const grades = Object.values(c.alinhavos);
-  const skills =
-    grades.filter((n) => n === 2).length === 2 && grades.filter((n) => n === 1).length === 4;
+  const skills = c.foundation
+    ? !allocationErrors(c).some((e) => e.startsWith("Alinhavos"))
+    : grades.filter((n) => n === 2).length === 2 && grades.filter((n) => n === 1).length === 4;
   const face =
     [c.face.origin, c.face.occupation, c.face.conviction, c.face.limit, c.face.anchor.detail].every(
       (v) => v.trim(),
     ) && c.face.links.some((l) => l.node.trim() && l.nature.trim());
   const steps = [
     ["Feição", "pessoa", "pessoa", face, "Seis pilares e Âncora"],
-    ["Matrizes", "constituicao", "constituicao", matrices, "Duas d10 · duas d8"],
-    ["Alinhavos", "constituicao", "motor", skills, "Dois d8 · quatro d6"],
+    [
+      "Matrizes",
+      "constituicao",
+      "constituicao",
+      matrices,
+      c.foundation ? "Quatro Passadas · uma redução opcional · teto d10" : "Duas d10 · duas d8",
+    ],
+    [
+      "Alinhavos",
+      "constituicao",
+      "motor",
+      skills,
+      c.foundation ? `${6 + 2 * c.matrices.Nexo} Passadas · teto d8` : "Dois d8 · quatro d6",
+    ],
     [
       "Recursos",
       "constituicao",
@@ -117,8 +133,9 @@ export function TdvCreationLoom({
           className="tdv-creation-review"
         >
           <p>
-            Matrizes começam em d6; distribua 3, 3, 2 e 2. Alinhavos começam em d4; escolha dois em
-            grau 2 e quatro em grau 1. Os demais permanecem em grau 0.
+            {c.foundation
+              ? `Matrizes começam em d6: distribua quatro Passadas, teto d10. Uma única redução a d4 concede uma Passada adicional. Alinhavos começam em d4: ${6 + 2 * c.matrices.Nexo} Passadas, teto d8.`
+              : "Matrizes: duas d10 e duas d8. Alinhavos: dois d8 e quatro d6; demais d4."}
           </p>
           <p>
             Equipamento depende da Origem, Ofício e campanha. Lavor inicial exige concessão

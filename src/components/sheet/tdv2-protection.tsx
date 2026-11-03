@@ -7,8 +7,8 @@ export function TdvProtection({ character: c }: { character: TdvCharacter }) {
   const thresholds = [
     ["Resistência", HeartPulse, "Ímpeto", "Corpo"],
     ["Evasão", Footprints, "Cadência", "Movimento"],
-    ["Lucidez", Eye, "Nexo + Lastro", "Percepção"],
-    ["Firmeza", Mountain, "Lastro + Nexo", "Presença"],
+    ...(!c.foundation ? ([["Lucidez", Eye, "Nexo + Lastro", "Percepção"]] as const) : []),
+    ["Firmeza", Mountain, c.foundation ? "Lastro" : "Lastro + Nexo", "Presença"],
   ] as const;
   return (
     <div className="tdv-protection-instrument" data-broken={c.guard.broken}>
@@ -26,13 +26,15 @@ export function TdvProtection({ character: c }: { character: TdvCharacter }) {
       </div>
       <div className="tdv-protection-context">
         <strong>
-          {c.guard.totalCover ? "Cobertura total" : c.guard.protectionSource || "Base de Cadência"}
+          {c.guard.totalCover
+            ? "Cobertura total"
+            : c.guard.protectionSource || (c.foundation ? "Proteção passiva" : "Base de Cadência")}
         </strong>
         <span>
           {c.guard.totalCover ||
             (c.guard.broken
               ? "Sem proteção imediata; os demais limiares permanecem."
-              : `${stats.defenses.Evasão} de base${c.guard.protection ? ` + ${c.guard.protection} de proteção` : ""}${c.guard.modifier ? ` ${c.guard.modifier > 0 ? "+" : "−"} ${Math.abs(c.guard.modifier)} extraordinário` : ""}`)}
+              : `${c.foundation ? 8 + Math.floor(c.milestones.length / 4) : stats.defenses.Evasão} de base${c.guard.protection ? ` + ${c.guard.protection} de proteção` : ""}${c.guard.modifier ? ` ${c.guard.modifier > 0 ? "+" : "−"} ${Math.abs(c.guard.modifier)} extraordinário` : ""}`)}
         </span>
       </div>
       <dl className="tdv-defense">

@@ -8,7 +8,7 @@ import { Section } from "./sheet-ui";
 import { AddItemDialog } from "./add-item-dialog";
 import { SheetInventoryOrganizer } from "./sheet-inventory-organizer";
 import { TdvInscription } from "./tdv2-fields";
-import { uid, RECORD_FIELDS, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
+import { uid, RECORD_FIELDS, cargoProfile, type TdvCharacter, type TdvRecord } from "@/lib/tdv2";
 import type { SheetData, SheetUpdate } from "./sheet-model";
 export function Tdv2DossierDetails({
   sheet,
@@ -61,6 +61,7 @@ export function Tdv2Belongings({
   sheetId: string;
   beforeOrganize: () => Promise<boolean>;
 }) {
+  const cargo = cargoProfile(c);
   return (
     <div className="tdv-belongings-grid">
       {(
@@ -86,7 +87,13 @@ export function Tdv2Belongings({
             "Integridade",
           ],
         ] as const
-      ).map(([kind, title, ...fields]) => {
+      ).map(([kind, title, ...originalFields]) => {
+        const fields = [
+          ...originalFields,
+          ...(c.foundation
+            ? ["Espaços", "Quantidade", ...(kind === "Arma" ? ["Dados de dano"] : [])]
+            : []),
+        ];
         const records = c.records.filter((r) => r.kind === kind);
         return (
           <Section
@@ -143,8 +150,15 @@ export function Tdv2Belongings({
           >
             {kind === "Equipamento" && (
               <p className="tdv-cargo-reading">
-                <strong>Carga</strong> Volume, mãos ocupadas, suportes e acesso. O que dificulta uma
-                abordagem deve ser reorganizado, dividido ou deixado para trás.
+                <strong>
+                  Carga {c.foundation ? `${cargo.used}/${cargo.capacity} Espaços` : ""}
+                </strong>{" "}
+                {cargo.unclassified > 0 ? `${cargo.unclassified} itens sem classificação. ` : ""}
+                {cargo.immobile
+                  ? "Acima do dobro: deslocamento normal exige auxílio."
+                  : cargo.overloaded
+                    ? "Sobrecarga: avaliar Fadigado enquanto persistir."
+                    : "Volume, mãos ocupadas, suportes e acesso permanecem relevantes."}
               </p>
             )}
             <div className="tdv-equipment-list">

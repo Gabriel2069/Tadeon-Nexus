@@ -15,7 +15,7 @@ it("offers an immediate roll without narrative fields or a persisted diary entry
   const onChange = vi.fn();
   render(
     <TdvTestPanel
-      character={{ ...newTdvCharacter("reference"), ready: true }}
+      character={{ ...newTdvCharacter("reference", "legacy"), ready: true }}
       onChange={onChange}
       canEdit
       quick
@@ -59,7 +59,7 @@ it("confirms physical faces once without rerolling or silently repeating the ope
   const onChange = vi.fn();
   render(
     <TdvTestPanel
-      character={{ ...newTdvCharacter("reference"), ready: true }}
+      character={{ ...newTdvCharacter("reference", "legacy"), ready: true }}
       onChange={onChange}
       canEdit
       quick

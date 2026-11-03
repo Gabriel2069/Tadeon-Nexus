@@ -1,4 +1,28 @@
 type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+/** New projection fields are absent on historical payloads: older clients stay compatible. */
+export function publicTdvConstitution(
+  foundation: boolean,
+  derived: {
+    maximums: { pv: number; pi: number; pe: number };
+    guard: number | null;
+    defenses: { Resistência: number; Evasão: number; Firmeza: number };
+    capacity: number | null;
+  },
+) {
+  return foundation
+    ? {
+        mechanicsRevision: "VIII",
+        maximums: derived.maximums,
+        defenses: {
+          Guarda: derived.guard,
+          Resistência: derived.defenses.Resistência,
+          Evasão: derived.defenses.Evasão,
+          Firmeza: derived.defenses.Firmeza,
+        },
+        capacity: derived.capacity,
+      }
+    : {};
+}
 /** Public tabletop projection. Unknown fields (including mestre notes) never cross this boundary. */
 export type TdvPublicRound = {
   version: 2;
