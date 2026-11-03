@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Activity, Backpack, Layers3, Sprout, UserRound, Shield } from "lucide-react";
+import { Activity, Backpack, Layers3, Sprout, UserRound, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   ALINHAVOS,
@@ -37,6 +38,12 @@ export function TdvGamePanel({
   onTranscend: (name: string) => void;
 }) {
   const [allSkills, setAllSkills] = useState(false);
+  const [query, setQuery] = useState("");
+  const normalize = (value: string) =>
+    value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("pt-BR");
   const s = constitution(c);
   const commit = (fn: () => TdvCharacter) => {
     try {
@@ -100,6 +107,12 @@ export function TdvGamePanel({
   const expressions = c.records.filter((r) =>
     ["Lavor", "Trama", "Fragmento", "Selo"].includes(r.kind),
   );
+  const visibleSkills = ALINHAVOS.filter(
+    (name) =>
+      (allSkills || query.trim() || (s.alinhavos[name] ?? 0) > 0) &&
+      normalize(name).includes(normalize(query.trim())),
+  );
+  const links = c.face.links.filter((link) => link.node.trim());
   return (
     <section className="tdv-game-panel" aria-label="Painel de jogo">
       <nav className="tdv-game-toolbelt" aria-label="Ferramentas da personagem">
@@ -112,19 +125,43 @@ export function TdvGamePanel({
             ["percurso", `${s.pu} PU · ${s.development}%`, Sprout],
           ] as const
         ).map(([tab, label, Icon]) => (
-          <Button key={tab} variant="ghost" onClick={() => onOpen(tab)}>
+          <Button
+            key={tab}
+            aria-label={label}
+            title={label}
+            variant="ghost"
+            onClick={() => onOpen(tab)}
+          >
             <Icon aria-hidden="true" />
-            {label}
+            <span>
+              {tab === "equipamento" ? "Itens" : tab === "percurso" ? `${s.pu} PU` : label}
+            </span>
           </Button>
         ))}
       </nav>
       <div className="tdv-game-capacities">
         <div className="tdv-game-matrices">{MATRICES.map((name) => capacity(name, true))}</div>
-        <div className="tdv-game-skills">
-          {ALINHAVOS.filter((name) => allSkills || (s.alinhavos[name] ?? 0) > 0).map((name) =>
-            capacity(name),
-          )}
+        <div className="tdv-game-skill-heading">
+          <h2>
+            Alinhavos <small>{visibleSkills.length}</small>
+          </h2>
+          <label className="tdv-game-search">
+            <Search aria-hidden="true" />
+            <Input
+              type="search"
+              aria-label="Buscar Alinhavo no modo de jogo"
+              placeholder="Buscar…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
         </div>
+        <div className="tdv-game-skills">{visibleSkills.map((name) => capacity(name))}</div>
+        {!visibleSkills.length && (
+          <p className="tdv-game-empty" role="status">
+            Nenhum Alinhavo encontrado.
+          </p>
+        )}
         <Button
           variant="ghost"
           className="tdv-game-skills-toggle"
@@ -140,16 +177,33 @@ export function TdvGamePanel({
       </section>
       <section className="tdv-game-ready" aria-label="À mão">
         <h2>
-          <Shield aria-hidden="true" />À mão
+          <Backpack aria-hidden="true" />À mão{" "}
+          <small>
+            {equipped.length} itens · {expressions.length} expressões
+          </small>
         </h2>
         <div className="tdv-game-ready-list">
           {equipped.slice(0, 6).map((r) => (
             <button key={r.id} type="button" onClick={() => onOpen("equipamento")}>
               <strong>{r.name || r.kind}</strong>
-              <span>{r.fields.Impacto || r.fields["Porte e acesso"] || r.kind}</span>
+              <span>
+                {[
+                  r.fields.Impacto && `Impacto ${r.fields.Impacto}`,
+                  r.fields["Dano-base"] && `Dano ${r.fields["Dano-base"]}`,
+                ]
+                  .filter(Boolean)
+                  .join(" · ") ||
+                  r.fields["Porte e acesso"] ||
+                  r.kind}
+              </span>
             </button>
           ))}
         </div>
+        {equipped.length > 6 && (
+          <Button variant="ghost" onClick={() => onOpen("equipamento")}>
+            Ver todos os {equipped.length} itens
+          </Button>
+        )}
         {!equipped.length && (
           <Button variant="ghost" onClick={() => onOpen("equipamento")}>
             Organizar equipamento
@@ -168,14 +222,25 @@ export function TdvGamePanel({
             </Button>
           ))}
         </div>
-        <Button variant="ghost" onClick={() => onOpen("pessoa")}>
-          Âncora · {c.face.anchor.pillar}
-        </Button>
-        {c.face.links.length > 0 && (
-          <Button variant="ghost" onClick={() => onOpen("pessoa")}>
-            Vínculos · {c.face.links.length}
+        {expressions.length > 8 && (
+          <Button variant="ghost" onClick={() => onOpen("expressao")}>
+            Ver todas as {expressions.length} expressões
           </Button>
         )}
+        <div className="tdv-game-identity-shortcuts">
+          <Button
+            variant="ghost"
+            data-shaken={c.face.anchor.shaken}
+            onClick={() => onOpen("pessoa")}
+          >
+            Âncora · {c.face.anchor.shaken ? "Abalada" : c.face.anchor.pillar}
+          </Button>
+          {links.length > 0 && (
+            <Button variant="ghost" onClick={() => onOpen("pessoa")}>
+              Vínculos · {links.length}
+            </Button>
+          )}
+        </div>
       </section>
     </section>
   );
