@@ -1,3 +1,4 @@
+import { TdvSurfaceContext } from "./tdv2-surface-context";
 import {
   Anchor,
   Link2,
@@ -7,7 +8,7 @@ import {
   Sprout,
   SlidersHorizontal,
 } from "lucide-react";
-import { createContext, useContext, useId, useState, type ReactNode } from "react";
+import { useContext, useId, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export const TdvSurfaceContext = createContext("constituicao");
 /** Text belongs to the character surface; blur commits, Escape cancels. */
 export function TdvInscription({
   label,

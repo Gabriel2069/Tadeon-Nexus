@@ -154,13 +154,18 @@ export const tdv2CharacterSchema = z
       .optional(),
     temporaryEffects: z
       .array(
-        z.object({
-          id: z.string(),
-          target: z.enum([...MATRICES, ...ALINHAVOS]),
-          kind: z.enum(["Proveito", "Desproveito", "Bônus"]),
-          value: z.number().int().min(-100).max(100),
-          note: text,
-        }),
+        z
+          .object({
+            id: z.string().min(1).max(200),
+            target: z.enum([...MATRICES, ...ALINHAVOS]),
+            kind: z.enum(["Proveito", "Desproveito", "Bônus"]),
+            value: z.number().int().min(-100).max(100),
+            note: text,
+          })
+          .refine(
+            (effect) => (effect.kind === "Bônus" ? effect.value !== 0 : effect.value === 1),
+            "Informe um efeito temporário válido.",
+          ),
       )
       .max(50)
       .optional(),
@@ -191,7 +196,7 @@ export const tdv2CharacterSchema = z
           intensity: z.enum(["Leve", "Grave", "Crítica"]),
         }),
       )
-      .max(102),
+      .max(103),
     scene: z.object({
       shaken: z.array(z.enum(MATRICES)).max(4),
       forcedAtZero: z.boolean(),
@@ -533,16 +538,30 @@ export function equilibriumBand(n: number) {
 /** Canonical zero-resource states are idempotent; a read never writes the sheet. */
 export function withResourceConditions(c: TdvCharacter): TdvCharacter {
   const critical = c.resources.pv === 0 && c.critical === "Ativa" ? "Incapacitada" : c.critical;
-  const conditions = [...c.conditions];
-  const add = (id: string, name: string, origin: string, effect: string, exit: string) => {
+  let changed = false;
+  const conditions = c.conditions.filter((item) => {
+    const keep = item.id !== "tdv-zero-pe" || c.resources.pe === 0;
+    if (!keep) changed = true;
+    return keep;
+  });
+  const add = (
+    id: string,
+    name: string,
+    origin: string,
+    effect: string,
+    exit: string,
+    intensity: "Leve" | "Grave" | "Crítica" = "Crítica",
+  ) => {
     if (
       !conditions.some(
         (item) =>
           item.id === id ||
           item.name.toLocaleLowerCase("pt-BR") === name.toLocaleLowerCase("pt-BR"),
       )
-    )
-      conditions.push({ id, name, origin, effect, exit, intensity: "Crítica" });
+    ) {
+      conditions.push({ id, name, origin, effect, exit, intensity });
+      changed = true;
+    }
   };
   if (
     (c.resources.pv === 0 || ["Incapacitada", "À Beira"].includes(critical)) &&
@@ -563,9 +582,16 @@ export function withResourceConditions(c: TdvCharacter): TdvCharacter {
       "Interromper a operação dependente da continuidade afetada. Definir ameaça, assistência e transformação da Feição com a mesa.",
       "Conter a ameaça, recuperar continuidade e PI; reconhecer a transformação na Feição.",
     );
-  return critical === c.critical && conditions.length === c.conditions.length
-    ? c
-    : { ...c, critical, conditions };
+  if (c.resources.pe === 0)
+    add(
+      "tdv-zero-pe",
+      "Esforço esgotado",
+      "Esforço zerado",
+      "A 0 PE, ações ordinárias continuam disponíveis. Custos em PE precisam ser pagos; Forçar a 0 PE exige contrapartida e só ocorre uma vez por cena.",
+      "Recuperar PE.",
+      "Leve",
+    );
+  return critical === c.critical && !changed ? c : { ...c, critical, conditions };
 }
 export function setResourceModifier(
   c: TdvCharacter,
@@ -875,6 +901,8 @@ export function testSignature(context: NonNullable<TestRequest["context"]>) {
     .join(" | ");
 }
 export function readTest(prumo: number, tento: number, dt: number, modifier = 0) {
+  if (!Number.isInteger(modifier) || Math.abs(modifier) > 10000)
+    throw new Error("Modificador de Enlace inválido.");
   const enlace = prumo + tento + modifier,
     margin = enlace - dt,
     criticalFailure = prumo === 1 && tento === 1,

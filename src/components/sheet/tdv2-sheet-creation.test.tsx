@@ -36,7 +36,7 @@ it("applies only reviewed choices and preserves concurrent resources and records
   const change = vi.fn();
   const props = { character, onChange: change, canEdit: true, isMaster: true };
   const view = render(<Tdv2Sheet {...props} />);
-  fireEvent.mouseDown(screen.getByRole("tab", { name: "Percurso" }), {
+  fireEvent.mouseDown(screen.getByRole("tab", { name: "Transformação" }), {
     button: 0,
     ctrlKey: false,
   });

@@ -383,7 +383,12 @@ export function TdvTestPanel({
     <>
       {last && (
         <div className="tdv-result" aria-live="polite">
-          <TdvTestWeave prumo={last.result.prumo} tento={last.result.tento} dt={last.result.dt} />
+          <TdvTestWeave
+            prumo={last.result.prumo}
+            tento={last.result.tento}
+            dt={last.result.dt}
+            modifier={last.result.modifier ?? 0}
+          />
           <p>
             {last.result.quality}
             {last.result.critical ? " · Consonância crítica" : ""}
@@ -392,6 +397,7 @@ export function TdvTestPanel({
             {Object.entries({
               Prumo: last.result.prumo,
               Tento: last.result.tento,
+              ...(last.result.modifier ? { Modificador: last.result.modifier } : {}),
               Enlace: last.result.enlace,
               Ascendente: last.result.ascendente,
               Retorno: last.result.retorno,

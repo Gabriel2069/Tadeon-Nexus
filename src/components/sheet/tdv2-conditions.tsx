@@ -107,7 +107,11 @@ export function TdvConditions({
                     )}
                   </dl>
                   <div className="tdv-actions">
-                    <Button variant="ghost" disabled={!canEdit} onClick={() => setEditing(true)}>
+                    <Button
+                      variant="ghost"
+                      disabled={!canEdit || item.id === "tdv-zero-pe"}
+                      onClick={() => setEditing(true)}
+                    >
                       Ajustar condição
                     </Button>
                     <Button

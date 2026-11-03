@@ -1,3 +1,4 @@
+import { TdvSurfaceContext } from "./tdv2-surface-context";
 import { TdvGamePanel } from "./tdv2-game-panel";
 import { TdvProtection } from "./tdv2-protection";
 import { TdvRecordCollection } from "./tdv2-retained-tools";
@@ -18,7 +19,6 @@ import AttributeRadar from "./attribute-radar";
 import { useState, type ReactNode, type CSSProperties } from "react";
 import {
   TdvAction,
-  TdvSurfaceContext,
   TdvDisclosure,
   TdvField,
   TdvSelect,

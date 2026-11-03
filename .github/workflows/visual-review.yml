@@ -1,5 +1,9 @@
 name: Visual review
 
+concurrency:
+  group: visual-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     paths:
@@ -32,8 +36,9 @@ jobs:
           node --input-type=module <<'JS'
           import {readFileSync,appendFileSync} from 'node:fs';
           const paths=readFileSync('/tmp/changed-paths.txt','utf8').trim().split('\n');
-          const focused=paths.every(p=>p.startsWith('docs/') || p.startsWith('src/components/sheet/') || p.startsWith('src/lib/tdv2') || p.startsWith('supabase/migrations/') || p.startsWith('scripts/verify-tdv2') || p==='scripts/verify-sheet-interactive.mjs' || ['src/components/selection-plate.tsx','src/styles/navigation-layout.css','src/styles/sheet-premium.css','.github/workflows/visual-review.yml'].includes(p));
-          appendFileSync(process.env.GITHUB_OUTPUT,`suites=${JSON.stringify(focused?['navigation','play']:['navigation','utilities','tabletop','sheet','tdv2','play'])}\nfocused=${focused}\n`);
+          const focused=paths.every(p=>p.startsWith('docs/') || p.startsWith('src/components/sheet/') || p.startsWith('src/lib/tdv2') || p.startsWith('supabase/migrations/') || p.startsWith('scripts/verify-tdv2') || p.startsWith('scripts/verify-sheet-') || ['src/components/selection-plate.tsx','src/styles/navigation-layout.css','src/styles/sheet-premium.css','.github/workflows/visual-review.yml','.github/workflows/quality.yml'].includes(p));
+          const navigation=paths.some(p=>['src/components/selection-plate.tsx','src/styles/navigation-layout.css'].includes(p));
+          appendFileSync(process.env.GITHUB_OUTPUT,`suites=${JSON.stringify(focused?(navigation?['navigation','play']:['play']):['navigation','utilities','tabletop','sheet','tdv2','play'])}\nfocused=${focused}\n`);
           JS
   review:
     needs: scope
@@ -207,6 +212,7 @@ jobs:
       - name: Conferir ficha interativa e jogo em quatro composições
         if: matrix.suite == 'play'
         env:
+          NEXUS_AUDIT_SCOPE: instruments
           NEXUS_AUDIT_OUTPUT: /tmp/tadeon-visual/tdv2-interactive
           NEXUS_AUDIT_VIEWPORTS: "[[320,720],[568,320],[820,1180],[1440,900]]"
         run: node scripts/verify-tdv2.mjs

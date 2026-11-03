@@ -17,9 +17,14 @@ let engine = ts
     "from " + JSON.stringify(pathToFileURL(require.resolve("zod")).href),
   );
 writeFileSync(testRoot + "/engine.mjs", engine);
-const { newTdvCharacter, finishCreation, addMilestone, invest } = await import(
-  pathToFileURL(testRoot + "/engine.mjs")
-);
+const {
+  newTdvCharacter,
+  finishCreation,
+  addMilestone,
+  invest,
+  setResourceModifier,
+  addCapabilityEffect,
+} = await import(pathToFileURL(testRoot + "/engine.mjs"));
 const db = new PGlite();
 let checks = 0;
 const player = "00000000-0000-4000-8000-000000000001",
@@ -424,6 +429,44 @@ await update(increased);
 checks++;
 await assert.rejects(() => update(newTdvCharacter()));
 checks++;
+// Optional DEC-033 payloads obey the same capacity calculations on the server.
+await db.exec("reset role");
+await db.exec(readFileSync("supabase/migrations/20261102234203_tdv_resource_effects.sql", "utf8"));
+const effectsBase = finishCreation(newTdvCharacter("reference"));
+const raised = setResourceModifier(effectsBase, "pv", 5, 15);
+assert.equal(await valid(raised), true);
+checks++;
+assert.equal(await valid({ ...raised, resources: { ...raised.resources, pv: 16 } }), false);
+checks++;
+assert.equal(await valid(setResourceModifier(effectsBase, "pi", -20)), true);
+checks++;
+assert.equal(await valid({ ...effectsBase, resourceModifiers: { pv: "5", pi: 0, pe: 0 } }), false);
+checks++;
+assert.equal(await valid(addCapabilityEffect(effectsBase, "Nexo", "Bônus", 2)), true);
+checks++;
+for (const patch of [
+  { target: undefined },
+  { target: "Tudo" },
+  { kind: "Proveito", value: 2 },
+  { value: 0.5 },
+  { kind: "Bônus", value: 0 },
+]) {
+  const e = addCapabilityEffect(effectsBase, "Nexo", "Bônus", 2);
+  e.temporaryEffects[0] = { ...e.temporaryEffects[0], ...patch };
+  assert.equal(await valid(e), false);
+  checks++;
+}
+assert.equal(await valid({ ...effectsBase, crisisMarks: { dying: 3, collapse: 3 } }), true);
+checks++;
+assert.equal(await valid({ ...effectsBase, crisisMarks: { dying: 4, collapse: 0 } }), false);
+checks++;
+await auth(player);
+await update(raised);
+checks++;
+await assert.rejects(() =>
+  update({ ...raised, progression: { allowMilestones: true, allowCreation: true } }),
+);
+checks++;
 console.log(
   JSON.stringify({
     passed: true,
@@ -434,6 +477,7 @@ console.log(
       "20261027191353_tdv_ii_operational_play",
       "20261102153325_tdv_sheet_authorized_corrections",
       "20261102183118_tdv_progression_without_form_gate",
+      "20261102234203_tdv_resource_effects",
     ],
     legacyUnchanged: true,
   }),

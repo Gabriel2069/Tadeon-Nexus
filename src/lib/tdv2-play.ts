@@ -80,7 +80,7 @@ export function recordOutcome(
     Intenção: test.intention,
     Abordagem: test.approach,
     "Ponto em Jogo": test.point,
-    "Dados originais": `${test.prumo} + ${test.tento} = ${result.enlace}; DT ${test.dt}`,
+    "Dados originais": `${test.prumo} + ${test.tento}${test.modifier ? ` ${test.modifier > 0 ? "+" : "−"} ${Math.abs(test.modifier)}` : ""} = ${result.enlace}; DT ${test.dt}`,
     Consequência: outcome.principal,
     [result.success ? "Abertura" : "Fresta"]: outcome.opening,
     Rastro: outcome.trace,
@@ -196,6 +196,7 @@ export const PHYSICAL_INTENTS = [
   "Outra mudança",
 ] as const;
 export interface PhysicalConsequence {
+  modifier?: number;
   eventId?: string;
   intention: (typeof PHYSICAL_INTENTS)[number];
   prumo: number;
