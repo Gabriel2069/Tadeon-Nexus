@@ -28,13 +28,17 @@ export function TdvCrisisTrackers({
       {entries.map(([kind, label, key]) => (
         <div key={kind} data-crisis={key} data-stage={c.crisisMarks?.[kind] ?? 0}>
           <span>
-            {label}
+            {c.foundation && kind === "dying" && !c.conditions.some((i) => i.name === "Morrendo")
+              ? "Vitalidade zerada"
+              : label}
             <em>{c.crisisMarks?.[kind] ?? 0} / 3</em>
             <small>
               {key === "pv"
                 ? c.conditions.some((i) => i.name === "Morrendo")
                   ? "Ameaça real à vida"
-                  : c.critical
+                  : c.foundation
+                    ? "Sem ameaça à vida reconhecida"
+                    : c.critical
                 : key === "pi"
                   ? "Marcas de Colapso"
                   : "Vestígio · Ruptura · Cessação"}

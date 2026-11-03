@@ -1,3 +1,4 @@
+import { recordOutcome } from "./tdv2-play";
 import { describe, it, expect } from "vitest";
 import {
   newTdvCharacter,
@@ -150,6 +151,42 @@ describe("Fundação VIII: constituição e economia compartilhadas", () => {
         arremate: { thread: "Tento", minimum: 3 },
       }),
     ).toMatchObject({ success: true, arremateMet: false });
+  });
+  it("retains the declared Arremate thread when reading the stored outcome", () => {
+    const c = ready();
+    const request = {
+      matrix: "Ímpeto" as const,
+      alinhavo: "Luta",
+      dt: 5,
+      reading: "Arremate" as const,
+      arremate: { thread: "Prumo" as const, minimum: 5 },
+      prumoPro: 0,
+      prumoDes: 0,
+      tentoPro: 0,
+      tentoDes: 0,
+      force: "" as const,
+      extraordinary: false,
+      counterpart: "",
+      context: {
+        intention: "Sustentar",
+        approach: "Apoio corporal",
+        change: "Primeira intervenção",
+        point: "Travessia",
+        risk: true,
+      },
+    };
+    const rolled = resolveTest(c, request, () => 0.5, { prumo: 6, tento: 2 });
+    expect(rolled.character.scene.tests![0].arremate).toEqual({ thread: "Prumo", minimum: 5 });
+    const recorded = recordOutcome(rolled.character, rolled.character.scene.tests![0].id, {
+      principal: "Apoio conservado",
+      opening: "Passagem",
+      trace: "",
+      devolution: "",
+      permanence: "",
+      redobra: "",
+      support: "",
+    });
+    expect(recorded.records.at(-1)!.fields).toHaveProperty("Abertura", "Passagem");
   });
   it("charges Forçar by Marco and records effective dice sizes", () => {
     let c = ready();

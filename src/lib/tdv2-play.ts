@@ -86,6 +86,8 @@ export function recordOutcome(
           tento: test.tentoSize,
           revision: test.revision,
           reading: test.reading,
+          arremate: test.arremate,
+          balanceTolerance: test.balanceTolerance,
         }
       : undefined,
   );

@@ -122,6 +122,10 @@ export const sceneTestSchema = z.object({
     .optional(),
   revision: z.literal("VIII").optional(),
   reading: z.enum(["Enlace", "Ascendente", "Retorno", "Desvio", "Arremate"]).optional(),
+  arremate: z
+    .object({ thread: z.enum(["Prumo", "Tento"]), minimum: z.number().int().min(1).max(20) })
+    .optional(),
+  balanceTolerance: z.union([z.literal(0), z.literal(1)]).optional(),
 });
 export const activeExpressionSchema = z.object({
   id: z.string(),
@@ -1698,6 +1702,10 @@ export function resolveTest(
                   tentoSize: dice.tento,
                   ...(c.foundation ? { revision: "VIII" as const } : {}),
                   ...(r.reading ? { reading: r.reading } : {}),
+                  ...(r.arremate ? { arremate: r.arremate } : {}),
+                  ...(r.balanceTolerance !== undefined
+                    ? { balanceTolerance: r.balanceTolerance }
+                    : {}),
                   ...(dice.bonus ? { modifier: dice.bonus } : {}),
                   matrix: r.matrix,
                   alinhavo: r.alinhavo,

@@ -456,7 +456,7 @@ export function TdvPhysicalResolution({
         disabled={busy}
       />
       <TdvDisclosure initiallyOpen={false}>
-        <summary>Extensão e estado À Beira</summary>
+        <summary>Extensão e estado {row?.tdv2_data.foundation ? "Morrendo" : "À Beira"}</summary>
         <TdvField
           label="Extensão concreta da consequência"
           value={v.extension}
@@ -482,7 +482,11 @@ export function TdvPhysicalResolution({
           disabled={busy}
         />
         <TdvCheck
-          label="Uma nova consequência física a 0 PV leva a À Beira"
+          label={
+            row?.tdv2_data.foundation
+              ? "A perda de Vitalidade envolve ameaça real à vida"
+              : "Uma nova consequência física a 0 PV leva a À Beira"
+          }
           value={v.brink}
           onChange={(n) => set("brink", n)}
           disabled={busy}

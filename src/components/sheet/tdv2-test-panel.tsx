@@ -59,6 +59,10 @@ export function TdvTestPanel({
   const [helper, setHelper] = useState({ name: "", grade: 0, contribution: "" });
   const effective = {
     ...request,
+    arremate:
+      request.reading === "Arremate" && request.arremate
+        ? { ...request.arremate, minimum: request.dt }
+        : request.arremate,
     context: remember
       ? {
           ...request.context!,
@@ -430,6 +434,12 @@ export function TdvTestPanel({
               Ascendente: last.result.ascendente,
               Retorno: last.result.retorno,
               Desvio: last.result.desvio,
+              ...(last.result.relative
+                ? {
+                    "Faixa Prumo": last.result.relative.prumo,
+                    "Faixa Tento": last.result.relative.tento,
+                  }
+                : {}),
             }).map(([name, value]) => (
               <div className="tdv-reading" key={name}>
                 <small>{name}</small>
