@@ -272,10 +272,15 @@ export function Tdv2Sheet({
                   />
                 ))}
               </div>
-              <div className="tdv-mark-reading">
-                <h3>Marca</h3>
+              <div
+                className="tdv-mark-reading"
+                data-manifested={Object.values(c.face.mark).some((value) => value.trim())}
+              >
+                <h3>
+                  <span aria-hidden="true">◇</span> Marca
+                </h3>
                 {markEditing || Object.values(c.face.mark).some((value) => value.trim()) ? (
-                  <div className="tdv-grid tdv-grid--identity">
+                  <div className="tdv-mark-triptych">
                     {(
                       [
                         ["trigger", "Gatilho"],
@@ -541,16 +546,26 @@ export function Tdv2Sheet({
             Novo vínculo
           </Button>
         </Section>
-        {c.creation && (
-          <Section variant="folio" id="tdv-grupo" title="Implicação" emblem="vinculos">
-            <TdvInscription
-              label="Razão para entrar na primeira situação"
-              value={c.creation.groupReason}
-              onChange={(v) => onChange({ ...c, creation: { ...c.creation!, groupReason: v } })}
+        {narrative}
+        <Section variant="folio" id="tdv-historia" title="História e memória">
+          {!narrative && (
+            <TdvField
+              label="História da personagem"
+              value={c.history}
+              onChange={(v) => upd("history", v)}
               disabled={disabled}
             />
-          </Section>
-        )}
+          )}
+          <TdvDisclosure initiallyOpen={Boolean(c.notes.trim())}>
+            <summary>Anotações opcionais</summary>
+            <TdvField
+              label="Anotações e Restos"
+              value={c.notes}
+              onChange={(v) => upd("notes", v)}
+              disabled={disabled}
+            />
+          </TdvDisclosure>
+        </Section>
       </TabsContent>
       <TabsContent value="constituicao" data-sheet-content>
         <Section variant="folio" id="tdv-constituicao" title="Matrizes e Alinhavos">
@@ -990,26 +1005,6 @@ export function Tdv2Sheet({
               </p>
             ))}
           </details>
-        </Section>
-        {narrative}
-        <Section variant="folio" id="tdv-historia" title="História e memória">
-          {!narrative && (
-            <TdvField
-              label="História da personagem"
-              value={c.history}
-              onChange={(v) => upd("history", v)}
-              disabled={disabled}
-            />
-          )}
-          <TdvDisclosure initiallyOpen={Boolean(c.notes.trim())}>
-            <summary>Anotações opcionais</summary>
-            <TdvField
-              label="Anotações e Restos"
-              value={c.notes}
-              onChange={(v) => upd("notes", v)}
-              disabled={disabled}
-            />
-          </TdvDisclosure>
         </Section>
       </TabsContent>
     </Tabs>

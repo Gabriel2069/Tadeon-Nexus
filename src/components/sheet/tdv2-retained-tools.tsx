@@ -212,6 +212,9 @@ export function TdvRecordCollection({
       {groups.map((group) => (
         <Section
           key={group.id}
+          className={
+            group.id === "tramas-fragmentos" ? `tdv-phenomena--${phenomenon.toLowerCase()}` : ""
+          }
           variant="folio"
           id={group.id}
           title={group.title}

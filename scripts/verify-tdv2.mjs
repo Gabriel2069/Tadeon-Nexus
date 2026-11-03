@@ -56,6 +56,12 @@ function character() {
       offer: "Abrigo e acesso aos arquivos do cais",
       demand: "Preservar a identidade das testemunhas",
     });
+  if (process.env.NEXUS_AUDIT_SCOPE === "instruments")
+    c.face.mark = {
+      trigger: "O fio se rompe",
+      manifestation: "Luz nas costuras",
+      residue: "Cinza nas mãos",
+    };
   c.creation = { groupReason: "Proteger o cais", reviewed: true, familiarities: ["Luta"] };
   return finishCreation(c);
 }

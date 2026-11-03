@@ -195,9 +195,12 @@ export function SheetInventoryOrganizer({
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[88dvh] max-w-3xl overflow-y-auto">
+        <DialogContent className="tdv-organizer-dialog max-h-[88dvh] max-w-3xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-cinzel">Organização do inventário</DialogTitle>
+            <DialogTitle className="font-cinzel">
+              <Boxes aria-hidden="true" />
+              Organização do inventário
+            </DialogTitle>
             <DialogDescription>
               Recipientes organizam onde cada item está sem modificar peso, descrição ou qualquer
               dado original. Recipientes também podem ficar dentro de outros recipientes.

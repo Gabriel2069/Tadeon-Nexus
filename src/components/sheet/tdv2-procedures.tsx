@@ -6,6 +6,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Shield } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -66,9 +67,12 @@ export function TdvGuard({ character: c, onChange, canEdit }: Props) {
           Proteção e cobertura
         </Button>
       </DialogTrigger>
-      <DialogContent className="tdv-operation-dialog">
+      <DialogContent className="tdv-operation-dialog tdv-protection-dialog">
         <DialogHeader>
-          <DialogTitle>Proteção e cobertura</DialogTitle>
+          <DialogTitle>
+            <Shield aria-hidden="true" />
+            Proteção e cobertura
+          </DialogTitle>
           <DialogDescription>Posição, escudo e abordagens impedidas.</DialogDescription>
         </DialogHeader>
         <div className="tdv-grid">

@@ -24,9 +24,10 @@ export function TdvCrisisTrackers({
   return (
     <div className="tdv-crisis-trackers" aria-label="Acompanhamento de risco">
       {entries.map(([kind, label, key]) => (
-        <div key={kind} data-crisis={key}>
+        <div key={kind} data-crisis={key} data-stage={c.crisisMarks?.[kind] ?? 0}>
           <span>
             {label}
+            <em>{c.crisisMarks?.[kind] ?? 0} / 3</em>
             <small>{key === "pv" ? c.critical : "Colapso de Inteireza"}</small>
           </span>
           <div>

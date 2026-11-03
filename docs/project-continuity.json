@@ -1856,6 +1856,11 @@
       "id": "DEC-033",
       "decision": "Quatro guias Feição/Ação/Expressão/Transformação, Vínculos visuais, menus de identidade própria, modificadores de recursos, efeitos temporários e leitura marcante dos estados zero.",
       "reason": "Pedido explícito de Tadeu. Cena transfere suas ferramentas a Ação; nenhum dado/função removido. Campos aditivos opcionais, validador compatível e Edge Function usam o motor existente. Três marcadores são acompanhamento manual, sem regra automática de morte. QA concentrado nos fluxos alterados, quatro tamanhos e leitura/edição; backup geral continua diferido."
+    },
+    {
+      "id": "DEC-034",
+      "decision": "Personalizar Proteção e Organizar, graduar visualmente o risco, acompanhar a cor de Tramas/Fragmentos/Selos e reunir narrativa e memória em Feição; Marca como tríptico de manifestação.",
+      "reason": "Pedido explícito de Tadeu. Remover apenas o quadro de Implicação, preservando creation.groupReason nos dados. Nenhuma regra, autorização ou migration alterada."
     }
   ],
   "bridges": [
