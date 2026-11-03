@@ -44,3 +44,10 @@ Narrativa (História, Personalidade, Objetivos, Observações) e História/memó
 Proteção e Organizar recebem materiais específicos nos seus portais reais. Tramas/Fragmentos/Selos alteram o pigmento do quadro externo conforme a seleção. Os três marcadores manuais de risco passam por intensidade de borda, pigmento e preenchimento estáticos, sem loop e sem mudar as consequências mecânicas.
 
 Reversão deste lote: reverter apenas os componentes/estilos de DEC-034; nenhum dado precisa ser removido ou convertido. Baseline publicado cd0751eecb82814be91d525be0d241f317a94617. Evidências finais e publicação na PR desta rodada; dispositivos físicos e contas reais continuam não certificados.
+
+
+## DEC-035 · Painel de jogo
+
+Cinco atalhos em faixa única adaptável, nomes acessíveis completos e rótulos compactos. Alinhavos têm busca local que ignora acentos, alcança também graus não treinados e retorna à seleção anterior ao limpar; sem gravar estado na ficha. Itens/expressões preservam as prévias compactas e agora mostram total e acesso explícito à coleção completa. Dano-base declarado aparece na leitura do item, sem cálculo novo. Âncora Abalada tem estado visível; vínculos vazios não inflam a contagem.
+
+Sem mudança de regra, schema, autoridade ou banco. Reverter apenas apresentação e busca para o baseline publicado 0ebc56b283e814d2ab0229867f5b809a410ef76f; dados não requerem conversão. Evidência e publicação próprias na PR; aparelhos físicos/contas reais não certificados.

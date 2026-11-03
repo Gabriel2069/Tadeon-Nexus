@@ -209,6 +209,24 @@ export async function verifyInstruments({
     (await page.locator(".tdv-game-skills .tdv-competency").count()) === 6,
     "Trained skills prioritized",
   );
+  const search = page.getByRole("searchbox", { name: "Buscar Alinhavo no modo de jogo" });
+  assert((await search.boundingBox()).height >= 44, "Game search retains touch target size");
+  await search.fill("canalizacao");
+  assert(
+    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 1,
+    "Search includes untrained skills without accents",
+  );
+  if ([320, 1440].includes(width)) await geometry("game-capability-search");
+  await search.fill("zzzz");
+  assert(
+    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 0,
+    "Empty search has no stale skills",
+  );
+  await search.fill("");
+  assert(
+    (await page.locator(".tdv-game-skills .tdv-competency").count()) === 6,
+    "Clearing restores trained skills",
+  );
   const cramped = await page
     .locator(".tdv-game-skills h3")
     .evaluateAll((es) =>

@@ -29560,7 +29560,7 @@
       ]
     },
     "src/components/sheet/tdv2-game-panel.tsx": {
-      "sha256": "2c9e9943dbe7c9a1cd99b93f060b308338bfa6eac6e4f0c5ed55e5c0b4efb043",
+      "sha256": "f67dd1c4e63000e5a726234bed4cb2fc8bd131e3a132e1fbe02b4f7aa6437f53",
       "imports": [
         {
           "specifier": "react",
@@ -29579,18 +29579,27 @@
             "Layers3",
             "Sprout",
             "UserRound",
-            "Shield"
+            "Search"
           ],
           "line": 2,
           "kind": "static",
           "target": null
         },
         {
+          "specifier": "@/components/ui/input",
+          "names": [
+            "Input"
+          ],
+          "line": 3,
+          "kind": "static",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
           "specifier": "@/components/ui/button",
           "names": [
             "Button"
           ],
-          "line": 3,
+          "line": 4,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -29608,7 +29617,7 @@
             "capabilityEffects",
             "addCapabilityEffect"
           ],
-          "line": 4,
+          "line": 5,
           "kind": "static",
           "target": "src/lib/tdv2.ts"
         },
@@ -29617,7 +29626,7 @@
           "names": [
             "TdvCompetency"
           ],
-          "line": 17,
+          "line": 18,
           "kind": "static",
           "target": "src/components/sheet/tdv2-competencies.tsx"
         },
@@ -29626,7 +29635,7 @@
           "names": [
             "TdvProtection"
           ],
-          "line": 18,
+          "line": 19,
           "kind": "static",
           "target": "src/components/sheet/tdv2-protection.tsx"
         },
@@ -29635,7 +29644,7 @@
           "names": [
             "TdvGuard"
           ],
-          "line": 19,
+          "line": 20,
           "kind": "static",
           "target": "src/components/sheet/tdv2-procedures.tsx"
         },
@@ -29644,7 +29653,7 @@
           "names": [
             "toast"
           ],
-          "line": 20,
+          "line": 21,
           "kind": "static",
           "target": null
         }
@@ -29652,109 +29661,157 @@
       "renders": [
         {
           "component": "TdvCompetency",
-          "line": 51
+          "line": 58
         },
         {
           "component": "section",
-          "line": 104
+          "line": 117
         },
         {
           "component": "nav",
-          "line": 105
-        },
-        {
-          "component": "Button",
-          "line": 115
-        },
-        {
-          "component": "Icon",
-          "line": 116
-        },
-        {
-          "component": "div",
-          "line": 121
-        },
-        {
-          "component": "div",
-          "line": 122
-        },
-        {
-          "component": "div",
-          "line": 123
+          "line": 118
         },
         {
           "component": "Button",
           "line": 128
         },
         {
-          "component": "section",
-          "line": 137
+          "component": "Icon",
+          "line": 135
         },
         {
-          "component": "TdvProtection",
-          "line": 138
+          "component": "span",
+          "line": 136
         },
         {
-          "component": "TdvGuard",
-          "line": 139
-        },
-        {
-          "component": "section",
-          "line": 141
-        },
-        {
-          "component": "h2",
+          "component": "div",
           "line": 142
         },
         {
-          "component": "Shield",
+          "component": "div",
           "line": 143
         },
         {
           "component": "div",
+          "line": 144
+        },
+        {
+          "component": "h2",
           "line": 145
         },
         {
-          "component": "button",
-          "line": 147
+          "component": "small",
+          "line": 146
         },
         {
-          "component": "strong",
+          "component": "label",
           "line": 148
         },
         {
-          "component": "span",
+          "component": "Search",
           "line": 149
         },
         {
-          "component": "Button",
-          "line": 154
+          "component": "Input",
+          "line": 150
         },
         {
           "component": "div",
-          "line": 158
-        },
-        {
-          "component": "Button",
           "line": 160
         },
         {
-          "component": "small",
-          "line": 167
+          "component": "p",
+          "line": 162
         },
         {
           "component": "Button",
-          "line": 171
+          "line": 166
         },
         {
-          "component": "Button",
+          "component": "section",
           "line": 175
+        },
+        {
+          "component": "TdvProtection",
+          "line": 176
+        },
+        {
+          "component": "TdvGuard",
+          "line": 177
+        },
+        {
+          "component": "section",
+          "line": 179
+        },
+        {
+          "component": "h2",
+          "line": 180
+        },
+        {
+          "component": "Backpack",
+          "line": 181
+        },
+        {
+          "component": "small",
+          "line": 182
+        },
+        {
+          "component": "div",
+          "line": 186
+        },
+        {
+          "component": "button",
+          "line": 188
+        },
+        {
+          "component": "strong",
+          "line": 189
+        },
+        {
+          "component": "span",
+          "line": 190
+        },
+        {
+          "component": "Button",
+          "line": 204
+        },
+        {
+          "component": "Button",
+          "line": 209
+        },
+        {
+          "component": "div",
+          "line": 213
+        },
+        {
+          "component": "Button",
+          "line": 215
+        },
+        {
+          "component": "small",
+          "line": 222
+        },
+        {
+          "component": "Button",
+          "line": 227
+        },
+        {
+          "component": "div",
+          "line": 231
+        },
+        {
+          "component": "Button",
+          "line": 232
+        },
+        {
+          "component": "Button",
+          "line": 240
         }
       ],
       "actions": [
         {
           "component": "TdvCompetency",
-          "line": 59,
+          "line": 66,
           "event": "onAddEffect",
           "expression": "{(kind, value, note) => commit(() => addCapabilityEffect(c, name, kind, value, note)) }",
           "label": "{name}",
@@ -29762,7 +29819,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 62,
+          "line": 69,
           "event": "onRemoveEffect",
           "expression": "{(id) => onChange({ ...c, temporaryEffects: (c.temporaryEffects ?? []).filter((effect) => effect.id !== id), }) }",
           "label": "{name}",
@@ -29770,7 +29827,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 88,
+          "line": 95,
           "event": "onAdvance",
           "expression": "{() => commit(() => advanceCapability(c, name, matrix))}",
           "label": "{name}",
@@ -29778,7 +29835,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 89,
+          "line": 96,
           "event": "onReverse",
           "expression": "{() => commit(() => reverseCapability(c, name, matrix))}",
           "label": "{name}",
@@ -29786,7 +29843,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 90,
+          "line": 97,
           "event": "onDevelop",
           "expression": "{() => onTranscend(name)}",
           "label": "{name}",
@@ -29794,15 +29851,23 @@
         },
         {
           "component": "Button",
-          "line": 115,
+          "line": 133,
           "event": "onClick",
           "expression": "{() => onOpen(tab)}",
-          "label": null,
+          "label": "{label}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 156,
+          "event": "onChange",
+          "expression": "{(e) => setQuery(e.target.value)}",
+          "label": "\"Buscar Alinhavo no modo de jogo\"",
           "certification": "source-only"
         },
         {
           "component": "Button",
-          "line": 132,
+          "line": 170,
           "event": "onClick",
           "expression": "{() => setAllSkills(!allSkills)}",
           "label": null,
@@ -29810,7 +29875,7 @@
         },
         {
           "component": "TdvGuard",
-          "line": 139,
+          "line": 177,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -29818,7 +29883,7 @@
         },
         {
           "component": "button",
-          "line": 147,
+          "line": 188,
           "event": "onClick",
           "expression": "{() => onOpen(\"equipamento\")}",
           "label": null,
@@ -29826,7 +29891,7 @@
         },
         {
           "component": "Button",
-          "line": 154,
+          "line": 204,
           "event": "onClick",
           "expression": "{() => onOpen(\"equipamento\")}",
           "label": null,
@@ -29834,7 +29899,15 @@
         },
         {
           "component": "Button",
-          "line": 164,
+          "line": 209,
+          "event": "onClick",
+          "expression": "{() => onOpen(\"equipamento\")}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 219,
           "event": "onClick",
           "expression": "{() => onUse(r.id)}",
           "label": null,
@@ -29842,7 +29915,15 @@
         },
         {
           "component": "Button",
-          "line": 171,
+          "line": 227,
+          "event": "onClick",
+          "expression": "{() => onOpen(\"expressao\")}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 235,
           "event": "onClick",
           "expression": "{() => onOpen(\"pessoa\")}",
           "label": null,
@@ -29850,7 +29931,7 @@
         },
         {
           "component": "Button",
-          "line": 175,
+          "line": 240,
           "event": "onClick",
           "expression": "{() => onOpen(\"pessoa\")}",
           "label": null,
@@ -29862,15 +29943,15 @@
       "guards": [
         {
           "expression": "TdvCompetency disabled={!canEdit}",
-          "line": 68
+          "line": 75
         },
         {
           "expression": "TdvGuard canEdit={canEdit}",
-          "line": 139
+          "line": 177
         },
         {
           "expression": "Button disabled={!canEdit || !c.ready}",
-          "line": 163
+          "line": 218
         }
       ]
     },
