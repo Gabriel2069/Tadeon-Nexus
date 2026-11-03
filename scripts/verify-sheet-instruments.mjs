@@ -59,21 +59,24 @@ export async function verifyInstruments({
     await tab(name);
     await top();
     await geometry("instruments-" + state);
+    if (name === "Expressão") {
+      await page.getByRole("button", { name: /^Fragmentos/ }).click();
+      await geometry("instruments-fragments");
+      await page.getByRole("button", { name: /^Tramas/ }).click();
+    }
     if (name === "Feição" && [320, 1440].includes(width)) {
       await geometry("instruments-links");
-      const links = await page
-        .locator(".tdv-link-summary")
-        .evaluateAll((es) =>
-          es.map((e) => ({
-            display: getComputedStyle(e).display,
-            name: e.querySelector("strong").getBoundingClientRect().bottom,
-            nature: e.querySelector("small").getBoundingClientRect().top,
-            exchange: [...e.querySelectorAll(".tdv-link-exchange > span")].map((s) => ({
-              label: s.querySelector("b").getBoundingClientRect().bottom,
-              value: s.querySelector("span").getBoundingClientRect().top,
-            })),
+      const links = await page.locator(".tdv-link-summary").evaluateAll((es) =>
+        es.map((e) => ({
+          display: getComputedStyle(e).display,
+          name: e.querySelector("strong").getBoundingClientRect().bottom,
+          nature: e.querySelector("small").getBoundingClientRect().top,
+          exchange: [...e.querySelectorAll(".tdv-link-exchange > span")].map((s) => ({
+            label: s.querySelector("b").getBoundingClientRect().bottom,
+            value: s.querySelector("span").getBoundingClientRect().top,
           })),
-        );
+        })),
+      );
       assert(
         links.every(
           (e) =>
@@ -136,6 +139,13 @@ export async function verifyInstruments({
     (await page.locator('.tdv-alinhavos [aria-label="Familiaridade"]').count()) === 1,
     "Familiarity has its own symbol",
   );
+  if ([320, 1440].includes(width)) {
+    await page.getByRole("button", { name: "Proteção e cobertura", exact: true }).click();
+    const protection = page.getByRole("dialog", { name: "Proteção e cobertura", exact: true });
+    await fit(protection);
+    await geometry("instruments-protection");
+    await close(protection);
+  }
   await page.getByRole("button", { name: /Consultar Nexo ·/ }).click();
   let popup = page.getByRole("dialog", { name: "Capacidade Nexo", exact: true });
   await fit(popup);
@@ -245,6 +255,7 @@ export async function verifyInstruments({
   if (role === "mestre" && [320, 1440].includes(width)) {
     await page.getByRole("button", { name: "Morrendo: 3 de 3", exact: true }).click();
     await saved(() => getRow().tdv2_data.crisisMarks?.dying === 3);
+    await geometry("instruments-risk-three");
     assert(getRow().tdv2_data.critical !== "Morta", "Risk marks never declare death automatically");
   }
   if (role === "espectador") {

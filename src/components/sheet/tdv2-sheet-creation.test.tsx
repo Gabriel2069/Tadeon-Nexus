@@ -13,7 +13,8 @@ it("offers the full creation review on an older draft without changing its saved
   const html = renderToStaticMarkup(
     <Tdv2Sheet character={character} onChange={change} canEdit isMaster />,
   );
-  expect(html).toContain("Razão para entrar na primeira situação");
+  expect(html).not.toContain("Razão para entrar na primeira situação");
+  expect(html).toContain("História e memória");
   expect(html).toContain("Revisar criação");
   expect(JSON.stringify(character)).toBe(before);
   expect(change).not.toHaveBeenCalled();

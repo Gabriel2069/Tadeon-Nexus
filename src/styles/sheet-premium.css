@@ -2130,7 +2130,7 @@
 .tadeon-tdv2-sheet .tadeon-description-card { grid-template-rows: auto auto auto; padding: clamp(.85rem,1.8cqi,1.25rem); background: radial-gradient(ellipse at 0 0,rgb(var(--folio-rgb) / 6%),transparent 65%),linear-gradient(150deg,#121820d9,#080e16d9); }
 .tadeon-tdv2-sheet .tadeon-description-card__heading h3 { color: rgb(var(--folio-rgb)); font: 500 clamp(1.4rem,2.9cqi,1.9rem)/1.1 var(--font-cinzel); }
 .tadeon-tdv2-sheet .tadeon-description-card__heading small { display: none; }
-.tdv-mark-reading { padding: .6rem .3rem; margin-top: .5rem; border-top: 1px solid rgb(var(--section-rgb) / 16%); }
+.tdv-mark-reading { padding: 1rem; margin-top: 1rem; border: 1px solid #dba2a138; border-radius: 1.3rem .4rem 1.3rem .4rem; background: radial-gradient(ellipse at 100% 0,#dba2a118,transparent 70%),#090d1570; }
 .tdv-mark-reading h3 { color: #dba2a1; font: 500 1.1rem var(--font-cinzel); }
 .tdv-mark-reading p { font: 1rem/1.45 var(--font-inter); margin-block: .3rem; }
 .tdv-equipment-list { display: grid; gap: .75rem; min-width: 0; }
@@ -2693,3 +2693,25 @@
 .tdv-test-weave__tento { stroke: #d7b47b; fill: none; stroke-width: 2; }
 .tdv-test-weave__threshold { stroke: #d4cec2; stroke-dasharray: 2 4; }
 .tdv-test-weave text { fill: #d5d4bf; font: 10px var(--font-inter); }
+
+/* Contextual instruments retain their own pigments outside the folio portal. */
+.tdv-protection-dialog { --folio-rgb: 137 190 197; background: radial-gradient(ellipse at 100% 0,#89bec724,transparent 65%),#10161ff5; }
+.tdv-protection-dialog [data-slot="dialog-title"],.tdv-organizer-dialog [data-slot="dialog-title"] { display: flex; align-items: center; gap: .65rem; }
+.tdv-protection-dialog [data-slot="dialog-title"] svg,.tdv-organizer-dialog [data-slot="dialog-title"] svg { width: 1.7rem; height: 1.7rem; color: rgb(var(--folio-rgb)); }
+.tdv-protection-dialog > .tdv-grid { padding: .8rem; border-left: 2px solid #89bec750; background: #080e1640; gap: 1rem; }
+.tdv-organizer-dialog { --folio-rgb: 172 196 140; border-top: 2px solid #acc48c; border-radius: 1.5rem .55rem 1.5rem .55rem; background: radial-gradient(ellipse at 100% 0,#acc48c20,transparent 65%),#10161ff5; }
+.tdv-organizer-dialog section { border-color: #acc48c38; background: #080e1640; }
+.tdv-organizer-dialog :is(input,select) { border-color: #acc48c45; }
+.tadeon-tdv2-sheet [data-section="tramas-fragmentos"].tdv-phenomena--fragmento { --section-rgb: 203 162 116; }
+.tadeon-tdv2-sheet [data-section="tramas-fragmentos"].tdv-phenomena--selo { --section-rgb: 143 187 203; }
+.tdv-mark-reading h3 { display: flex; gap: .5rem; align-items: center; margin-bottom: .8rem; }
+.tdv-mark-reading h3 > span { display: grid; place-items: center; width: 2rem; height: 2rem; color: #e5b0b9; border: 1px solid #dba2a155; border-radius: 50%; }
+.tdv-mark-reading[data-manifested="true"] { border-left: 3px solid #dba2a1; }
+.tdv-mark-triptych { display: grid; gap: .8rem; counter-reset: manifestation; }
+.tdv-mark-triptych > div { counter-increment: manifestation; position: relative; padding: .5rem .6rem .5rem 2.2rem; border-top: 1px solid #dba2a130; }
+.tdv-mark-triptych > div::before { content: counter(manifestation,upper-roman); position: absolute; left: .3rem; top: .55rem; color: #dba2a1; font: .8rem var(--font-mono); }
+@container tdv-atlas (min-width: 600px) { .tdv-mark-triptych { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+.tdv-crisis-trackers [data-stage="1"] { border-left: 2px solid rgb(var(--risk-rgb)); background: linear-gradient(90deg,rgb(var(--risk-rgb) / 18%),transparent); }
+.tdv-crisis-trackers [data-stage="2"] { border-left: 3px solid rgb(var(--risk-rgb)); background: linear-gradient(90deg,rgb(var(--risk-rgb) / 27%),rgb(var(--risk-rgb) / 4%)); box-shadow: inset 0 0 20px rgb(var(--risk-rgb) / 8%); }
+.tdv-crisis-trackers [data-stage="3"] { border: 1px solid rgb(var(--risk-rgb) / 75%); border-left-width: 4px; background: linear-gradient(100deg,rgb(var(--risk-rgb) / 35%),rgb(var(--risk-rgb) / 9%)); box-shadow: inset 0 0 24px rgb(var(--risk-rgb) / 14%); }
+.tdv-crisis-trackers em { font: .7rem var(--font-mono); color: rgb(var(--risk-rgb)); font-style: normal; }

@@ -35,3 +35,12 @@ Fixtures e screenshots não certificam aparelhos físicos, latência real, conta
 ## Reversão
 
 Reverter a apresentação mantendo leitores dos campos opcionais, os cálculos de máximos e o validador compatível. Não retornar cegamente ao schema estrito anterior: fichas com campos novos ou recursos acima da base precisam continuar legíveis. Não apagar efeitos/modificadores, truncar recursos ou regravar dados como atalho. A Edge Function pode ter sua apresentação anterior recomposta conservando o motor/schema atual e JWT. Migrações aplicadas não são removidas; correções posteriores usam nova migration.
+
+
+## DEC-034 · Contexto e manifestação
+
+Narrativa (História, Personalidade, Objetivos, Observações) e História/memória passam de Transformação para Feição; mesmos componentes, callbacks e dados. O quadro Implicação sai da composição, mas creation.groupReason permanece intacto, inclusive nos registros legados. Marca organiza Gatilho, Manifestação e Resíduo em três inscrições, com ordem visual e tinta própria.
+
+Proteção e Organizar recebem materiais específicos nos seus portais reais. Tramas/Fragmentos/Selos alteram o pigmento do quadro externo conforme a seleção. Os três marcadores manuais de risco passam por intensidade de borda, pigmento e preenchimento estáticos, sem loop e sem mudar as consequências mecânicas.
+
+Reversão deste lote: reverter apenas os componentes/estilos de DEC-034; nenhum dado precisa ser removido ou convertido. Baseline publicado cd0751eecb82814be91d525be0d241f317a94617. Evidências finais e publicação na PR desta rodada; dispositivos físicos e contas reais continuam não certificados.
