@@ -1,0 +1,37 @@
+# DEC-033 · Instrumentos e estados da ficha
+
+Base reconfirmada: main `6de0a770b443bec028444cd16f35114f16f42e42`, PR 323 publicada. Esta rodada atende NEX-046/NEX-047, sem certificar a V4 inteira. Backup geral continua diferido por instrução de Tadeu.
+
+## Destinos e composição
+
+| Antes | Destino atual | Conteúdo preservado |
+| --- | --- | --- |
+| Pessoa | Feição (`pessoa`) | Pessoa, narrativa, Âncora e Vínculos |
+| Constituição/Ficha | Ação (`constituicao`) | Recursos, Matrizes, Alinhavos, condições e defesas |
+| Cena (`acao`) | Ação (`constituicao`) | Proteção, consequências, recuperação e encerramento de cena |
+| Expressão | Expressão (`expressao`) | Lavores, Tramas/Fragmentos, Selos e demais registros |
+| Percurso | Transformação (`percurso`) | Desenvolvimento, PU, Marcos e correções autorizadas |
+
+O card antes chamado Feição passa a Pessoa. A navegação usa quatro guias e a placa existente, arredondada/contida no trilho. Jogo usa os mesmos dados e apresenta as ferramentas integrais na janela contextual.
+
+Vínculos mostram dois nós unidos por fio, estado e reciprocidade antes da edição. Menus de recursos, Equilíbrio, capacidades e operações recebem pigmentos, dados/símbolos e composição próprios, sem animação ambiente. Familiaridade tem símbolo próprio e não concede bônus. Leitura permanece disponível ao espectador; controles de gravação obedecem às permissões existentes.
+
+## Mecânica e persistência
+
+- `resourceModifiers` é opcional: inteiros assinados por recurso. Máximo efetivo = máximo de base + modificador, limitado a zero. Aumentar o máximo não cura; reduzir ajusta o atual quando necessário. As fórmulas independentes de defesa não mudam.
+- `temporaryEffects` guarda Proveito, Desproveito ou bônus numérico por Matriz/Alinhavo. Os marcadores aparecem junto do dado. Proveito/Desproveito se cancelam e deslocam no máximo uma categoria; não autorizam d20 extraordinário. Bônus altera Enlace, preservando faces, Consonância, Desvio e falha 1/1. Testes registrados guardam seu modificador para reprodução estável. O fim da cena remove efeitos temporários.
+- PV zero produz Incapacitada; PI zero produz Colapso. A saída dessas condições exige ação explícita, após restaurar o recurso. PE zero mostra Esforço esgotado sem impor penalidade genérica nem impedir ações ordinárias; esse indicador termina quando PE retorna.
+- `crisisMarks` oferece três marcadores manuais de Morrendo/Colapsando. Não é uma regra nova de três falhas, não mata automaticamente e não substitui a janela de intervenção do livro. Risco produz borda/fundo estáticos de leitura forte, com rótulos além de cor.
+- Não se regrava nenhuma ficha em massa. Campos novos são opcionais. A normalização dos estados ao consultar é pura; a leitura não grava. CAS, autorização, progressão e histórico de correções permanecem.
+- Migration `20261102234203_tdv_resource_effects.sql`: substitui somente o validador privado, aceitando os campos aditivos e máximos modificados. Mantém SECURITY INVOKER, search_path vazio, ACLs e guarda de progressão. Não altera tabelas, papéis ou registros.
+- `tabletop-view` continua usando o motor compartilhado, filtragem de audiência/RLS e JWT verificado. Sua publicação deve levar o schema atualizado: a versão estrita anterior rejeitaria os novos campos. Estados zero são derivados em memória, sem escrita pelo serviço.
+
+## Evidências e limites
+
+Antes da publicação: 172 suítes/730 testes locais; 70 verificações PostgreSQL isoladas, incluindo campos inválidos, máximos modificados e regressão proibida ao jogador. Gate completo e evidência visual do fonte final ficam na PR desta rodada. A passagem visual concentrada cobre quatro viewports (320×720, 568×320, 820×1180 e 1440×900), edição/leitura, quatro guias, extremos do trilho, menus, efeitos, jogo e recursos zerados. A passagem anterior continua disponível para diagnóstico, sem repetição automática integral em cada ajuste.
+
+Fixtures e screenshots não certificam aparelhos físicos, latência real, contas reais, toda a Mesa, Nexus ou as demais fases V4. Não há alegação de ganho FPS/INP nesta rodada. O livro disponível de referência é `02_Livro_de_Regras(5)(1).docx`, textualmente idêntico à edição (5) já conferida; a menção a uma edição posterior indisponível não foi tratada como conteúdo conhecido.
+
+## Reversão
+
+Reverter a apresentação mantendo leitores dos campos opcionais, os cálculos de máximos e o validador compatível. Não retornar cegamente ao schema estrito anterior: fichas com campos novos ou recursos acima da base precisam continuar legíveis. Não apagar efeitos/modificadores, truncar recursos ou regravar dados como atalho. A Edge Function pode ter sua apresentação anterior recomposta conservando o motor/schema atual e JWT. Migrações aplicadas não são removidas; correções posteriores usam nova migration.

@@ -857,6 +857,8 @@
         "src/components/sheet/tdv2-competencies.tsx",
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-emblem.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
@@ -865,6 +867,7 @@
         "src/components/sheet/tdv2-protection.tsx",
         "src/components/sheet/tdv2-retained-tools.tsx",
         "src/components/sheet/tdv2-sheet.tsx",
+        "src/components/sheet/tdv2-surface-context.ts",
         "src/components/sheet/tdv2-test-panel.tsx",
         "src/components/sheet/tdv2-visual-instruments.tsx",
         "src/components/tabletop/tabletop-cross-surface-bridge.tsx",
@@ -992,6 +995,8 @@
         "src/components/sheet/tdv2-competencies.tsx",
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
         "src/components/sheet/tdv2-play-presence.tsx",
@@ -1027,6 +1032,8 @@
         "src/components/sheet/tdv2-competencies.tsx",
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
         "src/components/sheet/tdv2-play-presence.tsx",
@@ -1845,6 +1852,8 @@
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-conversion.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-emblem.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
@@ -1853,6 +1862,7 @@
         "src/components/sheet/tdv2-protection.tsx",
         "src/components/sheet/tdv2-retained-tools.tsx",
         "src/components/sheet/tdv2-sheet.tsx",
+        "src/components/sheet/tdv2-surface-context.ts",
         "src/components/sheet/tdv2-test-panel.tsx",
         "src/components/sheet/tdv2-visual-instruments.tsx",
         "src/components/sheet/use-sheet-chrome.ts",
@@ -1970,6 +1980,8 @@
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-conversion.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
         "src/components/sheet/tdv2-play-presence.tsx",
@@ -2009,6 +2021,8 @@
         "src/components/sheet/tdv2-conditions.tsx",
         "src/components/sheet/tdv2-conversion.tsx",
         "src/components/sheet/tdv2-creation-loom.tsx",
+        "src/components/sheet/tdv2-crisis-trackers.tsx",
+        "src/components/sheet/tdv2-effects-menu.tsx",
         "src/components/sheet/tdv2-fields.tsx",
         "src/components/sheet/tdv2-game-panel.tsx",
         "src/components/sheet/tdv2-play-presence.tsx",
@@ -3244,6 +3258,7 @@
     "src/components/sheet/sheet-ui.test.tsx",
     "src/components/sheet/tdv2-creation-loom.test.tsx",
     "src/components/sheet/tdv2-fields.test.tsx",
+    "src/components/sheet/tdv2-resource-menu.test.tsx",
     "src/components/sheet/tdv2-sheet-creation.test.tsx",
     "src/components/sheet/tdv2-test-panel.test.tsx",
     "src/components/tabletop/tabletop-commands.test.tsx",
@@ -3378,6 +3393,7 @@
     "src/lib/tdv2-conditions.test.ts",
     "src/lib/tdv2-play.test.ts",
     "src/lib/tdv2-round.test.ts",
+    "src/lib/tdv2-sheet-effects.test.ts",
     "src/lib/tdv2.test.ts",
     "src/lib/typography-dash.test.ts",
     "src/lib/ui-coherence-192-regression.test.ts",
@@ -27771,14 +27787,33 @@
       ]
     },
     "src/components/sheet/tdv2-competencies.tsx": {
-      "sha256": "c330d4c2b9a7f1864f7251fe22673ae8e07b018e30eadd15b4d8cc2ff4007bbc",
+      "sha256": "98fdfac2bf0ac7425d23a1215aefad09a35a66245b914c0226a9e8fd60248b7f",
       "imports": [
+        {
+          "specifier": "lucide-react",
+          "names": [
+            "Sparkles"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "./tdv2-effects-menu",
+          "names": [
+            "TdvEffectEditor",
+            "TdvEffectBadges"
+          ],
+          "line": 2,
+          "kind": "static",
+          "target": "src/components/sheet/tdv2-effects-menu.tsx"
+        },
         {
           "specifier": "./tdv2-emblem",
           "names": [
             "TdvDie"
           ],
-          "line": 1,
+          "line": 3,
           "kind": "static",
           "target": "src/components/sheet/tdv2-emblem.tsx"
         },
@@ -27787,7 +27822,7 @@
           "names": [
             "useState"
           ],
-          "line": 2,
+          "line": 4,
           "kind": "static",
           "target": null
         },
@@ -27796,7 +27831,7 @@
           "names": [
             "Button"
           ],
-          "line": 3,
+          "line": 5,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -27807,27 +27842,9 @@
             "PopoverContent",
             "PopoverTrigger"
           ],
-          "line": 4,
-          "kind": "static",
-          "target": "src/components/ui/popover.tsx"
-        },
-        {
-          "specifier": "@/components/ui/input",
-          "names": [
-            "Input"
-          ],
-          "line": 5,
-          "kind": "static",
-          "target": "src/components/ui/input.tsx"
-        },
-        {
-          "specifier": "react",
-          "names": [
-            "useId"
-          ],
           "line": 6,
           "kind": "static",
-          "target": null
+          "target": "src/components/ui/popover.tsx"
         },
         {
           "specifier": "@/lib/tdv2",
@@ -27842,241 +27859,201 @@
       "renders": [
         {
           "component": "span",
-          "line": 81
-        },
-        {
-          "component": "TdvDie",
-          "line": 82
-        },
-        {
-          "component": "article",
           "line": 86
         },
         {
+          "component": "TdvDie",
+          "line": 87
+        },
+        {
+          "component": "article",
+          "line": 91
+        },
+        {
           "component": "h3",
-          "line": 93
+          "line": 98
+        },
+        {
+          "component": "Sparkles",
+          "line": 101
+        },
+        {
+          "component": "title",
+          "line": 102
         },
         {
           "component": "Popover",
-          "line": 94
+          "line": 106
         },
         {
           "component": "PopoverTrigger",
-          "line": 95
+          "line": 107
         },
         {
           "component": "Button",
-          "line": 96
+          "line": 108
         },
         {
-          "component": "PopoverContent",
-          "line": 104
-        },
-        {
-          "component": "header",
-          "line": 109
-        },
-        {
-          "component": "small",
-          "line": 110
-        },
-        {
-          "component": "h3",
-          "line": 111
-        },
-        {
-          "component": "strong",
-          "line": 112
-        },
-        {
-          "component": "p",
+          "component": "TdvEffectBadges",
           "line": 114
         },
         {
-          "component": "p",
-          "line": 119
+          "component": "PopoverContent",
+          "line": 117
         },
         {
-          "component": "div",
-          "line": 123
-        },
-        {
-          "component": "Button",
+          "component": "header",
           "line": 124
         },
         {
-          "component": "div",
-          "line": 136
-        },
-        {
-          "component": "strong",
-          "line": 137
-        },
-        {
           "component": "small",
-          "line": 142
+          "line": 125
         },
         {
-          "component": "Button",
-          "line": 146
+          "component": "h3",
+          "line": 126
         },
         {
-          "component": "Button",
-          "line": 165
+          "component": "span",
+          "line": 127
         },
         {
-          "component": "div",
-          "line": 178
-        },
-        {
-          "component": "i",
-          "line": 180
+          "component": "TdvDie",
+          "line": 128
         },
         {
           "component": "p",
-          "line": 183
+          "line": 131
+        },
+        {
+          "component": "p",
+          "line": 136
+        },
+        {
+          "component": "TdvEffectEditor",
+          "line": 140
         },
         {
           "component": "div",
-          "line": 212
+          "line": 147
+        },
+        {
+          "component": "Button",
+          "line": 148
         },
         {
           "component": "div",
-          "line": 213
+          "line": 160
         },
         {
           "component": "strong",
-          "line": 214
+          "line": 161
         },
         {
           "component": "small",
-          "line": 216
+          "line": 166
         },
         {
-          "component": "span",
-          "line": 218
+          "component": "Button",
+          "line": 170
         },
         {
-          "component": "small",
-          "line": 220
+          "component": "Button",
+          "line": 189
         },
         {
           "component": "div",
-          "line": 222
-        },
-        {
-          "component": "strong",
-          "line": 223
-        },
-        {
-          "component": "span",
-          "line": 224
-        },
-        {
-          "component": "small",
-          "line": 225
-        },
-        {
-          "component": "div",
-          "line": 229
+          "line": 202
         },
         {
           "component": "i",
-          "line": 238
+          "line": 204
+        },
+        {
+          "component": "p",
+          "line": 207
         },
         {
           "component": "div",
-          "line": 241
+          "line": 236
+        },
+        {
+          "component": "div",
+          "line": 237
+        },
+        {
+          "component": "strong",
+          "line": 238
+        },
+        {
+          "component": "small",
+          "line": 240
         },
         {
           "component": "span",
           "line": 242
         },
         {
-          "component": "span",
-          "line": 243
-        },
-        {
-          "component": "span",
+          "component": "small",
           "line": 244
         },
         {
-          "component": "span",
-          "line": 245
-        },
-        {
-          "component": "span",
+          "component": "div",
           "line": 246
         },
         {
-          "component": "p",
+          "component": "strong",
+          "line": 247
+        },
+        {
+          "component": "span",
           "line": 248
         },
         {
-          "component": "div",
-          "line": 274
-        },
-        {
-          "component": "Button",
-          "line": 275
-        },
-        {
-          "component": "Popover",
-          "line": 284
-        },
-        {
-          "component": "PopoverTrigger",
-          "line": 291
-        },
-        {
-          "component": "Button",
-          "line": 292
-        },
-        {
-          "component": "strong",
-          "line": 298
-        },
-        {
-          "component": "span",
-          "line": 299
-        },
-        {
           "component": "small",
-          "line": 300
-        },
-        {
-          "component": "PopoverContent",
-          "line": 303
-        },
-        {
-          "component": "label",
-          "line": 304
-        },
-        {
-          "component": "Input",
-          "line": 307
-        },
-        {
-          "component": "Button",
-          "line": 316
-        },
-        {
-          "component": "Button",
-          "line": 327
+          "line": 249
         },
         {
           "component": "div",
-          "line": 337
+          "line": 253
+        },
+        {
+          "component": "i",
+          "line": 262
+        },
+        {
+          "component": "div",
+          "line": 265
         },
         {
           "component": "span",
-          "line": 338
+          "line": 266
+        },
+        {
+          "component": "span",
+          "line": 267
+        },
+        {
+          "component": "span",
+          "line": 268
+        },
+        {
+          "component": "span",
+          "line": 269
+        },
+        {
+          "component": "span",
+          "line": 270
+        },
+        {
+          "component": "p",
+          "line": 272
         }
       ],
       "actions": [
         {
           "component": "Popover",
-          "line": 94,
+          "line": 106,
           "event": "onOpenChange",
           "expression": "{setOpen}",
           "label": null,
@@ -28084,15 +28061,31 @@
         },
         {
           "component": "PopoverContent",
-          "line": 105,
+          "line": 118,
           "event": "onCloseAutoFocus",
           "expression": "{preserveNextPopupFocus}",
           "label": "{`Capacidade ${name}`}",
           "certification": "source-only"
         },
         {
+          "component": "TdvEffectEditor",
+          "line": 144,
+          "event": "onAdd",
+          "expression": "{onAddEffect}",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvEffectEditor",
+          "line": 145,
+          "event": "onRemove",
+          "expression": "{onRemoveEffect}",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
           "component": "Button",
-          "line": 129,
+          "line": 153,
           "event": "onClick",
           "expression": "{() => { onReverse?.(); setOpen(false); }}",
           "label": "{`Reverter ${name}`}",
@@ -28100,7 +28093,7 @@
         },
         {
           "component": "Button",
-          "line": 155,
+          "line": 179,
           "event": "onClick",
           "expression": "{() => { if (matrix && grade === 4 && !creation) onDevelop?.(); else onAdvance?.(); setOpen(false); }}",
           "label": "{`Avançar ${name}`}",
@@ -28108,50 +28101,10 @@
         },
         {
           "component": "Button",
-          "line": 168,
+          "line": 192,
           "event": "onClick",
           "expression": "{() => { setOpen(false); onRoll?.(); }}",
           "label": null,
-          "certification": "source-only"
-        },
-        {
-          "component": "Button",
-          "line": 280,
-          "event": "onClick",
-          "expression": "{() => onChange(value - 1)}",
-          "label": "{`Retirar 1 ${name}`}",
-          "certification": "source-only"
-        },
-        {
-          "component": "Popover",
-          "line": 286,
-          "event": "onOpenChange",
-          "expression": "{(next) => { if (next) setDraft(value); setOpen(next); }}",
-          "label": null,
-          "certification": "source-only"
-        },
-        {
-          "component": "Input",
-          "line": 314,
-          "event": "onChange",
-          "expression": "{(e) => setDraft(Number(e.target.value))}",
-          "label": "{id}",
-          "certification": "source-only"
-        },
-        {
-          "component": "Button",
-          "line": 318,
-          "event": "onClick",
-          "expression": "{() => { onChange(draft); setOpen(false); }}",
-          "label": null,
-          "certification": "source-only"
-        },
-        {
-          "component": "Button",
-          "line": 332,
-          "event": "onClick",
-          "expression": "{() => onChange(value + 1)}",
-          "label": "{`Restaurar 1 ${name}`}",
           "certification": "source-only"
         }
       ],
@@ -28159,48 +28112,36 @@
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 179
+          "line": 203
         },
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 237
+          "line": 261
         }
       ],
       "routes": [],
       "guards": [
         {
+          "expression": "TdvEffectEditor disabled={disabled}",
+          "line": 143
+        },
+        {
           "expression": "Button disabled={disabled || !canReverse}",
-          "line": 127
+          "line": 151
         },
         {
           "expression": "Button disabled={ disabled || grade >= (matrix ? 5 : 4) || (!creation && availablePU < (advanceCost ?? 0)) || (creation && choiceAllowed ? !choiceAllowed(grade + 1) : false) }",
-          "line": 149
+          "line": 173
         },
         {
           "expression": "Button disabled={disabled || blocked}",
-          "line": 167
-        },
-        {
-          "expression": "Button disabled={disabled || value <= 0}",
-          "line": 278
-        },
-        {
-          "expression": "Button disabled={disabled}",
-          "line": 295
-        },
-        {
-          "expression": "Button disabled={!Number.isInteger(draft) || draft < 0 || draft > maximum}",
-          "line": 317
-        },
-        {
-          "expression": "Button disabled={disabled || value >= maximum}",
-          "line": 330
+          "line": 191
         }
       ]
     },
     "src/components/sheet/tdv2-conditions.tsx": {
-      "sha256": "3418b0baaa9b360e17a093f62f2507ae50248b06f647a849e0df2997605612b2",
+      "sha256": "c159448482d4f76f757482438eaba07f1ded8fcf401032e96f4a99edffce1736",
       "imports": [
         {
           "specifier": "react",
@@ -28362,75 +28303,75 @@
         },
         {
           "component": "Button",
-          "line": 113
+          "line": 117
         },
         {
           "component": "div",
-          "line": 129
+          "line": 141
         },
         {
           "component": "TdvField",
-          "line": 130
+          "line": 142
         },
         {
           "component": "TdvChoices",
-          "line": 137
+          "line": 149
         },
         {
           "component": "TdvField",
-          "line": 146
-        },
-        {
-          "component": "TdvSelect",
           "line": 158
         },
         {
           "component": "TdvSelect",
-          "line": 184
+          "line": 170
+        },
+        {
+          "component": "TdvSelect",
+          "line": 196
         },
         {
           "component": "small",
-          "line": 201
-        },
-        {
-          "component": "TdvField",
-          "line": 205
-        },
-        {
-          "component": "details",
-          "line": 211
-        },
-        {
-          "component": "summary",
-          "line": 212
-        },
-        {
-          "component": "TdvField",
           "line": 213
         },
         {
+          "component": "TdvField",
+          "line": 217
+        },
+        {
+          "component": "details",
+          "line": 223
+        },
+        {
+          "component": "summary",
+          "line": 224
+        },
+        {
+          "component": "TdvField",
+          "line": 225
+        },
+        {
           "component": "div",
-          "line": 221
+          "line": 233
         },
         {
           "component": "Button",
-          "line": 222
+          "line": 234
         },
         {
           "component": "Button",
-          "line": 232
+          "line": 244
         },
         {
           "component": "Button",
-          "line": 245
+          "line": 257
         },
         {
           "component": "Button",
-          "line": 253
+          "line": 265
         },
         {
           "component": "Plus",
-          "line": 272
+          "line": 284
         }
       ],
       "actions": [
@@ -28452,7 +28393,7 @@
         },
         {
           "component": "Button",
-          "line": 110,
+          "line": 113,
           "event": "onClick",
           "expression": "{() => setEditing(true)}",
           "label": null,
@@ -28460,15 +28401,15 @@
         },
         {
           "component": "Button",
-          "line": 115,
+          "line": 124,
           "event": "onClick",
-          "expression": "{() => { onChange({ ...c, conditions: c.conditions.filter((x) => x.id !== item.id), }); setOpen(null); addRef.current?.focus(); }}",
+          "expression": "{() => { onChange({ ...c, ...(item.id === \"tdv-zero-pv\" && c.resources.pv > 0 ? { critical: \"Ativa\" as const } : {}), conditions: c.conditions.filter((x) => x.id !== item.id), }); setOpen(null); addRef.current?.focus(); }}",
           "label": null,
           "certification": "source-only"
         },
         {
           "component": "TdvField",
-          "line": 135,
+          "line": 147,
           "event": "onChange",
           "expression": "{(name) => update(item.id, { name })}",
           "label": null,
@@ -28476,7 +28417,7 @@
         },
         {
           "component": "TdvChoices",
-          "line": 142,
+          "line": 154,
           "event": "onChange",
           "expression": "{(value) => update(item.id, { intensity: value as Condition[\"intensity\"] }) }",
           "label": null,
@@ -28484,7 +28425,7 @@
         },
         {
           "component": "TdvField",
-          "line": 150,
+          "line": 162,
           "event": "onChange",
           "expression": "{(effect) => update(item.id, { effect: impact ? declareConditionImpact(effect, impact.kind, impact.target) : effect, }) }",
           "label": null,
@@ -28492,7 +28433,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 163,
+          "line": 175,
           "event": "onChange",
           "expression": "{(kind) => { if (kind === \"Descrição apenas\") { setPending((previous) => { const next = { ...previous }; delete next[item.id]; return next; }); update(item.id, { effect: declareConditionImpact(item.effect, \"Descrição apenas\", \"\"), }); } els",
           "label": null,
@@ -28500,7 +28441,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 189,
+          "line": 201,
           "event": "onChange",
           "expression": "{(target) => { if (target !== \"Escolha a capacidade\") update(item.id, { effect: declareConditionImpact( item.effect, application as \"Desproveito\" | \"Impedimento\", target, ), }); }}",
           "label": null,
@@ -28508,7 +28449,7 @@
         },
         {
           "component": "TdvField",
-          "line": 209,
+          "line": 221,
           "event": "onChange",
           "expression": "{(exit) => update(item.id, { exit })}",
           "label": null,
@@ -28516,7 +28457,7 @@
         },
         {
           "component": "TdvField",
-          "line": 217,
+          "line": 229,
           "event": "onChange",
           "expression": "{(origin) => update(item.id, { origin })}",
           "label": null,
@@ -28524,7 +28465,7 @@
         },
         {
           "component": "Button",
-          "line": 224,
+          "line": 236,
           "event": "onClick",
           "expression": "{() => { setDraft(null); setOpen(null); addRef.current?.focus(); }}",
           "label": null,
@@ -28532,7 +28473,7 @@
         },
         {
           "component": "Button",
-          "line": 234,
+          "line": 246,
           "event": "onClick",
           "expression": "{() => { onChange({ ...c, conditions: [...c.conditions, item] }); setDraft(null); setEditing(false); setOpen(null); }}",
           "label": null,
@@ -28540,7 +28481,7 @@
         },
         {
           "component": "Button",
-          "line": 245,
+          "line": 257,
           "event": "onClick",
           "expression": "{() => setEditing(false)}",
           "label": null,
@@ -28548,7 +28489,7 @@
         },
         {
           "component": "Button",
-          "line": 258,
+          "line": 270,
           "event": "onClick",
           "expression": "{() => { const item: Condition = { id: uid(), name: \"\", origin: \"\", effect: \"\", exit: \"\", intensity: \"Leve\", }; setDraft(item); setOpen(item.id); setEditing(true); }}",
           "label": null,
@@ -28559,48 +28500,48 @@
       "routes": [],
       "guards": [
         {
-          "expression": "Button disabled={!canEdit}",
-          "line": 110
+          "expression": "Button disabled={!canEdit || item.id === \"tdv-zero-pe\"}",
+          "line": 112
         },
         {
-          "expression": "Button disabled={!canEdit || !item.exit.trim()}",
-          "line": 114
+          "expression": "Button disabled={ !canEdit || !item.exit.trim() || (item.id === \"tdv-zero-pv\" && c.resources.pv === 0) || (item.id === \"tdv-zero-pi\" && c.resources.pi === 0) }",
+          "line": 118
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 134
+          "line": 146
         },
         {
           "expression": "TdvChoices disabled={!canEdit}",
-          "line": 141
+          "line": 153
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 149
+          "line": 161
         },
         {
           "expression": "TdvSelect disabled={!canEdit}",
-          "line": 162
+          "line": 174
         },
         {
           "expression": "TdvSelect disabled={!canEdit}",
-          "line": 188
+          "line": 200
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 208
+          "line": 220
         },
         {
           "expression": "TdvField disabled={!canEdit}",
-          "line": 216
+          "line": 228
         },
         {
           "expression": "Button disabled={!item.name.trim()}",
-          "line": 233
+          "line": 245
         },
         {
           "expression": "Button disabled={!canEdit || c.conditions.length >= 100}",
-          "line": 257
+          "line": 269
         }
       ]
     },
@@ -28739,7 +28680,7 @@
       ]
     },
     "src/components/sheet/tdv2-creation-loom.tsx": {
-      "sha256": "5c0cc2615a992cf72b0225d3e3ae17dbeb5d6f503f05e4355e61e3c4c62db03e",
+      "sha256": "63af80dc96b070fc895b97591c677fa42cc8f6fa2855daa1560707f71c987e3d",
       "imports": [
         {
           "specifier": "react",
@@ -28785,114 +28726,102 @@
       "renders": [
         {
           "component": "section",
-          "line": 70
-        },
-        {
-          "component": "div",
-          "line": 71
-        },
-        {
-          "component": "div",
-          "line": 72
-        },
-        {
-          "component": "small",
-          "line": 73
-        },
-        {
-          "component": "h2",
-          "line": 74
-        },
-        {
-          "component": "Button",
           "line": 76
         },
         {
           "component": "div",
-          "line": 84
+          "line": 77
         },
         {
           "component": "div",
-          "line": 85
+          "line": 78
+        },
+        {
+          "component": "small",
+          "line": 79
+        },
+        {
+          "component": "h2",
+          "line": 80
+        },
+        {
+          "component": "Button",
+          "line": 82
+        },
+        {
+          "component": "div",
+          "line": 90
+        },
+        {
+          "component": "div",
+          "line": 91
         },
         {
           "component": "button",
-          "line": 87
+          "line": 93
         },
         {
           "component": "span",
-          "line": 98
+          "line": 104
         },
         {
           "component": "small",
-          "line": 99
+          "line": 105
         },
         {
           "component": "strong",
-          "line": 100
-        },
-        {
-          "component": "span",
-          "line": 101
-        },
-        {
-          "component": "p",
           "line": 106
         },
         {
-          "component": "strong",
+          "component": "span",
           "line": 107
         },
         {
-          "component": "TdvAction",
-          "line": 109
+          "component": "p",
+          "line": 112
         },
         {
-          "component": "p",
+          "component": "strong",
           "line": 113
         },
         {
-          "component": "p",
-          "line": 117
+          "component": "TdvAction",
+          "line": 115
         },
         {
           "component": "p",
-          "line": 124
+          "line": 119
+        },
+        {
+          "component": "p",
+          "line": 123
+        },
+        {
+          "component": "p",
+          "line": 130
         },
         {
           "component": "TdvCheck",
-          "line": 128
+          "line": 134
         },
         {
           "component": "p",
-          "line": 136
-        },
-        {
-          "component": "ul",
-          "line": 140
-        },
-        {
-          "component": "li",
           "line": 142
         },
         {
+          "component": "ul",
+          "line": 146
+        },
+        {
+          "component": "li",
+          "line": 148
+        },
+        {
           "component": "div",
-          "line": 164
+          "line": 170
         },
         {
           "component": "small",
-          "line": 165
-        },
-        {
-          "component": "p",
-          "line": 166
-        },
-        {
-          "component": "span",
-          "line": 167
-        },
-        {
-          "component": "TdvAction",
           "line": 171
         },
         {
@@ -28900,22 +28829,34 @@
           "line": 172
         },
         {
-          "component": "div",
-          "line": 176
+          "component": "span",
+          "line": 173
         },
         {
-          "component": "button",
+          "component": "TdvAction",
+          "line": 177
+        },
+        {
+          "component": "p",
           "line": 178
         },
         {
+          "component": "div",
+          "line": 182
+        },
+        {
+          "component": "button",
+          "line": 184
+        },
+        {
           "component": "small",
-          "line": 200
+          "line": 206
         }
       ],
       "actions": [
         {
           "component": "Button",
-          "line": 79,
+          "line": 85,
           "event": "onClick",
           "expression": "{() => onChange(finishCreation(c))}",
           "label": "\"Concluir criação TdV II\"",
@@ -28923,7 +28864,7 @@
         },
         {
           "component": "button",
-          "line": 90,
+          "line": 96,
           "event": "onClick",
           "expression": "{() => { setActiveStep(i); onSelect(tab); }}",
           "label": "{`Criação: ${label}`}",
@@ -28931,7 +28872,7 @@
         },
         {
           "component": "TdvCheck",
-          "line": 132,
+          "line": 138,
           "event": "onChange",
           "expression": "{(v) => onChange({ ...c, creation: { ...c.creation!, reviewed: v } })}",
           "label": null,
@@ -28939,7 +28880,7 @@
         },
         {
           "component": "button",
-          "line": 187,
+          "line": 193,
           "event": "onClick",
           "expression": "{() => onChange({ ...c, creation: { ...c.creation!, familiarities: selected.includes(name) ? selected.filter((n) => n !== name) : [...selected, name], }, }) }",
           "label": null,
@@ -28951,15 +28892,266 @@
       "guards": [
         {
           "expression": "Button disabled={!canEdit || errors.length > 0}",
-          "line": 78
+          "line": 84
         },
         {
           "expression": "TdvCheck disabled={!canEdit}",
-          "line": 131
+          "line": 137
         },
         {
           "expression": "button disabled={ !canEdit || (c.ready && !c.progression?.allowCreation) || (!selected.includes(name) && selected.length >= 4) }",
-          "line": 181
+          "line": 187
+        }
+      ]
+    },
+    "src/components/sheet/tdv2-crisis-trackers.tsx": {
+      "sha256": "eab3d55c8c8832166486a0d3547e7c6b24acfa7b24e1c3e1b5101c960fb4a7fd",
+      "imports": [],
+      "renders": [
+        {
+          "component": "div",
+          "line": 25
+        },
+        {
+          "component": "div",
+          "line": 27
+        },
+        {
+          "component": "span",
+          "line": 28
+        },
+        {
+          "component": "small",
+          "line": 30
+        },
+        {
+          "component": "div",
+          "line": 32
+        },
+        {
+          "component": "button",
+          "line": 34
+        },
+        {
+          "component": "i",
+          "line": 52
+        }
+      ],
+      "actions": [
+        {
+          "component": "button",
+          "line": 41,
+          "event": "onClick",
+          "expression": "{() => onChange({ ...c, crisisMarks: { dying: c.crisisMarks?.dying ?? 0, collapse: c.crisisMarks?.collapse ?? 0, [kind]: (c.crisisMarks?.[kind] ?? 0) === value ? 0 : value, }, }) }",
+          "label": "{`${label}: ${value} de 3`}",
+          "certification": "source-only"
+        }
+      ],
+      "data": [],
+      "routes": [],
+      "guards": [
+        {
+          "expression": "button disabled={!canEdit}",
+          "line": 37
+        }
+      ]
+    },
+    "src/components/sheet/tdv2-effects-menu.tsx": {
+      "sha256": "1d71907dc49196e5f3490cec461182e6fa41dd4c398972729161c11280ce289a",
+      "imports": [
+        {
+          "specifier": "react",
+          "names": [
+            "useState"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "lucide-react",
+          "names": [
+            "Plus",
+            "X"
+          ],
+          "line": 2,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "@/components/ui/button",
+          "names": [
+            "Button"
+          ],
+          "line": 3,
+          "kind": "static",
+          "target": "src/components/ui/button.tsx"
+        },
+        {
+          "specifier": "@/components/ui/input",
+          "names": [
+            "Input"
+          ],
+          "line": 4,
+          "kind": "static",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
+          "specifier": "./tdv2-fields",
+          "names": [
+            "TdvChoices"
+          ],
+          "line": 5,
+          "kind": "static",
+          "target": "src/components/sheet/tdv2-fields.tsx"
+        }
+      ],
+      "renders": [
+        {
+          "component": "section",
+          "line": 31
+        },
+        {
+          "component": "div",
+          "line": 33
+        },
+        {
+          "component": "span",
+          "line": 34
+        },
+        {
+          "component": "strong",
+          "line": 35
+        },
+        {
+          "component": "small",
+          "line": 39
+        },
+        {
+          "component": "Button",
+          "line": 41
+        },
+        {
+          "component": "X",
+          "line": 47
+        },
+        {
+          "component": "Button",
+          "line": 52
+        },
+        {
+          "component": "Plus",
+          "line": 59
+        },
+        {
+          "component": "div",
+          "line": 64
+        },
+        {
+          "component": "TdvChoices",
+          "line": 65
+        },
+        {
+          "component": "label",
+          "line": 72
+        },
+        {
+          "component": "Input",
+          "line": 74
+        },
+        {
+          "component": "label",
+          "line": 84
+        },
+        {
+          "component": "Input",
+          "line": 86
+        },
+        {
+          "component": "Button",
+          "line": 93
+        },
+        {
+          "component": "small",
+          "line": 106
+        },
+        {
+          "component": "span",
+          "line": 122
+        },
+        {
+          "component": "i",
+          "line": 124
+        },
+        {
+          "component": "i",
+          "line": 129
+        }
+      ],
+      "actions": [
+        {
+          "component": "Button",
+          "line": 45,
+          "event": "onClick",
+          "expression": "{() => onRemove?.(effect.id)}",
+          "label": "{`Remover ${effect.kind} de ${name}`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 57,
+          "event": "onClick",
+          "expression": "{() => setEditing(!editing)}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvChoices",
+          "line": 69,
+          "event": "onChange",
+          "expression": "{(next) => setKind(next as Effect[\"kind\"])}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 80,
+          "event": "onChange",
+          "expression": "{(e) => setValue(Number(e.target.value))}",
+          "label": "{`Bônus temporário de ${name}`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 90,
+          "event": "onChange",
+          "expression": "{(e) => setNote(e.target.value)}",
+          "label": "{`Origem do efeito em ${name}`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 98,
+          "event": "onClick",
+          "expression": "{() => { onAdd?.(kind, kind === \"Bônus\" ? value : 1, note); setEditing(false); setNote(\"\"); }}",
+          "label": null,
+          "certification": "source-only"
+        }
+      ],
+      "data": [],
+      "routes": [],
+      "guards": [
+        {
+          "expression": "Button disabled={disabled}",
+          "line": 43
+        },
+        {
+          "expression": "Button disabled={disabled}",
+          "line": 55
+        },
+        {
+          "expression": "Button disabled={ disabled || (kind === \"Bônus\" && (!Number.isInteger(value) || !value || Math.abs(value) > 100)) }",
+          "line": 94
         }
       ]
     },
@@ -29006,15 +29198,40 @@
       "guards": []
     },
     "src/components/sheet/tdv2-fields.tsx": {
-      "sha256": "35752359745844f483d8b3a752da896fe7ec3623a88de53b3515c5c3918b0b51",
+      "sha256": "0ff4ca8f468dde12292c8d6a9c45fdc6d095b2ee3cbcf2182b58b0a90860e372",
       "imports": [
+        {
+          "specifier": "./tdv2-surface-context",
+          "names": [
+            "TdvSurfaceContext"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": "src/components/sheet/tdv2-surface-context.ts"
+        },
+        {
+          "specifier": "lucide-react",
+          "names": [
+            "Anchor",
+            "Link2",
+            "Sparkles",
+            "HeartPulse",
+            "Shield",
+            "Sprout",
+            "SlidersHorizontal"
+          ],
+          "line": 2,
+          "kind": "static",
+          "target": null
+        },
         {
           "specifier": "react",
           "names": [
+            "useContext",
             "useId",
             "useState"
           ],
-          "line": 1,
+          "line": 11,
           "kind": "static",
           "target": null
         },
@@ -29023,7 +29240,7 @@
           "names": [
             "Input"
           ],
-          "line": 2,
+          "line": 12,
           "kind": "static",
           "target": "src/components/ui/input.tsx"
         },
@@ -29032,7 +29249,7 @@
           "names": [
             "Textarea"
           ],
-          "line": 3,
+          "line": 13,
           "kind": "static",
           "target": "src/components/ui/textarea.tsx"
         },
@@ -29041,7 +29258,7 @@
           "names": [
             "Button"
           ],
-          "line": 4,
+          "line": 14,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -29055,7 +29272,7 @@
             "DialogDescription",
             "DialogTrigger"
           ],
-          "line": 5,
+          "line": 15,
           "kind": "static",
           "target": "src/components/ui/dialog.tsx"
         }
@@ -29063,153 +29280,157 @@
       "renders": [
         {
           "component": "div",
-          "line": 32
+          "line": 42
         },
         {
           "component": "label",
-          "line": 33
+          "line": 43
         },
         {
           "component": "strong",
-          "line": 37
+          "line": 47
         },
         {
           "component": "Textarea",
-          "line": 39
+          "line": 49
         },
         {
           "component": "button",
-          "line": 62
+          "line": 72
         },
         {
           "component": "strong",
-          "line": 71
+          "line": 81
         },
         {
           "component": "Dialog",
-          "line": 91
+          "line": 116
         },
         {
           "component": "DialogTrigger",
-          "line": 92
+          "line": 117
         },
         {
           "component": "Button",
-          "line": 93
+          "line": 118
         },
         {
           "component": "DialogContent",
-          "line": 97
+          "line": 122
         },
         {
           "component": "DialogHeader",
-          "line": 98
+          "line": 123
         },
         {
           "component": "DialogTitle",
-          "line": 99
-        },
-        {
-          "component": "DialogDescription",
-          "line": 100
-        },
-        {
-          "component": "div",
-          "line": 102
-        },
-        {
-          "component": "fieldset",
           "line": 124
         },
         {
-          "component": "legend",
+          "component": "Icon",
           "line": 125
         },
         {
-          "component": "div",
-          "line": 126
-        },
-        {
-          "component": "label",
+          "component": "DialogDescription",
           "line": 128
         },
         {
+          "component": "div",
+          "line": 130
+        },
+        {
+          "component": "fieldset",
+          "line": 152
+        },
+        {
+          "component": "legend",
+          "line": 153
+        },
+        {
+          "component": "div",
+          "line": 154
+        },
+        {
+          "component": "label",
+          "line": 156
+        },
+        {
           "component": "input",
-          "line": 129
+          "line": 157
         },
         {
           "component": "span",
-          "line": 136
+          "line": 164
         },
         {
           "component": "i",
-          "line": 137
+          "line": 165
         },
         {
           "component": "details",
-          "line": 163
+          "line": 191
         },
         {
           "component": "div",
-          "line": 192
+          "line": 220
         },
         {
           "component": "label",
-          "line": 193
+          "line": 221
         },
         {
           "component": "Input",
-          "line": 197
+          "line": 225
         },
         {
           "component": "Textarea",
-          "line": 205
+          "line": 233
         },
         {
           "component": "div",
-          "line": 235
+          "line": 263
         },
         {
           "component": "label",
-          "line": 236
+          "line": 264
         },
         {
           "component": "select",
-          "line": 239
+          "line": 267
         },
         {
           "component": "option",
-          "line": 248
+          "line": 276
         },
         {
           "component": "div",
-          "line": 271
+          "line": 299
         },
         {
           "component": "label",
-          "line": 272
+          "line": 300
         },
         {
           "component": "Input",
-          "line": 275
-        },
-        {
-          "component": "label",
-          "line": 302
-        },
-        {
-          "component": "input",
           "line": 303
         },
         {
+          "component": "label",
+          "line": 330
+        },
+        {
+          "component": "input",
+          "line": 331
+        },
+        {
           "component": "span",
-          "line": 309
+          "line": 337
         }
       ],
       "actions": [
         {
           "component": "Textarea",
-          "line": 46,
+          "line": 56,
           "event": "onChange",
           "expression": "{(event) => setDraft(event.target.value)}",
           "label": "{id}",
@@ -29217,7 +29438,7 @@
         },
         {
           "component": "Textarea",
-          "line": 47,
+          "line": 57,
           "event": "onBlur",
           "expression": "{() => { if (draft !== value) onChange(draft); setEditing(false); }}",
           "label": "{id}",
@@ -29225,7 +29446,7 @@
         },
         {
           "component": "Textarea",
-          "line": 51,
+          "line": 61,
           "event": "onKeyDown",
           "expression": "{(event) => { if (event.key === \"Escape\") { event.preventDefault(); setDraft(value); setEditing(false); } if ((event.ctrlKey || event.metaKey) && event.key === \"Enter\") event.currentTarget.blur(); }}",
           "label": "{id}",
@@ -29233,7 +29454,7 @@
         },
         {
           "component": "button",
-          "line": 66,
+          "line": 76,
           "event": "onClick",
           "expression": "{() => { setDraft(value); setEditing(true); }}",
           "label": "{id}",
@@ -29241,7 +29462,7 @@
         },
         {
           "component": "input",
-          "line": 134,
+          "line": 162,
           "event": "onChange",
           "expression": "{() => onChange(option)}",
           "label": "{name}",
@@ -29249,7 +29470,7 @@
         },
         {
           "component": "details",
-          "line": 167,
+          "line": 195,
           "event": "onToggle",
           "expression": "{(e) => { setOpen(e.currentTarget.open); onOpenChange?.(e.currentTarget.open); }}",
           "label": null,
@@ -29257,7 +29478,7 @@
         },
         {
           "component": "Input",
-          "line": 202,
+          "line": 230,
           "event": "onChange",
           "expression": "{(e) => onChange(e.target.value)}",
           "label": "{id}",
@@ -29265,7 +29486,7 @@
         },
         {
           "component": "Textarea",
-          "line": 210,
+          "line": 238,
           "event": "onChange",
           "expression": "{(e) => onChange(e.target.value)}",
           "label": "{id}",
@@ -29273,7 +29494,7 @@
         },
         {
           "component": "select",
-          "line": 245,
+          "line": 273,
           "event": "onChange",
           "expression": "{(e) => onChange(e.target.value)}",
           "label": "{id}",
@@ -29281,7 +29502,7 @@
         },
         {
           "component": "Input",
-          "line": 283,
+          "line": 311,
           "event": "onChange",
           "expression": "{(e) => onChange(Math.max(min, Math.min(max, Math.round(Number(e.target.value) || 0)))) }",
           "label": "{id}",
@@ -29289,7 +29510,7 @@
         },
         {
           "component": "input",
-          "line": 307,
+          "line": 335,
           "event": "onChange",
           "expression": "{(e) => onChange(e.target.checked)}",
           "label": null,
@@ -29301,36 +29522,36 @@
       "guards": [
         {
           "expression": "Button disabled={disabled}",
-          "line": 93
+          "line": 118
         },
         {
           "expression": "fieldset disabled={disabled}",
-          "line": 124
+          "line": 152
         },
         {
           "expression": "Input disabled={disabled}",
-          "line": 201
+          "line": 229
         },
         {
           "expression": "Textarea disabled={disabled}",
-          "line": 209
+          "line": 237
         },
         {
           "expression": "select disabled={disabled}",
-          "line": 244
+          "line": 272
         },
         {
           "expression": "Input disabled={disabled}",
-          "line": 282
+          "line": 310
         },
         {
           "expression": "input disabled={disabled}",
-          "line": 306
+          "line": 334
         }
       ]
     },
     "src/components/sheet/tdv2-game-panel.tsx": {
-      "sha256": "204d526b103e5b5d145ba8689eba4ec2f27e13d04c80dccd04a2297e83c3aa73",
+      "sha256": "2c9e9943dbe7c9a1cd99b93f060b308338bfa6eac6e4f0c5ed55e5c0b4efb043",
       "imports": [
         {
           "specifier": "react",
@@ -29374,7 +29595,9 @@
             "reverseCapability",
             "allocateCreation",
             "capabilityConditions",
-            "conditionImpact"
+            "conditionImpact",
+            "capabilityEffects",
+            "addCapabilityEffect"
           ],
           "line": 4,
           "kind": "static",
@@ -29385,7 +29608,7 @@
           "names": [
             "TdvCompetency"
           ],
-          "line": 15,
+          "line": 17,
           "kind": "static",
           "target": "src/components/sheet/tdv2-competencies.tsx"
         },
@@ -29394,7 +29617,7 @@
           "names": [
             "TdvProtection"
           ],
-          "line": 16,
+          "line": 18,
           "kind": "static",
           "target": "src/components/sheet/tdv2-protection.tsx"
         },
@@ -29403,7 +29626,7 @@
           "names": [
             "TdvGuard"
           ],
-          "line": 17,
+          "line": 19,
           "kind": "static",
           "target": "src/components/sheet/tdv2-procedures.tsx"
         },
@@ -29412,7 +29635,7 @@
           "names": [
             "toast"
           ],
-          "line": 18,
+          "line": 20,
           "kind": "static",
           "target": null
         }
@@ -29420,109 +29643,125 @@
       "renders": [
         {
           "component": "TdvCompetency",
-          "line": 49
+          "line": 51
         },
         {
           "component": "section",
-          "line": 91
+          "line": 104
         },
         {
           "component": "nav",
-          "line": 92
-        },
-        {
-          "component": "Button",
-          "line": 102
-        },
-        {
-          "component": "Icon",
-          "line": 103
-        },
-        {
-          "component": "div",
-          "line": 108
-        },
-        {
-          "component": "div",
-          "line": 109
-        },
-        {
-          "component": "div",
-          "line": 110
+          "line": 105
         },
         {
           "component": "Button",
           "line": 115
         },
         {
-          "component": "section",
-          "line": 124
-        },
-        {
-          "component": "TdvProtection",
-          "line": 125
-        },
-        {
-          "component": "TdvGuard",
-          "line": 126
-        },
-        {
-          "component": "section",
-          "line": 128
-        },
-        {
-          "component": "h2",
-          "line": 129
-        },
-        {
-          "component": "Shield",
-          "line": 130
+          "component": "Icon",
+          "line": 116
         },
         {
           "component": "div",
-          "line": 132
+          "line": 121
         },
         {
-          "component": "button",
-          "line": 134
+          "component": "div",
+          "line": 122
         },
         {
-          "component": "strong",
-          "line": 135
-        },
-        {
-          "component": "span",
-          "line": 136
+          "component": "div",
+          "line": 123
         },
         {
           "component": "Button",
+          "line": 128
+        },
+        {
+          "component": "section",
+          "line": 137
+        },
+        {
+          "component": "TdvProtection",
+          "line": 138
+        },
+        {
+          "component": "TdvGuard",
+          "line": 139
+        },
+        {
+          "component": "section",
           "line": 141
+        },
+        {
+          "component": "h2",
+          "line": 142
+        },
+        {
+          "component": "Shield",
+          "line": 143
         },
         {
           "component": "div",
           "line": 145
         },
         {
-          "component": "Button",
+          "component": "button",
           "line": 147
         },
         {
-          "component": "small",
-          "line": 154
+          "component": "strong",
+          "line": 148
+        },
+        {
+          "component": "span",
+          "line": 149
         },
         {
           "component": "Button",
+          "line": 154
+        },
+        {
+          "component": "div",
           "line": 158
         },
         {
           "component": "Button",
-          "line": 162
+          "line": 160
+        },
+        {
+          "component": "small",
+          "line": 167
+        },
+        {
+          "component": "Button",
+          "line": 171
+        },
+        {
+          "component": "Button",
+          "line": 175
         }
       ],
       "actions": [
         {
           "component": "TdvCompetency",
-          "line": 75,
+          "line": 59,
+          "event": "onAddEffect",
+          "expression": "{(kind, value, note) => commit(() => addCapabilityEffect(c, name, kind, value, note)) }",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 62,
+          "event": "onRemoveEffect",
+          "expression": "{(id) => onChange({ ...c, temporaryEffects: (c.temporaryEffects ?? []).filter((effect) => effect.id !== id), }) }",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 88,
           "event": "onAdvance",
           "expression": "{() => commit(() => advanceCapability(c, name, matrix))}",
           "label": "{name}",
@@ -29530,7 +29769,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 76,
+          "line": 89,
           "event": "onReverse",
           "expression": "{() => commit(() => reverseCapability(c, name, matrix))}",
           "label": "{name}",
@@ -29538,7 +29777,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 77,
+          "line": 90,
           "event": "onDevelop",
           "expression": "{() => onTranscend(name)}",
           "label": "{name}",
@@ -29546,7 +29785,7 @@
         },
         {
           "component": "Button",
-          "line": 102,
+          "line": 115,
           "event": "onClick",
           "expression": "{() => onOpen(tab)}",
           "label": null,
@@ -29554,7 +29793,7 @@
         },
         {
           "component": "Button",
-          "line": 119,
+          "line": 132,
           "event": "onClick",
           "expression": "{() => setAllSkills(!allSkills)}",
           "label": null,
@@ -29562,7 +29801,7 @@
         },
         {
           "component": "TdvGuard",
-          "line": 126,
+          "line": 139,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -29570,7 +29809,7 @@
         },
         {
           "component": "button",
-          "line": 134,
+          "line": 147,
           "event": "onClick",
           "expression": "{() => onOpen(\"equipamento\")}",
           "label": null,
@@ -29578,7 +29817,7 @@
         },
         {
           "component": "Button",
-          "line": 141,
+          "line": 154,
           "event": "onClick",
           "expression": "{() => onOpen(\"equipamento\")}",
           "label": null,
@@ -29586,7 +29825,7 @@
         },
         {
           "component": "Button",
-          "line": 151,
+          "line": 164,
           "event": "onClick",
           "expression": "{() => onUse(r.id)}",
           "label": null,
@@ -29594,7 +29833,7 @@
         },
         {
           "component": "Button",
-          "line": 158,
+          "line": 171,
           "event": "onClick",
           "expression": "{() => onOpen(\"pessoa\")}",
           "label": null,
@@ -29602,7 +29841,7 @@
         },
         {
           "component": "Button",
-          "line": 162,
+          "line": 175,
           "event": "onClick",
           "expression": "{() => onOpen(\"pessoa\")}",
           "label": null,
@@ -29614,27 +29853,36 @@
       "guards": [
         {
           "expression": "TdvCompetency disabled={!canEdit}",
-          "line": 55
+          "line": 68
         },
         {
           "expression": "TdvGuard canEdit={canEdit}",
-          "line": 126
+          "line": 139
         },
         {
           "expression": "Button disabled={!canEdit || !c.ready}",
-          "line": 150
+          "line": 163
         }
       ]
     },
     "src/components/sheet/tdv2-play-presence.tsx": {
-      "sha256": "4f77ee8e3798dbb718de2a41db44262c8374d37b0b4c6fade89607bfcec02f83",
+      "sha256": "b5502b20bc68ecd6d11b8ff11d9940a3601b602fa539f1686c972c6c715c9de2",
       "imports": [
+        {
+          "specifier": "./tdv2-crisis-trackers",
+          "names": [
+            "TdvCrisisTrackers"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": "src/components/sheet/tdv2-crisis-trackers.tsx"
+        },
         {
           "specifier": "react",
           "names": [
             "useId"
           ],
-          "line": 1,
+          "line": 2,
           "kind": "static",
           "target": null
         },
@@ -29643,7 +29891,7 @@
           "names": [
             "Button"
           ],
-          "line": 2,
+          "line": 3,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -29654,7 +29902,7 @@
             "PopoverContent",
             "PopoverTrigger"
           ],
-          "line": 3,
+          "line": 4,
           "kind": "static",
           "target": "src/components/ui/popover.tsx"
         },
@@ -29663,7 +29911,7 @@
           "names": [
             "TdvResourceActions"
           ],
-          "line": 4,
+          "line": 5,
           "kind": "static",
           "target": "src/components/sheet/tdv2-competencies.tsx"
         },
@@ -29672,7 +29920,7 @@
           "names": [
             "TdvConditions"
           ],
-          "line": 5,
+          "line": 6,
           "kind": "static",
           "target": "src/components/sheet/tdv2-conditions.tsx"
         },
@@ -29681,10 +29929,11 @@
           "names": [
             "constitution",
             "setResource",
+            "setResourceModifier",
             "addTension",
             "equilibriumBand"
           ],
-          "line": 6,
+          "line": 7,
           "kind": "static",
           "target": "src/lib/tdv2.ts"
         },
@@ -29693,7 +29942,7 @@
           "names": [
             "toast"
           ],
-          "line": 13,
+          "line": 15,
           "kind": "static",
           "target": null
         }
@@ -29701,181 +29950,213 @@
       "renders": [
         {
           "component": "section",
-          "line": 39
-        },
-        {
-          "component": "p",
           "line": 41
         },
         {
-          "component": "div",
-          "line": 45
+          "component": "p",
+          "line": 43
         },
         {
           "component": "div",
-          "line": 46
+          "line": 47
         },
         {
           "component": "div",
-          "line": 53
+          "line": 48
         },
         {
-          "component": "h2",
-          "line": 54
-        },
-        {
-          "component": "span",
+          "component": "div",
           "line": 55
         },
         {
-          "component": "small",
+          "component": "h2",
           "line": 56
         },
         {
-          "component": "svg",
-          "line": 58
-        },
-        {
-          "component": "path",
-          "line": 59
-        },
-        {
-          "component": "path",
-          "line": 64
-        },
-        {
-          "component": "path",
-          "line": 70
-        },
-        {
-          "component": "TdvResourceActions",
-          "line": 72
-        },
-        {
-          "component": "div",
-          "line": 83
-        },
-        {
-          "component": "header",
-          "line": 84
-        },
-        {
-          "component": "h2",
-          "line": 85
-        },
-        {
-          "component": "Popover",
-          "line": 86
-        },
-        {
-          "component": "PopoverTrigger",
-          "line": 87
-        },
-        {
-          "component": "button",
-          "line": 88
-        },
-        {
-          "component": "PopoverContent",
-          "line": 97
-        },
-        {
-          "component": "h3",
-          "line": 98
-        },
-        {
-          "component": "p",
-          "line": 99
-        },
-        {
-          "component": "p",
-          "line": 103
-        },
-        {
-          "component": "label",
-          "line": 104
-        },
-        {
-          "component": "input",
-          "line": 105
-        },
-        {
-          "component": "div",
-          "line": 119
-        },
-        {
           "component": "span",
-          "line": 124
-        },
-        {
-          "component": "div",
-          "line": 126
-        },
-        {
-          "component": "span",
-          "line": 127
-        },
-        {
-          "component": "span",
-          "line": 128
-        },
-        {
-          "component": "div",
-          "line": 130
-        },
-        {
-          "component": "Button",
-          "line": 131
-        },
-        {
-          "component": "div",
-          "line": 139
+          "line": 57
         },
         {
           "component": "small",
-          "line": 140
+          "line": 58
         },
         {
-          "component": "output",
+          "component": "svg",
+          "line": 60
+        },
+        {
+          "component": "path",
+          "line": 61
+        },
+        {
+          "component": "path",
+          "line": 66
+        },
+        {
+          "component": "path",
+          "line": 72
+        },
+        {
+          "component": "TdvResourceActions",
+          "line": 74
+        },
+        {
+          "component": "div",
+          "line": 90
+        },
+        {
+          "component": "header",
+          "line": 91
+        },
+        {
+          "component": "h2",
+          "line": 92
+        },
+        {
+          "component": "Popover",
+          "line": 93
+        },
+        {
+          "component": "PopoverTrigger",
+          "line": 94
+        },
+        {
+          "component": "button",
+          "line": 95
+        },
+        {
+          "component": "PopoverContent",
+          "line": 104
+        },
+        {
+          "component": "header",
+          "line": 105
+        },
+        {
+          "component": "small",
+          "line": 106
+        },
+        {
+          "component": "h3",
+          "line": 107
+        },
+        {
+          "component": "strong",
+          "line": 108
+        },
+        {
+          "component": "div",
+          "line": 113
+        },
+        {
+          "component": "span",
+          "line": 114
+        },
+        {
+          "component": "p",
+          "line": 116
+        },
+        {
+          "component": "p",
+          "line": 120
+        },
+        {
+          "component": "label",
+          "line": 121
+        },
+        {
+          "component": "input",
+          "line": 122
+        },
+        {
+          "component": "div",
+          "line": 136
+        },
+        {
+          "component": "span",
           "line": 141
+        },
+        {
+          "component": "div",
+          "line": 143
+        },
+        {
+          "component": "span",
+          "line": 144
         },
         {
           "component": "span",
           "line": 145
         },
         {
-          "component": "i",
+          "component": "div",
           "line": 147
         },
         {
           "component": "Button",
-          "line": 155
+          "line": 148
         },
         {
           "component": "div",
-          "line": 170
+          "line": 156
+        },
+        {
+          "component": "small",
+          "line": 157
+        },
+        {
+          "component": "output",
+          "line": 158
         },
         {
           "component": "span",
-          "line": 171
+          "line": 162
+        },
+        {
+          "component": "i",
+          "line": 164
         },
         {
           "component": "Button",
-          "line": 181
+          "line": 172
+        },
+        {
+          "component": "div",
+          "line": 187
+        },
+        {
+          "component": "span",
+          "line": 188
+        },
+        {
+          "component": "Button",
+          "line": 198
+        },
+        {
+          "component": "TdvCrisisTrackers",
+          "line": 203
         },
         {
           "component": "TdvConditions",
-          "line": 186
+          "line": 204
         },
         {
           "component": "p",
-          "line": 188
+          "line": 206
         }
       ],
       "actions": [
         {
           "component": "TdvResourceActions",
-          "line": 77,
+          "line": 80,
+          "event": "onApply",
+          "expression": "{(current, modifier) => run(() => setResourceModifier(c, key, modifier, current)) }",
+          "label": "{key.toUpperCase()}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvResourceActions",
+          "line": 84,
           "event": "onChange",
           "expression": "{(value) => run(() => setResource(c, key, value))}",
           "label": "{key.toUpperCase()}",
@@ -29883,7 +30164,7 @@
         },
         {
           "component": "input",
-          "line": 114,
+          "line": 131,
           "event": "onChange",
           "expression": "{(e) => onChange({ ...c, equilibrium: Number(e.target.value) })}",
           "label": "{id}",
@@ -29891,7 +30172,7 @@
         },
         {
           "component": "Button",
-          "line": 135,
+          "line": 152,
           "event": "onClick",
           "expression": "{() => run(() => addTension(c, -1))}",
           "label": "\"Tensão −1\"",
@@ -29899,7 +30180,7 @@
         },
         {
           "component": "Button",
-          "line": 159,
+          "line": 176,
           "event": "onClick",
           "expression": "{() => run(() => addTension(c, 1))}",
           "label": "\"Tensão +1\"",
@@ -29907,15 +30188,23 @@
         },
         {
           "component": "Button",
-          "line": 181,
+          "line": 198,
           "event": "onClick",
           "expression": "{onInspectState}",
           "label": null,
           "certification": "source-only"
         },
         {
+          "component": "TdvCrisisTrackers",
+          "line": 203,
+          "event": "onChange",
+          "expression": "{onChange}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
           "component": "TdvConditions",
-          "line": 186,
+          "line": 204,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -29927,23 +30216,27 @@
       "guards": [
         {
           "expression": "TdvResourceActions disabled={!canEdit}",
-          "line": 76
+          "line": 83
         },
         {
           "expression": "input disabled={!canEdit}",
-          "line": 113
+          "line": 130
         },
         {
           "expression": "Button disabled={!canEdit}",
-          "line": 133
+          "line": 150
         },
         {
           "expression": "Button disabled={!canEdit}",
-          "line": 157
+          "line": 174
+        },
+        {
+          "expression": "TdvCrisisTrackers canEdit={canEdit}",
+          "line": 203
         },
         {
           "expression": "TdvConditions canEdit={canEdit}",
-          "line": 186
+          "line": 204
         }
       ]
     },
@@ -31193,6 +31486,233 @@
       "routes": [],
       "guards": []
     },
+    "src/components/sheet/tdv2-resource-menu.tsx": {
+      "sha256": "400b22dd7085cc22781029e0d5a8d0c7fdbd599a018afb7abdf8148b1571f202",
+      "imports": [
+        {
+          "specifier": "react",
+          "names": [
+            "useId",
+            "useState"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "lucide-react",
+          "names": [
+            "HeartPulse",
+            "Brain",
+            "Zap"
+          ],
+          "line": 2,
+          "kind": "static",
+          "target": null
+        },
+        {
+          "specifier": "@/components/ui/button",
+          "names": [
+            "Button"
+          ],
+          "line": 3,
+          "kind": "static",
+          "target": "src/components/ui/button.tsx"
+        },
+        {
+          "specifier": "@/components/ui/input",
+          "names": [
+            "Input"
+          ],
+          "line": 4,
+          "kind": "static",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
+          "specifier": "@/components/ui/popover",
+          "names": [
+            "Popover",
+            "PopoverContent",
+            "PopoverTrigger"
+          ],
+          "line": 5,
+          "kind": "static",
+          "target": "src/components/ui/popover.tsx"
+        }
+      ],
+      "renders": [
+        {
+          "component": "div",
+          "line": 35
+        },
+        {
+          "component": "Button",
+          "line": 36
+        },
+        {
+          "component": "Popover",
+          "line": 45
+        },
+        {
+          "component": "PopoverTrigger",
+          "line": 55
+        },
+        {
+          "component": "Button",
+          "line": 56
+        },
+        {
+          "component": "strong",
+          "line": 61
+        },
+        {
+          "component": "span",
+          "line": 62
+        },
+        {
+          "component": "small",
+          "line": 63
+        },
+        {
+          "component": "PopoverContent",
+          "line": 66
+        },
+        {
+          "component": "header",
+          "line": 71
+        },
+        {
+          "component": "Icon",
+          "line": 72
+        },
+        {
+          "component": "small",
+          "line": 73
+        },
+        {
+          "component": "strong",
+          "line": 74
+        },
+        {
+          "component": "span",
+          "line": 76
+        },
+        {
+          "component": "p",
+          "line": 78
+        },
+        {
+          "component": "label",
+          "line": 82
+        },
+        {
+          "component": "Input",
+          "line": 83
+        },
+        {
+          "component": "label",
+          "line": 94
+        },
+        {
+          "component": "Input",
+          "line": 96
+        },
+        {
+          "component": "small",
+          "line": 109
+        },
+        {
+          "component": "Button",
+          "line": 114
+        },
+        {
+          "component": "Button",
+          "line": 133
+        },
+        {
+          "component": "div",
+          "line": 143
+        },
+        {
+          "component": "span",
+          "line": 144
+        }
+      ],
+      "actions": [
+        {
+          "component": "Button",
+          "line": 41,
+          "event": "onClick",
+          "expression": "{() => onChange(value - 1)}",
+          "label": "{`Retirar 1 ${name}`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Popover",
+          "line": 47,
+          "event": "onOpenChange",
+          "expression": "{(next) => { if (next) { setDraft(value); setDraftModifier(modifier); } setOpen(next); }}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 91,
+          "event": "onChange",
+          "expression": "{(e) => setDraft(Number(e.target.value))}",
+          "label": "{id}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Input",
+          "line": 103,
+          "event": "onChange",
+          "expression": "{(e) => { const next = Number(e.target.value); setDraftModifier(next); setDraft(Math.min(draft, Math.max(0, base + next))); }}",
+          "label": "{`Modificador de ${name}`}",
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 123,
+          "event": "onClick",
+          "expression": "{() => { if (onApply) onApply(draft, draftModifier); else onChange(draft); setOpen(false); }}",
+          "label": null,
+          "certification": "source-only"
+        },
+        {
+          "component": "Button",
+          "line": 138,
+          "event": "onClick",
+          "expression": "{() => onChange(value + 1)}",
+          "label": "{`Restaurar 1 ${name}`}",
+          "certification": "source-only"
+        }
+      ],
+      "data": [],
+      "routes": [],
+      "guards": [
+        {
+          "expression": "Button disabled={disabled || value <= 0}",
+          "line": 39
+        },
+        {
+          "expression": "Input disabled={disabled}",
+          "line": 90
+        },
+        {
+          "expression": "Input disabled={disabled}",
+          "line": 101
+        },
+        {
+          "expression": "Button disabled={ disabled || !Number.isInteger(draft) || draft < 0 || draft > nextMaximum || !Number.isInteger(draftModifier) || Math.abs(draftModifier) > 10000 }",
+          "line": 115
+        },
+        {
+          "expression": "Button disabled={disabled || value >= maximum}",
+          "line": 136
+        }
+      ]
+    },
     "src/components/sheet/tdv2-retained-tools.tsx": {
       "sha256": "01dc36263b60d1b332c1d6326a1c273ab84f57b0ed41b511b7c429eafd6f2af1",
       "imports": [
@@ -31688,14 +32208,23 @@
       ]
     },
     "src/components/sheet/tdv2-sheet.tsx": {
-      "sha256": "9befbf7362ba7ca3b9cd31325f60e8b42bfc490d493b4e9c5b9539542ef78d2e",
+      "sha256": "e0b105310f78e47c56841c21351c1888120aa00026c380270b17e0c4790160a0",
       "imports": [
+        {
+          "specifier": "./tdv2-surface-context",
+          "names": [
+            "TdvSurfaceContext"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": "src/components/sheet/tdv2-surface-context.ts"
+        },
         {
           "specifier": "./tdv2-game-panel",
           "names": [
             "TdvGamePanel"
           ],
-          "line": 1,
+          "line": 2,
           "kind": "static",
           "target": "src/components/sheet/tdv2-game-panel.tsx"
         },
@@ -31704,7 +32233,7 @@
           "names": [
             "TdvProtection"
           ],
-          "line": 2,
+          "line": 3,
           "kind": "static",
           "target": "src/components/sheet/tdv2-protection.tsx"
         },
@@ -31713,7 +32242,7 @@
           "names": [
             "TdvRecordCollection"
           ],
-          "line": 3,
+          "line": 4,
           "kind": "static",
           "target": "src/components/sheet/tdv2-retained-tools.tsx"
         },
@@ -31722,7 +32251,7 @@
           "names": [
             "TdvAnchorSeal"
           ],
-          "line": 4,
+          "line": 5,
           "kind": "static",
           "target": "src/components/sheet/tdv2-visual-instruments.tsx"
         },
@@ -31731,11 +32260,10 @@
           "names": [
             "LayoutPanelLeft",
             "UserRound",
-            "Activity",
             "Layers3",
             "Sprout"
           ],
-          "line": 5,
+          "line": 6,
           "kind": "static",
           "target": null
         },
@@ -31745,7 +32273,7 @@
             "TdvCreationLoom",
             "TdvFamiliarities"
           ],
-          "line": 6,
+          "line": 7,
           "kind": "static",
           "target": "src/components/sheet/tdv2-creation-loom.tsx"
         },
@@ -31754,7 +32282,7 @@
           "names": [
             "TdvPlayPresence"
           ],
-          "line": 7,
+          "line": 8,
           "kind": "static",
           "target": "src/components/sheet/tdv2-play-presence.tsx"
         },
@@ -31765,7 +32293,7 @@
             "TdvDevelopment",
             "MATRIX_CATEGORIES"
           ],
-          "line": 8,
+          "line": 9,
           "kind": "static",
           "target": "src/components/sheet/tdv2-competencies.tsx"
         },
@@ -31779,7 +32307,7 @@
             "DialogTitle",
             "DialogDescription"
           ],
-          "line": 9,
+          "line": 10,
           "kind": "static",
           "target": "src/components/ui/dialog.tsx"
         },
@@ -31788,7 +32316,7 @@
           "names": [
             "AttributeRadar"
           ],
-          "line": 17,
+          "line": 18,
           "kind": "static",
           "target": "src/components/sheet/attribute-radar.tsx"
         },
@@ -31797,7 +32325,7 @@
           "names": [
             "useState"
           ],
-          "line": 18,
+          "line": 19,
           "kind": "static",
           "target": null
         },
@@ -31813,7 +32341,7 @@
             "TdvInscription",
             "TdvChoices"
           ],
-          "line": 19,
+          "line": 20,
           "kind": "static",
           "target": "src/components/sheet/tdv2-fields.tsx"
         },
@@ -31826,7 +32354,7 @@
             "TdvExpressionUse",
             "TdvActiveExpressions"
           ],
-          "line": 29,
+          "line": 30,
           "kind": "static",
           "target": "src/components/sheet/tdv2-procedures.tsx"
         },
@@ -31835,7 +32363,7 @@
           "names": [
             "TdvTestPanel"
           ],
-          "line": 36,
+          "line": 37,
           "kind": "static",
           "target": "src/components/sheet/tdv2-test-panel.tsx"
         },
@@ -31844,7 +32372,7 @@
           "names": [
             "Button"
           ],
-          "line": 38,
+          "line": 39,
           "kind": "static",
           "target": "src/components/ui/button.tsx"
         },
@@ -31856,7 +32384,7 @@
             "TabsList",
             "TabsTrigger"
           ],
-          "line": 39,
+          "line": 40,
           "kind": "static",
           "target": "src/components/ui/tabs.tsx"
         },
@@ -31865,7 +32393,7 @@
           "names": [
             "Section"
           ],
-          "line": 40,
+          "line": 41,
           "kind": "static",
           "target": "src/components/sheet/sheet-ui.tsx"
         },
@@ -31887,13 +32415,17 @@
             "allocateCreation",
             "creationErrors",
             "constitution",
+            "withResourceConditions",
+            "capabilityEffects",
+            "addCapabilityEffect",
+            "endCharacterScene",
             "conditionImpact",
             "capabilityConditions",
             "invest",
             "recover",
             "uid"
           ],
-          "line": 41,
+          "line": 42,
           "kind": "static",
           "target": "src/lib/tdv2.ts"
         },
@@ -31902,7 +32434,7 @@
           "names": [
             "toast"
           ],
-          "line": 65,
+          "line": 70,
           "kind": "static",
           "target": null
         }
@@ -31910,431 +32442,419 @@
       "renders": [
         {
           "component": "Tabs",
-          "line": 209
+          "line": 223
         },
         {
           "component": "TabsList",
-          "line": 214
+          "line": 228
         },
         {
           "component": "TabsTrigger",
-          "line": 227
-        },
-        {
-          "component": "Icon",
-          "line": 234
-        },
-        {
-          "component": "span",
-          "line": 235
-        },
-        {
-          "component": "TabsContent",
-          "line": 239
-        },
-        {
-          "component": "div",
           "line": 240
         },
         {
-          "component": "div",
-          "line": 241
+          "component": "Icon",
+          "line": 247
         },
         {
-          "component": "Section",
-          "line": 242
+          "component": "span",
+          "line": 248
         },
         {
-          "component": "div",
-          "line": 243
-        },
-        {
-          "component": "FaceField",
+          "component": "TabsContent",
           "line": 252
         },
         {
           "component": "div",
-          "line": 262
-        },
-        {
-          "component": "h3",
-          "line": 263
+          "line": 253
         },
         {
           "component": "div",
-          "line": 265
-        },
-        {
-          "component": "TdvInscription",
-          "line": 273
-        },
-        {
-          "component": "p",
-          "line": 285
-        },
-        {
-          "component": "Button",
-          "line": 288
+          "line": 254
         },
         {
           "component": "Section",
-          "line": 299
+          "line": 255
         },
         {
           "component": "div",
-          "line": 300
-        },
-        {
-          "component": "span",
-          "line": 301
-        },
-        {
-          "component": "div",
-          "line": 302
-        },
-        {
-          "component": "small",
-          "line": 303
-        },
-        {
-          "component": "strong",
-          "line": 304
-        },
-        {
-          "component": "span",
-          "line": 306
-        },
-        {
-          "component": "div",
-          "line": 308
-        },
-        {
-          "component": "div",
-          "line": 309
-        },
-        {
-          "component": "div",
-          "line": 310
-        },
-        {
-          "component": "TdvAnchorSeal",
-          "line": 311
-        },
-        {
-          "component": "TdvChoices",
-          "line": 313
+          "line": 256
         },
         {
           "component": "FaceField",
-          "line": 330
-        },
-        {
-          "component": "TdvAction",
-          "line": 339
+          "line": 265
         },
         {
           "component": "div",
-          "line": 340
-        },
-        {
-          "component": "p",
-          "line": 341
-        },
-        {
-          "component": "TdvSelect",
-          "line": 347
-        },
-        {
-          "component": "TdvField",
-          "line": 354
-        },
-        {
-          "component": "TdvField",
-          "line": 362
-        },
-        {
-          "component": "Button",
-          "line": 372
-        },
-        {
-          "component": "Section",
-          "line": 391
-        },
-        {
-          "component": "div",
-          "line": 392
-        },
-        {
-          "component": "TdvDisclosure",
-          "line": 394
-        },
-        {
-          "component": "summary",
-          "line": 405
-        },
-        {
-          "component": "strong",
-          "line": 406
-        },
-        {
-          "component": "small",
-          "line": 407
-        },
-        {
-          "component": "span",
-          "line": 408
-        },
-        {
-          "component": "span",
-          "line": 412
-        },
-        {
-          "component": "span",
-          "line": 414
-        },
-        {
-          "component": "b",
-          "line": 415
-        },
-        {
-          "component": "span",
-          "line": 420
-        },
-        {
-          "component": "b",
-          "line": 421
-        },
-        {
-          "component": "div",
-          "line": 428
-        },
-        {
-          "component": "div",
-          "line": 429
-        },
-        {
-          "component": "TdvInscription",
-          "line": 439
-        },
-        {
-          "component": "TdvSelect",
-          "line": 455
-        },
-        {
-          "component": "TdvLinkUse",
-          "line": 470
-        },
-        {
-          "component": "Button",
-          "line": 476
-        },
-        {
-          "component": "Button",
-          "line": 492
-        },
-        {
-          "component": "Section",
-          "line": 519
-        },
-        {
-          "component": "TdvInscription",
-          "line": 520
-        },
-        {
-          "component": "TabsContent",
-          "line": 529
-        },
-        {
-          "component": "Section",
-          "line": 530
-        },
-        {
-          "component": "p",
-          "line": 532
-        },
-        {
-          "component": "br",
-          "line": 534
-        },
-        {
-          "component": "div",
-          "line": 538
-        },
-        {
-          "component": "div",
-          "line": 539
-        },
-        {
-          "component": "div",
-          "line": 540
-        },
-        {
-          "component": "AttributeRadar",
-          "line": 541
-        },
-        {
-          "component": "div",
-          "line": 556
-        },
-        {
-          "component": "TdvCompetency",
-          "line": 558
-        },
-        {
-          "component": "div",
-          "line": 598
+          "line": 275
         },
         {
           "component": "h3",
-          "line": 599
+          "line": 276
         },
         {
           "component": "div",
-          "line": 600
+          "line": 278
         },
         {
-          "component": "button",
-          "line": 602
+          "component": "TdvInscription",
+          "line": 286
         },
         {
-          "component": "label",
-          "line": 610
-        },
-        {
-          "component": "span",
-          "line": 611
-        },
-        {
-          "component": "input",
-          "line": 612
-        },
-        {
-          "component": "div",
-          "line": 623
-        },
-        {
-          "component": "TdvCompetency",
-          "line": 642
+          "component": "p",
+          "line": 298
         },
         {
           "component": "Button",
-          "line": 680
-        },
-        {
-          "component": "TdvFamiliarities",
-          "line": 684
-        },
-        {
-          "component": "TabsContent",
-          "line": 691
+          "line": 301
         },
         {
           "component": "Section",
-          "line": 692
-        },
-        {
-          "component": "TdvProtection",
-          "line": 693
-        },
-        {
-          "component": "TdvGuard",
-          "line": 694
-        },
-        {
-          "component": "p",
-          "line": 696
-        },
-        {
-          "component": "p",
-          "line": 699
-        },
-        {
-          "component": "p",
-          "line": 705
+          "line": 312
         },
         {
           "component": "div",
-          "line": 711
+          "line": 313
+        },
+        {
+          "component": "span",
+          "line": 314
+        },
+        {
+          "component": "div",
+          "line": 315
+        },
+        {
+          "component": "small",
+          "line": 316
+        },
+        {
+          "component": "strong",
+          "line": 317
+        },
+        {
+          "component": "span",
+          "line": 319
+        },
+        {
+          "component": "div",
+          "line": 321
+        },
+        {
+          "component": "div",
+          "line": 322
+        },
+        {
+          "component": "div",
+          "line": 323
+        },
+        {
+          "component": "TdvAnchorSeal",
+          "line": 324
+        },
+        {
+          "component": "TdvChoices",
+          "line": 326
+        },
+        {
+          "component": "FaceField",
+          "line": 343
+        },
+        {
+          "component": "TdvAction",
+          "line": 352
+        },
+        {
+          "component": "div",
+          "line": 353
         },
         {
           "component": "p",
-          "line": 712
+          "line": 354
         },
         {
           "component": "TdvSelect",
-          "line": 716
+          "line": 360
         },
         {
           "component": "TdvField",
-          "line": 727
+          "line": 367
         },
         {
           "component": "TdvField",
-          "line": 733
+          "line": 375
         },
         {
           "component": "Button",
+          "line": 385
+        },
+        {
+          "component": "Section",
+          "line": 404
+        },
+        {
+          "component": "div",
+          "line": 405
+        },
+        {
+          "component": "TdvDisclosure",
+          "line": 407
+        },
+        {
+          "component": "summary",
+          "line": 418
+        },
+        {
+          "component": "span",
+          "line": 419
+        },
+        {
+          "component": "svg",
+          "line": 420
+        },
+        {
+          "component": "circle",
+          "line": 421
+        },
+        {
+          "component": "circle",
+          "line": 422
+        },
+        {
+          "component": "path",
+          "line": 423
+        },
+        {
+          "component": "strong",
+          "line": 432
+        },
+        {
+          "component": "small",
+          "line": 433
+        },
+        {
+          "component": "span",
+          "line": 434
+        },
+        {
+          "component": "span",
+          "line": 438
+        },
+        {
+          "component": "span",
+          "line": 440
+        },
+        {
+          "component": "b",
+          "line": 441
+        },
+        {
+          "component": "span",
+          "line": 446
+        },
+        {
+          "component": "b",
+          "line": 447
+        },
+        {
+          "component": "div",
+          "line": 454
+        },
+        {
+          "component": "div",
+          "line": 455
+        },
+        {
+          "component": "TdvInscription",
+          "line": 465
+        },
+        {
+          "component": "TdvSelect",
+          "line": 481
+        },
+        {
+          "component": "TdvLinkUse",
+          "line": 496
+        },
+        {
+          "component": "Button",
+          "line": 502
+        },
+        {
+          "component": "Button",
+          "line": 518
+        },
+        {
+          "component": "Section",
+          "line": 545
+        },
+        {
+          "component": "TdvInscription",
+          "line": 546
+        },
+        {
+          "component": "TabsContent",
+          "line": 555
+        },
+        {
+          "component": "Section",
+          "line": 556
+        },
+        {
+          "component": "p",
+          "line": 558
+        },
+        {
+          "component": "br",
+          "line": 560
+        },
+        {
+          "component": "div",
+          "line": 564
+        },
+        {
+          "component": "div",
+          "line": 565
+        },
+        {
+          "component": "div",
+          "line": 566
+        },
+        {
+          "component": "AttributeRadar",
+          "line": 567
+        },
+        {
+          "component": "div",
+          "line": 582
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 584
+        },
+        {
+          "component": "div",
+          "line": 634
+        },
+        {
+          "component": "h3",
+          "line": 635
+        },
+        {
+          "component": "div",
+          "line": 636
+        },
+        {
+          "component": "button",
+          "line": 638
+        },
+        {
+          "component": "label",
+          "line": 646
+        },
+        {
+          "component": "span",
+          "line": 647
+        },
+        {
+          "component": "input",
+          "line": 648
+        },
+        {
+          "component": "div",
+          "line": 659
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 678
+        },
+        {
+          "component": "Button",
+          "line": 727
+        },
+        {
+          "component": "TdvFamiliarities",
+          "line": 731
+        },
+        {
+          "component": "Section",
+          "line": 737
+        },
+        {
+          "component": "TdvProtection",
+          "line": 738
+        },
+        {
+          "component": "TdvGuard",
           "line": 739
         },
         {
           "component": "p",
-          "line": 746
+          "line": 741
+        },
+        {
+          "component": "p",
+          "line": 744
+        },
+        {
+          "component": "p",
+          "line": 750
         },
         {
           "component": "div",
-          "line": 753
-        },
-        {
-          "component": "TdvAction",
-          "line": 754
-        },
-        {
-          "component": "TdvOutcome",
-          "line": 755
-        },
-        {
-          "component": "Button",
           "line": 756
         },
         {
-          "component": "TdvAction",
-          "line": 760
-        },
-        {
-          "component": "Section",
-          "line": 761
-        },
-        {
           "component": "p",
-          "line": 762
-        },
-        {
-          "component": "Button",
-          "line": 766
-        },
-        {
-          "component": "p",
-          "line": 781
-        },
-        {
-          "component": "Section",
-          "line": 785
+          "line": 757
         },
         {
           "component": "TdvSelect",
-          "line": 786
+          "line": 761
         },
         {
           "component": "TdvField",
-          "line": 793
+          "line": 772
         },
         {
-          "component": "TdvCheck",
+          "component": "TdvField",
+          "line": 778
+        },
+        {
+          "component": "Button",
+          "line": 784
+        },
+        {
+          "component": "p",
+          "line": 791
+        },
+        {
+          "component": "div",
+          "line": 798
+        },
+        {
+          "component": "TdvAction",
           "line": 799
         },
         {
-          "component": "TdvCheck",
+          "component": "TdvOutcome",
+          "line": 800
+        },
+        {
+          "component": "Button",
+          "line": 801
+        },
+        {
+          "component": "TdvAction",
           "line": 805
+        },
+        {
+          "component": "Section",
+          "line": 806
+        },
+        {
+          "component": "p",
+          "line": 807
         },
         {
           "component": "Button",
@@ -32342,317 +32862,349 @@
         },
         {
           "component": "p",
-          "line": 827
-        },
-        {
-          "component": "TabsContent",
-          "line": 835
-        },
-        {
-          "component": "TdvActiveExpressions",
-          "line": 837
-        },
-        {
-          "component": "TdvRecordCollection",
-          "line": 838
-        },
-        {
-          "component": "TabsContent",
-          "line": 846
+          "line": 818
         },
         {
           "component": "Section",
-          "line": 847
+          "line": 822
         },
         {
-          "component": "TdvDevelopment",
+          "component": "TdvSelect",
+          "line": 823
+        },
+        {
+          "component": "TdvField",
+          "line": 830
+        },
+        {
+          "component": "TdvCheck",
+          "line": 836
+        },
+        {
+          "component": "TdvCheck",
+          "line": 842
+        },
+        {
+          "component": "Button",
           "line": 848
         },
         {
-          "component": "div",
-          "line": 849
-        },
-        {
-          "component": "Button",
-          "line": 851
-        },
-        {
-          "component": "TdvAction",
-          "line": 867
-        },
-        {
           "component": "p",
-          "line": 868
+          "line": 864
         },
         {
-          "component": "DialogClose",
-          "line": 873
+          "component": "TabsContent",
+          "line": 872
         },
         {
-          "component": "Button",
+          "component": "TdvActiveExpressions",
           "line": 874
         },
         {
-          "component": "div",
-          "line": 895
+          "component": "TdvRecordCollection",
+          "line": 875
         },
         {
-          "component": "Button",
-          "line": 896
-        },
-        {
-          "component": "Button",
-          "line": 902
-        },
-        {
-          "component": "TdvCheck",
-          "line": 909
-        },
-        {
-          "component": "Button",
-          "line": 923
-        },
-        {
-          "component": "details",
-          "line": 936
-        },
-        {
-          "component": "summary",
-          "line": 937
-        },
-        {
-          "component": "p",
-          "line": 939
-        },
-        {
-          "component": "p",
-          "line": 944
-        },
-        {
-          "component": "br",
-          "line": 946
-        },
-        {
-          "component": "p",
-          "line": 951
+          "component": "TabsContent",
+          "line": 883
         },
         {
           "component": "Section",
-          "line": 958
+          "line": 884
         },
         {
-          "component": "TdvField",
-          "line": 960
-        },
-        {
-          "component": "TdvDisclosure",
-          "line": 967
-        },
-        {
-          "component": "summary",
-          "line": 968
-        },
-        {
-          "component": "TdvField",
-          "line": 969
+          "component": "TdvDevelopment",
+          "line": 885
         },
         {
           "component": "div",
-          "line": 981
+          "line": 886
         },
         {
-          "component": "div",
-          "line": 994
+          "component": "Button",
+          "line": 888
         },
         {
-          "component": "div",
-          "line": 996
-        },
-        {
-          "component": "button",
-          "line": 1004
-        },
-        {
-          "component": "div",
-          "line": 1018
+          "component": "TdvAction",
+          "line": 904
         },
         {
           "component": "p",
-          "line": 1019
+          "line": 905
         },
         {
-          "component": "ul",
-          "line": 1021
-        },
-        {
-          "component": "li",
-          "line": 1023
-        },
-        {
-          "component": "div",
-          "line": 1027
+          "component": "DialogClose",
+          "line": 910
         },
         {
           "component": "Button",
-          "line": 1028
+          "line": 911
+        },
+        {
+          "component": "div",
+          "line": 932
         },
         {
           "component": "Button",
-          "line": 1031
+          "line": 933
         },
         {
-          "component": "TdvPlayPresence",
-          "line": 1063
-        },
-        {
-          "component": "TdvCreationLoom",
-          "line": 1077
-        },
-        {
-          "component": "TdvGamePanel",
-          "line": 1086
-        },
-        {
-          "component": "Dialog",
-          "line": 1098
-        },
-        {
-          "component": "DialogContent",
-          "line": 1099
-        },
-        {
-          "component": "DialogHeader",
-          "line": 1100
-        },
-        {
-          "component": "DialogTitle",
-          "line": 1101
-        },
-        {
-          "component": "DialogDescription",
-          "line": 1102
-        },
-        {
-          "component": "div",
-          "line": 1104
-        },
-        {
-          "component": "Dialog",
-          "line": 1114
-        },
-        {
-          "component": "DialogContent",
-          "line": 1115
-        },
-        {
-          "component": "DialogHeader",
-          "line": 1116
-        },
-        {
-          "component": "DialogTitle",
-          "line": 1117
-        },
-        {
-          "component": "DialogDescription",
-          "line": 1118
-        },
-        {
-          "component": "div",
-          "line": 1122
-        },
-        {
-          "component": "TdvSelect",
-          "line": 1123
-        },
-        {
-          "component": "TdvSelect",
-          "line": 1134
-        },
-        {
-          "component": "TdvField",
-          "line": 1142
-        },
-        {
-          "component": "TdvSelect",
-          "line": 1151
-        },
-        {
-          "component": "TdvField",
-          "line": 1159
+          "component": "Button",
+          "line": 939
         },
         {
           "component": "TdvCheck",
-          "line": 1167
-        },
-        {
-          "component": "div",
-          "line": 1174
-        },
-        {
-          "component": "strong",
-          "line": 1175
-        },
-        {
-          "component": "span",
-          "line": 1182
+          "line": 946
         },
         {
           "component": "Button",
-          "line": 1195
+          "line": 960
+        },
+        {
+          "component": "details",
+          "line": 973
+        },
+        {
+          "component": "summary",
+          "line": 974
+        },
+        {
+          "component": "p",
+          "line": 976
+        },
+        {
+          "component": "p",
+          "line": 981
+        },
+        {
+          "component": "br",
+          "line": 983
+        },
+        {
+          "component": "p",
+          "line": 988
+        },
+        {
+          "component": "Section",
+          "line": 995
+        },
+        {
+          "component": "TdvField",
+          "line": 997
+        },
+        {
+          "component": "TdvDisclosure",
+          "line": 1004
+        },
+        {
+          "component": "summary",
+          "line": 1005
+        },
+        {
+          "component": "TdvField",
+          "line": 1006
+        },
+        {
+          "component": "TdvSurfaceContext.Provider",
+          "line": 1018
+        },
+        {
+          "component": "div",
+          "line": 1019
+        },
+        {
+          "component": "div",
+          "line": 1045
+        },
+        {
+          "component": "div",
+          "line": 1047
+        },
+        {
+          "component": "button",
+          "line": 1055
+        },
+        {
+          "component": "div",
+          "line": 1069
+        },
+        {
+          "component": "p",
+          "line": 1070
+        },
+        {
+          "component": "ul",
+          "line": 1072
+        },
+        {
+          "component": "li",
+          "line": 1074
+        },
+        {
+          "component": "div",
+          "line": 1078
+        },
+        {
+          "component": "Button",
+          "line": 1079
+        },
+        {
+          "component": "Button",
+          "line": 1082
+        },
+        {
+          "component": "TdvPlayPresence",
+          "line": 1114
+        },
+        {
+          "component": "TdvCreationLoom",
+          "line": 1128
+        },
+        {
+          "component": "TdvGamePanel",
+          "line": 1137
         },
         {
           "component": "Dialog",
-          "line": 1228
+          "line": 1149
         },
         {
           "component": "DialogContent",
-          "line": 1234
+          "line": 1150
         },
         {
           "component": "DialogHeader",
-          "line": 1235
+          "line": 1151
         },
         {
           "component": "DialogTitle",
-          "line": 1236
+          "line": 1152
         },
         {
           "component": "DialogDescription",
-          "line": 1240
+          "line": 1153
+        },
+        {
+          "component": "div",
+          "line": 1155
+        },
+        {
+          "component": "Dialog",
+          "line": 1165
+        },
+        {
+          "component": "DialogContent",
+          "line": 1166
+        },
+        {
+          "component": "DialogHeader",
+          "line": 1167
+        },
+        {
+          "component": "DialogTitle",
+          "line": 1168
+        },
+        {
+          "component": "DialogDescription",
+          "line": 1169
+        },
+        {
+          "component": "div",
+          "line": 1173
+        },
+        {
+          "component": "TdvSelect",
+          "line": 1174
+        },
+        {
+          "component": "TdvSelect",
+          "line": 1185
+        },
+        {
+          "component": "TdvField",
+          "line": 1193
+        },
+        {
+          "component": "TdvSelect",
+          "line": 1202
+        },
+        {
+          "component": "TdvField",
+          "line": 1210
+        },
+        {
+          "component": "TdvCheck",
+          "line": 1218
+        },
+        {
+          "component": "div",
+          "line": 1225
+        },
+        {
+          "component": "strong",
+          "line": 1226
+        },
+        {
+          "component": "span",
+          "line": 1233
+        },
+        {
+          "component": "Button",
+          "line": 1246
+        },
+        {
+          "component": "Dialog",
+          "line": 1279
+        },
+        {
+          "component": "DialogContent",
+          "line": 1285
+        },
+        {
+          "component": "DialogHeader",
+          "line": 1286
+        },
+        {
+          "component": "DialogTitle",
+          "line": 1287
+        },
+        {
+          "component": "DialogDescription",
+          "line": 1291
         },
         {
           "component": "TdvExpressionUse",
-          "line": 1243
+          "line": 1294
         },
         {
           "component": "Dialog",
-          "line": 1256
+          "line": 1307
         },
         {
           "component": "DialogContent",
-          "line": 1262
+          "line": 1313
         },
         {
           "component": "DialogHeader",
-          "line": 1263
+          "line": 1314
         },
         {
           "component": "DialogTitle",
-          "line": 1264
+          "line": 1315
         },
         {
           "component": "DialogDescription",
-          "line": 1265
+          "line": 1316
         },
         {
           "component": "TdvTestPanel",
-          "line": 1271
+          "line": 1322
         }
       ],
       "actions": [
         {
           "component": "Tabs",
-          "line": 212,
+          "line": 226,
           "event": "onValueChange",
           "expression": "{presentation === \"game\" ? setGameTab : setTab}",
           "label": null,
@@ -32660,7 +33212,7 @@
         },
         {
           "component": "FaceField",
-          "line": 257,
+          "line": 270,
           "event": "onChange",
           "expression": "{(v) => face(key, v)}",
           "label": null,
@@ -32668,7 +33220,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 278,
+          "line": 291,
           "event": "onChange",
           "expression": "{(value) => upd(\"face\", { ...c.face, mark: { ...c.face.mark, [key]: value } }) }",
           "label": null,
@@ -32676,7 +33228,7 @@
         },
         {
           "component": "Button",
-          "line": 291,
+          "line": 304,
           "event": "onClick",
           "expression": "{() => setMarkEditing((value) => !value)}",
           "label": null,
@@ -32684,7 +33236,7 @@
         },
         {
           "component": "TdvChoices",
-          "line": 317,
+          "line": 330,
           "event": "onChange",
           "expression": "{(v) => upd(\"face\", { ...c.face, anchor: { ...c.face.anchor, pillar: v as TdvCharacter[\"face\"][\"anchor\"][\"pillar\"], }, }) }",
           "label": null,
@@ -32692,7 +33244,7 @@
         },
         {
           "component": "FaceField",
-          "line": 333,
+          "line": 346,
           "event": "onChange",
           "expression": "{(v) => upd(\"face\", { ...c.face, anchor: { ...c.face.anchor, detail: v } }) }",
           "label": null,
@@ -32700,7 +33252,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 351,
+          "line": 364,
           "event": "onChange",
           "expression": "{(v) => setAnchorMode(v as typeof anchorMode)}",
           "label": null,
@@ -32708,7 +33260,7 @@
         },
         {
           "component": "TdvField",
-          "line": 357,
+          "line": 370,
           "event": "onChange",
           "expression": "{setConsequence}",
           "label": null,
@@ -32716,7 +33268,7 @@
         },
         {
           "component": "TdvField",
-          "line": 369,
+          "line": 382,
           "event": "onChange",
           "expression": "{setOutcome}",
           "label": null,
@@ -32724,7 +33276,7 @@
         },
         {
           "component": "Button",
-          "line": 375,
+          "line": 388,
           "event": "onClick",
           "expression": "{() => run(() => c.face.anchor.shaken ? resettle(c, outcome) : anchor(c, anchorMode, consequence, outcome), ) }",
           "label": null,
@@ -32732,7 +33284,7 @@
         },
         {
           "component": "TdvDisclosure",
-          "line": 398,
+          "line": 411,
           "event": "onOpenChange",
           "expression": "{(open) => setOpenLinks((previous) => previous[link.id] === open ? previous : { ...previous, [link.id]: open }, ) }",
           "label": null,
@@ -32740,7 +33292,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 443,
+          "line": 469,
           "event": "onChange",
           "expression": "{(v) => upd(\"face\", { ...c.face, links: c.face.links.map((l) => l.id === link.id ? { ...l, [key]: v } : l, ), }) }",
           "label": null,
@@ -32748,7 +33300,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 459,
+          "line": 485,
           "event": "onChange",
           "expression": "{(v) => upd(\"face\", { ...c.face, links: c.face.links.map((l) => l.id === link.id ? { ...l, state: v as typeof link.state } : l, ), }) }",
           "label": null,
@@ -32756,7 +33308,7 @@
         },
         {
           "component": "TdvLinkUse",
-          "line": 473,
+          "line": 499,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -32764,7 +33316,7 @@
         },
         {
           "component": "Button",
-          "line": 479,
+          "line": 505,
           "event": "onClick",
           "expression": "{() => upd(\"face\", { ...c.face, links: c.face.links.filter((l) => l.id !== link.id), }) }",
           "label": null,
@@ -32772,7 +33324,7 @@
         },
         {
           "component": "Button",
-          "line": 495,
+          "line": 521,
           "event": "onClick",
           "expression": "{() => { const id = uid(); setNewLinkId(id); upd(\"face\", { ...c.face, links: [ ...c.face.links, { id, node: \"\", nature: \"\", state: \"Presente\", offer: \"\", demand: \"\", tension: \"\", }, ], }); }}",
           "label": null,
@@ -32780,7 +33332,7 @@
         },
         {
           "component": "TdvInscription",
-          "line": 523,
+          "line": 549,
           "event": "onChange",
           "expression": "{(v) => onChange({ ...c, creation: { ...c.creation!, groupReason: v } })}",
           "label": null,
@@ -32788,7 +33340,23 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 563,
+          "line": 590,
+          "event": "onAddEffect",
+          "expression": "{(kind, value, note) => run(() => addCapabilityEffect(c, matrix, kind, value, note)) }",
+          "label": "{matrix}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 593,
+          "event": "onRemoveEffect",
+          "expression": "{(id) => upd( \"temporaryEffects\", (c.temporaryEffects ?? []).filter((e) => e.id !== id), ) }",
+          "label": "{matrix}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 599,
           "event": "onAdvance",
           "expression": "{() => run(() => initialDraft ? allocateCreation(c, matrix, c.matrices[matrix] + 1, true) : advanceCapability(c, matrix, true), ) }",
           "label": "{matrix}",
@@ -32796,7 +33364,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 570,
+          "line": 606,
           "event": "onReverse",
           "expression": "{() => run(() => initialDraft ? allocateCreation(c, matrix, c.matrices[matrix] - 1, true) : reverseCapability(c, matrix, true), ) }",
           "label": "{matrix}",
@@ -32804,7 +33372,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 588,
+          "line": 624,
           "event": "onRoll",
           "expression": "{() => setRollChoice({ matrix })}",
           "label": "{matrix}",
@@ -32812,7 +33380,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 589,
+          "line": 625,
           "event": "onDevelop",
           "expression": "{() => develop(matrix, true)}",
           "label": "{matrix}",
@@ -32820,7 +33388,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 593,
+          "line": 629,
           "event": "onChange",
           "expression": "{(grade) => run(() => allocateCreation(c, matrix, grade, true))}",
           "label": "{matrix}",
@@ -32828,7 +33396,7 @@
         },
         {
           "component": "button",
-          "line": 605,
+          "line": 641,
           "event": "onClick",
           "expression": "{() => setShowAllGameSkills((value) => !value)}",
           "label": null,
@@ -32836,7 +33404,7 @@
         },
         {
           "component": "input",
-          "line": 618,
+          "line": 654,
           "event": "onChange",
           "expression": "{(event) => setSkillSearch(event.target.value)}",
           "label": "\"Buscar Alinhavo\"",
@@ -32844,7 +33412,23 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 646,
+          "line": 684,
+          "event": "onAddEffect",
+          "expression": "{(kind, value, note) => run(() => addCapabilityEffect(c, name, kind, value, note)) }",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 687,
+          "event": "onRemoveEffect",
+          "expression": "{(id) => upd( \"temporaryEffects\", (c.temporaryEffects ?? []).filter((e) => e.id !== id), ) }",
+          "label": "{name}",
+          "certification": "source-only"
+        },
+        {
+          "component": "TdvCompetency",
+          "line": 693,
           "event": "onAdvance",
           "expression": "{() => run(() => initialDraft ? allocateCreation(c, name, (c.alinhavos[name] ?? 0) + 1, false) : advanceCapability(c, name, false), ) }",
           "label": "{name}",
@@ -32852,7 +33436,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 653,
+          "line": 700,
           "event": "onReverse",
           "expression": "{() => run(() => initialDraft ? allocateCreation(c, name, (c.alinhavos[name] ?? 0) - 1, false) : reverseCapability(c, name, false), ) }",
           "label": "{name}",
@@ -32860,7 +33444,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 672,
+          "line": 719,
           "event": "onChange",
           "expression": "{(grade) => run(() => allocateCreation(c, name, grade, false))}",
           "label": "{name}",
@@ -32868,7 +33452,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 673,
+          "line": 720,
           "event": "onRoll",
           "expression": "{() => setRollChoice({ alinhavo: name })}",
           "label": "{name}",
@@ -32876,7 +33460,7 @@
         },
         {
           "component": "TdvCompetency",
-          "line": 674,
+          "line": 721,
           "event": "onDevelop",
           "expression": "{() => develop(name, false)}",
           "label": "{name}",
@@ -32884,7 +33468,7 @@
         },
         {
           "component": "Button",
-          "line": 680,
+          "line": 727,
           "event": "onClick",
           "expression": "{() => setSkillSearch(\"\")}",
           "label": null,
@@ -32892,7 +33476,7 @@
         },
         {
           "component": "TdvFamiliarities",
-          "line": 686,
+          "line": 733,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -32900,7 +33484,7 @@
         },
         {
           "component": "TdvGuard",
-          "line": 694,
+          "line": 739,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -32908,7 +33492,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 724,
+          "line": 769,
           "event": "onChange",
           "expression": "{(v) => upd(\"critical\", v as TdvCharacter[\"critical\"])}",
           "label": null,
@@ -32916,7 +33500,7 @@
         },
         {
           "component": "TdvField",
-          "line": 730,
+          "line": 775,
           "event": "onChange",
           "expression": "{(v) => upd(\"deathWindow\", v)}",
           "label": null,
@@ -32924,7 +33508,7 @@
         },
         {
           "component": "TdvField",
-          "line": 736,
+          "line": 781,
           "event": "onChange",
           "expression": "{setCareAction}",
           "label": null,
@@ -32932,7 +33516,7 @@
         },
         {
           "component": "Button",
-          "line": 742,
+          "line": 787,
           "event": "onClick",
           "expression": "{() => run(() => stabilize(c, careAction))}",
           "label": null,
@@ -32940,7 +33524,7 @@
         },
         {
           "component": "TdvOutcome",
-          "line": 755,
+          "line": 800,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -32948,7 +33532,7 @@
         },
         {
           "component": "Button",
-          "line": 756,
+          "line": 801,
           "event": "onClick",
           "expression": "{() => setRollChoice({ matrix: \"Nexo\" })}",
           "label": null,
@@ -32956,15 +33540,15 @@
         },
         {
           "component": "Button",
-          "line": 769,
+          "line": 814,
           "event": "onClick",
-          "expression": "{() => upd(\"scene\", { ...c.scene, shaken: [], forcedAtZero: false, tests: [], paidEvents: [], }) }",
+          "expression": "{() => onChange(endCharacterScene(c))}",
           "label": null,
           "certification": "source-only"
         },
         {
           "component": "TdvSelect",
-          "line": 790,
+          "line": 827,
           "event": "onChange",
           "expression": "{setRecovery}",
           "label": null,
@@ -32972,7 +33556,7 @@
         },
         {
           "component": "TdvField",
-          "line": 796,
+          "line": 833,
           "event": "onChange",
           "expression": "{setWindow}",
           "label": null,
@@ -32980,7 +33564,7 @@
         },
         {
           "component": "TdvCheck",
-          "line": 802,
+          "line": 839,
           "event": "onChange",
           "expression": "{setCare}",
           "label": null,
@@ -32988,7 +33572,7 @@
         },
         {
           "component": "TdvCheck",
-          "line": 808,
+          "line": 845,
           "event": "onChange",
           "expression": "{setRebuilt}",
           "label": null,
@@ -32996,7 +33580,7 @@
         },
         {
           "component": "Button",
-          "line": 813,
+          "line": 850,
           "event": "onClick",
           "expression": "{() => run(() => recover( c, recovery as \"Pausa breve\" | \"Repouso profundo\" | \"Recuperação plena\", care, rebuilt, window, ), ) }",
           "label": null,
@@ -33004,7 +33588,7 @@
         },
         {
           "component": "TdvActiveExpressions",
-          "line": 837,
+          "line": 874,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -33012,7 +33596,7 @@
         },
         {
           "component": "TdvRecordCollection",
-          "line": 840,
+          "line": 877,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -33020,7 +33604,7 @@
         },
         {
           "component": "TdvRecordCollection",
-          "line": 842,
+          "line": 879,
           "event": "onUse",
           "expression": "{setExpressionUse}",
           "label": null,
@@ -33028,7 +33612,7 @@
         },
         {
           "component": "Button",
-          "line": 853,
+          "line": 890,
           "event": "onClick",
           "expression": "{() => { if (!c.ready && creationErrors(c).length) { toast.error(creationErrors(c).join(\" \")); setTab(\"constituicao\"); setGameTab(\"constituicao\"); return; } run(() => grantMilestone(c)); }}",
           "label": null,
@@ -33036,7 +33620,7 @@
         },
         {
           "component": "Button",
-          "line": 877,
+          "line": 914,
           "event": "onClick",
           "expression": "{() => { setInitialDraft({ ...c, progression: { allowMilestones: c.progression?.allowMilestones ?? false, allowCreation: true, }, }); setGameToolsOpen(false); setTab(\"constituicao\"); setGameTab(\"constituicao\"); }}",
           "label": null,
@@ -33044,7 +33628,7 @@
         },
         {
           "component": "Button",
-          "line": 898,
+          "line": 935,
           "event": "onClick",
           "expression": "{() => run(() => reverseProgression(c, \"Marco\"))}",
           "label": null,
@@ -33052,7 +33636,7 @@
         },
         {
           "component": "Button",
-          "line": 904,
+          "line": 941,
           "event": "onClick",
           "expression": "{() => run(() => reverseProgression(c, \"Investimento\"))}",
           "label": null,
@@ -33060,7 +33644,7 @@
         },
         {
           "component": "TdvCheck",
-          "line": 913,
+          "line": 950,
           "event": "onChange",
           "expression": "{(value) => upd(\"progression\", { allowCreation: c.progression?.allowCreation ?? false, allowMilestones: value, }) }",
           "label": null,
@@ -33068,7 +33652,7 @@
         },
         {
           "component": "Button",
-          "line": 926,
+          "line": 963,
           "event": "onClick",
           "expression": "{() => { setKind(\"Matriz\"); setTarget(MATRICES[0]); setReason(\"\"); setTranscendent(false); setDevelopmentOpen(true); }}",
           "label": null,
@@ -33076,7 +33660,7 @@
         },
         {
           "component": "TdvField",
-          "line": 963,
+          "line": 1000,
           "event": "onChange",
           "expression": "{(v) => upd(\"history\", v)}",
           "label": null,
@@ -33084,7 +33668,7 @@
         },
         {
           "component": "TdvField",
-          "line": 972,
+          "line": 1009,
           "event": "onChange",
           "expression": "{(v) => upd(\"notes\", v)}",
           "label": null,
@@ -33092,7 +33676,7 @@
         },
         {
           "component": "button",
-          "line": 1009,
+          "line": 1060,
           "event": "onClick",
           "expression": "{() => selectProfile(value)}",
           "label": null,
@@ -33100,7 +33684,7 @@
         },
         {
           "component": "Button",
-          "line": 1028,
+          "line": 1079,
           "event": "onClick",
           "expression": "{() => setInitialDraft(null)}",
           "label": null,
@@ -33108,7 +33692,7 @@
         },
         {
           "component": "Button",
-          "line": 1033,
+          "line": 1084,
           "event": "onClick",
           "expression": "{() => { const merged = { ...incoming, matrices: c.matrices, alinhavos: c.alinhavos, creation: c.creation ? { ...incoming.creation!, familiarities: c.creation.familiarities } : incoming.creation, face: { ...incoming.face, anchor: { ...incom",
           "label": null,
@@ -33116,7 +33700,7 @@
         },
         {
           "component": "TdvPlayPresence",
-          "line": 1066,
+          "line": 1117,
           "event": "onChange",
           "expression": "{onChange}",
           "label": "{name}",
@@ -33124,15 +33708,15 @@
         },
         {
           "component": "TdvPlayPresence",
-          "line": 1069,
+          "line": 1120,
           "event": "onInspectState",
-          "expression": "{() => { if (presentation === \"game\") { setGameTab(\"acao\"); setGameToolsOpen(true); } else setTab(\"acao\"); }}",
+          "expression": "{() => { if (presentation === \"game\") { setGameTab(\"constituicao\"); setGameToolsOpen(true); } else setTab(\"constituicao\"); }}",
           "label": "{name}",
           "certification": "source-only"
         },
         {
           "component": "TdvCreationLoom",
-          "line": 1079,
+          "line": 1130,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -33140,7 +33724,7 @@
         },
         {
           "component": "TdvCreationLoom",
-          "line": 1081,
+          "line": 1132,
           "event": "onSelect",
           "expression": "{presentation === \"game\" ? setGameTab : setTab}",
           "label": null,
@@ -33148,7 +33732,7 @@
         },
         {
           "component": "TdvGamePanel",
-          "line": 1088,
+          "line": 1139,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -33156,7 +33740,7 @@
         },
         {
           "component": "TdvGamePanel",
-          "line": 1091,
+          "line": 1142,
           "event": "onUse",
           "expression": "{setExpressionUse}",
           "label": null,
@@ -33164,7 +33748,7 @@
         },
         {
           "component": "TdvGamePanel",
-          "line": 1092,
+          "line": 1143,
           "event": "onTranscend",
           "expression": "{(name) => develop(name, true)}",
           "label": null,
@@ -33172,7 +33756,7 @@
         },
         {
           "component": "TdvGamePanel",
-          "line": 1093,
+          "line": 1144,
           "event": "onOpen",
           "expression": "{(value) => { setGameTab(value === \"equipamento\" ? \"expressao\" : value); setGameToolsOpen(true); }}",
           "label": null,
@@ -33180,7 +33764,7 @@
         },
         {
           "component": "Dialog",
-          "line": 1098,
+          "line": 1149,
           "event": "onOpenChange",
           "expression": "{setGameToolsOpen}",
           "label": null,
@@ -33188,7 +33772,7 @@
         },
         {
           "component": "Dialog",
-          "line": 1114,
+          "line": 1165,
           "event": "onOpenChange",
           "expression": "{setDevelopmentOpen}",
           "label": null,
@@ -33196,7 +33780,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 1127,
+          "line": 1178,
           "event": "onChange",
           "expression": "{(v) => { setKind(v); setTarget(v === \"Matriz\" ? MATRICES[0] : v === \"Alinhavo\" ? ALINHAVOS[0] : \"\"); }}",
           "label": null,
@@ -33204,7 +33788,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 1138,
+          "line": 1189,
           "event": "onChange",
           "expression": "{setTarget}",
           "label": null,
@@ -33212,7 +33796,7 @@
         },
         {
           "component": "TdvField",
-          "line": 1145,
+          "line": 1196,
           "event": "onChange",
           "expression": "{setTarget}",
           "label": null,
@@ -33220,7 +33804,7 @@
         },
         {
           "component": "TdvSelect",
-          "line": 1155,
+          "line": 1206,
           "event": "onChange",
           "expression": "{(v) => setCost(Number(v))}",
           "label": null,
@@ -33228,7 +33812,7 @@
         },
         {
           "component": "TdvField",
-          "line": 1162,
+          "line": 1213,
           "event": "onChange",
           "expression": "{setReason}",
           "label": null,
@@ -33236,7 +33820,7 @@
         },
         {
           "component": "TdvCheck",
-          "line": 1170,
+          "line": 1221,
           "event": "onChange",
           "expression": "{setTranscendent}",
           "label": null,
@@ -33244,7 +33828,7 @@
         },
         {
           "component": "Button",
-          "line": 1204,
+          "line": 1255,
           "event": "onClick",
           "expression": "{() => run(() => { const next = invest(c, { kind: kind as TdvCharacter[\"investments\"][number][\"kind\"], target, reason, transcendent, cost: kind === \"Matriz\" ? stats.matrices[target as Matrix] + 3 : kind === \"Alinhavo\" ? 2 : cost, }); setDev",
           "label": null,
@@ -33252,7 +33836,7 @@
         },
         {
           "component": "Dialog",
-          "line": 1230,
+          "line": 1281,
           "event": "onOpenChange",
           "expression": "{(open) => { if (!open) setExpressionUse(null); }}",
           "label": null,
@@ -33260,7 +33844,7 @@
         },
         {
           "component": "TdvExpressionUse",
-          "line": 1246,
+          "line": 1297,
           "event": "onChange",
           "expression": "{(value) => { onChange(value); setExpressionUse(null); }}",
           "label": null,
@@ -33268,7 +33852,7 @@
         },
         {
           "component": "Dialog",
-          "line": 1258,
+          "line": 1309,
           "event": "onOpenChange",
           "expression": "{(open) => { if (!open) setRollChoice(null); }}",
           "label": null,
@@ -33276,7 +33860,7 @@
         },
         {
           "component": "TdvTestPanel",
-          "line": 1274,
+          "line": 1325,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -33287,240 +33871,259 @@
         {
           "operation": "getItem",
           "target": "[dynamic]",
-          "line": 121
+          "line": 129
         },
         {
           "operation": "setItem",
           "target": "[dynamic]",
-          "line": 135
+          "line": 147
         }
       ],
       "routes": [],
       "guards": [
         {
           "expression": "TabsTrigger disabled={Boolean(initialDraft) && ![\"pessoa\", \"constituicao\"].includes(value)}",
-          "line": 232
+          "line": 245
         },
         {
           "expression": "FaceField disabled={disabled}",
-          "line": 258
+          "line": 271
         },
         {
           "expression": "TdvInscription disabled={disabled}",
-          "line": 277
-        },
-        {
-          "expression": "Button disabled={disabled}",
           "line": 290
         },
         {
+          "expression": "Button disabled={disabled}",
+          "line": 303
+        },
+        {
           "expression": "TdvChoices disabled={!canEdit}",
-          "line": 326
+          "line": 339
         },
         {
           "expression": "FaceField disabled={disabled}",
-          "line": 336
+          "line": 349
         },
         {
           "expression": "TdvSelect disabled={disabled}",
-          "line": 352
+          "line": 365
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 358
+          "line": 371
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 370
+          "line": 383
         },
         {
           "expression": "Button disabled={disabled || !c.ready}",
-          "line": 374
+          "line": 387
         },
         {
           "expression": "TdvInscription disabled={disabled}",
-          "line": 451
+          "line": 477
         },
         {
           "expression": "TdvSelect disabled={disabled}",
-          "line": 467
+          "line": 493
         },
         {
           "expression": "TdvLinkUse canEdit={canEdit}",
-          "line": 474
+          "line": 500
         },
         {
           "expression": "Button disabled={disabled}",
-          "line": 478
+          "line": 504
         },
         {
           "expression": "Button disabled={disabled || c.face.links.length >= 50}",
-          "line": 494
+          "line": 520
         },
         {
           "expression": "TdvInscription disabled={disabled}",
-          "line": 524
+          "line": 550
         },
         {
           "expression": "TdvCompetency disabled={!canEdit}",
-          "line": 587
+          "line": 623
         },
         {
           "expression": "TdvCompetency disabled={!canEdit}",
-          "line": 669
+          "line": 716
         },
         {
           "expression": "TdvFamiliarities canEdit={canEdit && initialUnlocked}",
-          "line": 687
+          "line": 734
         },
         {
           "expression": "TdvGuard canEdit={canEdit}",
-          "line": 694
+          "line": 739
         },
         {
           "expression": "TdvSelect disabled={disabled}",
-          "line": 725
+          "line": 770
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 731
+          "line": 776
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 737
+          "line": 782
         },
         {
           "expression": "Button disabled={disabled || c.critical === \"Morta\"}",
-          "line": 741
+          "line": 786
         },
         {
           "expression": "TdvOutcome canEdit={canEdit}",
-          "line": 755
+          "line": 800
         },
         {
           "expression": "Button disabled={disabled}",
-          "line": 767
-        },
-        {
-          "expression": "TdvSelect disabled={disabled}",
-          "line": 791
-        },
-        {
-          "expression": "TdvField disabled={disabled}",
-          "line": 797
-        },
-        {
-          "expression": "TdvCheck disabled={disabled}",
-          "line": 803
-        },
-        {
-          "expression": "TdvCheck disabled={disabled}",
-          "line": 809
-        },
-        {
-          "expression": "Button disabled={disabled || !c.ready}",
           "line": 812
         },
         {
+          "expression": "TdvSelect disabled={disabled}",
+          "line": 828
+        },
+        {
+          "expression": "TdvField disabled={disabled}",
+          "line": 834
+        },
+        {
+          "expression": "TdvCheck disabled={disabled}",
+          "line": 840
+        },
+        {
+          "expression": "TdvCheck disabled={disabled}",
+          "line": 846
+        },
+        {
+          "expression": "Button disabled={disabled || !c.ready}",
+          "line": 849
+        },
+        {
           "expression": "TdvActiveExpressions canEdit={canEdit}",
-          "line": 837
+          "line": 874
         },
         {
           "expression": "TdvRecordCollection canEdit={canEdit}",
-          "line": 841
+          "line": 878
         },
         {
           "expression": "Button disabled={disabled || c.milestones.length >= 20}",
-          "line": 852
+          "line": 889
         },
         {
           "expression": "Button disabled={!canEdit || c.investments.length > 0}",
-          "line": 876
+          "line": 913
         },
         {
           "expression": "Button disabled={disabled || !c.milestones.length || stats.pu < 2}",
-          "line": 897
+          "line": 934
         },
         {
           "expression": "Button disabled={disabled || !c.investments.length}",
-          "line": 903
+          "line": 940
         },
         {
           "expression": "TdvCheck disabled={disabled}",
-          "line": 912
+          "line": 949
         },
         {
           "expression": "Button disabled={disabled || !c.ready || stats.pu < 2}",
-          "line": 925
+          "line": 962
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 964
+          "line": 1001
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 973
+          "line": 1010
         },
         {
           "expression": "button disabled={Boolean(initialDraft)}",
-          "line": 1008
+          "line": 1059
         },
         {
           "expression": "Button disabled={creationErrors(c).length > 0}",
-          "line": 1032
+          "line": 1083
         },
         {
           "expression": "TdvPlayPresence canEdit={canEdit && !initialDraft}",
-          "line": 1067
+          "line": 1118
         },
         {
           "expression": "TdvCreationLoom canEdit={canEdit}",
-          "line": 1080
-        },
-        {
-          "expression": "TdvGamePanel canEdit={canEdit}",
-          "line": 1089
-        },
-        {
-          "expression": "TdvSelect disabled={disabled}",
           "line": 1131
         },
         {
-          "expression": "TdvSelect disabled={disabled}",
-          "line": 1139
-        },
-        {
-          "expression": "TdvField disabled={disabled}",
-          "line": 1146
+          "expression": "TdvGamePanel canEdit={canEdit}",
+          "line": 1140
         },
         {
           "expression": "TdvSelect disabled={disabled}",
-          "line": 1156
+          "line": 1182
+        },
+        {
+          "expression": "TdvSelect disabled={disabled}",
+          "line": 1190
         },
         {
           "expression": "TdvField disabled={disabled}",
-          "line": 1163
+          "line": 1197
+        },
+        {
+          "expression": "TdvSelect disabled={disabled}",
+          "line": 1207
+        },
+        {
+          "expression": "TdvField disabled={disabled}",
+          "line": 1214
         },
         {
           "expression": "TdvCheck disabled={disabled}",
-          "line": 1171
+          "line": 1222
         },
         {
           "expression": "Button disabled={ disabled || !c.ready || investmentAtLimit || stats.pu < investmentCost || !reason.trim() || !target.trim() }",
-          "line": 1196
+          "line": 1247
         },
         {
           "expression": "TdvExpressionUse canEdit={canEdit}",
-          "line": 1250
+          "line": 1301
         },
         {
           "expression": "TdvTestPanel canEdit={canEdit}",
-          "line": 1275
+          "line": 1326
         }
       ]
     },
+    "src/components/sheet/tdv2-surface-context.ts": {
+      "sha256": "7db8e615c64950a52aa3f964fff409f339a05f59b9fad2b7e9f6458e0f697cd3",
+      "imports": [
+        {
+          "specifier": "react",
+          "names": [
+            "createContext"
+          ],
+          "line": 1,
+          "kind": "static",
+          "target": null
+        }
+      ],
+      "renders": [],
+      "actions": [],
+      "data": [],
+      "routes": [],
+      "guards": []
+    },
     "src/components/sheet/tdv2-test-panel.tsx": {
-      "sha256": "44897c0080645fbdb10abdc5a891ae72d32a1787bd9a4a17939b4cd79750b0eb",
+      "sha256": "4769490780bc446215e0442a9cefa2058d645192672f0ba3d9882031813b1d78",
       "imports": [
         {
           "specifier": "./tdv2-visual-instruments",
@@ -33793,91 +34396,91 @@
         },
         {
           "component": "Button",
-          "line": 335
-        },
-        {
-          "component": "div",
-          "line": 346
+          "line": 336
         },
         {
           "component": "div",
           "line": 347
         },
         {
-          "component": "span",
+          "component": "div",
           "line": 348
         },
         {
-          "component": "strong",
+          "component": "span",
           "line": 349
         },
         {
+          "component": "strong",
+          "line": 350
+        },
+        {
           "component": "small",
-          "line": 351
+          "line": 352
         },
         {
           "component": "div",
-          "line": 354
+          "line": 355
         },
         {
           "component": "span",
-          "line": 362
+          "line": 363
         },
         {
           "component": "i",
-          "line": 364
+          "line": 365
         },
         {
           "component": "small",
-          "line": 367
+          "line": 368
         },
         {
           "component": "p",
-          "line": 375
+          "line": 376
         },
         {
           "component": "div",
-          "line": 384
-        },
-        {
-          "component": "TdvTestWeave",
           "line": 385
         },
         {
-          "component": "p",
+          "component": "TdvTestWeave",
           "line": 386
         },
         {
-          "component": "div",
-          "line": 390
+          "component": "p",
+          "line": 392
         },
         {
           "component": "div",
-          "line": 399
+          "line": 396
+        },
+        {
+          "component": "div",
+          "line": 406
         },
         {
           "component": "small",
-          "line": 400
+          "line": 407
         },
         {
           "component": "strong",
-          "line": 401
+          "line": 408
         },
         {
           "component": "p",
-          "line": 405
+          "line": 412
         },
         {
           "component": "p",
-          "line": 411
+          "line": 418
         },
         {
           "component": "p",
-          "line": 416
+          "line": 423
         },
         {
           "component": "div",
-          "line": 430
+          "line": 437
         }
       ],
       "actions": [
@@ -34035,7 +34638,7 @@
         },
         {
           "component": "Button",
-          "line": 335,
+          "line": 336,
           "event": "onClick",
           "expression": "{() => setConfirmedPhysical(\"\")}",
           "label": null,
@@ -34046,7 +34649,7 @@
         {
           "operation": "from",
           "target": "[dynamic]",
-          "line": 363
+          "line": 364
         }
       ],
       "routes": [],
@@ -34129,12 +34732,12 @@
         },
         {
           "expression": "Button disabled={!canEdit}",
-          "line": 335
+          "line": 336
         }
       ]
     },
     "src/components/sheet/tdv2-visual-instruments.tsx": {
-      "sha256": "c7219602eacf47e9604745319aeb9640c5701dd205d272efcff331c26bbf941c",
+      "sha256": "d80f785fd2988e0ee10093b56cf39038fdc419a02aa05cf48a1022971d97f3f3",
       "imports": [
         {
           "specifier": "react",
@@ -34373,43 +34976,43 @@
         },
         {
           "component": "svg",
-          "line": 262
+          "line": 273
         },
         {
           "component": "path",
-          "line": 268
-        },
-        {
-          "component": "path",
-          "line": 272
-        },
-        {
-          "component": "path",
-          "line": 276
-        },
-        {
-          "component": "path",
-          "line": 277
-        },
-        {
-          "component": "circle",
-          "line": 278
-        },
-        {
-          "component": "text",
           "line": 279
         },
         {
-          "component": "text",
-          "line": 282
+          "component": "path",
+          "line": 283
         },
         {
-          "component": "text",
-          "line": 285
+          "component": "path",
+          "line": 287
         },
         {
-          "component": "text",
+          "component": "path",
           "line": 288
+        },
+        {
+          "component": "circle",
+          "line": 289
+        },
+        {
+          "component": "text",
+          "line": 290
+        },
+        {
+          "component": "text",
+          "line": 293
+        },
+        {
+          "component": "text",
+          "line": 296
+        },
+        {
+          "component": "text",
+          "line": 299
         }
       ],
       "actions": [
@@ -62144,7 +62747,7 @@
       "guards": []
     },
     "src/lib/tdv2-play.ts": {
-      "sha256": "7824a22990aea3b2272fe671929d0d23b84803af36aa01b022e0a2c84131c842",
+      "sha256": "6dea6c3596ac2c5d43155ef67a173f7551c558ab83748ea93fc2e2bc2b22880d",
       "imports": [
         {
           "specifier": "./tdv2",
@@ -62154,6 +62757,7 @@
             "readTest",
             "resolveTest",
             "setResource",
+            "withResourceConditions",
             "uid"
           ],
           "line": 1,
@@ -62177,7 +62781,7 @@
       "guards": []
     },
     "src/lib/tdv2.ts": {
-      "sha256": "78b8964830fa82b0ced7481bfaad0424b894a1a6daaacd0085ce70a77b577bec",
+      "sha256": "db05134f14e12767479bf780eef7beea1f9e3f8d72b55f3c30b567a56e1c1a43",
       "imports": [
         {
           "specifier": "zod",

@@ -2502,7 +2502,9 @@
 .tdv-cargo-reading { display: flex; flex-wrap: wrap; gap: .4rem; color: #b6c6a4; font: .85rem/1.4 var(--font-inter); padding-block: .5rem .9rem; }
 .tdv-cargo-reading strong { color: #d5e6ba; }
 .tdv-item-dialog[data-item-kind="trama"] { --folio-rgb: 178 158 211; }
-.tdv-item-dialog[data-item-kind="fragmento"],.tdv-item-dialog[data-item-kind="selo"] { --folio-rgb: 137 190 197; }
+.tdv-item-dialog[data-item-kind="fragmento"] { --folio-rgb: 203 162 116; }
+.tdv-item-dialog[data-item-kind="selo"] { --folio-rgb: 143 187 203; }
+.tdv-item-dialog[data-item-kind="lavor"] { --folio-rgb: 149 201 165; }
 .tdv-game-panel { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); align-items: start; gap: .75rem 1rem; }
 .tdv-game-toolbelt { grid-column: 1/-1; display: flex; flex-wrap: wrap; gap: .25rem; border-block: 1px solid #cdb88b25; padding-block: .25rem; }
 .tdv-game-toolbelt button { min-height: 44px; gap: .4rem; font: .9rem var(--font-inter); }

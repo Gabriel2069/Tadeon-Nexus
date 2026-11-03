@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-02; referência de runtime: `f447350d9b8f8696b822de978c43800bcc554ef3`. PR #320 em `feat/nex-047-visual-play`; integração: `integrated`. Não é prova de deploy.
+Snapshot: 2026-11-02; referência de runtime: `6de0a770b443bec028444cd16f35114f16f42e42`. PR #323 em `feat/dec032-game-panel`; integração: `integrated`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 
@@ -55,7 +55,7 @@ Cada PR usa IDs desta fila e declara dependências. Trabalho sobre o mesmo propr
 | NEX-043 | V4 fase 0: manifesto montado, fontes, baseline e restauração | Adiado | 0 | delivery | NEX-042 |
 | NEX-044 | V4 fase 1: biblioteca material e motion autoral | Integrado | 1 | shell | NEX-043 |
 | NEX-045 | V4 fase 2: shell, entrada e utilidades | Integrado | 1 | shell | NEX-044 |
-| NEX-046 | V4 fase 3: Ficha Integral em cinco fólios | Em andamento | 1 | sheet | NEX-042 |
+| NEX-046 | V4 fase 3: Ficha Integral em quatro guias (DEC-033) | Em andamento | 1 | sheet | NEX-042 |
 | NEX-047 | V4 fase 4: Visão de Partida e integração física/digital | Planejado | 1 | sheet | NEX-046, NEX-048 |
 | NEX-048 | V4: autoridade transacional de ações, custos e Resto | Planejado | 1 | session | NEX-043, NEX-010, NEX-011 |
 | NEX-049 | V4 fase 5: Mesa, Mestre e Nexus integrados | Planejado | 1 | tabletop | NEX-047, NEX-048 |
@@ -448,13 +448,13 @@ Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMEN
 
 Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [CI/referência](https://github.com/Gabriel2069/tadeon-nexus/pull/317).
 
-## NEX-046 — V4 fase 3: Ficha Integral em cinco fólios
+## NEX-046 — V4 fase 3: Ficha Integral em quatro guias (DEC-033)
 
 - Preservar todos os campos, IDs, narrativa, inventário, vínculos, rascunhos, CAS e acesso histórico.
-- Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.
+- Recompor Feição/Ação/Expressão/Transformação, com destinos equivalentes para a antiga Cena, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.
 - Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco.
 
-Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json), [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_COMO_INSTRUMENTO.md](../docs/v4/FICHA_COMO_INSTRUMENTO.md), [docs/v4/living-sheet-validation.json](../docs/v4/living-sheet-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json).
+Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json), [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_COMO_INSTRUMENTO.md](../docs/v4/FICHA_COMO_INSTRUMENTO.md), [docs/v4/living-sheet-validation.json](../docs/v4/living-sheet-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md).
 
 ## NEX-047 — V4 fase 4: Visão de Partida e integração física/digital
 
@@ -462,7 +462,7 @@ Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/v
 - Isolar e identificar Forma de Poder legada, preservando URL/flag/payload e impedindo gravação por simples leitura.
 - Implementar dois Fios, cartões/repertório, físico/híbrido/digital, conciliação explícita, offline/retry e aprovação sem cobranças duplicadas.
 
-Evidências: [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json).
+Evidências: [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md).
 
 ## NEX-048 — V4: autoridade transacional de ações, custos e Resto
 
@@ -522,3 +522,4 @@ Evidências: pendentes; não declarar concluído.
 | DEC-030 | Ficha como prancheta interativa: expandido padrão, recursos diretos, capacidades proporcionadas, vínculos compactos, desenvolvimento por ações e jogo digital/híbrido/apoio físico. A composição genérica de DEC-029 e a prioridade de jogo de DEC-028 são superadas pelo pedido atual. | Pedido explícito de Tadeu. Condições têm efeitos declarados, sem gravidade/prosa inferindo penalidade. A instrução mais recente reduz QA repetitivo: quatro composições representativas e fluxos alterados substituem três varreduras sobrepostas, preservando Quality e regressões mecânicas. Sem migrations (DEC-024). |
 | DEC-031 | Priorizar exposição e consulta na ficha, unificar materiais dos quadros e deslocar operações ocasionais para comandos; distribuição inicial limitada, Marcos diretos, correção arquivada e delegação pelo mestre. | Pedido explícito de Tadeu após PR 321. QA proporcional por escopo; autorização de reabertura e delegação exige guarda no servidor. Autoriza uma alteração aditiva e reversível da função de progressão sem regravar dados; o adiamento de backup geral permanece. Não inventar pacote de pontos, pré-requisitos ou bônus fora do Livro II. |
 | DEC-032 | Painel de jogo condensado, Tramas/Fragmentos alternados, cores anteriores das Matrizes e progressão unidirecional por clique com PU; regressão exclusiva do mestre. | Pedido explícito de Tadeu. Selagem valida o pacote numérico sem impor preenchimento de prosa. Marco pode selar distribuição válida no mesmo evento; nenhum rascunho real é normalizado. Carga usa volume, mãos, suporte e acesso conforme Livro II (5). QA proporcional aos fluxos alterados, quatro larguras e papéis mestre/espectador; sem varredura V4 integral. |
+| DEC-033 | Quatro guias Feição/Ação/Expressão/Transformação, Vínculos visuais, menus de identidade própria, modificadores de recursos, efeitos temporários e leitura marcante dos estados zero. | Pedido explícito de Tadeu. Cena transfere suas ferramentas a Ação; nenhum dado/função removido. Campos aditivos opcionais, validador compatível e Edge Function usam o motor existente. Três marcadores são acompanhamento manual, sem regra automática de morte. QA concentrado nos fluxos alterados, quatro tamanhos e leitura/edição; backup geral continua diferido. |

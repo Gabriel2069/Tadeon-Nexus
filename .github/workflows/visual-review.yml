@@ -36,7 +36,7 @@ jobs:
           node --input-type=module <<'JS'
           import {readFileSync,appendFileSync} from 'node:fs';
           const paths=readFileSync('/tmp/changed-paths.txt','utf8').trim().split('\n');
-          const focused=paths.every(p=>p.startsWith('docs/') || p.startsWith('src/components/sheet/') || p.startsWith('src/lib/tdv2') || p.startsWith('supabase/migrations/') || p.startsWith('scripts/verify-tdv2') || p.startsWith('scripts/verify-sheet-') || ['src/components/selection-plate.tsx','src/styles/navigation-layout.css','src/styles/sheet-premium.css','.github/workflows/visual-review.yml','.github/workflows/quality.yml'].includes(p));
+          const focused=paths.every(p=>p.startsWith('docs/') || p.startsWith('src/components/sheet/') || p.startsWith('src/lib/tdv2') || p.startsWith('supabase/migrations/') || p.startsWith('scripts/verify-tdv2') || p.startsWith('scripts/verify-sheet-') || ['supabase/functions/tabletop-view/index.ts','src/components/selection-plate.tsx','src/styles/navigation-layout.css','src/styles/sheet-premium.css','.github/workflows/visual-review.yml','.github/workflows/quality.yml'].includes(p));
           const navigation=paths.some(p=>['src/components/selection-plate.tsx','src/styles/navigation-layout.css'].includes(p));
           appendFileSync(process.env.GITHUB_OUTPUT,`suites=${JSON.stringify(focused?(navigation?['navigation','play']:['play']):['navigation','utilities','tabletop','sheet','tdv2','play'])}\nfocused=${focused}\n`);
           JS
