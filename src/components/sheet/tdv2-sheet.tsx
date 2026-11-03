@@ -1,8 +1,9 @@
+import { TdvSurfaceContext } from "./tdv2-surface-context";
 import { TdvGamePanel } from "./tdv2-game-panel";
 import { TdvProtection } from "./tdv2-protection";
 import { TdvRecordCollection } from "./tdv2-retained-tools";
 import { TdvAnchorSeal } from "./tdv2-visual-instruments";
-import { LayoutPanelLeft, UserRound, Activity, Layers3, Sprout } from "lucide-react";
+import { LayoutPanelLeft, UserRound, Layers3, Sprout } from "lucide-react";
 import { TdvCreationLoom, TdvFamiliarities } from "./tdv2-creation-loom";
 import { TdvPlayPresence } from "./tdv2-play-presence";
 import { TdvCompetency, TdvDevelopment, MATRIX_CATEGORIES } from "./tdv2-competencies";
@@ -54,6 +55,10 @@ import {
   allocateCreation,
   creationErrors,
   constitution,
+  withResourceConditions,
+  capabilityEffects,
+  addCapabilityEffect,
+  endCharacterScene,
   conditionImpact,
   capabilityConditions,
   invest,
@@ -97,13 +102,16 @@ export function Tdv2Sheet({
   preferenceKey?: string;
 }) {
   const [initialDraft, setInitialDraft] = useState<TdvCharacter | null>(null);
-  const source = initialDraft ?? incoming;
+  const source = withResourceConditions(initialDraft ?? incoming);
   const c =
     source.ready || source.creation
       ? source
       : { ...source, creation: { groupReason: "", familiarities: [], reviewed: false } };
-  const onChange = (value: TdvCharacter) =>
-    initialDraft ? setInitialDraft(value) : onPersist(value);
+  const onChange = (value: TdvCharacter) => {
+    const next = withResourceConditions(value);
+    if (initialDraft) setInitialDraft(next);
+    else onPersist(next);
+  };
   const [tab, setTab] = useState(c.ready ? "constituicao" : "pessoa"),
     [reason, setReason] = useState(""),
     [kind, setKind] = useState("Matriz"),
@@ -126,7 +134,11 @@ export function Tdv2Sheet({
   });
   const [gameToolsOpen, setGameToolsOpen] = useState(false);
   const [gameTab, setGameTab] = useState(
-    gameProfile === "hibrido" ? "expressao" : gameProfile === "fisico" ? "acao" : "constituicao",
+    gameProfile === "hibrido"
+      ? "expressao"
+      : gameProfile === "fisico"
+        ? "constituicao"
+        : "constituicao",
   );
   const selectProfile = (value: "digital" | "hibrido" | "fisico") => {
     setGameProfile(value);
@@ -136,7 +148,9 @@ export function Tdv2Sheet({
       } catch {
         /* optional preference */
       }
-    setGameTab(value === "hibrido" ? "expressao" : value === "fisico" ? "acao" : "constituicao");
+    setGameTab(
+      value === "hibrido" ? "expressao" : value === "fisico" ? "constituicao" : "constituicao",
+    );
   };
   const develop = (name: string, matrix: boolean) => {
     setKind(matrix ? "Matriz" : "Alinhavo");
@@ -217,11 +231,10 @@ export function Tdv2Sheet({
       >
         {(
           [
-            ["constituicao", "Constituição", "Ficha", LayoutPanelLeft],
-            ["pessoa", "Pessoa", "Pessoa", UserRound],
-            ["acao", "Ação", "Cena", Activity],
+            ["pessoa", "Feição", "Feição", UserRound],
+            ["constituicao", "Ação", "Ação", LayoutPanelLeft],
             ["expressao", "Expressão", "Expressão", Layers3],
-            ["percurso", "Percurso", "Percurso", Sprout],
+            ["percurso", "Transformação", "Transformação", Sprout],
           ] as const
         ).map(([value, label, compact, Icon]) => (
           <TabsTrigger
@@ -239,7 +252,7 @@ export function Tdv2Sheet({
       <TabsContent value="pessoa" data-sheet-content>
         <div className="tdv-persona-layout">
           <div className="tdv-persona-dossier">
-            <Section variant="folio" id="tdv-feicao" title="Feição">
+            <Section variant="folio" id="tdv-feicao" title="Pessoa">
               <div className="tdv-grid tdv-grid--identity">
                 {(
                   [
@@ -403,23 +416,36 @@ export function Tdv2Sheet({
                 className="tdv-folio tdv-link-folio"
               >
                 <summary className="tdv-link-summary">
+                  <span className="tdv-link-emblem" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                      <circle cx="11" cy="24" r="5" />
+                      <circle cx="37" cy="24" r="5" />
+                      <path
+                        d={
+                          link.state === "Rompido"
+                            ? "M16 24h5m6 0h5"
+                            : "M16 24c7-15 9 15 16 0M16 24c7 15 9-15 16 0"
+                        }
+                      />
+                    </svg>
+                  </span>
                   <strong>{link.node.trim() || `Vínculo ${index + 1}`}</strong>
                   <small>{link.nature.trim() || "Definir relação"}</small>
                   <span className="tdv-link-state" data-link-state={link.state}>
                     {link.state}
                   </span>
-                  {openLinks[link.id] && (link.offer || link.demand) && (
+                  {(link.offer || link.demand) && (
                     <span className="tdv-link-exchange">
                       {link.offer && (
                         <span>
                           <b>Oferece</b>
-                          {link.offer}
+                          <span>{link.offer}</span>
                         </span>
                       )}
                       {link.demand && (
                         <span>
                           <b>Cobra</b>
-                          {link.demand}
+                          <span>{link.demand}</span>
                         </span>
                       )}
                     </span>
@@ -560,6 +586,16 @@ export function Tdv2Sheet({
                   name={matrix}
                   grade={stats.matrices[matrix]}
                   matrix
+                  temporaryEffects={capabilityEffects(c, matrix)}
+                  onAddEffect={(kind, value, note) =>
+                    run(() => addCapabilityEffect(c, matrix, kind, value, note))
+                  }
+                  onRemoveEffect={(id) =>
+                    upd(
+                      "temporaryEffects",
+                      (c.temporaryEffects ?? []).filter((e) => e.id !== id),
+                    )
+                  }
                   onAdvance={() =>
                     run(() =>
                       initialDraft
@@ -643,6 +679,17 @@ export function Tdv2Sheet({
                 key={name}
                 name={name}
                 grade={stats.alinhavos[name] ?? 0}
+                familiar={c.creation?.familiarities.includes(name)}
+                temporaryEffects={capabilityEffects(c, name)}
+                onAddEffect={(kind, value, note) =>
+                  run(() => addCapabilityEffect(c, name, kind, value, note))
+                }
+                onRemoveEffect={(id) =>
+                  upd(
+                    "temporaryEffects",
+                    (c.temporaryEffects ?? []).filter((e) => e.id !== id),
+                  )
+                }
                 onAdvance={() =>
                   run(() =>
                     initialDraft
@@ -687,8 +734,6 @@ export function Tdv2Sheet({
             canEdit={canEdit && initialUnlocked}
           />
         </Section>
-      </TabsContent>
-      <TabsContent value="acao" data-sheet-content>
         <Section variant="folio" id="tdv-protecao" title="Proteção">
           <TdvProtection character={c} />
           <TdvGuard character={c} onChange={onChange} canEdit={canEdit} />
@@ -757,7 +802,7 @@ export function Tdv2Sheet({
               Abrir dados opcionais
             </Button>
           </TdvAction>
-          <TdvAction title="Cena e recuperação">
+          <TdvAction title="Recuperação e efeitos">
             <Section variant="folio" id="tdv-cena" title="Continuidade da cena">
               <p>
                 Matrizes Abaladas: {c.scene.shaken.join(", ") || "nenhuma"}. Forçar a 0 PE:{" "}
@@ -766,15 +811,7 @@ export function Tdv2Sheet({
               <Button
                 disabled={disabled}
                 variant="outline"
-                onClick={() =>
-                  upd("scene", {
-                    ...c.scene,
-                    shaken: [],
-                    forcedAtZero: false,
-                    tests: [],
-                    paidEvents: [],
-                  })
-                }
+                onClick={() => onChange(endCharacterScene(c))}
               >
                 Encerrar cena e liberar efeitos de cena
               </Button>
@@ -978,309 +1015,324 @@ export function Tdv2Sheet({
     </Tabs>
   );
   return (
-    <div
-      className="tadeon-tdv2-sheet"
-      data-folio={activeTab}
-      data-severity={conditionSeverity}
-      style={
-        {
-          "--equilibrium-tint": c.equilibrium < 0 ? "242 88 70" : "244 205 62",
-          "--equilibrium-strength": Math.abs(c.equilibrium) / 100,
-        } as CSSProperties
-      }
-      data-presentation={presentation}
-      data-game-profile={gameProfile}
-    >
-      <div className="tdv-presentation-layout">
-        {presentation === "game" && (
-          <div className="tdv-game-profiles" aria-label="Combinação de jogo">
-            {(
-              [
-                ["digital", "Digital"],
-                ["hibrido", "Híbrido"],
-                ["fisico", "Apoio físico"],
-              ] as const
-            ).map(([value, label]) => (
-              <button
-                type="button"
-                key={value}
-                aria-pressed={gameProfile === value}
-                disabled={Boolean(initialDraft)}
-                onClick={() => selectProfile(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {initialDraft && (
-          <div className="tdv-allocation-status">
-            <p>Revisão das escolhas · alterações ainda não salvas</p>
-            {creationErrors(c).length > 0 && (
-              <ul aria-live="polite">
-                {creationErrors(c).map((error) => (
-                  <li key={error}>{error}</li>
-                ))}
-              </ul>
-            )}
-            <div className="tdv-actions">
-              <Button variant="ghost" onClick={() => setInitialDraft(null)}>
-                Cancelar revisão
-              </Button>
-              <Button
-                disabled={creationErrors(c).length > 0}
-                onClick={() => {
-                  const merged = {
-                    ...incoming,
-                    matrices: c.matrices,
-                    alinhavos: c.alinhavos,
-                    creation: c.creation
-                      ? { ...incoming.creation!, familiarities: c.creation.familiarities }
-                      : incoming.creation,
-                    face: {
-                      ...incoming.face,
-                      anchor: { ...incoming.face.anchor, pillar: c.face.anchor.pillar },
-                    },
-                  };
-                  const maximums = constitution(merged).maximums;
-                  onPersist({
-                    ...merged,
-                    resources: {
-                      pv: Math.min(incoming.resources.pv, maximums.pv),
-                      pi: Math.min(incoming.resources.pi, maximums.pi),
-                      pe: Math.min(incoming.resources.pe, maximums.pe),
-                    },
-                  });
-                  setInitialDraft(null);
-                }}
-              >
-                Salvar escolhas iniciais
-              </Button>
+    <TdvSurfaceContext.Provider value={activeTab}>
+      <div
+        className="tadeon-tdv2-sheet"
+        data-folio={activeTab}
+        data-severity={conditionSeverity}
+        data-zero-pv={c.resources.pv === 0 || c.critical === "Morta" || undefined}
+        data-zero-pi={c.resources.pi === 0 || undefined}
+        data-zero-pe={c.resources.pe === 0 || undefined}
+        style={
+          {
+            "--equilibrium-tint": c.equilibrium < 0 ? "242 88 70" : "244 205 62",
+            "--equilibrium-strength": Math.abs(c.equilibrium) / 100,
+            "--crisis-rgb":
+              c.resources.pv === 0 || c.critical === "Morta"
+                ? "255 72 98"
+                : c.resources.pi === 0
+                  ? "176 112 255"
+                  : "82 208 135",
+            "--crisis-strength":
+              Object.values(c.resources).some((value) => value === 0) || c.critical === "Morta"
+                ? 0.22
+                : 0,
+          } as CSSProperties
+        }
+        data-presentation={presentation}
+        data-game-profile={gameProfile}
+      >
+        <div className="tdv-presentation-layout">
+          {presentation === "game" && (
+            <div className="tdv-game-profiles" aria-label="Combinação de jogo">
+              {(
+                [
+                  ["digital", "Digital"],
+                  ["hibrido", "Híbrido"],
+                  ["fisico", "Apoio físico"],
+                ] as const
+              ).map(([value, label]) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-pressed={gameProfile === value}
+                  disabled={Boolean(initialDraft)}
+                  onClick={() => selectProfile(value)}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-          </div>
-        )}
-        <TdvPlayPresence
-          name={name}
-          character={c}
-          onChange={onChange}
-          canEdit={canEdit && !initialDraft}
-          physical={presentation === "game" && gameProfile === "fisico"}
-          onInspectState={() => {
-            if (presentation === "game") {
-              setGameTab("acao");
-              setGameToolsOpen(true);
-            } else setTab("acao");
-          }}
-        />
-        {!c.ready && (
-          <TdvCreationLoom
+          )}
+
+          {initialDraft && (
+            <div className="tdv-allocation-status">
+              <p>Revisão das escolhas · alterações ainda não salvas</p>
+              {creationErrors(c).length > 0 && (
+                <ul aria-live="polite">
+                  {creationErrors(c).map((error) => (
+                    <li key={error}>{error}</li>
+                  ))}
+                </ul>
+              )}
+              <div className="tdv-actions">
+                <Button variant="ghost" onClick={() => setInitialDraft(null)}>
+                  Cancelar revisão
+                </Button>
+                <Button
+                  disabled={creationErrors(c).length > 0}
+                  onClick={() => {
+                    const merged = {
+                      ...incoming,
+                      matrices: c.matrices,
+                      alinhavos: c.alinhavos,
+                      creation: c.creation
+                        ? { ...incoming.creation!, familiarities: c.creation.familiarities }
+                        : incoming.creation,
+                      face: {
+                        ...incoming.face,
+                        anchor: { ...incoming.face.anchor, pillar: c.face.anchor.pillar },
+                      },
+                    };
+                    const maximums = constitution(merged).maximums;
+                    onPersist({
+                      ...merged,
+                      resources: {
+                        pv: Math.min(incoming.resources.pv, maximums.pv),
+                        pi: Math.min(incoming.resources.pi, maximums.pi),
+                        pe: Math.min(incoming.resources.pe, maximums.pe),
+                      },
+                    });
+                    setInitialDraft(null);
+                  }}
+                >
+                  Salvar escolhas iniciais
+                </Button>
+              </div>
+            </div>
+          )}
+          <TdvPlayPresence
+            name={name}
             character={c}
             onChange={onChange}
-            canEdit={canEdit}
-            onSelect={presentation === "game" ? setGameTab : setTab}
+            canEdit={canEdit && !initialDraft}
+            physical={presentation === "game" && gameProfile === "fisico"}
+            onInspectState={() => {
+              if (presentation === "game") {
+                setGameTab("constituicao");
+                setGameToolsOpen(true);
+              } else setTab("constituicao");
+            }}
           />
-        )}
-        {presentation === "game" && !initialDraft ? (
-          <>
-            <TdvGamePanel
+          {!c.ready && (
+            <TdvCreationLoom
               character={c}
               onChange={onChange}
               canEdit={canEdit}
-              isMaster={isMaster}
-              onUse={setExpressionUse}
-              onTranscend={(name) => develop(name, true)}
-              onOpen={(value) => {
-                setGameTab(value === "equipamento" ? "expressao" : value);
-                setGameToolsOpen(true);
-              }}
+              onSelect={presentation === "game" ? setGameTab : setTab}
             />
-            <Dialog open={gameToolsOpen} onOpenChange={setGameToolsOpen}>
-              <DialogContent className="tdv-game-tools-dialog">
-                <DialogHeader>
-                  <DialogTitle>Instrumentos da personagem</DialogTitle>
-                  <DialogDescription>Detalhes e operações da ficha integral.</DialogDescription>
-                </DialogHeader>
-                <div className="tadeon-tdv2-sheet" data-folio={activeTab}>
-                  {sheetContents}
-                </div>
-              </DialogContent>
-            </Dialog>
-          </>
-        ) : (
-          sheetContents
-        )}
-
-        <Dialog open={developmentOpen} onOpenChange={setDevelopmentOpen}>
-          <DialogContent className="tdv-development-dialog">
-            <DialogHeader>
-              <DialogTitle>Dar corpo à experiência</DialogTitle>
-              <DialogDescription>
-                Escolha uma mudança; confira o custo e o saldo antes de investir.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="tdv-grid">
-              <TdvSelect
-                label="Tipo de investimento"
-                value={kind}
-                options={["Matriz", "Alinhavo", "Lavor", "Ampliação"]}
-                onChange={(v) => {
-                  setKind(v);
-                  setTarget(v === "Matriz" ? MATRICES[0] : v === "Alinhavo" ? ALINHAVOS[0] : "");
-                }}
-                disabled={disabled}
-              />
-              {kind === "Matriz" || kind === "Alinhavo" ? (
-                <TdvSelect
-                  label="Capacidade a desenvolver"
-                  value={target}
-                  options={kind === "Matriz" ? MATRICES : ALINHAVOS}
-                  onChange={setTarget}
-                  disabled={disabled}
-                />
-              ) : (
-                <TdvField
-                  label="Estrutura que recebe a mudança"
-                  value={target}
-                  onChange={setTarget}
-                  disabled={disabled}
-                  short
-                />
-              )}
-              {(kind === "Lavor" || kind === "Ampliação") && (
-                <TdvSelect
-                  label="Custo em PU"
-                  value={String(cost)}
-                  options={kind === "Lavor" ? ["4", "6"] : ["3", "4", "5", "6", "7"]}
-                  onChange={(v) => setCost(Number(v))}
-                  disabled={disabled}
-                />
-              )}
-              <TdvField
-                label="Como esta mudança foi incorporada?"
-                value={reason}
-                onChange={setReason}
-                disabled={disabled}
-              />
-            </div>
-            {kind === "Matriz" && investmentGrade === 4 && (
-              <TdvCheck
-                label="Marco transcendente e incorporação irreversível expressamente reconhecidos"
-                value={transcendent}
-                onChange={setTranscendent}
-                disabled={disabled}
-              />
-            )}
-            <div className="tdv-investment-preview" role="status">
-              <strong>
-                {investmentAtLimit
-                  ? "Escala concluída"
-                  : investmentGrade !== undefined
-                    ? `d${DICE[investmentGrade]} → d${DICE[investmentGrade + 1]}`
-                    : target || "Escolha uma incorporação"}
-              </strong>
-              <span>
-                {investmentAtLimit ? (
-                  "Não há avanço ordinário seguinte"
-                ) : (
-                  <>
-                    {investmentCost} PU ·{" "}
-                    {stats.pu >= investmentCost
-                      ? `${stats.pu - investmentCost} PU após investir`
-                      : `faltam ${investmentCost - stats.pu} PU`}
-                  </>
-                )}
-              </span>
-            </div>
-            <Button
-              disabled={
-                disabled ||
-                !c.ready ||
-                investmentAtLimit ||
-                stats.pu < investmentCost ||
-                !reason.trim() ||
-                !target.trim()
-              }
-              onClick={() =>
-                run(() => {
-                  const next = invest(c, {
-                    kind: kind as TdvCharacter["investments"][number]["kind"],
-                    target,
-                    reason,
-                    transcendent,
-                    cost:
-                      kind === "Matriz"
-                        ? stats.matrices[target as Matrix] + 3
-                        : kind === "Alinhavo"
-                          ? 2
-                          : cost,
-                  });
-                  setDevelopmentOpen(false);
-                  setReason("");
-                  return next;
-                })
-              }
-            >
-              Confirmar mudança
-            </Button>
-          </DialogContent>
-        </Dialog>
-        <Dialog
-          open={expressionUse !== null}
-          onOpenChange={(open) => {
-            if (!open) setExpressionUse(null);
-          }}
-        >
-          <DialogContent className="tdv-expression-dialog">
-            <DialogHeader>
-              <DialogTitle>
-                {c.records.find((record) => record.id === expressionUse)?.name ||
-                  "Compor uma expressão"}
-              </DialogTitle>
-              <DialogDescription>Intenção, prática e preço no mesmo gesto.</DialogDescription>
-            </DialogHeader>
-            {expressionUse !== null && (
-              <TdvExpressionUse
-                key={expressionUse}
-                character={c}
-                onChange={(value) => {
-                  onChange(value);
-                  setExpressionUse(null);
-                }}
-                canEdit={canEdit}
-                initialRecordId={expressionUse || undefined}
-              />
-            )}
-          </DialogContent>
-        </Dialog>
-        <Dialog
-          open={rollChoice !== null}
-          onOpenChange={(open) => {
-            if (!open) setRollChoice(null);
-          }}
-        >
-          <DialogContent className="tdv-roll-dialog">
-            <DialogHeader>
-              <DialogTitle>Dois Fios · {rollChoice?.alinhavo ?? rollChoice?.matrix}</DialogTitle>
-              <DialogDescription>
-                Escolha a Matriz pela abordagem e o Alinhavo pela prática. A ficha calcula os dados
-                e aplica apenas os efeitos mecânicos.
-              </DialogDescription>
-            </DialogHeader>
-            {rollChoice && (
-              <TdvTestPanel
-                key={`${rollChoice.matrix}/${rollChoice.alinhavo}`}
+          )}
+          {presentation === "game" && !initialDraft ? (
+            <>
+              <TdvGamePanel
                 character={c}
                 onChange={onChange}
                 canEdit={canEdit}
-                quick
-                initialMatrix={rollChoice.matrix}
-                initialAlinhavo={rollChoice.alinhavo}
+                isMaster={isMaster}
+                onUse={setExpressionUse}
+                onTranscend={(name) => develop(name, true)}
+                onOpen={(value) => {
+                  setGameTab(value === "equipamento" ? "expressao" : value);
+                  setGameToolsOpen(true);
+                }}
               />
-            )}
-          </DialogContent>
-        </Dialog>
+              <Dialog open={gameToolsOpen} onOpenChange={setGameToolsOpen}>
+                <DialogContent className="tdv-game-tools-dialog">
+                  <DialogHeader>
+                    <DialogTitle>Instrumentos da personagem</DialogTitle>
+                    <DialogDescription>Detalhes e operações da ficha integral.</DialogDescription>
+                  </DialogHeader>
+                  <div className="tadeon-tdv2-sheet" data-folio={activeTab}>
+                    {sheetContents}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </>
+          ) : (
+            sheetContents
+          )}
+
+          <Dialog open={developmentOpen} onOpenChange={setDevelopmentOpen}>
+            <DialogContent className="tdv-development-dialog">
+              <DialogHeader>
+                <DialogTitle>Dar corpo à experiência</DialogTitle>
+                <DialogDescription>
+                  Escolha uma mudança; confira o custo e o saldo antes de investir.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="tdv-grid">
+                <TdvSelect
+                  label="Tipo de investimento"
+                  value={kind}
+                  options={["Matriz", "Alinhavo", "Lavor", "Ampliação"]}
+                  onChange={(v) => {
+                    setKind(v);
+                    setTarget(v === "Matriz" ? MATRICES[0] : v === "Alinhavo" ? ALINHAVOS[0] : "");
+                  }}
+                  disabled={disabled}
+                />
+                {kind === "Matriz" || kind === "Alinhavo" ? (
+                  <TdvSelect
+                    label="Capacidade a desenvolver"
+                    value={target}
+                    options={kind === "Matriz" ? MATRICES : ALINHAVOS}
+                    onChange={setTarget}
+                    disabled={disabled}
+                  />
+                ) : (
+                  <TdvField
+                    label="Estrutura que recebe a mudança"
+                    value={target}
+                    onChange={setTarget}
+                    disabled={disabled}
+                    short
+                  />
+                )}
+                {(kind === "Lavor" || kind === "Ampliação") && (
+                  <TdvSelect
+                    label="Custo em PU"
+                    value={String(cost)}
+                    options={kind === "Lavor" ? ["4", "6"] : ["3", "4", "5", "6", "7"]}
+                    onChange={(v) => setCost(Number(v))}
+                    disabled={disabled}
+                  />
+                )}
+                <TdvField
+                  label="Como esta mudança foi incorporada?"
+                  value={reason}
+                  onChange={setReason}
+                  disabled={disabled}
+                />
+              </div>
+              {kind === "Matriz" && investmentGrade === 4 && (
+                <TdvCheck
+                  label="Marco transcendente e incorporação irreversível expressamente reconhecidos"
+                  value={transcendent}
+                  onChange={setTranscendent}
+                  disabled={disabled}
+                />
+              )}
+              <div className="tdv-investment-preview" role="status">
+                <strong>
+                  {investmentAtLimit
+                    ? "Escala concluída"
+                    : investmentGrade !== undefined
+                      ? `d${DICE[investmentGrade]} → d${DICE[investmentGrade + 1]}`
+                      : target || "Escolha uma incorporação"}
+                </strong>
+                <span>
+                  {investmentAtLimit ? (
+                    "Não há avanço ordinário seguinte"
+                  ) : (
+                    <>
+                      {investmentCost} PU ·{" "}
+                      {stats.pu >= investmentCost
+                        ? `${stats.pu - investmentCost} PU após investir`
+                        : `faltam ${investmentCost - stats.pu} PU`}
+                    </>
+                  )}
+                </span>
+              </div>
+              <Button
+                disabled={
+                  disabled ||
+                  !c.ready ||
+                  investmentAtLimit ||
+                  stats.pu < investmentCost ||
+                  !reason.trim() ||
+                  !target.trim()
+                }
+                onClick={() =>
+                  run(() => {
+                    const next = invest(c, {
+                      kind: kind as TdvCharacter["investments"][number]["kind"],
+                      target,
+                      reason,
+                      transcendent,
+                      cost:
+                        kind === "Matriz"
+                          ? stats.matrices[target as Matrix] + 3
+                          : kind === "Alinhavo"
+                            ? 2
+                            : cost,
+                    });
+                    setDevelopmentOpen(false);
+                    setReason("");
+                    return next;
+                  })
+                }
+              >
+                Confirmar mudança
+              </Button>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={expressionUse !== null}
+            onOpenChange={(open) => {
+              if (!open) setExpressionUse(null);
+            }}
+          >
+            <DialogContent className="tdv-expression-dialog">
+              <DialogHeader>
+                <DialogTitle>
+                  {c.records.find((record) => record.id === expressionUse)?.name ||
+                    "Compor uma expressão"}
+                </DialogTitle>
+                <DialogDescription>Intenção, prática e preço no mesmo gesto.</DialogDescription>
+              </DialogHeader>
+              {expressionUse !== null && (
+                <TdvExpressionUse
+                  key={expressionUse}
+                  character={c}
+                  onChange={(value) => {
+                    onChange(value);
+                    setExpressionUse(null);
+                  }}
+                  canEdit={canEdit}
+                  initialRecordId={expressionUse || undefined}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={rollChoice !== null}
+            onOpenChange={(open) => {
+              if (!open) setRollChoice(null);
+            }}
+          >
+            <DialogContent className="tdv-roll-dialog">
+              <DialogHeader>
+                <DialogTitle>Dois Fios · {rollChoice?.alinhavo ?? rollChoice?.matrix}</DialogTitle>
+                <DialogDescription>
+                  Escolha a Matriz pela abordagem e o Alinhavo pela prática. A ficha calcula os
+                  dados e aplica apenas os efeitos mecânicos.
+                </DialogDescription>
+              </DialogHeader>
+              {rollChoice && (
+                <TdvTestPanel
+                  key={`${rollChoice.matrix}/${rollChoice.alinhavo}`}
+                  character={c}
+                  onChange={onChange}
+                  canEdit={canEdit}
+                  quick
+                  initialMatrix={rollChoice.matrix}
+                  initialAlinhavo={rollChoice.alinhavo}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
-    </div>
+    </TdvSurfaceContext.Provider>
   );
 }

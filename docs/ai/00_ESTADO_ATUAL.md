@@ -2,6 +2,8 @@
 
 Verificado em 02/11/2026 (America/Sao_Paulo). Entrada curta de retomada; o registro único de tarefas e responsáveis é [project-continuity.json](../project-continuity.json).
 
+Checkpoint DEC-033: quatro guias (Feição, Ação, Expressão, Transformação), Vínculos visuais, menus próprios, modificadores de máximos, efeitos temporários e estados zero. Ferramentas de Cena transferidas para Ação; nenhum dado removido. PR 323 publicada em `6de0a77`, HTTP200/SHA exato em 02/11 às 19:38Z. O lote atual exige gates/publicação próprios; ver [destinos, persistência e limites](../v4/FICHA_INSTRUMENTOS_E_ESTADOS.md). Não declarar V4 integral.
+
 Checkpoint DEC-031: exposição como prioridade; quadros uniformes e escrita inline, Lavores/Tramas em casas próprias, criação limitada, Marcos diretos e autorização de revisão/delegação por guarda SQL. Fonte/gates/publicação próprios; QA reduzido por escopo. Ver [diferenças e limites](../v4/FICHA_LEITURA_E_ESCOLHAS.md).
 
 Checkpoint DEC-030: expandido padrão, recursos diretos, capacidades compactas e operações contextuais. Recomposto após indisponibilidade; fonte/gates/publicação da PR 321 são próprios. QA reduzido por instrução expressa de Tadeu, com amostra responsiva e regressões mecânicas. Ver [diferenças e limites](../v4/FICHA_PRANCHETA_INTERATIVA.md); não declarar V4 integral.

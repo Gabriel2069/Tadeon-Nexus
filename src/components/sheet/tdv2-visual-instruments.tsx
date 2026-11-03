@@ -254,10 +254,21 @@ export function TdvLinkAtlas({
   );
 }
 
-export function TdvTestWeave({ prumo, tento, dt }: { prumo: number; tento: number; dt: number }) {
-  const total = prumo + tento,
-    max = Math.max(total, dt, 1),
-    sx = (v: number) => 28 + (v / max) * 284;
+export function TdvTestWeave({
+  prumo,
+  tento,
+  dt,
+  modifier = 0,
+}: {
+  prumo: number;
+  tento: number;
+  dt: number;
+  modifier?: number;
+}) {
+  const total = prumo + tento + modifier,
+    min = Math.min(0, total),
+    max = Math.max(prumo + tento, total, dt, 1),
+    sx = (v: number) => 28 + ((v - min) / (max - min)) * 284;
   return (
     <svg
       className="tdv-test-weave"

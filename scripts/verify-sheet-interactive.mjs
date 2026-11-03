@@ -78,17 +78,17 @@ export async function verifyInteractive({
     "44px controls: " + JSON.stringify(targets),
   );
   for (const [label, state] of [
-    ["Constituição", "capacities"],
-    ["Pessoa", "person"],
+    ["Ação", "capacities"],
+    ["Feição", "person"],
     ["Ação", "scene"],
     ["Expressão", "repertoire"],
-    ["Percurso", "development"],
+    ["Transformação", "development"],
   ]) {
     await tab(label);
     await top();
     await geometry("interactive-" + state);
   }
-  await tab("Constituição");
+  await tab("Ação");
   const capability = page.getByRole("button", { name: /Consultar Nexo ·/ });
   await capability.click();
   let popup = page.getByRole("dialog", { name: "Capacidade Nexo", exact: true });
@@ -108,7 +108,7 @@ export async function verifyInteractive({
   );
   await page.getByRole("button", { name: "Limpar busca", exact: true }).click();
   if (role === "mestre") {
-    await tab("Pessoa");
+    await tab("Feição");
     const before = writes.length;
     await page.getByRole("button", { name: "Editar Origem", exact: true }).click();
     let inline = page.getByRole("textbox", { name: "Origem", exact: true });
@@ -124,10 +124,10 @@ export async function verifyInteractive({
       await page.getByRole("button", { name: "Editar Origem", exact: true }).isVisible(),
       "Inline returns to reading",
     );
-    await tab("Percurso");
+    await tab("Transformação");
     await page.getByRole("button", { name: "Conceder Marco · +5% e 2 PU", exact: true }).click();
     await saved(() => getRow().tdv2_data.milestones.length === 1);
-    await tab("Constituição");
+    await tab("Ação");
     await page.getByRole("button", { name: /^Consultar Luta ·/ }).click();
     popup = page.getByRole("dialog", { name: "Capacidade Luta", exact: true });
     assert(
@@ -142,7 +142,7 @@ export async function verifyInteractive({
       .getByRole("button", { name: "Reverter Luta", exact: true })
       .click();
     await saved(() => getRow().tdv2_data.investments.length === 0);
-    await tab("Percurso");
+    await tab("Transformação");
     await page.getByRole("button", { name: "Correções e permissões", exact: true }).click();
     popup = page.getByRole("dialog", { name: "Correções e permissões", exact: true });
     await fit(popup);
@@ -213,7 +213,7 @@ export async function verifyInteractive({
     await fit(popup);
     await geometry("interactive-protection");
     await close(popup);
-    await tab("Constituição");
+    await tab("Ação");
     await page.getByRole("button", { name: "Retirar 1 PV", exact: true }).click();
     await saved(() => getRow().tdv2_data.resources.pv === 9);
     for (let i = 0; i < 4; i++)
@@ -342,7 +342,7 @@ export async function verifyInteractive({
     await page.goto(page.url().split("?")[0] + "?mode=edit");
     await page.getByRole("button", { name: "Ficha integral", exact: true }).click();
     await page.getByRole("button", { name: "Concluir criação TdV II", exact: true }).waitFor();
-    await tab("Constituição");
+    await tab("Ação");
     assert(
       (await page.locator('.tdv-matrices [data-grade="1"]').count()) === 4,
       "Creation starts four d6 matrices",

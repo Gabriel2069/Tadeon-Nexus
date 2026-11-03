@@ -45,7 +45,7 @@ export function TdvCreationLoom({
     ],
     [
       "Defesas",
-      "acao",
+      "constituicao",
       "ancora",
       true,
       `Res. ${stats.defenses.Resistência} · Evasão ${stats.defenses.Evasão}`,
@@ -64,7 +64,13 @@ export function TdvCreationLoom({
       Boolean(c.creation?.groupReason.trim()),
       "Por que entrar nesta situação?",
     ],
-    ["Revisão", "acao", "uso", Boolean(c.creation?.reviewed), "Acesso, Condições e capacidade"],
+    [
+      "Revisão",
+      "constituicao",
+      "uso",
+      Boolean(c.creation?.reviewed),
+      "Acesso, Condições e capacidade",
+    ],
   ] as const;
   return (
     <section className="tdv-creation-loom" aria-label="Criação da personagem pelo Livro II">

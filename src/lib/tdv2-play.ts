@@ -4,6 +4,7 @@ import {
   readTest,
   resolveTest,
   setResource,
+  withResourceConditions,
   uid,
   type TestRequest,
   type TdvCharacter,
@@ -47,11 +48,11 @@ export function payDeclared(
     throw new Error("Organize a cena antes de novos pagamentos.");
   if (c.resources.pe < event.pe || c.resources.pi < event.pi)
     throw new Error("PE ou PI insuficientes; esta abordagem não começa.");
-  return {
+  return withResourceConditions({
     ...c,
     resources: { ...c.resources, pe: c.resources.pe - event.pe, pi: c.resources.pi - event.pi },
     scene: { ...c.scene, paidEvents: [...(c.scene.paidEvents ?? []), event] },
-  };
+  });
 }
 export function recordOutcome(
   c: TdvCharacter,
@@ -73,13 +74,13 @@ export function recordOutcome(
   required(outcome.principal, "Registre a consequência principal.");
   if (outcome.redobra.trim())
     required(outcome.support, "Redobra exige outra continuidade capaz de sustentar o Resto.");
-  const result = readTest(test.prumo, test.tento, test.dt);
+  const result = readTest(test.prumo, test.tento, test.dt, test.modifier ?? 0);
   return rest(c, `Resto: ${test.intention}`, {
     Teste: testId,
     Intenção: test.intention,
     Abordagem: test.approach,
     "Ponto em Jogo": test.point,
-    "Dados originais": `${test.prumo} + ${test.tento} = ${result.enlace}; DT ${test.dt}`,
+    "Dados originais": `${test.prumo} + ${test.tento}${test.modifier ? ` ${test.modifier > 0 ? "+" : "−"} ${Math.abs(test.modifier)}` : ""} = ${result.enlace}; DT ${test.dt}`,
     Consequência: outcome.principal,
     [result.success ? "Abertura" : "Fresta"]: outcome.opening,
     Rastro: outcome.trace,
@@ -195,6 +196,7 @@ export const PHYSICAL_INTENTS = [
   "Outra mudança",
 ] as const;
 export interface PhysicalConsequence {
+  modifier?: number;
   eventId?: string;
   intention: (typeof PHYSICAL_INTENTS)[number];
   prumo: number;
@@ -228,7 +230,7 @@ export function applyPhysicalConsequence(c: TdvCharacter, s: PhysicalConsequence
   for (const n of [s.prumo, s.tento])
     if (!Number.isInteger(n) || n < 1 || n > 20)
       throw new Error("Informe os dois resultados originais do ataque.");
-  const result = readTest(s.prumo, s.tento, dt);
+  const result = readTest(s.prumo, s.tento, dt, s.modifier ?? 0);
   if (!result.success)
     throw new Error(
       "O ataque não alcançou o limiar; não aplique a consequência principal como êxito.",

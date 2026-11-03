@@ -1,25 +1,25 @@
 {
   "version": 1,
   "checkedAt": "2026-11-02",
-  "runtimeReference": "f447350d9b8f8696b822de978c43800bcc554ef3",
+  "runtimeReference": "6de0a770b443bec028444cd16f35114f16f42e42",
   "integration": {
-    "pr": 320,
-    "branch": "feat/nex-047-visual-play",
+    "pr": 323,
+    "branch": "feat/dec032-game-panel",
     "base": "main",
-    "baseCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
-    "sourceCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
-    "headCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
+    "baseCommit": "5a1757ce92a91a88004ce6e340d68df01ae28590",
+    "sourceCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
+    "headCommit": "44a734ae022742a7f901d6e61e2bd058d5579df0",
     "state": "integrated",
-    "mergeCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
-    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190627",
-    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190598",
-    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184403",
+    "mergeCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
+    "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426790",
+    "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41509426926",
+    "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188120",
     "production": "workflow-confirmed; HTTP200 and exact release marker",
-    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184380",
-    "productionCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
-    "productionVerifiedAt": "2026-11-02T02:12:26.777Z",
+    "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41511188038",
+    "productionCommit": "6de0a770b443bec028444cd16f35114f16f42e42",
+    "productionVerifiedAt": "2026-11-02T19:38:14Z",
     "productionHttpStatus": 200,
-    "note": "PR 320 publicada com 703 testes e 642 estados TdV II; novo lote DEC-029 exige gates/publicação próprios."
+    "note": "PR 323 publicada; pacote 510485 bytes, SHA256 e3063430958304e15a5b39c75fc0767234357c5e48a8a47794755c5ba4e7d17d. Lote DEC-033 exige gates e publicação próprios."
   },
   "domains": [
     {
@@ -451,6 +451,11 @@
       "path": "docs/v4/FICHA_PAINEL_E_PROGRESSAO.md",
       "status": "active",
       "purpose": "DEC-032: destinos, selagem numérica, progressão por clique, painel condensado e limites."
+    },
+    {
+      "path": "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
+      "status": "active",
+      "purpose": "DEC-033: destinos das guias, instrumentos, efeitos, estados zero, persistência aditiva e reversão compatível."
     }
   ],
   "tasks": [
@@ -1544,7 +1549,7 @@
     },
     {
       "id": "NEX-046",
-      "title": "V4 fase 3: Ficha Integral em cinco fólios",
+      "title": "V4 fase 3: Ficha Integral em quatro guias (DEC-033)",
       "domain": "sheet",
       "status": "active",
       "priority": 1,
@@ -1553,7 +1558,7 @@
       ],
       "acceptance": [
         "Preservar todos os campos, IDs, narrativa, inventário, vínculos, rascunhos, CAS e acesso histórico.",
-        "Recompor Pessoa/Constituição/Ação/Expressão/Percurso, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.",
+        "Recompor Feição/Ação/Expressão/Transformação, com destinos equivalentes para a antiga Cena, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.",
         "Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco."
       ],
       "evidence": [
@@ -1569,9 +1574,10 @@
         "docs/v4/FICHA_COMO_INSTRUMENTO.md",
         "docs/v4/living-sheet-validation.json",
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
-        "docs/v4/playbook-sheet-validation.json"
+        "docs/v4/playbook-sheet-validation.json",
+        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
       ],
-      "checkpoint": "DEC-031: leitura, quadros uniformes, capacidades/radar coloridos, recursos neon, operações contextuais, criação limitada e progressão autorizada. Gates e publicação deste lote têm evidência própria na PR; não certifica V4 integral. docs/v4/FICHA_LEITURA_E_ESCOLHAS.md"
+      "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
     {
       "id": "NEX-047",
@@ -1592,9 +1598,10 @@
         "docs/v4/FICHA_VISUAL_E_JOGO.md",
         "docs/v4/sheet-play-validation.json",
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
-        "docs/v4/playbook-sheet-validation.json"
+        "docs/v4/playbook-sheet-validation.json",
+        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
       ],
-      "checkpoint": "DEC-031: leitura, quadros uniformes, capacidades/radar coloridos, recursos neon, operações contextuais, criação limitada e progressão autorizada. Gates e publicação deste lote têm evidência própria na PR; não certifica V4 integral. docs/v4/FICHA_LEITURA_E_ESCOLHAS.md"
+      "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
     {
       "id": "NEX-048",
@@ -1844,6 +1851,11 @@
       "id": "DEC-032",
       "decision": "Painel de jogo condensado, Tramas/Fragmentos alternados, cores anteriores das Matrizes e progressão unidirecional por clique com PU; regressão exclusiva do mestre.",
       "reason": "Pedido explícito de Tadeu. Selagem valida o pacote numérico sem impor preenchimento de prosa. Marco pode selar distribuição válida no mesmo evento; nenhum rascunho real é normalizado. Carga usa volume, mãos, suporte e acesso conforme Livro II (5). QA proporcional aos fluxos alterados, quatro larguras e papéis mestre/espectador; sem varredura V4 integral."
+    },
+    {
+      "id": "DEC-033",
+      "decision": "Quatro guias Feição/Ação/Expressão/Transformação, Vínculos visuais, menus de identidade própria, modificadores de recursos, efeitos temporários e leitura marcante dos estados zero.",
+      "reason": "Pedido explícito de Tadeu. Cena transfere suas ferramentas a Ação; nenhum dado/função removido. Campos aditivos opcionais, validador compatível e Edge Function usam o motor existente. Três marcadores são acompanhamento manual, sem regra automática de morte. QA concentrado nos fluxos alterados, quatro tamanhos e leitura/edição; backup geral continua diferido."
     }
   ],
   "bridges": [
@@ -2677,6 +2689,25 @@
       "productionVerifiedAt": "2026-11-01T22:41:30.312Z",
       "productionHttpStatus": 200,
       "note": "PR 319 publicada. O lote DEC-028 exige Quality, seis grupos visuais e agregador no próprio fonte; publicação somente por main."
+    },
+    {
+      "pr": 320,
+      "branch": "feat/nex-047-visual-play",
+      "base": "main",
+      "baseCommit": "413fe24b7511415fa1af94f3dec62c89d34bc160",
+      "sourceCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
+      "headCommit": "1f8108791e264f74e6290218e8688ad7d24d7bfd",
+      "state": "integrated",
+      "mergeCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+      "sourceQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190627",
+      "sourceVisualRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41374190598",
+      "mainQualityRun": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184403",
+      "production": "workflow-confirmed; HTTP200 and exact release marker",
+      "productionEvidence": "https://github.com/Gabriel2069/tadeon-nexus/actions/runs/41376184380",
+      "productionCommit": "172eafa8d17dc98b026607f4c20e10cd9e48d44b",
+      "productionVerifiedAt": "2026-11-02T02:12:26.777Z",
+      "productionHttpStatus": 200,
+      "note": "PR 320 publicada com 703 testes e 642 estados TdV II; novo lote DEC-029 exige gates/publicação próprios."
     }
   ]
 }

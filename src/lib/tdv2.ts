@@ -66,6 +66,7 @@ export const sceneTestSchema = z.object({
   approach: text,
   change: text,
   point: text,
+  modifier: z.number().int().min(-10000).max(10000).optional(),
   prumo: z.number().int().min(1).max(20),
   tento: z.number().int().min(1).max(20),
   dt: z.number().min(2).max(1000),
@@ -144,6 +145,33 @@ export const tdv2CharacterSchema = z
       pi: z.number().int().min(0).max(100000),
       pe: z.number().int().min(0).max(100000),
     }),
+    resourceModifiers: z
+      .object({
+        pv: z.number().int().min(-10000).max(10000),
+        pi: z.number().int().min(-10000).max(10000),
+        pe: z.number().int().min(-10000).max(10000),
+      })
+      .optional(),
+    temporaryEffects: z
+      .array(
+        z
+          .object({
+            id: z.string().min(1).max(200),
+            target: z.enum([...MATRICES, ...ALINHAVOS]),
+            kind: z.enum(["Proveito", "Desproveito", "Bônus"]),
+            value: z.number().int().min(-100).max(100),
+            note: text,
+          })
+          .refine(
+            (effect) => (effect.kind === "Bônus" ? effect.value !== 0 : effect.value === 1),
+            "Informe um efeito temporário válido.",
+          ),
+      )
+      .max(50)
+      .optional(),
+    crisisMarks: z
+      .object({ dying: z.number().int().min(0).max(3), collapse: z.number().int().min(0).max(3) })
+      .optional(),
     guard: z.object({
       modifier: z.number().int().min(-100).max(100),
       source: text,
@@ -168,7 +196,7 @@ export const tdv2CharacterSchema = z
           intensity: z.enum(["Leve", "Grave", "Crítica"]),
         }),
       )
-      .max(100),
+      .max(103),
     scene: z.object({
       shaken: z.array(z.enum(MATRICES)).max(4),
       forcedAtZero: z.boolean(),
@@ -286,7 +314,12 @@ export function constitution(character: TdvCharacter) {
   return {
     matrices,
     alinhavos,
-    maximums: { pv, pi, pe },
+    baseMaximums: { pv, pi, pe },
+    maximums: {
+      pv: Math.max(0, pv + (character.resourceModifiers?.pv ?? 0)),
+      pi: Math.max(0, pi + (character.resourceModifiers?.pi ?? 0)),
+      pe: Math.max(0, pe + (character.resourceModifiers?.pe ?? 0)),
+    },
     defenses: { Resistência: pv, Evasão: evasion, Lucidez: pi, Firmeza: pi },
     guard: character.guard.broken
       ? null
@@ -502,14 +535,123 @@ export function equilibriumBand(n: number) {
           ? "Conhecimento inclinado"
           : "Conhecimento prevalente";
 }
+/** Canonical zero-resource states are idempotent; a read never writes the sheet. */
+export function withResourceConditions(c: TdvCharacter): TdvCharacter {
+  const critical = c.resources.pv === 0 && c.critical === "Ativa" ? "Incapacitada" : c.critical;
+  let changed = false;
+  const conditions = c.conditions.filter((item) => {
+    const keep = item.id !== "tdv-zero-pe" || c.resources.pe === 0;
+    if (!keep) changed = true;
+    return keep;
+  });
+  const add = (
+    id: string,
+    name: string,
+    origin: string,
+    effect: string,
+    exit: string,
+    intensity: "Leve" | "Grave" | "Crítica" = "Crítica",
+  ) => {
+    if (
+      !conditions.some(
+        (item) =>
+          item.id === id ||
+          item.name.toLocaleLowerCase("pt-BR") === name.toLocaleLowerCase("pt-BR"),
+      )
+    ) {
+      conditions.push({ id, name, origin, effect, exit, intensity });
+      changed = true;
+    }
+  };
+  if (
+    (c.resources.pv === 0 || ["Incapacitada", "À Beira"].includes(critical)) &&
+    critical !== "Morta"
+  )
+    add(
+      "tdv-zero-pv",
+      "Incapacitada",
+      "Vitalidade zerada",
+      "Sem ações físicas exigentes. Fala, percepção e um gesto plausível dependem da situação; nova consequência física relevante pode levar a À Beira.",
+      "Recuperar PV e condições de funcionamento; receber o cuidado necessário.",
+    );
+  if (c.resources.pi === 0)
+    add(
+      "tdv-zero-pi",
+      "Colapso",
+      "Inteireza zerada",
+      "Interromper a operação dependente da continuidade afetada. Definir ameaça, assistência e transformação da Feição com a mesa.",
+      "Conter a ameaça, recuperar continuidade e PI; reconhecer a transformação na Feição.",
+    );
+  if (c.resources.pe === 0)
+    add(
+      "tdv-zero-pe",
+      "Esforço esgotado",
+      "Esforço zerado",
+      "A 0 PE, ações ordinárias continuam disponíveis. Custos em PE precisam ser pagos; Forçar a 0 PE exige contrapartida e só ocorre uma vez por cena.",
+      "Recuperar PE.",
+      "Leve",
+    );
+  return critical === c.critical && !changed ? c : { ...c, critical, conditions };
+}
+export function setResourceModifier(
+  c: TdvCharacter,
+  key: "pv" | "pi" | "pe",
+  value: number,
+  current = c.resources[key],
+): TdvCharacter {
+  if (!Number.isInteger(value) || Math.abs(value) > 10000)
+    throw new Error("Use um modificador inteiro entre −10000 e +10000.");
+  return setResource(
+    { ...c, resourceModifiers: { pv: 0, pi: 0, pe: 0, ...c.resourceModifiers, [key]: value } },
+    key,
+    current,
+  );
+}
+export function capabilityEffects(c: TdvCharacter, target: string) {
+  return (c.temporaryEffects ?? []).filter((effect) => effect.target === target);
+}
+export function addCapabilityEffect(
+  c: TdvCharacter,
+  target: string,
+  kind: "Proveito" | "Desproveito" | "Bônus",
+  value: number,
+  note = "",
+): TdvCharacter {
+  if (![...MATRICES, ...ALINHAVOS].some((name) => name === target))
+    throw new Error("Escolha uma capacidade válida.");
+  if ((c.temporaryEffects?.length ?? 0) >= 50)
+    throw new Error("Encerre um efeito antes de adicionar outro.");
+  if (!Number.isInteger(value) || Math.abs(value) > 100 || (kind === "Bônus" && value === 0))
+    throw new Error("Informe um bônus inteiro não nulo entre −100 e +100.");
+  return {
+    ...c,
+    temporaryEffects: [
+      ...(c.temporaryEffects ?? []),
+      {
+        id: uid(),
+        target: target as (typeof MATRICES)[number] | (typeof ALINHAVOS)[number],
+        kind,
+        value: kind === "Bônus" ? value : 1,
+        note: note.trim(),
+      },
+    ],
+  };
+}
+export function endCharacterScene(c: TdvCharacter): TdvCharacter {
+  return {
+    ...c,
+    temporaryEffects: [],
+    scene: { ...c.scene, shaken: [], forcedAtZero: false, tests: [], paidEvents: [] },
+  };
+}
 export function setResource(c: TdvCharacter, key: "pv" | "pi" | "pe", value: number): TdvCharacter {
   const max = constitution(c).maximums[key],
     current = Math.max(0, Math.min(max, Math.round(value) || 0));
-  return {
+  return withResourceConditions({
     ...c,
     resources: { ...c.resources, [key]: current },
     critical: key === "pv" && current === 0 && c.critical === "Ativa" ? "Incapacitada" : c.critical,
-  };
+  });
 }
 export function recover(
   c: TdvCharacter,
@@ -704,14 +846,24 @@ export function prepareTest(c: TdvCharacter, r: TestRequest) {
     applicable.filter(({ impact }) => impact?.target === target && impact.kind === "Desproveito")
       .length;
   const shaken = c.scene.shaken.includes(r.matrix) ? 1 : 0;
+  const temporary = (target: string, kind: string) =>
+    capabilityEffects(c, target).filter((effect) => effect.kind === kind).length;
+  const direction = (target: string) =>
+    temporary(target, "Proveito") - temporary(target, "Desproveito");
+  const bonus = (target: string) =>
+    capabilityEffects(c, target)
+      .filter((effect) => effect.kind === "Bônus")
+      .reduce((sum, effect) => sum + effect.value, 0);
   prumo = shift(
     prumo,
-    Math.sign(r.prumoPro - r.prumoDes - shaken - disadvantages(r.matrix)),
+    Math.sign(r.prumoPro - r.prumoDes - shaken - disadvantages(r.matrix) + direction(r.matrix)),
     r.extraordinary,
   );
   tento = shift(
     tento,
-    Math.sign(r.tentoPro - r.tentoDes - (r.helper ? 0 : disadvantages(r.alinhavo))),
+    Math.sign(
+      r.tentoPro - r.tentoDes + (r.helper ? 0 : direction(r.alinhavo) - disadvantages(r.alinhavo)),
+    ),
     r.extraordinary,
   );
   let cost = 0,
@@ -733,15 +885,25 @@ export function prepareTest(c: TdvCharacter, r: TestRequest) {
   }
   if (c.resources.pe < cost + declaredPE || c.resources.pi < declaredPI)
     throw new Error("Não há PE ou PI para pagar os custos declarados; esta abordagem não começa.");
-  return { prumo, tento, cost: cost + declaredPE, forcingCost: cost, piCost: declaredPI, zero };
+  return {
+    prumo,
+    tento,
+    cost: cost + declaredPE,
+    forcingCost: cost,
+    piCost: declaredPI,
+    zero,
+    bonus: bonus(r.matrix) + (r.helper ? 0 : bonus(r.alinhavo)),
+  };
 }
 export function testSignature(context: NonNullable<TestRequest["context"]>) {
   return [context.intention, context.approach, context.change]
     .map((value) => value.trim().normalize("NFC").toLocaleLowerCase("pt-BR"))
     .join(" | ");
 }
-export function readTest(prumo: number, tento: number, dt: number) {
-  const enlace = prumo + tento,
+export function readTest(prumo: number, tento: number, dt: number, modifier = 0) {
+  if (!Number.isInteger(modifier) || Math.abs(modifier) > 10000)
+    throw new Error("Modificador de Enlace inválido.");
+  const enlace = prumo + tento + modifier,
     margin = enlace - dt,
     criticalFailure = prumo === 1 && tento === 1,
     success = !criticalFailure && enlace >= dt,
@@ -749,6 +911,7 @@ export function readTest(prumo: number, tento: number, dt: number) {
   return {
     prumo,
     tento,
+    ...(modifier ? { modifier } : {}),
     enlace,
     dt,
     margin,
@@ -786,14 +949,19 @@ export function resolveTest(
       Number.isInteger(value) && value >= 1 && value <= size;
   if (faces && (!validFace(faces.prumo, dice.prumo) || !validFace(faces.tento, dice.tento)))
     throw new Error("Confira as faces físicas: use inteiros entre 1 e o dado final de cada Fio.");
-  const result = readTest(faces?.prumo ?? roll(dice.prumo), faces?.tento ?? roll(dice.tento), r.dt);
+  const result = readTest(
+    faces?.prumo ?? roll(dice.prumo),
+    faces?.tento ?? roll(dice.tento),
+    r.dt,
+    dice.bonus,
+  );
   // A plain roll is transient; only mechanical effects or explicit records change the sheet.
   if (!(dice.cost || dice.piCost || dice.zero || result.criticalFailure || r.context || r.costs))
     return { result, dice, character: c };
   return {
     result,
     dice,
-    character: {
+    character: withResourceConditions({
       ...c,
       resources: {
         ...c.resources,
@@ -827,6 +995,7 @@ export function resolveTest(
                   prumo: result.prumo,
                   tento: result.tento,
                   dt: r.dt,
+                  ...(dice.bonus ? { modifier: dice.bonus } : {}),
                   matrix: r.matrix,
                   alinhavo: r.alinhavo,
                   ...(r.helper ? { helper: r.helper.name } : {}),
@@ -847,7 +1016,7 @@ export function resolveTest(
           ? [...new Set([...c.scene.shaken, r.matrix])]
           : c.scene.shaken,
       },
-    },
+    }),
   };
 }
 export function contested(a: ReturnType<typeof readTest>, b: ReturnType<typeof readTest>) {
@@ -927,7 +1096,7 @@ export function characterStateLabel(c: TdvCharacter) {
       .join(" · ") || "Ativa"
   );
 }
-export function probabilityProfile(prumo: number, tento: number, dt: number) {
+export function probabilityProfile(prumo: number, tento: number, dt: number, modifier = 0) {
   if (
     !DICE.includes(prumo as (typeof DICE)[number]) ||
     !DICE.includes(tento as (typeof DICE)[number]) ||
@@ -939,7 +1108,7 @@ export function probabilityProfile(prumo: number, tento: number, dt: number) {
     criticalFailure = 0;
   for (let p = 1; p <= prumo; p++)
     for (let t = 1; t <= tento; t++) {
-      const r = readTest(p, t, dt);
+      const r = readTest(p, t, dt, modifier);
       success += Number(r.success);
       critical += Number(r.critical);
       criticalFailure += Number(r.criticalFailure);

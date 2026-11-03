@@ -1,3 +1,4 @@
+import { TdvCrisisTrackers } from "./tdv2-crisis-trackers";
 import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -6,6 +7,7 @@ import { TdvConditions } from "./tdv2-conditions";
 import {
   constitution,
   setResource,
+  setResourceModifier,
   addTension,
   equilibriumBand,
   type TdvCharacter,
@@ -73,6 +75,11 @@ export function TdvPlayPresence({
                   name={key.toUpperCase()}
                   value={c.resources[key]}
                   maximum={stats.maximums[key]}
+                  base={stats.baseMaximums[key]}
+                  modifier={c.resourceModifiers?.[key] ?? 0}
+                  onApply={(current, modifier) =>
+                    run(() => setResourceModifier(c, key, modifier, current))
+                  }
                   disabled={!canEdit}
                   onChange={(value) => run(() => setResource(c, key, value))}
                 />
@@ -95,7 +102,17 @@ export function TdvPlayPresence({
                 </button>
               </PopoverTrigger>
               <PopoverContent className="tdv-domain-popup" aria-label="Domínios do Equilíbrio">
-                <h3>{equilibriumBand(c.equilibrium)}</h3>
+                <header className="tdv-domain-popup-heading">
+                  <small>Medo ↔ Conhecimento</small>
+                  <h3>{equilibriumBand(c.equilibrium)}</h3>
+                  <strong>
+                    {c.equilibrium > 0 ? "+" : ""}
+                    {c.equilibrium}
+                  </strong>
+                </header>
+                <div className="tdv-domain-axis" aria-hidden="true">
+                  <span style={{ left: `${5 + (c.equilibrium + 10) * 4.5}%` }} />
+                </div>
                 <p>
                   Medo −10 ↔ Conhecimento +10. A faixa contextualiza a personagem, sem bônus
                   universal.
@@ -183,6 +200,7 @@ export function TdvPlayPresence({
           </Button>
         </div>
       )}
+      <TdvCrisisTrackers character={c} onChange={onChange} canEdit={canEdit} />
       <TdvConditions character={c} onChange={onChange} canEdit={canEdit} />
       {!c.ready && (
         <p className="tdv-note">

@@ -1,9 +1,9 @@
+import { Sparkles } from "lucide-react";
+import { TdvEffectEditor, TdvEffectBadges, type TdvEffectControls } from "./tdv2-effects-menu";
 import { TdvDie } from "./tdv2-emblem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { useId } from "react";
 import { DICE } from "@/lib/tdv2";
 
 // A departing selector must not return focus over a selector the player just opened.
@@ -52,7 +52,12 @@ export function TdvCompetency({
   advanceCost,
   availablePU = 0,
   canReverse = false,
-}: {
+  familiar = false,
+  temporaryEffects = [],
+  onAddEffect,
+  onRemoveEffect,
+}: TdvEffectControls & {
+  familiar?: boolean;
   name: string;
   grade: number;
   matrix?: boolean;
@@ -90,7 +95,14 @@ export function TdvCompetency({
       data-shaken={shaken || undefined}
       data-affected={effects.length > 0 || undefined}
     >
-      <h3>{name}</h3>
+      <h3>
+        {name}
+        {familiar && (
+          <Sparkles className="tdv-familiarity-mark" role="img" aria-label="Familiaridade">
+            <title>Familiaridade de formação, sem bônus mecânico</title>
+          </Sparkles>
+        )}
+      </h3>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -99,17 +111,22 @@ export function TdvCompetency({
             aria-label={`${creation ? "Distribuir" : "Consultar"} ${name} · ${state} · ${die}`}
           >
             {face}
+            <TdvEffectBadges name={name} effects={temporaryEffects} />
           </Button>
         </PopoverTrigger>
         <PopoverContent
           onCloseAutoFocus={preserveNextPopupFocus}
           className="tdv-capability-popup"
           aria-label={`Capacidade ${name}`}
+          data-capability={name}
+          data-kind={matrix ? "matrix" : "skill"}
         >
           <header>
             <small>{matrix ? "Matriz · Prumo" : "Alinhavo · Tento"}</small>
             <h3>{name}</h3>
-            <strong>{die}</strong>
+            <span className="tdv-popup-die">
+              <TdvDie sides={DICE[grade]} />
+            </span>
           </header>
           <p>
             {state}
@@ -120,6 +137,13 @@ export function TdvCompetency({
               {effect.kind} · {effect.name}
             </p>
           ))}
+          <TdvEffectEditor
+            name={name}
+            effects={temporaryEffects}
+            disabled={disabled}
+            onAdd={onAddEffect}
+            onRemove={onRemoveEffect}
+          />
           <div className="tdv-capability-advance">
             <Button
               variant="ghost"
@@ -253,92 +277,4 @@ export function TdvDevelopment({
   );
 }
 
-export function TdvResourceActions({
-  onChange,
-  name,
-  value,
-  maximum,
-  disabled,
-}: {
-  name: string;
-  value: number;
-  maximum: number;
-  disabled: boolean;
-  onChange: (value: number) => void;
-}) {
-  const [open, setOpen] = useState(false),
-    [draft, setDraft] = useState(value);
-  const id = useId();
-  return (
-    <>
-      <div className="tdv-resource-operation">
-        <Button
-          className="tdv-resource-step"
-          variant="ghost"
-          disabled={disabled || value <= 0}
-          aria-label={`Retirar 1 ${name}`}
-          onClick={() => onChange(value - 1)}
-        >
-          −
-        </Button>
-        <Popover
-          open={open}
-          onOpenChange={(next) => {
-            if (next) setDraft(value);
-            setOpen(next);
-          }}
-        >
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              className="tdv-resource-value"
-              disabled={disabled}
-              aria-label={`${name}: ${value} de ${maximum}. Ajustar ${name}`}
-            >
-              <strong>{value}</strong>
-              <span>/ {maximum}</span>
-              <small>ajustar</small>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="tdv-resource-adjust">
-            <label className="tadeon-dossier-label" htmlFor={id}>
-              {name} atual
-            </label>
-            <Input
-              className="tadeon-resource-field"
-              id={id}
-              type="number"
-              value={draft}
-              min={0}
-              max={maximum}
-              onChange={(e) => setDraft(Number(e.target.value))}
-            />
-            <Button
-              disabled={!Number.isInteger(draft) || draft < 0 || draft > maximum}
-              onClick={() => {
-                onChange(draft);
-                setOpen(false);
-              }}
-            >
-              Aplicar {name}
-            </Button>
-          </PopoverContent>
-        </Popover>
-        <Button
-          className="tdv-resource-step"
-          variant="ghost"
-          disabled={disabled || value >= maximum}
-          aria-label={`Restaurar 1 ${name}`}
-          onClick={() => onChange(value + 1)}
-        >
-          +
-        </Button>
-      </div>
-      <div className="tdv-resource-level" aria-hidden="true">
-        <span
-          style={{ width: `${Math.max(0, Math.min(100, (value / Math.max(1, maximum)) * 100))}%` }}
-        />
-      </div>
-    </>
-  );
-}
+export { TdvResourceActions } from "./tdv2-resource-menu";

@@ -1,3 +1,4 @@
+import { verifyInstruments } from "./verify-sheet-instruments.mjs";
 import { verifyInteractive } from "./verify-sheet-interactive.mjs";
 import { auditViewports } from "./v4-viewports.mjs";
 /** NEX-040: real UI, isolated authenticated fixtures. No production writes. */
@@ -50,6 +51,12 @@ function character() {
   });
   c.face.anchor.detail = "A promessa a Elen";
   Object.assign(c.face.links[0], { node: "Elen", nature: "Confiança" });
+  if (process.env.NEXUS_AUDIT_SCOPE === "instruments")
+    Object.assign(c.face.links[0], {
+      offer: "Abrigo e acesso aos arquivos do cais",
+      demand: "Preservar a identidade das testemunhas",
+    });
+  c.creation = { groupReason: "Proteger o cais", reviewed: true, familiarities: ["Luta"] };
   return finishCreation(c);
 }
 const server = spawn(
@@ -265,6 +272,7 @@ try {
       await installDesignFonts(page);
       const geometry = async (label) => {
         const target = {
+          "instruments-links": "#tdv-vinculos",
           "interactive-scene": "#tdv-protecao",
           "interactive-digital-cockpit": ".tdv-game-panel",
           "sheet-critical": ".tdv-result",
@@ -383,7 +391,9 @@ try {
       };
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
       await page.locator(".tdv-character-name").waitFor();
-      await verifyInteractive({
+      await (
+        process.env.NEXUS_AUDIT_SCOPE === "instruments" ? verifyInstruments : verifyInteractive
+      )({
         page,
         context,
         getRow: () => row,

@@ -42,6 +42,7 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [v4/FICHA_PRANCHETA_INTERATIVA.md](v4/FICHA_PRANCHETA_INTERATIVA.md) | active | Direção DEC-030, destinos de funções, condições explícitas e validação proporcional solicitada pelo usuário. |
 | [v4/FICHA_LEITURA_E_ESCOLHAS.md](v4/FICHA_LEITURA_E_ESCOLHAS.md) | active | Destinos, criação/progressão, autorização e limites de DEC-031. |
 | [v4/FICHA_PAINEL_E_PROGRESSAO.md](v4/FICHA_PAINEL_E_PROGRESSAO.md) | active | DEC-032: destinos, selagem numérica, progressão por clique, painel condensado e limites. |
+| [v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](v4/FICHA_INSTRUMENTOS_E_ESTADOS.md) | active | DEC-033: destinos das guias, instrumentos, efeitos, estados zero, persistência aditiva e reversão compatível. |
 
 ## Contratos e evidências
 

@@ -330,6 +330,7 @@ export function TdvTestPanel({
           {physical ? "Conferir dados físicos" : "Rolar os dois Fios"}
           {prepared?.cost ? ` · ${prepared.cost} PE` : ""}
           {prepared?.piCost ? ` · ${prepared.piCost} PI` : ""}
+          {prepared?.bonus ? ` · ${prepared.bonus > 0 ? "+" : ""}${prepared.bonus} no Enlace` : ""}
         </Button>
         {physical && confirmedPhysical === physicalSignature && (
           <Button variant="ghost" disabled={!canEdit} onClick={() => setConfirmedPhysical("")}>
@@ -340,7 +341,7 @@ export function TdvTestPanel({
     </>
   );
   const probability = prepared
-    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt).success * 100
+    ? probabilityProfile(prepared.prumo, prepared.tento, request.dt, prepared.bonus).success * 100
     : 0;
   const chance = prepared && (
     <div className="tdv-probability-instrument">
@@ -382,7 +383,12 @@ export function TdvTestPanel({
     <>
       {last && (
         <div className="tdv-result" aria-live="polite">
-          <TdvTestWeave prumo={last.result.prumo} tento={last.result.tento} dt={last.result.dt} />
+          <TdvTestWeave
+            prumo={last.result.prumo}
+            tento={last.result.tento}
+            dt={last.result.dt}
+            modifier={last.result.modifier ?? 0}
+          />
           <p>
             {last.result.quality}
             {last.result.critical ? " · Consonância crítica" : ""}
@@ -391,6 +397,7 @@ export function TdvTestPanel({
             {Object.entries({
               Prumo: last.result.prumo,
               Tento: last.result.tento,
+              ...(last.result.modifier ? { Modificador: last.result.modifier } : {}),
               Enlace: last.result.enlace,
               Ascendente: last.result.ascendente,
               Retorno: last.result.retorno,

@@ -10,6 +10,8 @@ import {
   allocateCreation,
   capabilityConditions,
   conditionImpact,
+  capabilityEffects,
+  addCapabilityEffect,
   type TdvCharacter,
 } from "@/lib/tdv2";
 import { TdvCompetency } from "./tdv2-competencies";
@@ -52,6 +54,17 @@ export function TdvGamePanel({
         matrix={matrix}
         grade={grade}
         creation={!c.ready}
+        familiar={!matrix && c.creation?.familiarities.includes(name as (typeof ALINHAVOS)[number])}
+        temporaryEffects={capabilityEffects(c, name)}
+        onAddEffect={(kind, value, note) =>
+          commit(() => addCapabilityEffect(c, name, kind, value, note))
+        }
+        onRemoveEffect={(id) =>
+          onChange({
+            ...c,
+            temporaryEffects: (c.temporaryEffects ?? []).filter((effect) => effect.id !== id),
+          })
+        }
         disabled={!canEdit}
         advanceCost={matrix ? grade + 3 : 2}
         availablePU={s.pu}
@@ -92,10 +105,10 @@ export function TdvGamePanel({
       <nav className="tdv-game-toolbelt" aria-label="Ferramentas da personagem">
         {(
           [
-            ["pessoa", "Pessoa", UserRound],
+            ["pessoa", "Feição", UserRound],
             ["equipamento", "Equipamento", Backpack],
             ["expressao", "Expressão", Layers3],
-            ["acao", "Cena", Activity],
+            ["constituicao", "Ação", Activity],
             ["percurso", `${s.pu} PU · ${s.development}%`, Sprout],
           ] as const
         ).map(([tab, label, Icon]) => (
