@@ -51,3 +51,8 @@ Reversão deste lote: reverter apenas os componentes/estilos de DEC-034; nenhum 
 Cinco atalhos em faixa única adaptável, nomes acessíveis completos e rótulos compactos. Alinhavos têm busca local que ignora acentos, alcança também graus não treinados e retorna à seleção anterior ao limpar; sem gravar estado na ficha. Itens/expressões preservam as prévias compactas e agora mostram total e acesso explícito à coleção completa. Dano-base declarado aparece na leitura do item, sem cálculo novo. Âncora Abalada tem estado visível; vínculos vazios não inflam a contagem.
 
 Sem mudança de regra, schema, autoridade ou banco. Reverter apenas apresentação e busca para o baseline publicado 0ebc56b283e814d2ab0229867f5b809a410ef76f; dados não requerem conversão. Evidência e publicação próprias na PR; aparelhos físicos/contas reais não certificados.
+
+
+## DEC-036 · Encaixes estreitos
+
+Recursos mantêm três colunas, com redução do espaço entre elas e retirada do preenchimento lateral nas larguras estreitas para caberem alvos independentes. Guias recompostas em duas linhas, nomes de Matrizes/Alinhavos acima dos dados, ações longas com quebra permitida e cabeçalho flexível. Popups preservam espaço para fechar. Nenhuma função ou informação removida. QA mede retângulos reais de alvos nos dois modos, além de overflow, portais e capturas. Baseline c0210373c2eac847b09f6c82d99f17e0a3241060; reverter somente apresentação DEC-036 se necessário. Sem alteração de banco. Dispositivos físicos e teclados nativos não certificados por emulação.

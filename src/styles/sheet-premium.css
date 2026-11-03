@@ -2591,7 +2591,7 @@
 .tdv-sheet-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .tdv-sheet-tools > p { flex-basis: 100%; color: #bdb6a3; font: .85rem var(--font-inter); }
 .tadeon-sheet-instrument-header .tadeon-sheet-save-state { flex: 0 0 auto; order: 0; margin-left: auto; }
-.tadeon-sheet-instrument-header .tadeon-sheet-commandbar__actions { flex-wrap: nowrap; }
+.tadeon-sheet-instrument-header .tadeon-sheet-commandbar__actions { flex-wrap: wrap; min-width: 0; }
 .tdv-creation-loom { padding: .85rem; border-block: 1px solid #b8c2a44d; background: #94a37d09; }
 .tdv-creation-loom__head { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
 .tdv-creation-loom__head h2 { font: 500 1.7rem var(--font-cinzel); }
@@ -2728,3 +2728,23 @@
 .tdv-game-identity-shortcuts [data-shaken="true"] { color: #e7a2a9; border-bottom: 2px solid #d98f9b; }
 .tdv-game-ready-list button:focus-visible { outline: 2px solid #cdb88b; outline-offset: 2px; }
 @container tdv-atlas (max-width: 499px) { .tdv-game-toolbelt button { font-size: .72rem; } .tdv-game-skill-heading { gap: .2rem; } }
+
+/* Narrow sheets preserve independent targets and a readable capacity name. */
+@container tdv-atlas (max-width: 380px) {
+ .tdv-play-resources { gap: .2rem; }
+ .tadeon-tdv2-sheet[data-presentation] .tdv-resource { padding-inline: 0; }
+ .tdv-tabs--sheet { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .tdv-tabs--sheet > button { display: flex; flex-direction: row; justify-content: center; min-height: 44px; gap: .4rem; padding: .4rem .15rem; }
+ .tdv-tabs--sheet > button > span { white-space: normal; overflow-wrap: normal; hyphens: none; }
+ .tdv-matrices .tdv-matrix h3,.tdv-alinhavos .tdv-competency h3 { grid-column: 1/-1; grid-row: 1; }
+ .tdv-matrices .tdv-matrix .tdv-competency__die,.tdv-alinhavos .tdv-competency .tdv-competency__die { grid-column: 2; grid-row: 2/4; }
+ .tdv-context-action,.tdv-actions > button,.tdv-game-expression-list > button { max-width: 100%; min-width: 0; height: auto; min-height: 44px; white-space: normal; overflow-wrap: anywhere; }
+ .tdv-game-search { max-width: 100%; }
+ .tdv-condition-chip { max-width: 100%; min-width: 0; }
+ .tdv-record-heading > span { min-width: 0; overflow-wrap: anywhere; }
+}
+.tdv-operation-dialog [data-slot="dialog-title"] { padding-right: 1.75rem; min-width: 0; overflow-wrap: anywhere; }
+.tdv-operation-dialog [data-slot="dialog-title"] > svg { flex-shrink: 0; }
+
+.tadeon-tdv2-sheet :is(button,input,textarea,select,[contenteditable="true"]) { scroll-margin-block: calc(var(--sheet-sticky-top,5rem) + .75rem) 1rem; }
+.tadeon-tdv2-sheet .tadeon-sheet-section--folio { scroll-margin-top: calc(var(--sheet-sticky-top,5rem) + .75rem); }

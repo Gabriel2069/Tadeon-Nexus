@@ -40,8 +40,35 @@ export async function verifyInstruments({
       "Popup within viewport: " + JSON.stringify(b),
     );
   };
+  const resourceTargets = async () => {
+    const targets = await page.locator(".tdv-play-resources .tdv-resource-step").evaluateAll((es) =>
+      es.map((e) => {
+        const r = e.getBoundingClientRect(),
+          p = e.closest(".tdv-resource").getBoundingClientRect();
+        return { x: r.x, y: r.y, w: r.width, h: r.height, left: p.left, right: p.right };
+      }),
+    );
+    assert(
+      targets.every(
+        (r) => r.w >= 43.9 && r.h >= 43.9 && r.x >= r.left - 1 && r.x + r.w <= r.right + 1,
+      ),
+      "Resource targets fit their own column: " + JSON.stringify(targets),
+    );
+    assert(
+      targets.every((r, i) =>
+        targets.every(
+          (s, j) =>
+            i === j ||
+            Math.min(r.x + r.w, s.x + s.w) - Math.max(r.x, s.x) <= 1 ||
+            Math.min(r.y + r.h, s.y + s.h) - Math.max(r.y, s.y) <= 1,
+        ),
+      ),
+      "Resource targets never overlap",
+    );
+  };
   await page.evaluate(() => document.fonts.ready);
   await settle();
+  await resourceTargets();
   assert(
     (await page.locator('.tdv-tabs--sheet [role="tab"]').count()) === 4,
     "Four operational folios",
@@ -205,6 +232,8 @@ export async function verifyInstruments({
   await close(popup);
   await page.getByRole("button", { name: "Modo de jogo", exact: true }).click();
   assert((await page.locator(".tdv-game-panel").count()) === 1, "Game cockpit mounted");
+  await settle();
+  await resourceTargets();
   assert(
     (await page.locator(".tdv-game-skills .tdv-competency").count()) === 6,
     "Trained skills prioritized",
