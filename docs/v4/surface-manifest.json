@@ -32465,7 +32465,7 @@
       "guards": []
     },
     "src/components/sheet/tdv2-resource-menu.tsx": {
-      "sha256": "c8ad1d658d788b1f41310179394a111f06662888441707b4f588c3bafba9b61b",
+      "sha256": "23070bd816adb4f93145dce385118358eaafdbf707014bfc8530b1c26ad38edb",
       "imports": [
         {
           "specifier": "react",

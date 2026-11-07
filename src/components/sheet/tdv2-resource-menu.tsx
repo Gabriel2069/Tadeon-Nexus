@@ -60,7 +60,7 @@ export function TdvResourceActions({
               aria-label={`${name}: ${value} de ${maximum}. Ajustar ${name}`}
             >
               <span className="tdv-resource-dial">
-                <svg viewBox="0 0 160 116" aria-hidden="true" className="tdv-resource-arc">
+                <svg viewBox="0 0 160 104" aria-hidden="true" className="tdv-resource-arc">
                   <path
                     d="M10 90a70 70 0 0 1 140 0"
                     pathLength="100"
@@ -75,7 +75,7 @@ export function TdvResourceActions({
                 </svg>
                 <strong
                   style={{
-                    fontSize: value >= 1000 ? "1rem" : value >= 100 ? "1.25rem" : undefined,
+                    fontSize: value >= 1000 ? "26cqi" : value >= 100 ? "32cqi" : undefined,
                   }}
                 >
                   {value}
