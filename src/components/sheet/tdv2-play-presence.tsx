@@ -48,46 +48,26 @@ export function TdvPlayPresence({
       )}
       <div className="tdv-cockpit">
         <div id="tdv-recursos" className="tdv-play-resources">
-          {(["pv", "pi", "pe"] as const).map((key) => {
-            const ratio = Math.max(
-              0,
-              Math.min(1, c.resources[key] / Math.max(1, stats.maximums[key])),
-            );
-            return (
-              <div className="tdv-resource" data-resource={key} key={key}>
-                <h2>
-                  <span>{{ pv: "Vitalidade", pi: "Inteireza", pe: "Esforço" }[key]}</span>
-                  <small>{key.toUpperCase()}</small>
-                </h2>
-                <svg className="tdv-resource-arc" viewBox="0 0 120 80" aria-hidden="true">
-                  <path
-                    d="M12 66a48 48 0 1 1 96 0"
-                    pathLength="100"
-                    className="tdv-resource-arc__track"
-                  />
-                  <path
-                    d="M12 66a48 48 0 1 1 96 0"
-                    pathLength="100"
-                    strokeDasharray={`${ratio * 100} 100`}
-                    className="tdv-resource-arc__fill"
-                  />
-                  <path d="M6 66h12m84 0h12M60 6v12" className="tdv-resource-arc__ticks" />
-                </svg>
-                <TdvResourceActions
-                  name={key.toUpperCase()}
-                  value={c.resources[key]}
-                  maximum={stats.maximums[key]}
-                  base={stats.baseMaximums[key]}
-                  modifier={c.resourceModifiers?.[key] ?? 0}
-                  onApply={(current, modifier) =>
-                    run(() => setResourceModifier(c, key, modifier, current))
-                  }
-                  disabled={!canEdit}
-                  onChange={(value) => run(() => setResource(c, key, value))}
-                />
-              </div>
-            );
-          })}
+          {(["pv", "pi", "pe"] as const).map((key) => (
+            <div className="tdv-resource" data-resource={key} key={key}>
+              <h2>
+                <span>{{ pv: "Vitalidade", pi: "Inteireza", pe: "Esforço" }[key]}</span>
+                <small>{key.toUpperCase()}</small>
+              </h2>
+              <TdvResourceActions
+                name={key.toUpperCase()}
+                value={c.resources[key]}
+                maximum={stats.maximums[key]}
+                base={stats.baseMaximums[key]}
+                modifier={c.resourceModifiers?.[key] ?? 0}
+                onApply={(current, modifier) =>
+                  run(() => setResourceModifier(c, key, modifier, current))
+                }
+                disabled={!canEdit}
+                onChange={(value) => run(() => setResource(c, key, value))}
+              />
+            </div>
+          ))}
         </div>
         <div id="tdv-equilibrio" className="tdv-domain-instrument">
           <header>

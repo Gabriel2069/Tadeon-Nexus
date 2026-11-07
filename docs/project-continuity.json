@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-03",
-  "runtimeReference": "c878253bfdb185a569ffc5f97c94dd595a2ec6b3",
+  "checkedAt": "2026-11-06",
+  "runtimeReference": "e23d1dd34737295bb3616aa1f0cb0907ca5eac9c",
   "integration": {
     "pr": null,
-    "branch": "feat/fundacao-viii",
+    "branch": "visual/ficha-dois-modos",
     "base": "main",
-    "baseCommit": "c878253bfdb185a569ffc5f97c94dd595a2ec6b3",
+    "baseCommit": "e23d1dd34737295bb3616aa1f0cb0907ca5eac9c",
     "sourceCommit": null,
     "headCommit": null,
     "state": "working",
-    "production": "not published; prior production c878253",
-    "note": "DEC-037 / NEX-051: candidato da Fundação VIII; gates e publicação próprios."
+    "production": "not published; prior production e23d1dd",
+    "note": "DEC-036 / NEX-046 / NEX-047: revisão visual dos dois modos sobre a Fundação VIII publicada."
   },
   "domains": [
     {
@@ -455,6 +455,11 @@
       "path": "docs/rules/fundacao-viii.md",
       "status": "reference",
       "purpose": "Fonte integral fornecida por Tadeu: Fundação V e consolidação VIII; precedência e parâmetros em calibração explícitos."
+    },
+    {
+      "path": "docs/v4/FICHA_DOIS_MODOS.md",
+      "status": "active",
+      "purpose": "DEC-036: diferenças e evidências de composição nos dois modos da ficha."
     },
     {
       "path": "docs/v4/FUNDACAO_VIII.md",
@@ -1579,7 +1584,8 @@
         "docs/v4/living-sheet-validation.json",
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json",
-        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
+        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
+        "docs/v4/FICHA_DOIS_MODOS.md"
       ],
       "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
@@ -1603,7 +1609,8 @@
         "docs/v4/sheet-play-validation.json",
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json",
-        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
+        "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
+        "docs/v4/FICHA_DOIS_MODOS.md"
       ],
       "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
