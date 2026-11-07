@@ -2210,7 +2210,7 @@
 .tdv-resource h2 small { font: .65rem var(--font-mono); }
 .tdv-resource-operation { position: relative; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: center; margin-top: .35rem; }
 .tdv-resource-operation .tdv-resource-value { grid-column: 1 / -1; grid-row: 1; display: grid; justify-items: center; gap: .1rem; width: 100%; min-width: 0; min-height: 64px; height: auto; padding: .2rem 0; border: 0; background: transparent; box-shadow: none; }
-.tdv-resource-dial { display: grid; width: 100%; max-width: 8.5rem; min-width: 0; }
+.tdv-resource-dial { display: grid; width: 100%; max-width: 6rem; min-width: 0; }
 .tdv-resource-dial > :is(svg,strong) { grid-area: 1 / 1; }
 .tdv-resource-arc { display: block; width: 100%; height: auto; fill: none; pointer-events: none; }
 .tdv-resource-arc__track { stroke: rgb(var(--resource-rgb) / 15%); stroke-width: 4; }
