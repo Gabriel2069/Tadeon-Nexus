@@ -1,17 +1,17 @@
 {
   "version": 1,
   "checkedAt": "2026-11-07",
-  "runtimeReference": "f69262cf867e876324671b54250189354fe9288d",
+  "runtimeReference": "56f8729a36d2a05e4a2fe6111d3491fbc3719f0e",
   "integration": {
     "pr": null,
-    "branch": "fix/arcos-dos-recursos",
+    "branch": "fix/proporcao-arco-valor",
     "base": "main",
-    "baseCommit": "f69262cf867e876324671b54250189354fe9288d",
+    "baseCommit": "56f8729a36d2a05e4a2fe6111d3491fbc3719f0e",
     "sourceCommit": null,
     "headCommit": null,
     "state": "working",
-    "production": "not published; prior production f69262c",
-    "note": "DEC-036 / NEX-046 / NEX-047: restaurar semicírculos e separar geometria de números e controles."
+    "production": "not published; prior production 56f8729",
+    "note": "DEC-036 / NEX-046 / NEX-047: números maiores e próximos do arco; corrigir conflito do limite de largura com o botão."
   },
   "domains": [
     {
