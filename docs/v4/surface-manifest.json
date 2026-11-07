@@ -30847,7 +30847,7 @@
       ]
     },
     "src/components/sheet/tdv2-play-presence.tsx": {
-      "sha256": "bfc08c4c6ad5604a0647f1858619267654c84e7efad72602c5aa55df8dd9d0ac",
+      "sha256": "53c5dd74ff3f3d90975a2e4ae3a7ab22ce1a050f03e629d1a4a6e9ff14543ce4",
       "imports": [
         {
           "specifier": "./tdv2-crisis-trackers",
@@ -30947,189 +30947,173 @@
         },
         {
           "component": "div",
-          "line": 57
+          "line": 52
         },
         {
           "component": "h2",
-          "line": 58
+          "line": 53
         },
         {
           "component": "span",
-          "line": 59
+          "line": 54
         },
         {
           "component": "small",
-          "line": 60
-        },
-        {
-          "component": "svg",
-          "line": 62
-        },
-        {
-          "component": "path",
-          "line": 63
-        },
-        {
-          "component": "path",
-          "line": 68
-        },
-        {
-          "component": "path",
-          "line": 74
+          "line": 55
         },
         {
           "component": "TdvResourceActions",
-          "line": 76
+          "line": 57
         },
         {
           "component": "div",
-          "line": 92
+          "line": 72
         },
         {
           "component": "header",
-          "line": 93
+          "line": 73
         },
         {
           "component": "h2",
-          "line": 94
+          "line": 74
         },
         {
           "component": "Popover",
-          "line": 95
+          "line": 75
         },
         {
           "component": "PopoverTrigger",
-          "line": 96
+          "line": 76
         },
         {
           "component": "button",
-          "line": 97
+          "line": 77
         },
         {
           "component": "PopoverContent",
-          "line": 106
+          "line": 86
         },
         {
           "component": "header",
-          "line": 107
+          "line": 87
         },
         {
           "component": "small",
-          "line": 108
+          "line": 88
         },
         {
           "component": "h3",
-          "line": 109
+          "line": 89
         },
         {
           "component": "strong",
-          "line": 110
+          "line": 90
         },
         {
           "component": "div",
-          "line": 115
+          "line": 95
         },
         {
           "component": "span",
-          "line": 116
+          "line": 96
         },
         {
           "component": "p",
-          "line": 118
+          "line": 98
         },
         {
           "component": "p",
-          "line": 122
+          "line": 102
         },
         {
           "component": "label",
-          "line": 123
+          "line": 103
         },
         {
           "component": "input",
-          "line": 124
+          "line": 104
+        },
+        {
+          "component": "div",
+          "line": 118
+        },
+        {
+          "component": "span",
+          "line": 123
+        },
+        {
+          "component": "div",
+          "line": 125
+        },
+        {
+          "component": "span",
+          "line": 126
+        },
+        {
+          "component": "span",
+          "line": 127
+        },
+        {
+          "component": "div",
+          "line": 129
+        },
+        {
+          "component": "Button",
+          "line": 130
         },
         {
           "component": "div",
           "line": 138
         },
         {
-          "component": "span",
-          "line": 143
-        },
-        {
-          "component": "div",
-          "line": 145
-        },
-        {
-          "component": "span",
-          "line": 146
-        },
-        {
-          "component": "span",
-          "line": 147
-        },
-        {
-          "component": "div",
-          "line": 149
-        },
-        {
-          "component": "Button",
-          "line": 150
-        },
-        {
-          "component": "div",
-          "line": 158
-        },
-        {
           "component": "small",
-          "line": 159
+          "line": 139
         },
         {
           "component": "output",
-          "line": 160
+          "line": 140
         },
         {
           "component": "span",
-          "line": 164
+          "line": 144
         },
         {
           "component": "i",
-          "line": 166
+          "line": 146
         },
         {
           "component": "Button",
-          "line": 174
+          "line": 154
         },
         {
           "component": "div",
-          "line": 189
+          "line": 169
         },
         {
           "component": "span",
-          "line": 190
+          "line": 170
         },
         {
           "component": "Button",
-          "line": 200
+          "line": 180
         },
         {
           "component": "TdvCrisisTrackers",
-          "line": 205
+          "line": 185
         },
         {
           "component": "TdvConditions",
-          "line": 210
+          "line": 190
         },
         {
           "component": "p",
-          "line": 212
+          "line": 192
         }
       ],
       "actions": [
         {
           "component": "TdvResourceActions",
-          "line": 82,
+          "line": 63,
           "event": "onApply",
           "expression": "{(current, modifier) => run(() => setResourceModifier(c, key, modifier, current)) }",
           "label": "{key.toUpperCase()}",
@@ -31137,7 +31121,7 @@
         },
         {
           "component": "TdvResourceActions",
-          "line": 86,
+          "line": 67,
           "event": "onChange",
           "expression": "{(value) => run(() => setResource(c, key, value))}",
           "label": "{key.toUpperCase()}",
@@ -31145,7 +31129,7 @@
         },
         {
           "component": "input",
-          "line": 133,
+          "line": 113,
           "event": "onChange",
           "expression": "{(e) => onChange({ ...c, equilibrium: Number(e.target.value) })}",
           "label": "{id}",
@@ -31153,7 +31137,7 @@
         },
         {
           "component": "Button",
-          "line": 154,
+          "line": 134,
           "event": "onClick",
           "expression": "{() => run(() => addTension(c, -1))}",
           "label": "\"Tensão −1\"",
@@ -31161,7 +31145,7 @@
         },
         {
           "component": "Button",
-          "line": 178,
+          "line": 158,
           "event": "onClick",
           "expression": "{() => run(() => addTension(c, 1))}",
           "label": "\"Tensão +1\"",
@@ -31169,7 +31153,7 @@
         },
         {
           "component": "Button",
-          "line": 200,
+          "line": 180,
           "event": "onClick",
           "expression": "{onInspectState}",
           "label": null,
@@ -31177,7 +31161,7 @@
         },
         {
           "component": "TdvCrisisTrackers",
-          "line": 207,
+          "line": 187,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -31185,7 +31169,7 @@
         },
         {
           "component": "TdvConditions",
-          "line": 210,
+          "line": 190,
           "event": "onChange",
           "expression": "{onChange}",
           "label": null,
@@ -31197,27 +31181,27 @@
       "guards": [
         {
           "expression": "TdvResourceActions disabled={!canEdit}",
-          "line": 85
+          "line": 66
         },
         {
           "expression": "input disabled={!canEdit}",
+          "line": 112
+        },
+        {
+          "expression": "Button disabled={!canEdit}",
           "line": 132
         },
         {
           "expression": "Button disabled={!canEdit}",
-          "line": 152
-        },
-        {
-          "expression": "Button disabled={!canEdit}",
-          "line": 176
+          "line": 156
         },
         {
           "expression": "TdvCrisisTrackers canEdit={canEdit && (!c.foundation || canAdjudicate)}",
-          "line": 208
+          "line": 188
         },
         {
           "expression": "TdvConditions canEdit={canEdit}",
-          "line": 210
+          "line": 190
         }
       ]
     },
