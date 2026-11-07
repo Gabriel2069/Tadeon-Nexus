@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-06; referência de runtime: `e23d1dd34737295bb3616aa1f0cb0907ca5eac9c`. PR #null em `visual/ficha-dois-modos`; integração: `working`. Não é prova de deploy.
+Snapshot: 2026-11-07; referência de runtime: `f69262cf867e876324671b54250189354fe9288d`. PR #null em `fix/arcos-dos-recursos`; integração: `working`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 

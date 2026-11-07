@@ -32465,7 +32465,7 @@
       "guards": []
     },
     "src/components/sheet/tdv2-resource-menu.tsx": {
-      "sha256": "400b22dd7085cc22781029e0d5a8d0c7fdbd599a018afb7abdf8148b1571f202",
+      "sha256": "c8ad1d658d788b1f41310179394a111f06662888441707b4f588c3bafba9b61b",
       "imports": [
         {
           "specifier": "react",
@@ -32521,105 +32521,121 @@
       "renders": [
         {
           "component": "div",
-          "line": 35
-        },
-        {
-          "component": "Button",
           "line": 36
         },
         {
+          "component": "Button",
+          "line": 37
+        },
+        {
           "component": "Popover",
-          "line": 45
+          "line": 46
         },
         {
           "component": "PopoverTrigger",
-          "line": 55
-        },
-        {
-          "component": "Button",
           "line": 56
         },
         {
-          "component": "strong",
-          "line": 61
+          "component": "Button",
+          "line": 57
         },
         {
           "component": "span",
           "line": 62
         },
         {
-          "component": "small",
+          "component": "svg",
           "line": 63
         },
         {
-          "component": "PopoverContent",
-          "line": 66
+          "component": "path",
+          "line": 64
         },
         {
-          "component": "header",
-          "line": 71
-        },
-        {
-          "component": "Icon",
-          "line": 72
-        },
-        {
-          "component": "small",
-          "line": 73
+          "component": "path",
+          "line": 69
         },
         {
           "component": "strong",
-          "line": 74
-        },
-        {
-          "component": "span",
           "line": 76
         },
         {
-          "component": "p",
-          "line": 78
-        },
-        {
-          "component": "label",
-          "line": 82
-        },
-        {
-          "component": "Input",
-          "line": 83
-        },
-        {
-          "component": "label",
-          "line": 94
-        },
-        {
-          "component": "Input",
-          "line": 96
+          "component": "span",
+          "line": 84
         },
         {
           "component": "small",
-          "line": 109
+          "line": 85
         },
         {
-          "component": "Button",
-          "line": 114
+          "component": "PopoverContent",
+          "line": 88
         },
         {
-          "component": "Button",
-          "line": 133
+          "component": "header",
+          "line": 93
         },
         {
-          "component": "div",
-          "line": 143
+          "component": "Icon",
+          "line": 94
+        },
+        {
+          "component": "small",
+          "line": 95
+        },
+        {
+          "component": "strong",
+          "line": 96
         },
         {
           "component": "span",
-          "line": 144
+          "line": 98
+        },
+        {
+          "component": "p",
+          "line": 100
+        },
+        {
+          "component": "label",
+          "line": 104
+        },
+        {
+          "component": "Input",
+          "line": 105
+        },
+        {
+          "component": "label",
+          "line": 116
+        },
+        {
+          "component": "Input",
+          "line": 118
+        },
+        {
+          "component": "small",
+          "line": 131
+        },
+        {
+          "component": "Button",
+          "line": 136
+        },
+        {
+          "component": "Button",
+          "line": 155
+        },
+        {
+          "component": "div",
+          "line": 165
+        },
+        {
+          "component": "span",
+          "line": 166
         }
       ],
       "actions": [
         {
           "component": "Button",
-          "line": 41,
+          "line": 42,
           "event": "onClick",
           "expression": "{() => onChange(value - 1)}",
           "label": "{`Retirar 1 ${name}`}",
@@ -32627,7 +32643,7 @@
         },
         {
           "component": "Popover",
-          "line": 47,
+          "line": 48,
           "event": "onOpenChange",
           "expression": "{(next) => { if (next) { setDraft(value); setDraftModifier(modifier); } setOpen(next); }}",
           "label": null,
@@ -32635,7 +32651,7 @@
         },
         {
           "component": "Input",
-          "line": 91,
+          "line": 113,
           "event": "onChange",
           "expression": "{(e) => setDraft(Number(e.target.value))}",
           "label": "{id}",
@@ -32643,7 +32659,7 @@
         },
         {
           "component": "Input",
-          "line": 103,
+          "line": 125,
           "event": "onChange",
           "expression": "{(e) => { const next = Number(e.target.value); setDraftModifier(next); setDraft(Math.min(draft, Math.max(0, base + next))); }}",
           "label": "{`Modificador de ${name}`}",
@@ -32651,7 +32667,7 @@
         },
         {
           "component": "Button",
-          "line": 123,
+          "line": 145,
           "event": "onClick",
           "expression": "{() => { if (onApply) onApply(draft, draftModifier); else onChange(draft); setOpen(false); }}",
           "label": null,
@@ -32659,7 +32675,7 @@
         },
         {
           "component": "Button",
-          "line": 138,
+          "line": 160,
           "event": "onClick",
           "expression": "{() => onChange(value + 1)}",
           "label": "{`Restaurar 1 ${name}`}",
@@ -32671,23 +32687,23 @@
       "guards": [
         {
           "expression": "Button disabled={disabled || value <= 0}",
-          "line": 39
+          "line": 40
         },
         {
           "expression": "Input disabled={disabled}",
-          "line": 90
+          "line": 112
         },
         {
           "expression": "Input disabled={disabled}",
-          "line": 101
+          "line": 123
         },
         {
           "expression": "Button disabled={ disabled || !Number.isInteger(draft) || draft < 0 || draft > nextMaximum || !Number.isInteger(draftModifier) || Math.abs(draftModifier) > 10000 }",
-          "line": 115
+          "line": 137
         },
         {
           "expression": "Button disabled={disabled || value >= maximum}",
-          "line": 136
+          "line": 158
         }
       ]
     },

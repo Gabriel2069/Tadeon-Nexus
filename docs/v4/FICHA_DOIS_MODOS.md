@@ -3,7 +3,7 @@
 Base de comparação: Fundação VIII publicada em `e23d1dd` (PR #328).
 Capturas com personagem sintética mostraram o arco das reservas sobre os valores, o nome dividido no meio de palavras com o painel lateral aberto em tablet, e o título de Proteção e cobertura com quatro linhas em 320 px.
 
-- Nos dois modos, um medidor colorido por reserva substitui a dupla leitura arco/barra. Valor, máximo, ajuste e botões conservam seus alvos.
+- Nos dois modos, o semicírculo colorido permanece ao redor do valor atual, dentro do próprio botão de ajuste; máximo e comandos ficam em faixas separadas. A barra linear também permanece. A remoção do arco na PR #329 foi revertida por pedido de Tadeu. Valor, máximo, ajuste e botões conservam seus alvos.
 - O cabeçalho recompõe pela largura disponível, inclusive com a navegação aberta. O diálogo reserva o espaço do Fechar uma vez só.
 - No jogo, Matrizes ficam alinhadas em torno dos dados; em espaço estreito, nome e dado dividem duas colunas de instrumentos. As três Defesas da Fundação ficam na mesma faixa, abaixo do selo e do contexto de Guarda.
 

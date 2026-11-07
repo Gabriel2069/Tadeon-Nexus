@@ -65,6 +65,28 @@ export async function verifyInstruments({
       ),
       "Resource targets never overlap",
     );
+    const gauges = await page.locator(".tdv-resource-dial").evaluateAll((ds) =>
+      ds.map((dial) => {
+        const text = dial.querySelector("strong").getBoundingClientRect();
+        const path = dial.querySelector(".tdv-resource-arc__track");
+        const matrix = path.getScreenCTM();
+        const length = path.getTotalLength();
+        return Array.from({ length: 101 }, (_, i) => {
+          const point = path.getPointAtLength((length * i) / 100);
+          const screen = new DOMPoint(point.x, point.y).matrixTransform(matrix);
+          return (
+            screen.x >= text.left - 3 &&
+            screen.x <= text.right + 3 &&
+            screen.y >= text.top - 3 &&
+            screen.y <= text.bottom + 3
+          );
+        }).every((hit) => !hit);
+      }),
+    );
+    assert(
+      gauges.length === 3 && gauges.every(Boolean),
+      "Resource arcs stay clear of their values",
+    );
   };
   await page.evaluate(() => document.fonts.ready);
   await settle();
