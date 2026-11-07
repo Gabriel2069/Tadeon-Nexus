@@ -41,13 +41,15 @@ export async function verifyInstruments({
     );
   };
   const resourceTargets = async () => {
-    const targets = await page.locator(".tdv-play-resources .tdv-resource-step").evaluateAll((es) =>
-      es.map((e) => {
-        const r = e.getBoundingClientRect(),
-          p = e.closest(".tdv-resource").getBoundingClientRect();
-        return { x: r.x, y: r.y, w: r.width, h: r.height, left: p.left, right: p.right };
-      }),
-    );
+    const targets = await page
+      .locator(".tdv-play-resources :is(.tdv-resource-step,.tdv-resource-value)")
+      .evaluateAll((es) =>
+        es.map((e) => {
+          const r = e.getBoundingClientRect(),
+            p = e.closest(".tdv-resource").getBoundingClientRect();
+          return { x: r.x, y: r.y, w: r.width, h: r.height, left: p.left, right: p.right };
+        }),
+      );
     assert(
       targets.every(
         (r) => r.w >= 43.9 && r.h >= 43.9 && r.x >= r.left - 1 && r.x + r.w <= r.right + 1,
@@ -64,6 +66,28 @@ export async function verifyInstruments({
         ),
       ),
       "Resource targets never overlap",
+    );
+    const gauges = await page.locator(".tdv-resource-dial").evaluateAll((ds) =>
+      ds.map((dial) => {
+        const text = dial.querySelector("strong").getBoundingClientRect();
+        const path = dial.querySelector(".tdv-resource-arc__track");
+        const matrix = path.getScreenCTM();
+        const length = path.getTotalLength();
+        return Array.from({ length: 101 }, (_, i) => {
+          const point = path.getPointAtLength((length * i) / 100);
+          const screen = new DOMPoint(point.x, point.y).matrixTransform(matrix);
+          return (
+            screen.x >= text.left - 3 &&
+            screen.x <= text.right + 3 &&
+            screen.y >= text.top - 3 &&
+            screen.y <= text.bottom + 3
+          );
+        }).every((hit) => !hit);
+      }),
+    );
+    assert(
+      gauges.length === 3 && gauges.every(Boolean),
+      "Resource arcs stay clear of their values",
     );
   };
   await page.evaluate(() => document.fonts.ready);

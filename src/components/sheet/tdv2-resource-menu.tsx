@@ -29,6 +29,7 @@ export function TdvResourceActions({
     [draftModifier, setDraftModifier] = useState(modifier);
   const nextMaximum = Math.max(0, base + draftModifier),
     key = name.toLowerCase(),
+    ratio = Math.max(0, Math.min(1, value / Math.max(1, maximum))),
     Icon = name === "PV" ? HeartPulse : name === "PI" ? Brain : Zap;
   return (
     <>
@@ -58,7 +59,28 @@ export function TdvResourceActions({
               className="tdv-resource-value"
               aria-label={`${name}: ${value} de ${maximum}. Ajustar ${name}`}
             >
-              <strong>{value}</strong>
+              <span className="tdv-resource-dial">
+                <svg viewBox="0 0 160 116" aria-hidden="true" className="tdv-resource-arc">
+                  <path
+                    d="M10 90a70 70 0 0 1 140 0"
+                    pathLength="100"
+                    className="tdv-resource-arc__track"
+                  />
+                  <path
+                    d="M10 90a70 70 0 0 1 140 0"
+                    pathLength="100"
+                    strokeDasharray={`${ratio * 100} 100`}
+                    className="tdv-resource-arc__fill"
+                  />
+                </svg>
+                <strong
+                  style={{
+                    fontSize: value >= 1000 ? "1rem" : value >= 100 ? "1.25rem" : undefined,
+                  }}
+                >
+                  {value}
+                </strong>
+              </span>
               <span>/ {maximum}</span>
               <small>ajustar</small>
             </Button>
