@@ -48,7 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         suite: ${{ fromJSON(needs.scope.outputs.suites) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
       NEXUS_BROWSER_MODULE: file:///tmp/tadeon-browser/node_modules/playwright/index.mjs
