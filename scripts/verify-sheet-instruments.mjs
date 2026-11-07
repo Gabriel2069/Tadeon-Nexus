@@ -41,13 +41,15 @@ export async function verifyInstruments({
     );
   };
   const resourceTargets = async () => {
-    const targets = await page.locator(".tdv-play-resources .tdv-resource-step").evaluateAll((es) =>
-      es.map((e) => {
-        const r = e.getBoundingClientRect(),
-          p = e.closest(".tdv-resource").getBoundingClientRect();
-        return { x: r.x, y: r.y, w: r.width, h: r.height, left: p.left, right: p.right };
-      }),
-    );
+    const targets = await page
+      .locator(".tdv-play-resources :is(.tdv-resource-step,.tdv-resource-value)")
+      .evaluateAll((es) =>
+        es.map((e) => {
+          const r = e.getBoundingClientRect(),
+            p = e.closest(".tdv-resource").getBoundingClientRect();
+          return { x: r.x, y: r.y, w: r.width, h: r.height, left: p.left, right: p.right };
+        }),
+      );
     assert(
       targets.every(
         (r) => r.w >= 43.9 && r.h >= 43.9 && r.x >= r.left - 1 && r.x + r.w <= r.right + 1,
