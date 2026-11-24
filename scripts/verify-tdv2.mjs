@@ -1,3 +1,4 @@
+import { verifyNovember, verifyNovemberPlay } from "./verify-tdv-november.mjs";
 import { verifyInstruments } from "./verify-sheet-instruments.mjs";
 import { verifyInteractive } from "./verify-sheet-interactive.mjs";
 import { auditViewports } from "./v4-viewports.mjs";
@@ -41,8 +42,9 @@ const token = [
 ]
   .map((v) => (typeof v === "string" ? v : Buffer.from(JSON.stringify(v)).toString("base64url")))
   .join(".");
+const novemberPlay = process.env.NEXUS_AUDIT_SCOPE === "november-play";
 function character() {
-  const c = newTdvCharacter("reference");
+  const c = newTdvCharacter("reference", novemberPlay ? "TDV-2026-11-23" : "VIII");
   Object.assign(c.face, {
     origin: "O cais",
     occupation: "Registradora",
@@ -90,7 +92,7 @@ try {
     await new Promise((r) => setTimeout(r, 500));
   }
   for (const { width, height, viewportKey } of auditViewports())
-    for (const role of ["mestre", "espectador"]) {
+    for (const role of (novemberPlay ? ["jogador", "mestre"] : process.env.NEXUS_AUDIT_SCOPE === "november" ? ["jogador", "espectador", "mestre"] : ["mestre", "espectador"])) {
       let row = {
         id: sheetId,
         owner_id: userId,
@@ -202,7 +204,7 @@ try {
         let body = [];
         if (req.method() === "PATCH") {
           const patch = req.postDataJSON();
-          assert(role === "mestre", "Readonly mutation");
+          assert(role === "mestre" || (role === "jogador" && path.includes("/character_sheets")), "Readonly mutation");
           writes.push({ path, patch });
           if (path.includes("/character_sheets")) {
             if (historicalEditing) {
@@ -402,7 +404,7 @@ try {
       await page.goto(`http://127.0.0.1:${port}/sheet/${sheetId}`);
       await page.locator(".tdv-character-name").waitFor();
       await (
-        process.env.NEXUS_AUDIT_SCOPE === "instruments" ? verifyInstruments : verifyInteractive
+        novemberPlay ? verifyNovemberPlay : process.env.NEXUS_AUDIT_SCOPE === "november" ? verifyNovember : process.env.NEXUS_AUDIT_SCOPE === "instruments" ? verifyInstruments : verifyInteractive
       )({
         page,
         context,

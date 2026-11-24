@@ -246,3 +246,27 @@ it("preserves confirmed creation when optional tutorial storage is unavailable",
   expect(mock.success).toHaveBeenCalledWith("Ficha criada!");
   expect(mock.error).not.toHaveBeenCalled();
 });
+
+it.each([["true", "TDV-2026-11-23", 14], ["false", "VIII", 10]])(
+  "submits the initial constitution selected by the development setting %s",
+  async (setting, revision, pv) => {
+    vi.stubEnv("VITE_TDV_NOVEMBER_CREATION", String(setting));
+    try {
+      mock.query.mockResolvedValue({ data: [], error: null });
+      mock.create.mockResolvedValue({ data: { id: "new" }, error: null });
+      render(<HomePage />);
+      await startCreate();
+      await waitFor(() => expect(mock.navigate).toHaveBeenCalled());
+      expect(mock.create).toHaveBeenCalledWith(expect.objectContaining({
+        rules_version: 2,
+        tdv2_data: expect.objectContaining({
+          foundation: expect.objectContaining({ revision }),
+          ready: false,
+          resources: expect.objectContaining({ pv }),
+        }),
+      }));
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  },
+);

@@ -14,6 +14,12 @@ import {
   type TdvCharacter,
   type TestRequest,
 } from "@/lib/tdv2";
+export type TdvRollReading = {
+  matrix: Matrix;
+  alinhavo: string;
+  physical: boolean;
+  result: ReturnType<typeof resolveTest>["result"];
+};
 export function TdvTestPanel({
   character,
   onChange,
@@ -22,6 +28,8 @@ export function TdvTestPanel({
   declaredCosts,
   intention,
   quick = false,
+  initialPhysical = false,
+  onRead,
   initialMatrix = "Nexo",
   initialAlinhavo = "Investigação",
 }: {
@@ -32,6 +40,8 @@ export function TdvTestPanel({
   declaredCosts?: TestRequest["costs"];
   intention?: string;
   quick?: boolean;
+  initialPhysical?: boolean;
+  onRead?: (roll: TdvRollReading) => void;
   initialMatrix?: Matrix;
   initialAlinhavo?: string;
 }) {
@@ -48,7 +58,7 @@ export function TdvTestPanel({
     counterpart: "",
     context: { intention: "", approach: "", change: "", point: "", risk: false },
   });
-  const [physical, setPhysical] = useState(false);
+  const [physical, setPhysical] = useState(initialPhysical);
   const [confirmedPhysical, setConfirmedPhysical] = useState("");
   const [faces, setFaces] = useState({ prumo: 1, tento: 1 });
   const [remember, setRemember] = useState(!quick);
@@ -241,7 +251,7 @@ export function TdvTestPanel({
           <TdvSelect
             label="Leitura principal anunciada"
             value={request.reading ?? "Enlace"}
-            options={["Enlace", "Ascendente", "Retorno", "Desvio", "Arremate"]}
+            options={character.foundation?.revision === "TDV-2026-11-23" ? ["Enlace", "Ascendente", "Retorno"] : ["Enlace", "Ascendente", "Retorno", "Desvio", "Arremate"]}
             onChange={(v) => upd("reading", v as TestRequest["reading"])}
             disabled={!canEdit}
           />
@@ -345,6 +355,7 @@ export function TdvTestPanel({
                 : resolveTest(character, effective, undefined, physical ? faces : undefined);
               if (rolled.character !== character) onChange(rolled.character);
               setLast(rolled);
+              onRead?.({ matrix: effective.matrix, alinhavo: effective.alinhavo, physical, result: rolled.result });
               if (physical) setConfirmedPhysical(physicalSignature);
             } catch (e) {
               toast.error((e as Error).message);
@@ -433,8 +444,8 @@ export function TdvTestPanel({
               Enlace: last.result.enlace,
               Ascendente: last.result.ascendente,
               Retorno: last.result.retorno,
-              Desvio: last.result.desvio,
-              ...(last.result.relative
+              ...(character.foundation?.revision === "TDV-2026-11-23" ? {} : { Desvio: last.result.desvio }),
+              ...(last.result.relative && character.foundation?.revision !== "TDV-2026-11-23"
                 ? {
                     "Faixa Prumo": last.result.relative.prumo,
                     "Faixa Tento": last.result.relative.tento,
@@ -463,7 +474,7 @@ export function TdvTestPanel({
               {last.result.success
                 ? "Intenção alcançada."
                 : "Intenção não alcançada como pretendida."}{" "}
-              {last.result.consonance && !last.result.success
+              {character.foundation?.revision !== "TDV-2026-11-23" && last.result.consonance && !last.result.success
                 ? "Consonância sem alcance não é crítico."
                 : "A consequência depende da ação e da situação; Retorno baixo não cobra preço automático."}
             </p>

@@ -172,7 +172,9 @@ export function TdvCompetency({
                   : `d${DICE[grade]} → d${DICE[grade + 1]}`}
               </strong>
               <small>
-                {creation ? allocationHint : `${advanceCost ?? 0} PU · saldo ${availablePU} PU`}
+                {creation ? allocationHint : grade >= (ceiling ?? (matrix ? 5 : 4))
+                  ? `Saldo ${availablePU} PU`
+                  : `${advanceCost ?? 0} PU · saldo ${availablePU} PU`}
               </small>
             </div>
             <Button
@@ -244,7 +246,7 @@ export function TdvDevelopment({
   milestonePU?: number;
 }) {
   const band =
-    milestonePU === 3
+    milestonePU >= 3
       ? percent < 20
         ? "Práticas fundamentais"
         : percent < 40
@@ -303,7 +305,7 @@ export function TdvDevelopment({
         <span>100%</span>
       </div>
       <p>
-        Marcos de 5% · {milestonePU} PU por Marco. A faixa orienta o desenvolvimento; não acrescenta
+        {milestonePU === 4 ? "Caderno de novembro · 10 PU na criação, 4 por Marco e mais 2 por novo Patamar." : `Marcos de 5% · ${milestonePU} PU por Marco.`} A faixa orienta o desenvolvimento; não acrescenta
         bônus aos testes.
       </p>
     </div>

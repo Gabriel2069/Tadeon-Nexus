@@ -1,3 +1,4 @@
+import { TdvArsenal } from "@/components/sheet/tdv-arsenal";
 import { tabletopPersistenceService } from "@/lib/tabletop/tabletop-persistence-service";
 import { TdvOperations, TdvPhysicalResolution, TdvOppositionRead } from "./tdv2-procedures";
 import { cacheTdv2MasterState } from "@/lib/offline-cache";
@@ -100,6 +101,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
       .select("id,tdv2_revision,tdv2_state")
       .abortSignal(signal)
       .maybeSingle();
+    signal.throwIfAborted();
     if (error) throw error;
     if (!data) {
       setConflict(true);
@@ -753,6 +755,11 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
                 .map((row) => (
                   <div className="tdv-actions" key={row.id}>
                     <span>{row.name}</span>
+                    {row.tdv2_data.foundation?.revision === "TDV-2026-11-23" && (
+                      <span className="tdv-note">
+                        {row.tdv2_data.resources.pe} PE · {row.tdv2_data.scene.tests?.at(-1)?.intention ?? "Nenhum teste registrado"}
+                      </span>
+                    )}
                     <Button
                       variant="outline"
                       disabled={s.participants.some((p) => p.sheetId === row.id)}
@@ -1054,6 +1061,7 @@ function TdvMasterWorkspace({ embedded, initialTab }: { embedded: boolean; initi
         </TabsContent>
         <TabsContent value="reference" data-sheet-content>
           <Section id="tdv-master-reference" title="Referência do Motor">
+            <TdvArsenal />
             <p>
               Prumo + Tento = Enlace. Maior Fio é Ascendente; menor é Retorno; Prumo − Tento é
               Desvio Bruto. O Desvio Relativo compara as faixas proporcionais dos dados. O crítico

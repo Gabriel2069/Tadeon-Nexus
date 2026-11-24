@@ -1,4 +1,4 @@
-import { newTdvCharacter } from "@/lib/tdv2";
+import { newTdvCharacter, NOVEMBER_REVISION } from "@/lib/tdv2";
 import { CharacterArchive, type ArchiveSheet } from "@/components/character-archive";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -81,6 +81,7 @@ interface OwnerOption {
 }
 
 export function HomePage() {
+  const novemberCreation = import.meta.env.DEV && import.meta.env.VITE_TDV_NOVEMBER_CREATION === "true";
   const { user, profile, role } = useAuth();
   const navigate = useNavigate();
   const userId = user?.id;
@@ -254,7 +255,7 @@ export function HomePage() {
         .from("character_sheets")
         .insert({
           rules_version: 2,
-          tdv2_data: newTdvCharacter() as never,
+          tdv2_data: newTdvCharacter("base", novemberCreation ? NOVEMBER_REVISION : "VIII") as never,
           owner_id: selectedOwner.id,
           name: name.trim() || "Novo Personagem",
           weapon_proficiency: "operador",
@@ -419,6 +420,7 @@ export function HomePage() {
                   <DialogTitle className="font-cinzel">Criar ficha</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleCreate} className="space-y-4">
+                  {novemberCreation && <p>Ficha de ensaio · Caderno de 23/11/2026</p>}
                   <div>
                     <Label htmlFor="sheet-name">Nome da personagem</Label>
                     <Input

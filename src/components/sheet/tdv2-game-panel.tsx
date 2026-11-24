@@ -1,3 +1,4 @@
+import type { TdvRollReading } from "./tdv2-test-panel";
 import { useState } from "react";
 import { Activity, Backpack, Layers3, Sprout, UserRound, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,10 @@ import {
   ALINHAVOS,
   MATRICES,
   constitution,
+  capabilityCost,
+  capabilityCeiling,
+  spendNexoStep,
+  type Matrix,
   advanceCapability,
   reverseCapability,
   allocateCreation,
@@ -15,6 +20,7 @@ import {
   addCapabilityEffect,
   type TdvCharacter,
 } from "@/lib/tdv2";
+import { TdvEmblem } from "./tdv2-emblem";
 import { TdvCompetency } from "./tdv2-competencies";
 import { TdvProtection } from "./tdv2-protection";
 import { TdvGuard } from "./tdv2-procedures";
@@ -28,6 +34,8 @@ export function TdvGamePanel({
   onOpen,
   onUse,
   onTranscend,
+  onRoll,
+  latestRoll,
 }: {
   character: TdvCharacter;
   onChange: (c: TdvCharacter) => void;
@@ -35,7 +43,9 @@ export function TdvGamePanel({
   isMaster: boolean;
   onOpen: (tab: string) => void;
   onUse: (id: string) => void;
-  onTranscend: (name: string) => void;
+  onTranscend: (name: string, matrix: boolean) => void;
+  latestRoll: TdvRollReading | null;
+  onRoll: (choice: { matrix?: Matrix; alinhavo?: string }) => void;
 }) {
   const [allSkills, setAllSkills] = useState(false);
   const [query, setQuery] = useState("");
@@ -73,7 +83,11 @@ export function TdvGamePanel({
           })
         }
         disabled={!canEdit}
-        advanceCost={matrix ? grade + 3 : 2}
+        advanceCost={capabilityCost(c, grade, matrix)}
+        ceiling={capabilityCeiling(c, matrix)}
+        nexoSteps={matrix ? 0 : s.nexoSteps}
+        onNexo={() => commit(() => spendNexoStep(c, name))}
+        onRoll={() => onRoll(matrix ? { matrix: name as Matrix } : { alinhavo: name })}
         availablePU={s.pu}
         allocationHint="Distribuição inicial"
         choiceAllowed={(value) => {
@@ -85,16 +99,18 @@ export function TdvGamePanel({
           }
         }}
         canReverse={
-          isMaster &&
+          (isMaster || !c.ready) &&
           (c.ready
             ? c.investments.some(
-                (i) => i.target === name && i.kind === (matrix ? "Matriz" : "Alinhavo"),
+                (i) =>
+                  i.target === name &&
+                  (matrix ? i.kind === "Matriz" : i.kind === "Alinhavo" || i.kind === "Nexo"),
               )
-            : grade > (matrix ? 1 : 0))
+            : grade > (matrix && !c.foundation ? 1 : 0))
         }
         onAdvance={() => commit(() => advanceCapability(c, name, matrix))}
         onReverse={() => commit(() => reverseCapability(c, name, matrix))}
-        onDevelop={() => onTranscend(name)}
+        onDevelop={() => onTranscend(name, matrix)}
         effects={capabilityConditions(c, name).map((item) => ({
           name: item.name || "Condição",
           kind: conditionImpact(item.effect)!.kind,
@@ -112,9 +128,34 @@ export function TdvGamePanel({
       (allSkills || query.trim() || (s.alinhavos[name] ?? 0) > 0) &&
       normalize(name).includes(normalize(query.trim())),
   );
+  const latest = c.scene.tests?.at(-1);
+  const lastPair = latestRoll ?? latest;
   const links = c.face.links.filter((link) => link.node.trim());
   return (
     <section className="tdv-game-panel" aria-label="Painel de jogo">
+      <section className="tdv-test-entry" aria-label="Teste da personagem">
+        <TdvEmblem kind="motor" />
+        <div>
+          <h2>Dois Fios</h2>
+          <p>
+            {latest
+              ? `Último registro · ${latest.matrix} ${latest.prumo} · ${latest.alinhavo} ${latest.tento}`
+              : "Prumo da Matriz · Tento do Alinhavo"}
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          disabled={!canEdit || !c.ready}
+          onClick={() => onRoll(lastPair ? { matrix: lastPair.matrix, alinhavo: lastPair.alinhavo } : {})}
+        >
+          Preparar teste
+        </Button>
+        {latestRoll && <output className="tdv-last-reading" aria-label="Última rolagem nesta ficha">
+          <span>{latestRoll.physical ? "Dados físicos" : "Dados digitais"} · {latestRoll.result.reading}</span>
+          <strong>{latestRoll.result.quality}</strong>
+          <span>{latestRoll.matrix} <b>{latestRoll.result.prumo}</b> · {latestRoll.alinhavo} <b>{latestRoll.result.tento}</b> · DT {latestRoll.result.dt}</span>
+        </output>}
+      </section>
       <nav className="tdv-game-toolbelt" aria-label="Ferramentas da personagem">
         {(
           [

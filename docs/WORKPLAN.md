@@ -2,7 +2,7 @@
 
 > Gerado de [project-continuity.json](project-continuity.json). Edite o registro e rode `npm run sync:project`; não mantenha uma cópia manual.
 
-Snapshot: 2026-11-07; referência de runtime: `56f8729a36d2a05e4a2fe6111d3491fbc3719f0e`. PR #null em `fix/proporcao-arco-valor`; integração: `working`. Não é prova de deploy.
+Snapshot: 2026-11-24; referência de runtime: `56f8729a36d2a05e4a2fe6111d3491fbc3719f0e`. PR #null em `eng/tn-integrado-20261123`; integração: `working`. Não é prova de deploy.
 
 Estados: planejado → próximo → em andamento → validado na branch → integrado. Publicação exige evidência própria do SHA; adiado conserva o requisito. Se um requisito mudar, preservar o ID e registrar a decisão/evidência.
 
@@ -455,7 +455,7 @@ Evidências: [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMEN
 - Recompor Feição/Ação/Expressão/Transformação, com destinos equivalentes para a antiga Cena, história longa e estados densos sem truncamento; pares compactos no celular e estrutura bifocal no tablet.
 - Primeiro lote visual autorizado antes do fechamento do backup (DEC-024): atlas de cinco fólios, Âncora progressiva, recursos e Equilíbrio com apresentação própria; publicar após gates normais sem alterar banco.
 
-Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json), [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_COMO_INSTRUMENTO.md](../docs/v4/FICHA_COMO_INSTRUMENTO.md), [docs/v4/living-sheet-validation.json](../docs/v4/living-sheet-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md), [docs/v4/FICHA_DOIS_MODOS.md](../docs/v4/FICHA_DOIS_MODOS.md).
+Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/visible-validation.json](../docs/v4/visible-validation.json), [docs/v4/MATERIAIS_E_FECHAMENTO.md](../docs/v4/MATERIAIS_E_FECHAMENTO.md), [docs/v4/material-validation.json](../docs/v4/material-validation.json), [docs/v4/FICHA_OPERACIONAL.md](../docs/v4/FICHA_OPERACIONAL.md), [docs/v4/sheet-operational-validation.json](../docs/v4/sheet-operational-validation.json), [docs/v4/sheet-reading-validation.json](../docs/v4/sheet-reading-validation.json), [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_COMO_INSTRUMENTO.md](../docs/v4/FICHA_COMO_INSTRUMENTO.md), [docs/v4/living-sheet-validation.json](../docs/v4/living-sheet-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md), [docs/v4/FICHA_DOIS_MODOS.md](../docs/v4/FICHA_DOIS_MODOS.md), [docs/v4/ENGENHARIA_NOVEMBRO.md](../docs/v4/ENGENHARIA_NOVEMBRO.md).
 
 ## NEX-047 — V4 fase 4: Visão de Partida e integração física/digital
 
@@ -463,7 +463,7 @@ Evidências: [docs/v4/IMPLEMENTACAO.md](../docs/v4/IMPLEMENTACAO.md), [docs/v4/v
 - Isolar e identificar Forma de Poder legada, preservando URL/flag/payload e impedindo gravação por simples leitura.
 - Implementar dois Fios, cartões/repertório, físico/híbrido/digital, conciliação explícita, offline/retry e aprovação sem cobranças duplicadas.
 
-Evidências: [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md), [docs/v4/FICHA_DOIS_MODOS.md](../docs/v4/FICHA_DOIS_MODOS.md).
+Evidências: [docs/v4/FICHA_VISUAL_E_JOGO.md](../docs/v4/FICHA_VISUAL_E_JOGO.md), [docs/v4/sheet-play-validation.json](../docs/v4/sheet-play-validation.json), [docs/v4/FICHA_PRANCHETA_INTERATIVA.md](../docs/v4/FICHA_PRANCHETA_INTERATIVA.md), [docs/v4/playbook-sheet-validation.json](../docs/v4/playbook-sheet-validation.json), [docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md](../docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md), [docs/v4/FICHA_DOIS_MODOS.md](../docs/v4/FICHA_DOIS_MODOS.md), [docs/v4/ENGENHARIA_NOVEMBRO.md](../docs/v4/ENGENHARIA_NOVEMBRO.md).
 
 ## NEX-048 — V4: autoridade transacional de ações, custos e Resto
 
@@ -478,7 +478,7 @@ Evidências: pendentes; não declarar concluído.
 - Preservar todas as ferramentas e montagens comprovadas da Mesa, guias gerais/II do Mestre e operações do Nexus; demonstrar destino equivalente antes de remover qualquer item.
 - Refinar palco/HUD/inspector, preparação/condução e explorar/ler/relacionar sobre os mesmos estados e eventos filtrados por audiência.
 
-Evidências: pendentes; não declarar concluído.
+Evidências: [docs/v4/ENGENHARIA_NOVEMBRO.md](../docs/v4/ENGENHARIA_NOVEMBRO.md).
 
 ## NEX-050 — V4 fase 6: prova integral, acabamento e rollout
 

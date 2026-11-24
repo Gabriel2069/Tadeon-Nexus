@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 /** TdV II v2.0, Livro de Regras supplied 26/10/2026. See docs/rules/tdv-ii-v2.md. */
+export const NOVEMBER_REVISION = "TDV-2026-11-23" as const;
+type FoundationRevision = "VIII" | typeof NOVEMBER_REVISION;
 export const MATRICES = ["Ímpeto", "Cadência", "Nexo", "Lastro"] as const;
 export type Matrix = (typeof MATRICES)[number];
 export const ALINHAVOS = [
@@ -120,7 +122,7 @@ export const sceneTestSchema = z.object({
     .int()
     .refine((n) => DICE.includes(n as (typeof DICE)[number]))
     .optional(),
-  revision: z.literal("VIII").optional(),
+  revision: z.enum(["VIII", NOVEMBER_REVISION]).optional(),
   reading: z.enum(["Enlace", "Ascendente", "Retorno", "Desvio", "Arremate"]).optional(),
   arremate: z
     .object({ thread: z.enum(["Prumo", "Tento"]), minimum: z.number().int().min(1).max(20) })
@@ -149,7 +151,7 @@ export const tdv2CharacterSchema = z
     version: z.literal(2),
     foundation: z
       .object({
-        revision: z.literal("VIII"),
+        revision: z.enum(["VIII", NOVEMBER_REVISION]),
         nexoHighWater: degree,
         practices: z
           .array(
@@ -325,7 +327,48 @@ export const tdv2CharacterSchema = z
   .strict();
 export type TdvCharacter = z.infer<typeof tdv2CharacterSchema>;
 export const uid = () => crypto.randomUUID();
+
+type Reserve = "pv" | "pi" | "pe";
+export type ReserveValues = Record<Reserve, number>;
+
+// Caderno I.4, I.6 and VIII.1. Constitution shared by the dated edition and its read-only projection.
+export function novemberConstitution(
+  marco: number,
+  matrices: Record<Matrix, number>,
+  reinforcements: ReserveValues,
+  modifiers: ReserveValues,
+) {
+  if (!Number.isInteger(marco) || marco < 0 || marco > 20)
+    throw new RangeError("Marco fora da escala de 0 a 20.");
+  const patamar = Math.floor(marco / 4);
+  if (Object.values(matrices).some((n) => !Number.isInteger(n) || n < 0 || n > 5))
+    throw new RangeError("Grau de Matriz fora da escada.");
+  if (Object.values(reinforcements).some((n) => !Number.isInteger(n) || n < 0 || n > patamar + 1))
+    throw new RangeError("Reforços acima das oportunidades deste Patamar.");
+  const bases = {
+    pv: 12 + 2 * marco + patamar,
+    pi: Math.ceil((7 * marco + 33) / 4) + patamar,
+    pe: 6 + marco,
+  };
+  const maximums = {
+    pv: Math.max(0, bases.pv + 2 * matrices.Ímpeto + 2 * reinforcements.pv + modifiers.pv),
+    pi: Math.max(0, bases.pi + 2 * matrices.Lastro + 2 * reinforcements.pi + modifiers.pi),
+    pe: Math.max(0, bases.pe + 2 * matrices.Cadência + reinforcements.pe + modifiers.pe),
+  };
+  return {
+    revision: NOVEMBER_REVISION,
+    marco,
+    patamar,
+    bases,
+    maximums,
+    credit: 10 + 4 * marco + 2 * patamar,
+    reinforcementSlots: 1 + patamar,
+  };
+}
+
 export function capabilityCost(c: TdvCharacter, grade: number, matrix: boolean) {
+  if (c.foundation?.revision === NOVEMBER_REVISION)
+    return (matrix ? [2, 3, 4, 5, 8] : [2, 2, 3, 4])[grade] ?? 1000;
   return c.foundation
     ? ((matrix ? [3, 4, 5, 6, 8][grade] : [2, 3, 4, 5][grade]) ?? 1000)
     : matrix
@@ -342,6 +385,9 @@ function foundationConstitution(c: TdvCharacter) {
     alinhavos = { ...c.alinhavos },
     m = c.milestones.length;
   const foundation = c.foundation!;
+  const november = foundation.revision === NOVEMBER_REVISION;
+  if (november && (foundation.legacy || foundation.practices.length))
+    throw new Error("A edição de novembro usa seus próprios créditos de criação e de Marco.");
   let spent = foundation.legacy?.spent ?? 0,
     nexoUsed = 0;
   const reinforcements = { pv: 0, pi: 0, pe: 0 },
@@ -375,7 +421,7 @@ function foundationConstitution(c: TdvCharacter) {
       alinhavos[entry.target]++;
       if (entry.kind === "Nexo") nexoUsed++;
     } else if (entry.kind === "Reforço") {
-      if (!["pv", "pi", "pe"].includes(entry.target) || entry.cost !== 2)
+      if (!["pv", "pi", "pe"].includes(entry.target) || entry.cost !== (november && entry.target === "pe" ? 1 : 2))
         throw new Error("Reforço inválido.");
       const key = entry.target as keyof typeof reinforcements;
       if (++reinforcements[key] > slots)
@@ -383,6 +429,7 @@ function foundationConstitution(c: TdvCharacter) {
           "Todas as compras de Reforço deste recurso já foram utilizadas neste patamar.",
         );
     } else if (entry.kind === "Lavor") {
+      if (november) throw new Error("A incorporação de Lavores depende do catálogo aprovado para esta edição.");
       if (
         ![4, 6].includes(entry.cost) &&
         !(entry.cost >= 8 && entry.transcendent && m >= 16 && c.progression?.allowExtraordinary)
@@ -403,14 +450,17 @@ function foundationConstitution(c: TdvCharacter) {
       throw new Error("Práticas limitadas a dois PU por intervalo reconhecido.");
   if (new Set(practices.map((p) => p.id)).size !== practices.length)
     throw new Error("Prática duplicada.");
-  const credit = m * 3 + practices.reduce((s, p) => s + p.pu, 0);
+  const projected = november
+    ? novemberConstitution(m, matrices, reinforcements, { pv: 0, pi: 0, pe: 0 })
+    : null;
+  const credit = projected?.credit ?? m * 3 + practices.reduce((s, p) => s + p.pu, 0);
   const nexoSteps =
     2 * (Math.max(foundation.nexoHighWater, matrices.Nexo) - c.matrices.Nexo) - nexoUsed;
   if (nexoSteps < 0) throw new Error("Passadas permanentes de Nexo insuficientes.");
   if (spent > credit) throw new Error("Pontos de Urdume insuficientes.");
-  const pv = 2 * (4 + m) + 2 * matrices.Ímpeto + 2 * reinforcements.pv;
-  const pi = Math.ceil(1.75 * (3 + m)) + 2 * matrices.Lastro + 2 * reinforcements.pi;
-  const pe = 5 + m + 2 * matrices.Cadência + reinforcements.pe;
+  const pv = projected?.maximums.pv ?? 2 * (4 + m) + 2 * matrices.Ímpeto + 2 * reinforcements.pv;
+  const pi = projected?.maximums.pi ?? Math.ceil(1.75 * (3 + m)) + 2 * matrices.Lastro + 2 * reinforcements.pi;
+  const pe = projected?.maximums.pe ?? 5 + m + 2 * matrices.Cadência + reinforcements.pe;
   const guard = 8 + Math.floor(m / 4) + (c.guard.protection ?? 0) + c.guard.modifier;
   return {
     matrices,
@@ -420,6 +470,7 @@ function foundationConstitution(c: TdvCharacter) {
     development: m * 5,
     capacity: 5 + 2 * matrices.Ímpeto,
     nexoSteps,
+    reinforcements,
     reinforcementSlots: slots,
     baseMaximums: { pv, pi, pe },
     maximums: {
@@ -661,14 +712,14 @@ export function changeCrisis(
 }
 export function newTdvCharacter(
   distribution: "base" | "reference" = "base",
-  revision: "VIII" | "legacy" = "VIII",
+  revision: FoundationRevision | "legacy" = "VIII",
 ): TdvCharacter {
   const value: TdvCharacter = {
     version: 2,
-    ...(revision === "VIII"
+    ...(revision !== "legacy"
       ? {
           foundation: {
-            revision: "VIII" as const,
+            revision,
             nexoHighWater: distribution === "reference" ? 2 : 0,
             practices: [],
           },
@@ -677,7 +728,7 @@ export function newTdvCharacter(
     ready: false,
     matrices:
       distribution === "reference"
-        ? revision === "VIII"
+        ? revision !== "legacy"
           ? { Ímpeto: 2, Cadência: 2, Nexo: 2, Lastro: 2 }
           : { Ímpeto: 2, Cadência: 3, Nexo: 3, Lastro: 2 }
         : { Ímpeto: 1, Cadência: 1, Nexo: 1, Lastro: 1 },
@@ -693,7 +744,7 @@ export function newTdvCharacter(
                   "Percepção",
                   "Sociedade",
                   "Iniciativa",
-                  ...(revision === "VIII" ? ["Luta", "Medicina"] : []),
+                  ...(revision !== "legacy" ? ["Luta", "Medicina"] : []),
                 ].includes(name)
               ? 1
               : 0,
@@ -780,6 +831,7 @@ export function constitution(character: TdvCharacter) {
     defenses: { Resistência: pv, Evasão: evasion, Lucidez: pi, Firmeza: pi },
     capacity: null as number | null,
     nexoSteps: 0,
+    reinforcements: { pv: 0, pi: 0, pe: 0 },
     reinforcementSlots: 0,
     guard: character.guard.broken
       ? null
@@ -1427,6 +1479,8 @@ export function capabilityConditions(c: TdvCharacter, target: string) {
 }
 export function prepareTest(c: TdvCharacter, r: TestRequest) {
   if (!c.ready) throw new Error("Conclua a criação da personagem.");
+  if (c.foundation?.revision === NOVEMBER_REVISION && (r.reading === "Desvio" || r.reading === "Arremate" || r.arremate))
+    throw new Error("O procedimento de Corte e Desvio desta edição exige resolução assistida.");
   if (c.foundation && r.extraordinary && !c.progression?.allowExtraordinary)
     throw new Error(
       "Capacidade extraordinária precisa de reconhecimento expresso do Mestre nesta ficha.",
@@ -1555,7 +1609,7 @@ export function readTest(
   dice?: {
     prumo: number;
     tento: number;
-    revision?: "VIII";
+    revision?: FoundationRevision;
     reading?: TestRequest["reading"];
     balanceTolerance?: 0 | 1;
     arremate?: TestRequest["arremate"];
@@ -1616,7 +1670,7 @@ export function readTest(
     success,
     critical:
       success &&
-      (dice?.revision === "VIII" ? prumo === dice.prumo && tento === dice.tento : consonance),
+      (dice?.revision ? prumo === dice.prumo && tento === dice.tento : consonance),
     quality: criticalFailure
       ? "Falha Crítica"
       : margin >= 8
@@ -1652,7 +1706,7 @@ export function resolveTest(
     {
       prumo: dice.prumo,
       tento: dice.tento,
-      ...(c.foundation ? { revision: "VIII" as const } : {}),
+      ...(c.foundation ? { revision: c.foundation.revision } : {}),
       reading: r.reading,
       balanceTolerance: r.balanceTolerance,
       arremate: r.arremate,
@@ -1700,7 +1754,7 @@ export function resolveTest(
                   dt: r.dt,
                   prumoSize: dice.prumo,
                   tentoSize: dice.tento,
-                  ...(c.foundation ? { revision: "VIII" as const } : {}),
+                  ...(c.foundation ? { revision: c.foundation.revision } : {}),
                   ...(r.reading ? { reading: r.reading } : {}),
                   ...(r.arremate ? { arremate: r.arremate } : {}),
                   ...(r.balanceTolerance !== undefined

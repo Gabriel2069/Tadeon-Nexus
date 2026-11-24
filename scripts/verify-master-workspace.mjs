@@ -60,6 +60,7 @@ const assert = (condition, message) => {
 };
 
 const settings = {
+  updated_at: "2026-11-01T00:00:00Z",
   id: "00000000-0000-4000-8000-000000000099",
   key: "global",
   campaign_title: "O arquivo dos fios esquecidos",
@@ -106,10 +107,11 @@ try {
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
     let writes = [];
+    const stored = structuredClone(settings);
     let failSave = false;
     let failLoad = false;
     let holdSave = null;
-    await page.addInitScript(
+    await context.addInitScript(
       ({ user, token }) =>
         localStorage.setItem(
           "sb-nkxpstyfrzufsnowjrdi-auth-token",
@@ -124,7 +126,7 @@ try {
         ),
       { user, token },
     );
-    await page.route("**/*.supabase.co/**", async (r) => {
+    await context.route("**/*.supabase.co/**", async (r) => {
       const req = r.request(),
         url = new URL(req.url());
       let body = [];
@@ -133,14 +135,22 @@ try {
         return;
       }
       if (req.method() === "PATCH" && url.pathname.includes("/game_settings")) {
-        writes.push(req.postDataJSON());
+        const change = req.postDataJSON();
+        assert(!("updated_at" in change) && !("tdv2_state" in change), "Protected fields excluded");
+        assert(url.searchParams.get("id") === "eq." + stored.id, "Scoped master record");
+        writes.push(change);
         if (holdSave) await holdSave;
+        const matches = url.searchParams.get("updated_at") === "eq." + stored.updated_at;
+        if (!failSave && matches) {
+          Object.assign(stored, change);
+          stored.updated_at = new Date(Date.parse(stored.updated_at) + 1000).toISOString();
+        }
         await r.fulfill({
           status: failSave ? 503 : 200,
           contentType: "application/json",
           body: failSave
             ? JSON.stringify({ message: "Fixture unavailable" })
-            : JSON.stringify({ id: settings.id }),
+            : JSON.stringify(matches ? { id: stored.id, updated_at: stored.updated_at } : null),
         });
         return;
       }
@@ -177,7 +187,7 @@ try {
           });
           return;
         }
-        body = [settings];
+        body = [stored];
       } else if (url.pathname.includes("project_heartbeat")) body = "2026-10-15T00:00:00Z";
       if (Array.isArray(body) && req.headers().accept?.includes("vnd.pgrst.object"))
         body = body[0] || null;
@@ -501,6 +511,20 @@ try {
     await page.getByRole("button", { name: "Tentar novamente", exact: true }).click();
     await title.waitFor();
     await geometry("master-recovered");
+    const other = await context.newPage();
+    await installDesignFonts(other);
+    await other.goto(page.url());
+    const otherTitle = other.getByLabel("Campanha", { exact: true });
+    await otherTitle.fill("Rascunho da segunda janela");
+    await title.fill("Edição salva na primeira janela");
+    await page.getByRole("button", { name: "Salvar painel", exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('button[aria-label="Salvar painel"]')?.disabled);
+    await other.getByRole("button", { name: "Salvar painel", exact: true }).click();
+    await other.getByRole("alert").filter({ hasText: "A campanha mudou" }).waitFor();
+    assert((await otherTitle.inputValue()) === "Rascunho da segunda janela", "Conflict retains the second draft");
+    assert(stored.campaign_title === "Edição salva na primeira janela", "Conflict preserves the winning write");
+    assert(Object.keys(writes.at(-1)).join() === "campaign_title", "Only the edited column is submitted");
+    results.push({ width, label: "master-two-window-conflict", captured: false });
     assert(!errors.length, errors.join("\n"));
     await context.close();
   }

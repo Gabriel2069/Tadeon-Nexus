@@ -1,0 +1,951 @@
+{
+  "edition": "v0.9",
+  "source": "https://docs.google.com/document/d/1wNAxEYCmBDCtvSVpwbOMsc_ZboXEM7FZivdleRmzsro/edit",
+  "revision": "AHj4eMTAX3b2tvmsgXhM07EGmbq7i0EwoP44FfHb2GU1FLhQUzGb80JMhx1v9l2zB6FJMn_7mc5sD_vBJqf3vWxxFiFC6R7CiA7ko4Ftuw",
+  "items": [
+    {
+      "id": "canivete",
+      "kind": "Arma",
+      "name": "Canivete",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "0 E",
+        "Consonância": "Libertar vínculo: um ataque dirigido à amarra comum que retém um aliado solta a contenção e permite que ele se desloque normalmente no próximo Impulso.",
+        "Limite": "Exige fixação acessível e ataque contra a amarra, não contra o portador; não corta contenção extraordinária."
+      }
+    },
+    {
+      "id": "faca-de-combate",
+      "kind": "Arma",
+      "name": "Faca de combate",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Corte ou Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Troca de mão: depois do acerto, pode sacar ou guardar um objeto pequeno acessível sem gastar um Impulso.",
+        "Limite": "Uma troca apenas; não concede ataque nem recarga."
+      }
+    },
+    {
+      "id": "adaga",
+      "kind": "Arma",
+      "name": "Adaga",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Abertura curta: a próxima agressão de um aliado contra o mesmo alvo recebe -1 na Guarda deste alvo.",
+        "Limite": "Só um ataque até o início do próximo turno; não acumula."
+      }
+    },
+    {
+      "id": "punhal",
+      "kind": "Arma",
+      "name": "Punhal",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Mão exposta: o próximo teste legítimo de Desarmar contra o alvo recebe Proveito.",
+        "Limite": "Exige mão ou arma alcançável; encerra no início do próximo turno."
+      }
+    },
+    {
+      "id": "espada-curta",
+      "kind": "Arma",
+      "name": "Espada curta",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Cobertura aberta: reduz em 1 a Guarda do alvo no próximo ataque de contato feito por um aliado.",
+        "Limite": "Não se acumula com outra Cobertura aberta."
+      }
+    },
+    {
+      "id": "espada-longa",
+      "kind": "Arma",
+      "name": "Espada longa",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Corte ou Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma ou duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Aparo preparado: se gastar sua Resposta para bloquear o próximo ataque daquele alvo, recebe +1 Guarda nessa proteção.",
+        "Limite": "Não cria Resposta; respeita o teto ordinário de proteções."
+      }
+    },
+    {
+      "id": "sabre",
+      "kind": "Arma",
+      "name": "Sabre",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Passo de saída: após o acerto, desloca-se uma faixa para espaço livre.",
+        "Limite": "Não atravessa obstáculo nem escapa de Contenção válida."
+      }
+    },
+    {
+      "id": "florete",
+      "kind": "Arma",
+      "name": "Florete",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Linha aberta: a próxima intervenção de Perfuração feita contra o alvo ignora 1 ponto de cobertura parcial.",
+        "Limite": "Uma intervenção até o próximo turno; cobertura total permanece."
+      }
+    },
+    {
+      "id": "facao",
+      "kind": "Arma",
+      "name": "Facão",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "2 E",
+        "Consonância": "Abrir passagem: depois de acertar em meio à vegetação que dificulte a cena, o próximo deslocamento de um aliado nessa mesma faixa ignora o Desproveito causado por ela.",
+        "Limite": "Afeta apenas uma movimentação, até o próximo turno; não ignora outras fontes de Desproveito."
+      }
+    },
+    {
+      "id": "montante",
+      "kind": "Arma",
+      "name": "Montante",
+      "group": "Lâmina",
+      "fields": {
+        "Família": "Lâmina",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Varredura dirigida: após acertar, força o alvo a disputar Resistência para não recuar uma faixa.",
+        "Limite": "Apenas um alvo, espaço disponível e alvo de escala compatível."
+      }
+    },
+    {
+      "id": "machadinha",
+      "kind": "Arma",
+      "name": "Machadinha",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato ou arremesso curto",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Entalhe: se o alvo do ataque foi escudo ou cobertura comum, reduz em 1 sua proteção na próxima agressão pertinente.",
+        "Limite": "Não afeta corpo e cobertura no mesmo golpe sem efeito comprado."
+      }
+    },
+    {
+      "id": "machado-de-guerra",
+      "kind": "Arma",
+      "name": "Machado de guerra",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Corte",
+        "Alcance": "Contato",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Fender proteção: se o golpe foi dirigido a uma peça de proteção material comum, transforma Apto em Danificado.",
+        "Limite": "Não destrói armadura extraordinária nem duplica dano no portador."
+      }
+    },
+    {
+      "id": "lanca",
+      "kind": "Arma",
+      "name": "Lança",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Contato ampliado",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Recuo forçado: o alvo deve resistir com Resistência ou recuar uma faixa.",
+        "Limite": "Não desloca alvo ancorado ou muito maior sem efeito apropriado."
+      }
+    },
+    {
+      "id": "alabarda",
+      "kind": "Arma",
+      "name": "Alabarda",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Corte ou Perfuração",
+        "Alcance": "Contato ampliado",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Desorganizar linha: a próxima aproximação de um aliado ao alvo recebe Proveito.",
+        "Limite": "Exige linha disponível; encerra no início do próximo turno."
+      }
+    },
+    {
+      "id": "cajado",
+      "kind": "Arma",
+      "name": "Cajado",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Impacto",
+        "Alcance": "Contato ampliado",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Travessa defensiva: a próxima Resposta contra aquele alvo ganha +1 Guarda quando o cajado estiver interposto.",
+        "Limite": "Consome a Resposta e obedece ao teto de proteção."
+      }
+    },
+    {
+      "id": "porrete",
+      "kind": "Arma",
+      "name": "Porrete",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Impacto",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Romper Preparo: remove o estado Preparo daquele alvo se ele estava preparando algo que o golpe efetivamente interrompe.",
+        "Limite": "Não suprime Impulso, sustentação imaterial ou capacidades passivas."
+      }
+    },
+    {
+      "id": "maca",
+      "kind": "Arma",
+      "name": "Maça",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Impacto",
+        "Alcance": "Contato",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "2 E",
+        "Consonância": "Amassar cobertura: o próximo ataque pertinente ignora 1 ponto de Guarda fornecido por escudo ou peça material atingida.",
+        "Limite": "Não reduz Guarda de outras fontes."
+      }
+    },
+    {
+      "id": "martelo-de-guerra",
+      "kind": "Arma",
+      "name": "Martelo de guerra",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Impacto ou Perfuração",
+        "Alcance": "Contato",
+        "Manejo": "Uma ou duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Pancada concentrada: o próprio dano ultrapassado pela Guarda ignora 1 ponto de Têmpera Material da fonte Impacto, se aplicável.",
+        "Limite": "Não ignora Têmpera Imaterial ou Energética; mínimo 0."
+      }
+    },
+    {
+      "id": "corrente",
+      "kind": "Arma",
+      "name": "Corrente",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Impacto",
+        "Alcance": "Contato ampliado",
+        "Manejo": "Uma ou duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Laço parcial: até o alvo libertar a corrente por um Impulso válido, não pode se deslocar na direção fisicamente travada.",
+        "Limite": "Requer comprimento, apoio e alvo alcançável; não retira outras ações."
+      }
+    },
+    {
+      "id": "chicote",
+      "kind": "Arma",
+      "name": "Chicote",
+      "group": "Haste ou impacto",
+      "fields": {
+        "Família": "Haste ou impacto",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Corte ou Impacto",
+        "Alcance": "Contato ampliado",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Arrancar objeto: o alvo disputa uma resistência adequada para não soltar um objeto pequeno que segura.",
+        "Limite": "Alvo com objeto acessível; não imobiliza nem desarma peças presas."
+      }
+    },
+    {
+      "id": "arco-curto",
+      "kind": "Arma",
+      "name": "Arco curto",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância curta ou média",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Marca de tiro: o próximo ataque aliado à distância contra o mesmo alvo recebe Proveito.",
+        "Limite": "Exige linha de tiro e ocorre até o início do próximo turno."
+      }
+    },
+    {
+      "id": "arco-longo",
+      "kind": "Arma",
+      "name": "Arco longo",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância média ou longa",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Flanco exposto: a próxima agressão de aliado ignora 1 ponto de cobertura parcial do alvo.",
+        "Limite": "Não atravessa cobertura dominante; requer visão do alvo."
+      }
+    },
+    {
+      "id": "besta-leve",
+      "kind": "Arma",
+      "name": "Besta leve",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância curta ou média",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "2 E",
+        "Consonância": "Cravar peça: se houver suporte atingível atrás de um tecido/objeto, fixa-o ao suporte até a remoção do projétil.",
+        "Limite": "Não paralisa a criatura; exige suporte e projétil apropriado."
+      }
+    },
+    {
+      "id": "besta-pesada",
+      "kind": "Arma",
+      "name": "Besta pesada",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância média ou longa",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Cobertura comprometida: se o alvo do disparo for cobertura comum, ela passa de Apta a Danificada.",
+        "Limite": "Recarga permanece; não atravessa proteção extraordinária sem efeito."
+      }
+    },
+    {
+      "id": "funda",
+      "kind": "Arma",
+      "name": "Funda",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Impacto",
+        "Alcance": "Distância curta ou média",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Desestabilizar: o alvo perde Preparo se o impacto alcançou o elemento que estava usando para prepará-lo.",
+        "Limite": "Não quebra sustentação de fontes não atingidas."
+      }
+    },
+    {
+      "id": "dardo-de-arremesso",
+      "kind": "Arma",
+      "name": "Dardo de arremesso",
+      "group": "Projeção",
+      "fields": {
+        "Família": "Projeção",
+        "Categoria": "Leve",
+        "Impacto": "2d4",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância curta",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "0 ou 1 E",
+        "Consonância": "Marcação rápida: a próxima intervenção de Procurar ou localizar o alvo recebe Proveito.",
+        "Limite": "Exige projétil identificável no alvo e duração até próximo turno."
+      }
+    },
+    {
+      "id": "pistola",
+      "kind": "Arma",
+      "name": "Pistola",
+      "group": "Arma de fogo",
+      "fields": {
+        "Família": "Arma de fogo",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância curta ou média",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Fogo de cobertura: o próximo deslocamento do alvo através da linha de tiro recebe Desproveito no teste que o permitir.",
+        "Limite": "Há uma linha de tiro aberta; não concede novo disparo nem tira Impulsos."
+      }
+    },
+    {
+      "id": "revolver",
+      "kind": "Arma",
+      "name": "Revólver",
+      "group": "Arma de fogo",
+      "fields": {
+        "Família": "Arma de fogo",
+        "Categoria": "Comum",
+        "Impacto": "2d6",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância curta ou média",
+        "Manejo": "Uma mão",
+        "Porte e acesso": "1 E",
+        "Consonância": "Abertura de disparo: a Guarda do alvo cai 1 apenas para a próxima agressão aliada vinda da mesma direção.",
+        "Limite": "Não acumula; munição e acesso são limitados pela ficção."
+      }
+    },
+    {
+      "id": "espingarda",
+      "kind": "Arma",
+      "name": "Espingarda",
+      "group": "Arma de fogo",
+      "fields": {
+        "Família": "Arma de fogo",
+        "Categoria": "Pesada",
+        "Impacto": "2d8",
+        "Tipo de dano": "Perfuração ou Impacto",
+        "Alcance": "Distância curta",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Pressão próxima: alvo disputa Resistência ou recebe Posição Exposta para a próxima agressão pertinente.",
+        "Limite": "Um alvo; não cria área danosa nem projeta corpos enormes."
+      }
+    },
+    {
+      "id": "rifle",
+      "kind": "Arma",
+      "name": "Rifle",
+      "group": "Arma de fogo",
+      "fields": {
+        "Família": "Arma de fogo",
+        "Categoria": "Excepcional",
+        "Impacto": "2d10",
+        "Tipo de dano": "Perfuração",
+        "Alcance": "Distância longa",
+        "Manejo": "Duas mãos",
+        "Porte e acesso": "3 E",
+        "Consonância": "Linha rastreada: a próxima agressão aliada ignora 1 ponto de cobertura parcial identificada no alvo.",
+        "Limite": "Exige linha desimpedida e posição firme; não ignora cobertura total."
+      }
+    },
+    {
+      "id": "corda-10-a-20-m",
+      "kind": "Equipamento",
+      "name": "Corda 10 a 20 m",
+      "group": "Vínculos e escalada",
+      "fields": {
+        "Grupo": "Vínculos e escalada",
+        "Volume": "1 a 2 Espaços",
+        "Uso": "Permite preparar passagem, descida, fixação ou ligação entre suportes; requer ancoragem e intervenção apropriada",
+        "Limite": "Não impede queda sem apoio e checagem da fixação"
+      }
+    },
+    {
+      "id": "mosquetoes-e-fitas",
+      "kind": "Equipamento",
+      "name": "Mosquetões e fitas",
+      "group": "Vínculos e escalada",
+      "fields": {
+        "Grupo": "Vínculos e escalada",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permitem conexões e pontos de segurança adequados",
+        "Limite": "Não criam ponto estrutural resistente sozinhos"
+      }
+    },
+    {
+      "id": "gancho-de-escalada",
+      "kind": "Equipamento",
+      "name": "Gancho de escalada",
+      "group": "Vínculos e escalada",
+      "fields": {
+        "Grupo": "Vínculos e escalada",
+        "Volume": "1 Espaços",
+        "Uso": "Permite tentar alcançar pontos de apoio inacessíveis à mão",
+        "Limite": "Requer superfície e teste quando há risco"
+      }
+    },
+    {
+      "id": "binoculos",
+      "kind": "Equipamento",
+      "name": "Binóculos",
+      "group": "Observação",
+      "fields": {
+        "Grupo": "Observação",
+        "Volume": "1 Espaços",
+        "Uso": "Permitem observação visual à longa distância e reconhecimento sem aproximação",
+        "Limite": "Exigem linha de visão, iluminação e tempo para uso"
+      }
+    },
+    {
+      "id": "luneta",
+      "kind": "Equipamento",
+      "name": "Luneta",
+      "group": "Observação",
+      "fields": {
+        "Grupo": "Observação",
+        "Volume": "1 Espaços",
+        "Uso": "Observação de detalhes fixos a longa distância com apoio",
+        "Limite": "Campo visual estreito, requer posição"
+      }
+    },
+    {
+      "id": "lanterna",
+      "kind": "Equipamento",
+      "name": "Lanterna",
+      "group": "Observação",
+      "fields": {
+        "Grupo": "Observação",
+        "Volume": "1 Espaços",
+        "Uso": "Cria iluminação portátil em área compatível",
+        "Limite": "Produz sinal visível e possui combustível/carga"
+      }
+    },
+    {
+      "id": "espelho-articulado",
+      "kind": "Equipamento",
+      "name": "Espelho articulado",
+      "group": "Observação",
+      "fields": {
+        "Grupo": "Observação",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permite inspecionar um ângulo fora da linha direta",
+        "Limite": "Não revela o que não é refletido; pode ser percebido"
+      }
+    },
+    {
+      "id": "mapa-e-bussola",
+      "kind": "Equipamento",
+      "name": "Mapa e bússola",
+      "group": "Orientação",
+      "fields": {
+        "Grupo": "Orientação",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permitem navegação fundamentada e registrar rotas",
+        "Limite": "Dependem de mapa correto e referenciais"
+      }
+    },
+    {
+      "id": "marcadores-de-trilha",
+      "kind": "Equipamento",
+      "name": "Marcadores de trilha",
+      "group": "Orientação",
+      "fields": {
+        "Grupo": "Orientação",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permitem identificar caminho, retorno ou zona estudada",
+        "Limite": "Podem ser removidos ou falsificados"
+      }
+    },
+    {
+      "id": "apito",
+      "kind": "Equipamento",
+      "name": "Apito",
+      "group": "Comunicação",
+      "fields": {
+        "Grupo": "Comunicação",
+        "Volume": "0 Espaços",
+        "Uso": "Comunica sinal audível a distâncias razoáveis",
+        "Limite": "Revela posição e não carrega mensagem complexa"
+      }
+    },
+    {
+      "id": "radio-portatil",
+      "kind": "Equipamento",
+      "name": "Rádio portátil",
+      "group": "Comunicação",
+      "fields": {
+        "Grupo": "Comunicação",
+        "Volume": "1 Espaços",
+        "Uso": "Permite coordenação verbal entre portadores compatíveis",
+        "Limite": "Alcance, bateria e interferência relevantes"
+      }
+    },
+    {
+      "id": "jogo-de-ferramentas",
+      "kind": "Equipamento",
+      "name": "Jogo de ferramentas",
+      "group": "Ferramentas",
+      "fields": {
+        "Grupo": "Ferramentas",
+        "Volume": "2 Espaços",
+        "Uso": "Autoriza manutenção ou desmonte de mecanismos acessíveis",
+        "Limite": "Não substitui formação, tempo ou peças de reposição"
+      }
+    },
+    {
+      "id": "alicate-e-cortador",
+      "kind": "Equipamento",
+      "name": "Alicate e cortador",
+      "group": "Ferramentas",
+      "fields": {
+        "Grupo": "Ferramentas",
+        "Volume": "1 Espaços",
+        "Uso": "Permitem cortar e manipular fios e pequenas fixações",
+        "Limite": "Materiais espessos ou reforçados podem resistir"
+      }
+    },
+    {
+      "id": "pe-de-cabra",
+      "kind": "Equipamento",
+      "name": "Pé de cabra",
+      "group": "Ferramentas",
+      "fields": {
+        "Grupo": "Ferramentas",
+        "Volume": "2 Espaços",
+        "Uso": "Permite aplicar alavanca em portas ou estruturas com apoio",
+        "Limite": "Deforma ou denuncia uso; estrutura resistente pode impedir"
+      }
+    },
+    {
+      "id": "kit-de-costura",
+      "kind": "Equipamento",
+      "name": "Kit de costura",
+      "group": "Ferramentas",
+      "fields": {
+        "Grupo": "Ferramentas",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permite reparo de tecido, amarras e peças leves",
+        "Limite": "Não restaura Integridade de armadura pesada ou Costura extraordinária"
+      }
+    },
+    {
+      "id": "kit-de-primeiros-socorros",
+      "kind": "Equipamento",
+      "name": "Kit de primeiros socorros",
+      "group": "Cuidado",
+      "fields": {
+        "Grupo": "Cuidado",
+        "Volume": "2 Espaços",
+        "Uso": "Permite Cuidado físico pertinente com instrumentos limpos",
+        "Limite": "Não cura automaticamente nem substitui a regra de Recuperação"
+      }
+    },
+    {
+      "id": "tala-e-ataduras",
+      "kind": "Equipamento",
+      "name": "Tala e ataduras",
+      "group": "Cuidado",
+      "fields": {
+        "Grupo": "Cuidado",
+        "Volume": "1 Espaços",
+        "Uso": "Permitem imobilizar membro ferido e estabilizar condições adequadas",
+        "Limite": "Exigem tempo, acesso ao ferimento e técnica"
+      }
+    },
+    {
+      "id": "cobertor-termico",
+      "kind": "Equipamento",
+      "name": "Cobertor térmico",
+      "group": "Cuidado",
+      "fields": {
+        "Grupo": "Cuidado",
+        "Volume": "1 Espaços",
+        "Uso": "Ajuda a conter exposição ambiental ao frio",
+        "Limite": "Não anula dano energético excepcional"
+      }
+    },
+    {
+      "id": "rede",
+      "kind": "Equipamento",
+      "name": "Rede",
+      "group": "Contenção",
+      "fields": {
+        "Grupo": "Contenção",
+        "Volume": "2 Espaços",
+        "Uso": "Permite tentar contenção com cobertura espacial delimitada",
+        "Limite": "Exige teste/intervenção, pode ser cortada ou solta"
+      }
+    },
+    {
+      "id": "algemas-ou-manilhas",
+      "kind": "Equipamento",
+      "name": "Algemas ou manilhas",
+      "group": "Contenção",
+      "fields": {
+        "Grupo": "Contenção",
+        "Volume": "1 Espaços",
+        "Uso": "Mantêm contenção de mãos ou apoio se legitimamente aplicadas",
+        "Limite": "Não capturam sozinhas; podem ser abertas ou rompidas"
+      }
+    },
+    {
+      "id": "fita-resistente",
+      "kind": "Equipamento",
+      "name": "Fita resistente",
+      "group": "Contenção",
+      "fields": {
+        "Grupo": "Contenção",
+        "Volume": "1 Espaços",
+        "Uso": "Permite fixações curtas e reparos provisórios",
+        "Limite": "Tempo, superfície e resistência importam"
+      }
+    },
+    {
+      "id": "escudo-pequeno",
+      "kind": "Equipamento",
+      "name": "Escudo pequeno",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "2 Espaços",
+        "Uso": "Pode contribuir +1 Guarda na direção interposta",
+        "Limite": "Ocupa braço, não ultrapassa teto ordinário de +2"
+      }
+    },
+    {
+      "id": "escudo-grande",
+      "kind": "Equipamento",
+      "name": "Escudo grande",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "3 Espaços",
+        "Uso": "Pode contribuir +2 Guarda frente a agressões da direção protegida",
+        "Limite": "Manejo pesado; flancos e aproximação continuam vulneráveis"
+      }
+    },
+    {
+      "id": "colete-de-protecao",
+      "kind": "Equipamento",
+      "name": "Colete de proteção",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "2 Espaços",
+        "Uso": "Pode oferecer +1 Guarda nas regiões cobertas contra fontes pertinentes",
+        "Limite": "Não protege cabeça/membros nem dano Imaterial"
+      }
+    },
+    {
+      "id": "armadura-completa",
+      "kind": "Equipamento",
+      "name": "Armadura completa",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "3+ Espaços",
+        "Uso": "Pode oferecer até +2 Guarda em zonas materialmente protegidas",
+        "Limite": "Limitações reais de acesso, calor, manejo e mobilidade"
+      }
+    },
+    {
+      "id": "oculos-de-protecao",
+      "kind": "Equipamento",
+      "name": "Óculos de proteção",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "0 a 1 Espaços",
+        "Uso": "Permitem atuar em cena com partículas ou respingos comuns",
+        "Limite": "Não anulam Calor/Corrosão elevados"
+      }
+    },
+    {
+      "id": "mascara-filtrante",
+      "kind": "Equipamento",
+      "name": "Máscara filtrante",
+      "group": "Proteção",
+      "fields": {
+        "Grupo": "Proteção",
+        "Volume": "1 Espaços",
+        "Uso": "Permite exposição limitada a contaminantes de categoria compatível",
+        "Limite": "Filtro, ajuste e tempo de uso precisam ser especificados"
+      }
+    },
+    {
+      "id": "mochila-de-carga",
+      "kind": "Equipamento",
+      "name": "Mochila de carga",
+      "group": "Transporte",
+      "fields": {
+        "Grupo": "Transporte",
+        "Volume": "2 Espaços",
+        "Uso": "Permite distribuir e transportar itens com acesso organizado",
+        "Limite": "Ocupa os Espaços dos itens transportados; não cria carga gratuita"
+      }
+    },
+    {
+      "id": "bolsa-de-acesso-rapido",
+      "kind": "Equipamento",
+      "name": "Bolsa de acesso rápido",
+      "group": "Transporte",
+      "fields": {
+        "Grupo": "Transporte",
+        "Volume": "1 Espaços",
+        "Uso": "Mantém pequenos itens ao alcance sem reorganizar mochila",
+        "Limite": "Ocupação física e limite de capacidade continuam"
+      }
+    },
+    {
+      "id": "bateria-ou-combustivel-portatil",
+      "kind": "Equipamento",
+      "name": "Bateria ou combustível portátil",
+      "group": "Energia e suprimento",
+      "fields": {
+        "Grupo": "Energia e suprimento",
+        "Volume": "1 a 2 Espaços",
+        "Uso": "Sustenta equipamento dependente durante usos declarados",
+        "Limite": "Quantidade e reposição limitadas"
+      }
+    }
+  ],
+  "damageTypes": [
+    {
+      "family": "Material",
+      "name": "Impacto",
+      "source": "Pancadas, colisões, quedas, esmagamento",
+      "reserve": "PV ou PP quando pertinente"
+    },
+    {
+      "family": "Material",
+      "name": "Corte",
+      "source": "Talhos, lâminas, fios cortantes",
+      "reserve": "PV ou PP quando pertinente"
+    },
+    {
+      "family": "Material",
+      "name": "Perfuração",
+      "source": "Pontas, flechas, projéteis",
+      "reserve": "PV ou PP quando pertinente"
+    },
+    {
+      "family": "Energética",
+      "name": "Calor",
+      "source": "Chama, escaldadura, calor concentrado",
+      "reserve": "PV ou PP conforme a fonte"
+    },
+    {
+      "family": "Energética",
+      "name": "Frio",
+      "source": "Congelamento, exposição fria agressiva",
+      "reserve": "PV ou PP conforme a fonte"
+    },
+    {
+      "family": "Energética",
+      "name": "Eletricidade",
+      "source": "Descarga elétrica",
+      "reserve": "PV ou PP conforme a fonte"
+    },
+    {
+      "family": "Energética",
+      "name": "Vibração",
+      "source": "Oscilação, ressonância ou abalo mecânico específico",
+      "reserve": "PV ou PP conforme a fonte"
+    },
+    {
+      "family": "Substancial",
+      "name": "Corrosão",
+      "source": "Reação que degrada matéria ou estrutura",
+      "reserve": "PV ou PP pertinente"
+    },
+    {
+      "family": "Substancial",
+      "name": "Toxina",
+      "source": "Veneno ou agente tóxico",
+      "reserve": "Reserva e Condição especificadas na fonte"
+    },
+    {
+      "family": "Substancial",
+      "name": "Privação",
+      "source": "Ausência de ar, água, calor, suporte vital",
+      "reserve": "Reserva e Condição especificadas na fonte"
+    },
+    {
+      "family": "Imaterial",
+      "name": "Psíquica",
+      "source": "Agressão à organização mental",
+      "reserve": "PI ou PP se estrutura psíquica pertinente"
+    },
+    {
+      "family": "Imaterial",
+      "name": "Tessitural",
+      "source": "Interferência na continuidade, na malha ou na Costura",
+      "reserve": "PI, PV ou PP apenas conforme Expressão"
+    }
+  ]
+}
