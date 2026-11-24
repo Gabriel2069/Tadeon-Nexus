@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+export class MasterDraftConflict extends Error {}
+
 /** Manual persistence: a completed request never acknowledges newer edits. */
 export function useMasterDraft<T>(
   persist: (snapshot: T, signal: AbortSignal) => Promise<void | T>,
@@ -22,6 +24,11 @@ export function useMasterDraft<T>(
     };
   }, []);
   const load = useCallback((next: T) => {
+    controller.current?.abort();
+    controller.current = null;
+    request.current = null;
+    setSaving(false);
+    setSavedAt(null);
     revision.current++;
     current.current = next;
     setValue(next);
@@ -56,17 +63,20 @@ export function useMasterDraft<T>(
         setDirty(!clean);
         setSavedAt(new Date());
         return clean;
-      } catch {
+      } catch (failure) {
         if (active.current && !abort.signal.aborted) {
           setError(
-            "Não foi possível salvar. Suas alterações permanecem no painel; tente novamente.",
+            failure instanceof MasterDraftConflict ? failure.message : "Não foi possível salvar. Suas alterações permanecem no painel; tente novamente.",
           );
           setDirty(true);
         }
         return false;
       } finally {
-        request.current = null;
-        if (active.current) setSaving(false);
+        if (controller.current === abort) {
+          controller.current = null;
+          request.current = null;
+          if (active.current) setSaving(false);
+        }
       }
     })();
     request.current = pending;

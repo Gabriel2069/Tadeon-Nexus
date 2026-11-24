@@ -96,7 +96,7 @@ import {
   ThreatHub,
 } from "@/components/master/master-hub";
 import { DashboardHub } from "@/components/master/master-overview";
-import { useMasterDraft } from "@/components/master/use-master-draft";
+import { MasterDraftConflict, useMasterDraft } from "@/components/master/use-master-draft";
 import { MasterPanelIdentity } from "@/components/master/master-panel-navigation";
 import { SessionWorkspace } from "@/components/master/session-workspace";
 import { MasterCatalog } from "@/components/master/master-catalog";
@@ -191,6 +191,7 @@ interface Scene extends MasterScene {
 
 interface SettingsRow {
   id: string;
+  updated_at: string;
   campaign_id: string | null;
   initiative_notes: string;
   reminders: string;
@@ -334,25 +335,33 @@ function MasterWorkspace() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const leaveReturnFocusRef = useRef<HTMLElement | null>(null);
+  const savedSettings = useRef<{ values: SettingsRow; timestamp: string } | null>(null);
   const draft = useMasterDraft<SettingsRow>(async (snapshot, signal) => {
-    const { id, ...legacyPayload } = snapshot;
+    const base = savedSettings.current;
+    if (!base?.timestamp || base.values.id !== snapshot.id)
+      throw new MasterDraftConflict("A versão da campanha precisa ser recarregada antes de salvar.");
     const payload = Object.fromEntries(
-      Object.entries(legacyPayload).filter(
-        ([key]) => !["tdv2_state", "tdv2_revision"].includes(key),
-      ),
+      Object.entries(snapshot).filter(([key, value]) =>
+        !["id", "updated_at", "key", "campaign_id", "tdv2_state", "tdv2_revision"].includes(key) &&
+        !Object.is(base.values[key as keyof SettingsRow], value)),
     );
+    if (!Object.keys(payload).length) return;
     const { data, error } = await supabase
       .from("game_settings")
       .update(payload as never)
-      .eq("id", id)
-      .select("id")
+      .eq("id", snapshot.id)
+      .eq("updated_at", base.timestamp)
+      .select("id,updated_at")
       .abortSignal(signal)
       .maybeSingle();
-    if (error || !data) {
-      const failure = error ?? new Error("Nenhuma configuração foi atualizada.");
-      if (!signal.aborted) void reportClientError(failure, "save");
-      throw failure;
+    if (error) {
+      if (!signal.aborted) void reportClientError(error, "save");
+      throw error;
     }
+    if (!data?.updated_at)
+      throw new MasterDraftConflict("A campanha mudou desde a abertura ou ficou indisponível. Seu rascunho continua aqui. Abra o painel em outra aba para conferir a versão salva antes de reaplicar as alterações.");
+    if (!signal.aborted && savedSettings.current === base)
+      savedSettings.current = { values: snapshot, timestamp: data.updated_at };
   });
   const {
     value: s,
@@ -518,6 +527,7 @@ function MasterWorkspace() {
           );
         }
         if (!active) return;
+        savedSettings.current = { values: settings, timestamp: settings.updated_at };
         loadDraft(settings);
         setSheets(
           rawSheets.map((sheet) => ({
@@ -550,7 +560,10 @@ function MasterWorkspace() {
   };
 
   const blocker = useBlocker({
-    shouldBlockFn: ({ current, next }) => (dirty || saving) && current.pathname !== next.pathname,
+    shouldBlockFn: ({ current, next }) =>
+      (dirty || saving) &&
+      (current.pathname !== next.pathname ||
+        Reflect.get(current.search, "edition") !== Reflect.get(next.search, "edition")),
     enableBeforeUnload: dirty || saving,
     withResolver: true,
   });

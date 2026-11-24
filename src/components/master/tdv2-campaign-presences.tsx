@@ -1,3 +1,4 @@
+import { TdvEncounterTrace } from "./tdv-encounter-trace";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -208,6 +209,13 @@ export function Tdv2EncounterPlan({
         {selected.length} participantes ou presenças em foco. Escalas não são somadas em um Rank de
         grupo ou orçamento universal.
       </p>
+      <TdvEncounterTrace
+        participants={[...players, ...npcs, ...threats]
+          .filter((item) => selected.includes(item.id))
+          .map((item) => item.name)}
+        notes={notes}
+        onChange={onChange}
+      />
       <TdvField
         label="Plano do encontro: oposição, Pressão e complexidade"
         value={notes}

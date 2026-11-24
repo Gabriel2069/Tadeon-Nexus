@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-07",
+  "checkedAt": "2026-11-24",
   "runtimeReference": "56f8729a36d2a05e4a2fe6111d3491fbc3719f0e",
   "integration": {
     "pr": null,
-    "branch": "fix/proporcao-arco-valor",
+    "branch": "eng/tn-integrado-20261123",
     "base": "main",
-    "baseCommit": "56f8729a36d2a05e4a2fe6111d3491fbc3719f0e",
+    "baseCommit": "587d248a4095f559521b92e092b179d15560fb17",
     "sourceCommit": null,
     "headCommit": null,
     "state": "working",
-    "production": "not published; prior production 56f8729",
-    "note": "DEC-036 / NEX-046 / NEX-047: números maiores e próximos do arco; corrigir conflito do limite de largura com o botão."
+    "production": "Lote de Engenharia em trabalho local. Publicação em produção não verificada nesta retomada.",
+    "note": "TN-ENG-20261123-v2.0 · Primeira entrega parcial de Ficha, Jogo, Arsenal, Traçado e salvamento concorrente. O próximo portão é a revisão jogável de novembro com autoridade transacional."
   },
   "domains": [
     {
@@ -465,6 +465,11 @@
       "path": "docs/v4/FUNDACAO_VIII.md",
       "status": "active",
       "purpose": "DEC-037: diferenças implementadas, preservação visual/dados, autoridade, validação e limites da revisão VIII."
+    },
+    {
+      "path": "docs/v4/ENGENHARIA_NOVEMBRO.md",
+      "status": "active",
+      "purpose": "Escopo e provas da primeira entrega parcial do plano integrado de novembro."
     }
   ],
   "tasks": [
@@ -1585,7 +1590,8 @@
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json",
         "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
-        "docs/v4/FICHA_DOIS_MODOS.md"
+        "docs/v4/FICHA_DOIS_MODOS.md",
+        "docs/v4/ENGENHARIA_NOVEMBRO.md"
       ],
       "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
@@ -1610,7 +1616,8 @@
         "docs/v4/FICHA_PRANCHETA_INTERATIVA.md",
         "docs/v4/playbook-sheet-validation.json",
         "docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md",
-        "docs/v4/FICHA_DOIS_MODOS.md"
+        "docs/v4/FICHA_DOIS_MODOS.md",
+        "docs/v4/ENGENHARIA_NOVEMBRO.md"
       ],
       "checkpoint": "DEC-033: instrumentos e estados; quatro guias, Cena incorporada em Ação, mesmos dados/motor no jogo. Gates e publicação próprios na PR; não certifica V4 integral. docs/v4/FICHA_INSTRUMENTOS_E_ESTADOS.md"
     },
@@ -1646,7 +1653,9 @@
         "Preservar todas as ferramentas e montagens comprovadas da Mesa, guias gerais/II do Mestre e operações do Nexus; demonstrar destino equivalente antes de remover qualquer item.",
         "Refinar palco/HUD/inspector, preparação/condução e explorar/ler/relacionar sobre os mesmos estados e eventos filtrados por audiência."
       ],
-      "evidence": []
+      "evidence": [
+        "docs/v4/ENGENHARIA_NOVEMBRO.md"
+      ]
     },
     {
       "id": "NEX-050",

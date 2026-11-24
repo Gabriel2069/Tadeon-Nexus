@@ -46,6 +46,7 @@ Comece pelo [estado de continuidade](ai/00_ESTADO_ATUAL.md), [mapa do código](P
 | [rules/fundacao-viii.md](rules/fundacao-viii.md) | reference | Fonte integral fornecida por Tadeu: Fundação V e consolidação VIII; precedência e parâmetros em calibração explícitos. |
 | [v4/FICHA_DOIS_MODOS.md](v4/FICHA_DOIS_MODOS.md) | active | DEC-036: diferenças e evidências de composição nos dois modos da ficha. |
 | [v4/FUNDACAO_VIII.md](v4/FUNDACAO_VIII.md) | active | DEC-037: diferenças implementadas, preservação visual/dados, autoridade, validação e limites da revisão VIII. |
+| [v4/ENGENHARIA_NOVEMBRO.md](v4/ENGENHARIA_NOVEMBRO.md) | active | Escopo e provas da primeira entrega parcial do plano integrado de novembro. |
 
 ## Contratos e evidências
 

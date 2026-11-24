@@ -1,3 +1,4 @@
+import { TdvArsenal } from "./tdv-arsenal";
 import { SelectionPlate } from "@/components/selection-plate";
 import { useState, useRef } from "react";
 import { DialogClose } from "@/components/ui/dialog";
@@ -104,6 +105,15 @@ export function Tdv2Belongings({
             title={title}
             extra={
               <div className="tdv-actions">
+                <TdvArsenal
+                  kind={kind}
+                  full={c.records.length >= 200}
+                  onAdd={
+                    canEdit
+                      ? (record) => onChange({ ...c, records: [...c.records, record] })
+                      : undefined
+                  }
+                />
                 {kind === "Equipamento" && (
                   <SheetInventoryOrganizer
                     sheetId={sheetId}
@@ -444,13 +454,13 @@ function TdvEquipmentEntry({
       />
       <div className="tdv-record-facts">
         {[...new Set([...fields, ...Object.keys(record.fields)])]
-          .filter((field) => editing || record.fields[field]?.trim())
+          .filter((field) => record.fields["Edição"] === "v0.9" && field === "Dados de dano" ? Boolean(record.fields[field]) : editing || record.fields[field]?.trim())
           .map((field) => (
             <TdvInscription
               key={field}
               label={field}
               value={record.fields[field] ?? ""}
-              disabled={!canEdit}
+              disabled={!canEdit || (record.fields["Edição"] === "v0.9" && ["Catálogo", "Edição"].includes(field))}
               onChange={(value) =>
                 patch({ ...record, fields: { ...record.fields, [field]: value } })
               }

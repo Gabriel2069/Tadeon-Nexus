@@ -6,6 +6,7 @@ import {
   TdvBondProgress,
 } from "./tdv2-foundation-controls";
 import { TdvSurfaceContext } from "./tdv2-surface-context";
+import { TdvDevelopmentPreview } from "./tdv2-development-preview";
 import { TdvGamePanel } from "./tdv2-game-panel";
 import { TdvProtection } from "./tdv2-protection";
 import { TdvRecordCollection } from "./tdv2-retained-tools";
@@ -41,7 +42,7 @@ import {
   TdvExpressionUse,
   TdvActiveExpressions,
 } from "./tdv2-procedures";
-import { TdvTestPanel } from "./tdv2-test-panel";
+import { TdvTestPanel, type TdvRollReading } from "./tdv2-test-panel";
 export { TdvTestPanel } from "./tdv2-test-panel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -177,6 +178,7 @@ export function Tdv2Sheet({
       name: item.name || "Condição ativa",
       kind: conditionImpact(item.effect)!.kind,
     }));
+  const [latestRoll, setLatestRoll] = useState<TdvRollReading | null>(null);
   const [rollChoice, setRollChoice] = useState<{ matrix?: Matrix; alinhavo?: string } | null>(null);
   const [newLinkId, setNewLinkId] = useState<string | null>(null);
   const [recovery, setRecovery] = useState("Pausa breve"),
@@ -985,8 +987,9 @@ export function Tdv2Sheet({
             percent={stats.development}
             available={stats.pu}
             spent={stats.spent}
-            milestonePU={c.foundation ? 3 : 2}
+            milestonePU={c.foundation?.revision === "TDV-2026-11-23" ? 4 : c.foundation ? 3 : 2}
           />
+          {c.foundation?.revision !== "TDV-2026-11-23" && <TdvDevelopmentPreview character={c} />}
           <TdvFoundationConversion
             character={c}
             onChange={onChange}
@@ -1257,7 +1260,9 @@ export function Tdv2Sheet({
                 canEdit={canEdit}
                 isMaster={isMaster}
                 onUse={setExpressionUse}
-                onTranscend={(name) => develop(name, true)}
+                onTranscend={develop}
+                latestRoll={latestRoll}
+                onRoll={setRollChoice}
                 onOpen={(value) => {
                   setGameTab(value === "equipamento" ? "expressao" : value);
                   setGameToolsOpen(true);
@@ -1424,7 +1429,7 @@ export function Tdv2Sheet({
           >
             <DialogContent className="tdv-roll-dialog">
               <DialogHeader>
-                <DialogTitle>Dois Fios · {rollChoice?.alinhavo ?? rollChoice?.matrix}</DialogTitle>
+                <DialogTitle>Dois Fios · {rollChoice?.alinhavo ?? rollChoice?.matrix ?? "Teste livre"}</DialogTitle>
                 <DialogDescription>
                   Escolha a Matriz pela abordagem e o Alinhavo pela prática. A ficha calcula os
                   dados e aplica apenas os efeitos mecânicos.
@@ -1437,6 +1442,8 @@ export function Tdv2Sheet({
                   onChange={onChange}
                   canEdit={canEdit}
                   quick
+                  onRead={setLatestRoll}
+                  initialPhysical={presentation === "game" && gameProfile !== "digital"}
                   initialMatrix={rollChoice.matrix}
                   initialAlinhavo={rollChoice.alinhavo}
                 />

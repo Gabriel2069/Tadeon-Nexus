@@ -5,6 +5,7 @@ import { TdvAction, TdvField, TdvSelect } from "./tdv2-fields";
 import {
   adoptFoundation,
   grantPractice,
+  NOVEMBER_REVISION,
   invest,
   recoveryPreview,
   recoverByFronts,
@@ -52,12 +53,13 @@ export function TdvFoundationDevelopment({
 }: Props & { isMaster: boolean }) {
   const [practice, setPractice] = useState("");
   if (!c.foundation) return null;
+  const november = c.foundation.revision === NOVEMBER_REVISION;
   const used = c.foundation.practices
     .filter((p) => p.interval === c.milestones.length)
     .reduce((s, p) => s + p.pu, 0);
   return (
     <div className="tdv-actions">
-      {isMaster && (
+      {isMaster && !november && (
         <TdvAction title={`Reconhecer Prática · ${2 - used} PU disponíveis no intervalo`}>
           <TdvField
             label="Prática incorporada"
@@ -80,7 +82,7 @@ export function TdvFoundationDevelopment({
           </div>
         </TdvAction>
       )}
-      <TdvAction title="Reforçar reservas · 2 PU">
+      <TdvAction title={november ? "Reforçar reservas" : "Reforçar reservas · 2 PU"}>
         <p>
           Uma compra por recurso, mais uma a cada quatro Marcos. Cada compra acrescenta 2 PV, 2 PI
           ou 1 PE.
@@ -95,14 +97,14 @@ export function TdvFoundationDevelopment({
                   invest(c, {
                     kind: "Reforço",
                     target: key,
-                    cost: 2,
+                    cost: november && key === "pe" ? 1 : 2,
                     reason: `Reforço de ${key.toUpperCase()}`,
                     transcendent: false,
                   }),
                 )
               }
             >
-              +{key === "pe" ? 1 : 2} {key.toUpperCase()}
+              +{key === "pe" ? 1 : 2} {key.toUpperCase()}{november && ` · ${key === "pe" ? 1 : 2} PU`}
             </Button>
           ))}
         </div>

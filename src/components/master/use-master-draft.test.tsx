@@ -96,3 +96,29 @@ it("aborts the initiating workspace write on unmount and ignores late completion
   first.reject(new Error("late failure"));
   expect(await pending).toBe(false);
 });
+it("isolates an in-flight save from a newly loaded draft and its own pending save", async () => {
+  const previous = deferred();
+  const next = deferred();
+  const persist = vi.fn<(v: { name: string }, signal: AbortSignal) => Promise<void>>()
+    .mockReturnValueOnce(previous.promise)
+    .mockReturnValueOnce(next.promise);
+  const { result } = setup(persist);
+  let oldWrite!: Promise<boolean>;
+  let newWrite!: Promise<boolean>;
+  act(() => {
+    oldWrite = result.current.save();
+    result.current.load({ name: "Outra campanha" });
+    result.current.update("name", "Nova edição");
+    newWrite = result.current.save();
+  });
+  expect(persist.mock.calls[0][1].aborted).toBe(true);
+  await act(async () => previous.resolve());
+  expect(await oldWrite).toBe(false);
+  expect(result.current.saving).toBe(true);
+  expect(result.current.save()).toBe(newWrite);
+  expect(result.current.savedAt).toBeNull();
+  await act(async () => next.resolve());
+  expect(await newWrite).toBe(true);
+  expect(result.current.value?.name).toBe("Nova edição");
+  expect(result.current.dirty).toBe(false);
+});

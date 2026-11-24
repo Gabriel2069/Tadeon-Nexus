@@ -19,6 +19,8 @@ let engine = ts
 writeFileSync(testRoot + "/engine.mjs", engine);
 const {
   newTdvCharacter,
+  NOVEMBER_REVISION,
+  resolveTest,
   finishCreation,
   addMilestone,
   invest,
@@ -600,6 +602,76 @@ await assert.rejects(() =>
     JSON.stringify(masterRow.tdv2_state),
   ]),
 );
+checks++;
+// Two editors read the same token. PostgreSQL must reject the stale update
+// even when both requests belong to a master permitted to edit the record.
+await db.exec("reset role");
+const bootstrap = readFileSync("supabase/migrations/20260727030314_bootstrap_tadeon_nexus_schema.sql", "utf8");
+const timestampFunction = [...bootstrap.matchAll(/create or replace function public\.set_updated_at\(\)[\s\S]*?\$\$;/gi)].at(-1)?.[0];
+const timestampTrigger = bootstrap.match(/create trigger game_settings_updated_at[\s\S]*?execute function public\.set_updated_at\(\);/i)?.[0];
+assert.ok(timestampFunction && timestampTrigger, "Bootstrap timestamp trigger is required");
+await db.exec("alter table game_settings add column campaign_title text, add column updated_at timestamptz not null default now()");
+await db.exec(timestampFunction);
+await db.exec(timestampTrigger);
+const sheetTimestampTrigger = bootstrap.match(/create trigger character_sheets_updated_at[\s\S]*?execute function public\.set_updated_at\(\);/i)?.[0];
+assert.ok(sheetTimestampTrigger);
+await db.exec(sheetTimestampTrigger);
+await auth(master);
+const readCampaign = async () => (await db.query(
+  "select campaign_title, updated_at::text as token, tdv2_revision, tdv2_state from game_settings where id=$1", [settingsId]
+)).rows[0];
+const saveTitle = async (title, token) => (await db.query(
+  "update game_settings set campaign_title=$1 where id=$2 and updated_at=$3::timestamptz returning updated_at::text as token",
+  [title, settingsId, token]
+)).rows;
+const loadedCampaign = await readCampaign();
+const [firstWrite] = await saveTitle("Primeira edição", loadedCampaign.token);
+assert.ok(firstWrite && firstWrite.token !== loadedCampaign.token);
+checks++;
+assert.deepEqual(await saveTitle("Edição concorrente", loadedCampaign.token), []);
+checks++;
+assert.deepEqual(await readCampaign(), { ...loadedCampaign, campaign_title: "Primeira edição", token: firstWrite.token });
+checks++;
+await auth(player);
+assert.deepEqual(await saveTitle("Edição sem permissão", firstWrite.token), []);
+checks++;
+await auth(master);
+assert.equal((await saveTitle("Segunda edição", firstWrite.token)).length, 1);
+checks++;
+// Exercise the dated sheet through the same insert, CAS save and role-scoped reads as the app.
+await db.exec("reset role");
+await db.exec(readFileSync("scripts/fixtures/tdv-novembro.sql", "utf8"));
+await auth(player);
+const datedId = "00000000-0000-4000-8000-000000000b24";
+const initial = newTdvCharacter("reference", NOVEMBER_REVISION);
+const insertDated = await db.query("insert into character_sheets(id,owner_id,name,rules_version,tdv2_data) values($1,$2,'Personagem de novembro',2,$3) returning updated_at::text as stamp", [datedId, player, JSON.stringify(initial)]);
+const writeDated = (data, stamp) => db.query("update character_sheets set tdv2_data=$1 where id=$2 and updated_at=$3 returning updated_at::text as stamp", [JSON.stringify(data), datedId, stamp]);
+const sealed = finishCreation(initial);
+assert.deepEqual(sealed.resources, { pv: 16, pi: 13, pe: 10 });
+assert.equal(constitution(sealed).pu, 10);
+const sealedRow = (await writeDated(sealed, insertDated.rows[0].stamp)).rows[0];
+assert.ok(sealedRow);
+checks += 3;
+const input = { matrix: "Nexo", alinhavo: "Investigação", dt: 8, reading: "Enlace", force: "Prumo", prumoPro: 0, prumoDes: 0, tentoPro: 0, tentoDes: 0, counterpart: "", context: { intention: "Ler o selo", approach: "Examinar a inscrição", change: "", point: "", risk: true } };
+const physical = resolveTest(sealed, input, undefined, { prumo: 5, tento: 3 });
+const digitalFaces = [0.45, 0.3];
+const digital = resolveTest(sealed, input, () => digitalFaces.shift());
+assert.deepEqual(physical.result, digital.result);
+assert.equal(physical.character.resources.pe, 9);
+const persisted = await writeDated(physical.character, sealedRow.stamp);
+assert.equal(persisted.rows.length, 1);
+assert.equal((await writeDated(physical.character, sealedRow.stamp)).rows.length, 0);
+await assert.rejects(() => writeDated(newTdvCharacter("reference", "VIII"), persisted.rows[0].stamp));
+checks += 5;
+await auth(master);
+const observed = (await db.query("select tdv2_data from character_sheets where id=$1", [datedId])).rows[0].tdv2_data;
+assert.equal(observed.scene.tests.length, 1);
+assert.equal(observed.scene.tests[0].revision, NOVEMBER_REVISION);
+assert.equal(observed.resources.pe, 9);
+assert.equal(await valid({ ...observed, resources: { ...observed.resources, pv: 17 } }), false);
+checks += 4;
+await auth(stranger);
+assert.equal((await db.query("select id from character_sheets where id=$1", [datedId])).rows.length, 0);
 checks++;
 console.log(
   JSON.stringify({

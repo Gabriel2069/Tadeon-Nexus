@@ -2763,3 +2763,15 @@ details.tadeon-utility-note { padding-block: .35rem; }
 .tadeon-material-lab__states input { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); }
 .tadeon-material-lab__states p { padding: .75rem; border-inline-start: 2px solid rgb(var(--manifestation-rgb,var(--material-rgb)) / 70%); background: #0b1016; }
 @media (max-width: 639px) { .tadeon-material-lab { grid-template-columns: minmax(0,1fr); } }
+
+.tdv-encounter-trace { border-block: 1px solid #b9977140; padding-block: 1.2rem; container-type: inline-size; }
+.tdv-encounter-trace header { max-width: 64ch; margin-bottom: 1rem; }
+.tdv-encounter-trace h3 { font: 500 2rem/1.1 var(--font-cinzel); }
+.tdv-trace-bench { display: grid; gap: 1.3rem; }
+.tdv-trace-reading { align-self: start; display: grid; gap: .8rem; padding-inline-start: 1rem; border-inline-start: 2px solid #aa715e; }
+.tdv-trace-reading output { display: grid; gap: .3rem; font-variant-numeric: tabular-nums; }
+.tdv-trace-reading output strong { font: 500 2.2rem/1.05 var(--font-cinzel); color: #eccbad; }
+.tdv-trace-reading p { color: #c7bdaf; }
+@container (min-width: 40rem) {
+  .tdv-trace-bench { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}
